@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>数独问题 - 规划求解 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="数独问题 - 规划求解" />
+  <meta name="keywords" content="ortools,operational research,math model" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E6%95%B4%E6%95%B0%E8%A7%84%E5%88%92">一. 整数规划</a></li>
+<li><a href="#%E4%BA%8C-%E7%BA%A6%E6%9D%9F%E8%A7%84%E5%88%92">二. 约束规划</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/shu-du-wen-ti-gui-hua-qiu-jie/"> 数独问题 - 规划求解 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-11-04 12:32:13">2023-11-04</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/k9nWgChF7/"> <span>ortools</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/nVhK8pEaF/"> <span>operational research</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/iAiJqHkOw/">
+        <span>math model</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >13<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >2572<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <figure data-type="image" tabindex="1"><a href="https://pic.imgdb.cn/item/6532337cc458853aef5a44b3.png"><img src="https://pic.imgdb.cn/item/6532337cc458853aef5a44b3.png" alt="" loading="lazy"></a></figure>
+<p>(<em>上图: 号称难度系数最高数独</em>)</p>
+<p>数独是一个非常有趣的数学游戏, 最为常见的形式为九宫格(也有四宫格, 六宫格等): <strong>9 x 9</strong></p>
+<!--more-->
+<ul>
+<li>每个格子填入<code>1 - 9</code>范围的数字, 每个格子填入的数字都不相同</li>
+<li>每个小宫格<code> 3 x 3</code>范围填入, 遵守上述规则</li>
+<li>行列之间的数字填入, 遵守上述规则</li>
+</ul>
+<p>数独这个问题的解法非常巧妙, 这里参考了<a href="https://ww2.mathworks.cn/help/optim/ug/sudoku-puzzles-problem-based.html">通过整数规划求解数独谜题: 基于问题 - MATLAB &amp; Simulink - MathWorks 中国</a>提供的思路.</p>
+<p>(<em>MATLAB的文档是很不错的资料源, 对于各类数学/工程问题</em>)</p>
+<blockquote>
+<p>关键思路是将谜题从 9×9 正方形网格转换为一个由二元值( 0 或 1) 组成的 9×9×9 立方数组. 将这个立方数组想象成由 9 个正方形网络上下堆叠在一起. 顶部网格是数组的第一个正方形层, 只要解或提示包含整数 1, 则该层对应位置就为 1. 只要解或提示包含整数 2, 第二层对应位置就为 1. 只要解或提示包含整数 9, 第九层对应位置就为 1.</p>
+</blockquote>
+<figure data-type="image" tabindex="2"><img src="https://pic3.zhimg.com/80/v2-2f23f1294d83604a768c45f9e26c097a_720w.webp" alt="img" loading="lazy"></figure>
+<p>(<em>图源</em>: <a href="https://zhuanlan.zhihu.com/p/362008314">数学建模代码实战训练-5: 数独里的整数线规模型构造分析 - 知乎</a>, 作者版权所有)</p>
+<p>以整数规划为视角创建数学模型:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mspace linebreak="newline"></mspace><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mtext>min</mtext></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mspace width="1em"/><mn>0</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>1</mn><mo>)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mtext>s.t.</mtext></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mspace width="1em"/><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mn>9</mn></munderover><msub><mi>x</mi><mrow><mi>r</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>k</mi></mrow></msub><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi mathvariant="normal">∀</mi><mi>r</mi><mo separator="true">,</mo><mi>c</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mn>9</mn><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>2</mn><mo>)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mspace width="1em"/><munderover><mo>∑</mo><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><mn>9</mn></munderover><msub><mi>x</mi><mrow><mi>r</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>k</mi></mrow></msub><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi mathvariant="normal">∀</mi><mi>c</mi><mo separator="true">,</mo><mi>k</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mn>9</mn><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>3</mn><mo>)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mspace width="1em"/><munderover><mo>∑</mo><mrow><mi>c</mi><mo>=</mo><mn>1</mn></mrow><mn>9</mn></munderover><msub><mi>x</mi><mrow><mi>r</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>k</mi></mrow></msub><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi mathvariant="normal">∀</mi><mi>r</mi><mo separator="true">,</mo><mi>k</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mn>9</mn><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>4</mn><mo>)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mspace width="1em"/><munderover><mo>∑</mo><mrow><msup><mi>r</mi><mo mathvariant="normal">′</mo></msup><mo>=</mo><mn>1</mn></mrow><mn>3</mn></munderover><munderover><mo>∑</mo><mrow><msup><mi>c</mi><mo mathvariant="normal">′</mo></msup><mo>=</mo><mn>1</mn></mrow><mn>3</mn></munderover><msub><mi>x</mi><mrow><msup><mi>r</mi><mo mathvariant="normal">′</mo></msup><mo>+</mo><mi>r</mi><mo separator="true">,</mo><msup><mi>c</mi><mo mathvariant="normal">′</mo></msup><mo>+</mo><mi>c</mi><mo separator="true">,</mo><mi>k</mi></mrow></msub><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi mathvariant="normal">∀</mi><mi>r</mi><mo separator="true">,</mo><mi>c</mi><mo>∈</mo><mo>{</mo><mn>0</mn><mo separator="true">,</mo><mn>3</mn><mo separator="true">,</mo><mn>6</mn><mo>}</mo><mo separator="true">,</mo><mtext> </mtext><mi>k</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mn>9</mn><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>5</mn><mo>)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mspace width="1em"/><msub><mi>x</mi><mrow><mi>r</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>k</mi></mrow></msub><mo>=</mo><mn>1</mn><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi mathvariant="normal">∀</mi><mo>(</mo><mi>r</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>k</mi><mo>)</mo><mo>∈</mo><mi>C</mi><mo separator="true">,</mo></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>6</mn><mo>)</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mspace width="1em"/><msub><mi>x</mi><mrow><mi>r</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>k</mi></mrow></msub><mo>∈</mo><mo>{</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo>}</mo><mspace width="1em"/></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi mathvariant="normal">∀</mi><mi>r</mi><mo separator="true">,</mo><mi>c</mi><mo separator="true">,</mo><mi>k</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mn>9.</mn></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>7</mn><mo>)</mo></mrow></mstyle></mtd></mtr></mtable><mspace linebreak="newline"></mspace><mspace linebreak="newline"></mspace><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi>r</mi><mo separator="true">,</mo><mi>r</mi><mi>o</mi><mi>w</mi><mo separator="true">,</mo><mi mathvariant="normal">行</mi><mo separator="true">;</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi>c</mi><mo separator="true">,</mo><mi>c</mi><mi>o</mi><mi>l</mi><mi>u</mi><mi>m</mi><mi>n</mi><mo separator="true">,</mo><mi mathvariant="normal">列</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi>k</mi><mo separator="true">,</mo><mn>1</mn><mo>−</mo><mn>9</mn><mi mathvariant="normal">的</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">字</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi>C</mi><mo separator="true">,</mo><mi mathvariant="normal">已</mi><mi mathvariant="normal">填</mi><mi mathvariant="normal">入</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">字</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">坐</mi><mi mathvariant="normal">标</mi></mrow></mstyle></mtd></mtr></mtable><mspace linebreak="newline"></mspace><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>1</mn><mo>)</mo><mo>:</mo><mi mathvariant="normal">目</mi><mi mathvariant="normal">标</mi><mi mathvariant="normal">函</mi><mi mathvariant="normal">数</mi><mo separator="true">,</mo><mi mathvariant="normal">这</mi><mi mathvariant="normal">里</mi><mi mathvariant="normal">不</mi><mi mathvariant="normal">需</mi><mi mathvariant="normal">要</mi><mi mathvariant="normal">设</mi><mi mathvariant="normal">置</mi><mo separator="true">,</mo><mi mathvariant="normal">常</mi><mi mathvariant="normal">数</mi><mn>0</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mi mathvariant="normal">约</mi><mi mathvariant="normal">束</mi><mo>:</mo></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>2</mn><mo>)</mo><mo>:</mo><mi mathvariant="normal">每</mi><mi mathvariant="normal">个</mi><mi mathvariant="normal">格</mi><mi mathvariant="normal">子</mi><mi mathvariant="normal">填</mi><mi mathvariant="normal">入</mi><mi mathvariant="normal">一</mi><mi mathvariant="normal">个</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">字</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>3</mn><mo>)</mo><mo>:</mo><mi mathvariant="normal">每</mi><mi mathvariant="normal">行</mi><mi mathvariant="normal">格</mi><mi mathvariant="normal">子</mi><mi mathvariant="normal">填</mi><mi mathvariant="normal">入</mi><mi mathvariant="normal">一</mi><mi mathvariant="normal">个</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">字</mi><mo separator="true">,</mo><mi mathvariant="normal">不</mi><mi mathvariant="normal">重</mi><mi mathvariant="normal">复</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>4</mn><mo>)</mo><mo>:</mo><mi mathvariant="normal">每</mi><mi mathvariant="normal">列</mi><mi mathvariant="normal">格</mi><mi mathvariant="normal">子</mi><mi mathvariant="normal">填</mi><mi mathvariant="normal">入</mi><mi mathvariant="normal">一</mi><mi mathvariant="normal">个</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">字</mi><mo separator="true">,</mo><mi mathvariant="normal">不</mi><mi mathvariant="normal">重</mi><mi mathvariant="normal">复</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>5</mn><mo>)</mo><mo>:</mo><mi mathvariant="normal">每</mi><mi mathvariant="normal">个</mi><mi mathvariant="normal">小</mi><mi mathvariant="normal">宫</mi><mi mathvariant="normal">格</mi><mi mathvariant="normal">内</mi><mi mathvariant="normal">填</mi><mi mathvariant="normal">入</mi><mi mathvariant="normal">一</mi><mi mathvariant="normal">个</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">字</mi><mo separator="true">,</mo><mi mathvariant="normal">不</mi><mi mathvariant="normal">重</mi><mi mathvariant="normal">复</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>6</mn><mo>)</mo><mo>:</mo><mi mathvariant="normal">已</mi><mi mathvariant="normal">经</mi><mi mathvariant="normal">填</mi><mi mathvariant="normal">入</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">格</mi><mi mathvariant="normal">子</mi><mo separator="true">,</mo><mi mathvariant="normal">其</mi><mi mathvariant="normal">值</mi><mi mathvariant="normal">表</mi><mi mathvariant="normal">示</mi><mi mathvariant="normal">为</mi><mo>:</mo><mn>1</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>(</mo><mn>7</mn><mo>)</mo><mo>:</mo><mi mathvariant="normal">决</mi><mi mathvariant="normal">策</mi><mi mathvariant="normal">变</mi><mi mathvariant="normal">量</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">取</mi><mi mathvariant="normal">值</mi><mi mathvariant="normal">范</mi><mi mathvariant="normal">围</mi><mo separator="true">,</mo><mi mathvariant="normal">即</mi><mn>0</mn><mo>−</mo><mn>1</mn><mi mathvariant="normal">型</mi></mrow></mstyle></mtd></mtr></mtable></mrow><annotation encoding="application/x-tex">\\
+\begin{aligned}
+\text{min} &amp; \quad 0                        &amp;&amp;                                       &amp;&amp;(1)\\
+\text{s.t.} &amp; \quad \sum_{k=1}^{9}x_{r,c,k} = 1,\quad &amp;&amp;\forall r,c = 1,\dots,9,       &amp;&amp;(2)\\
+&amp; \quad \sum_{r=1}^{9}x_{r,c,k}=1,  \quad &amp;&amp;\forall c,k = 1,\dots,9,                   &amp;&amp;(3)\\
+&amp; \quad \sum_{c=1}^{9}x_{r,c,k}=1,  \quad &amp;&amp;\forall r,k = 1,\dots,9,                   &amp;&amp;(4)\\
+&amp; \quad \sum_{r&#x27;=1}^{3}\sum_{c&#x27;=1}^{3} x_{r&#x27;+r,c&#x27;+c,k} = 1,\quad&amp;&amp;\forall r,c \in \{0,3,6\},\ k = 1,\dots,9,                                                                           &amp;&amp;(5)\\
+&amp; \quad x_{r,c,k}=1, &amp;&amp;\forall(r,c,k)\in C,                                            &amp;&amp;(6)\\
+&amp; \quad x_{r,c,k}\in \{0,1\}\quad &amp;&amp;\forall r,c,k = 1,\dots,9.                         &amp;&amp;(7)
+\end{aligned} \\
+\\
+\begin{aligned}
+&amp;r, row, 行;\\
+&amp;c, column, 列\\
+&amp;k, 1 - 9的数字\\
+&amp;C, 已填入数字的坐标\\
+\end{aligned}
+\\
+\begin{aligned}
+&amp;(1): 目标函数, 这里不需要设置, 常数0\\
+&amp;约束:\\
+&amp;(2): 每个格子填入一个数字 \\
+&amp;(3): 每行格子填入一个数字, 不重复 \\
+&amp;(4): 每列格子填入一个数字, 不重复\\
+&amp;(5): 每个小宫格内填入一个数字, 不重复\\
+&amp;(6): 已经填入的格子, 其值表示为:1\\
+&amp;(7): 决策变量的取值范围, 即0-1型\\
+\end{aligned}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="mspace newline"></span><span class="base"><span class="strut" style="height:18.034776em;vertical-align:-8.767388em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:9.267388em;"><span style="top:-12.228501000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord text"><span class="mord">min</span></span></span></span><span style="top:-9.767388em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord text"><span class="mord">s.t.</span></span></span></span><span style="top:-6.364161999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:-2.995936000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:0.37229em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:2.806275em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:4.306274999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:8.767388em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:9.267388em;"><span style="top:-12.228501000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:1em;"></span><span class="mord">0</span></span></span><span style="top:-9.767388em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:1em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.801113em;"><span style="top:-1.8478869999999998em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.0500049999999996em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.300005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">9</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.302113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight">c</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span></span></span><span style="top:-6.364161999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:1em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8011130000000004em;"><span style="top:-1.882887em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">9</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.267113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight">c</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span></span></span><span style="top:-2.995936000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:1em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8011130000000004em;"><span style="top:-1.882887em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">c</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">9</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.267113em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight">c</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span></span></span><span style="top:0.37229em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:1em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8011130000000004em;"><span style="top:-1.856015em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.293985em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8011130000000004em;"><span style="top:-1.856015em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">3</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.293985em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mbin mtight">+</span><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mpunct mtight">,</span><span class="mord mtight"><span class="mord mathdefault mtight">c</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.6828285714285715em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mbin mtight">+</span><span class="mord mathdefault mtight">c</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:1em;"></span></span></span><span style="top:2.806275em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:1em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight">c</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span></span></span><span style="top:4.306274999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:1em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight">c</span><span class="mpunct mtight">,</span><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mopen">{</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">}</span><span class="mspace" style="margin-right:1em;"></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:8.767388em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:1em;"></span><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:9.267388em;"><span style="top:-12.228501000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:-9.767388em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:-6.364161999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:-2.995936000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:0.37229em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:2.806275em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:4.306274999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:8.767388em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:9.267388em;"><span style="top:-12.228501000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span></span></span><span style="top:-9.767388em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mord">∀</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">c</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">9</span><span class="mpunct">,</span></span></span><span style="top:-6.364161999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mord">∀</span><span class="mord mathdefault">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">9</span><span class="mpunct">,</span></span></span><span style="top:-2.995936000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mord">∀</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">9</span><span class="mpunct">,</span></span></span><span style="top:0.37229em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mord">∀</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">c</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mopen">{</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">6</span><span class="mclose">}</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace"> </span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">9</span><span class="mpunct">,</span></span></span><span style="top:2.806275em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mord">∀</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mpunct">,</span></span></span><span style="top:4.306274999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mord">∀</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner">…</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">9</span><span class="mord">.</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:8.767388em;"><span></span></span></span></span></span><span class="arraycolsep" style="width:1em;"></span><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:9.267388em;"><span style="top:-12.228501000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:-9.767388em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:-6.364161999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:-2.995936000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:0.37229em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:2.806275em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span><span style="top:4.306274999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:8.767388em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:9.267388em;"><span style="top:-12.228501000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span><span style="top:-9.767388em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">2</span><span class="mclose">)</span></span></span><span style="top:-6.364161999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span></span></span><span style="top:-2.995936000000001em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">4</span><span class="mclose">)</span></span></span><span style="top:0.37229em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">5</span><span class="mclose">)</span></span></span><span style="top:2.806275em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">6</span><span class="mclose">)</span></span></span><span style="top:4.306274999999999em;"><span class="pstrut" style="height:3.8011130000000004em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">7</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:8.767388em;"><span></span></span></span></span></span></span></span></span><span class="mspace newline"></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:6em;vertical-align:-2.7500000000000004em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:3.25em;"><span style="top:-5.25em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:-3.75em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:-2.249999999999999em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:-0.7499999999999996em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.7500000000000004em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:3.25em;"><span style="top:-5.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">行</span><span class="mpunct">;</span></span></span><span style="top:-3.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mord mathdefault">c</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">u</span><span class="mord mathdefault">m</span><span class="mord mathdefault">n</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">列</span></span></span><span style="top:-2.4099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">9</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">字</span></span></span><span style="top:-0.9099999999999997em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">已</span><span class="mord cjk_fallback">填</span><span class="mord cjk_fallback">入</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">字</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">坐</span><span class="mord cjk_fallback">标</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.7500000000000004em;"><span></span></span></span></span></span></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:12.000000000000002em;vertical-align:-5.750000000000001em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:6.250000000000001em;"><span style="top:-8.25em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:-6.75em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:-5.249999999999999em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:-3.749999999999999em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:-2.249999999999999em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:-0.7499999999999987em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:0.7500000000000009em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span><span style="top:2.250000000000001em;"><span class="pstrut" style="height:2.84em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:5.750000000000001em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:6.250000000000001em;"><span style="top:-8.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord cjk_fallback">目</span><span class="mord cjk_fallback">标</span><span class="mord cjk_fallback">函</span><span class="mord cjk_fallback">数</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">这</span><span class="mord cjk_fallback">里</span><span class="mord cjk_fallback">不</span><span class="mord cjk_fallback">需</span><span class="mord cjk_fallback">要</span><span class="mord cjk_fallback">设</span><span class="mord cjk_fallback">置</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">常</span><span class="mord cjk_fallback">数</span><span class="mord">0</span></span></span><span style="top:-6.91em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mord cjk_fallback">约</span><span class="mord cjk_fallback">束</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span></span></span><span style="top:-5.409999999999999em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">2</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord cjk_fallback">每</span><span class="mord cjk_fallback">个</span><span class="mord cjk_fallback">格</span><span class="mord cjk_fallback">子</span><span class="mord cjk_fallback">填</span><span class="mord cjk_fallback">入</span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">个</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">字</span></span></span><span style="top:-3.9099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">3</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord cjk_fallback">每</span><span class="mord cjk_fallback">行</span><span class="mord cjk_fallback">格</span><span class="mord cjk_fallback">子</span><span class="mord cjk_fallback">填</span><span class="mord cjk_fallback">入</span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">个</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">字</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">不</span><span class="mord cjk_fallback">重</span><span class="mord cjk_fallback">复</span></span></span><span style="top:-2.4099999999999993em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">4</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord cjk_fallback">每</span><span class="mord cjk_fallback">列</span><span class="mord cjk_fallback">格</span><span class="mord cjk_fallback">子</span><span class="mord cjk_fallback">填</span><span class="mord cjk_fallback">入</span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">个</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">字</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">不</span><span class="mord cjk_fallback">重</span><span class="mord cjk_fallback">复</span></span></span><span style="top:-0.9099999999999988em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">5</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord cjk_fallback">每</span><span class="mord cjk_fallback">个</span><span class="mord cjk_fallback">小</span><span class="mord cjk_fallback">宫</span><span class="mord cjk_fallback">格</span><span class="mord cjk_fallback">内</span><span class="mord cjk_fallback">填</span><span class="mord cjk_fallback">入</span><span class="mord cjk_fallback">一</span><span class="mord cjk_fallback">个</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">字</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">不</span><span class="mord cjk_fallback">重</span><span class="mord cjk_fallback">复</span></span></span><span style="top:0.5900000000000007em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">6</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord cjk_fallback">已</span><span class="mord cjk_fallback">经</span><span class="mord cjk_fallback">填</span><span class="mord cjk_fallback">入</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">格</span><span class="mord cjk_fallback">子</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">其</span><span class="mord cjk_fallback">值</span><span class="mord cjk_fallback">表</span><span class="mord cjk_fallback">示</span><span class="mord cjk_fallback">为</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span></span></span><span style="top:2.0900000000000007em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mopen">(</span><span class="mord">7</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord cjk_fallback">决</span><span class="mord cjk_fallback">策</span><span class="mord cjk_fallback">变</span><span class="mord cjk_fallback">量</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">取</span><span class="mord cjk_fallback">值</span><span class="mord cjk_fallback">范</span><span class="mord cjk_fallback">围</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">即</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">1</span><span class="mord cjk_fallback">型</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:5.750000000000001em;"><span></span></span></span></span></span></span></span></span></span></span></span></p>
+<h2 id="一-整数规划">一. 整数规划</h2>
+<p>使用 <code>pyscipopt</code>来求解</p>
+<pre><code class="language-python">import pyscipopt as opt
+
+# 创建上述数独
+matrix = [
+    [8, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 3, 6, 0, 0, 0, 0, 0],
+    [0, 7, 0, 0, 9, 0, 2, 0, 0],
+    [0, 5, 0, 0, 0, 7, 0, 0, 0],
+    [0, 0, 0, 0, 4, 5, 7, 0, 0],
+    [0, 0, 0, 1, 0, 0, 0, 3, 0],
+    [0, 0, 1, 0, 0, 0, 0, 6, 8],
+    [0, 0, 8, 5, 0, 0, 0, 1, 0],
+    [0, 9, 0, 0, 0, 0, 4, 0, 0]
+]
+
+# 普通参数
+# matrix shape
+N = 9
+# litte matrix shape
+n = 3
+# 填入的数字
+constants = [e for e in range(1, N + 1)]
+
+model = opt.Model(&quot;sudoku&quot;)
+
+# 创建变量, 需要 9 * 9 * 9 = 729个决策变量
+variables = {}
+for r in range(N):
+    for c in range(N):
+        for k in constants:
+            key = (r, c, k)
+            variables[key] = model.addVar(
+                name = '_'.join(str(e) for e in key),
+                # 数据类型为布尔型, 即0, 1
+                vtype = 'B'
+            )
+# 同时这里实现上述模型中的决策变量 0-1约束
+
+# 约束1, 对已经填写了数字变量坐标添加1策略约束
+for r in range(N):
+    for c in range(N):
+        if matrix[r][c] != 0:
+            constrain = variables[(r, c, matrix[r][c])] == 1
+            model.addCons(constrain)
+
+# 约束2, 每个网格内有且只有一个数字
+for r in range(N):
+    for c in range(N):
+        constrain = opt.quicksum(variables[(r, c, k)] for k in constants) == 1
+        model.addCons(constrain)
+
+# 约束3, 行列约束
+for i in range(N):
+    for k in constants:
+        # 行约束
+        r_constrain = opt.quicksum(variables[i, c, k] for c in range(N)) == 1
+        model.addCons(r_constrain)
+        # 列约束
+        c_constrain = opt.quicksum(variables[r, i, k] for r in range(N)) == 1
+        model.addCons(c_constrain)
+
+# 约束4, 子宫格约束
+for row in range(n):
+    for col in range(n):
+        for k in constants:
+            constrain = opt.quicksum(variables[r + n * row, c + n * col, k] for r in range(n) for c in range(n)) == 1
+            model.addCons(constrain)
+
+# 无目标函数
+model.optimize()
+
+if model.getStatus() == 'optimal':
+    print('sudoku solution:')
+    # 预先构造一个数独容器用于存放解析结果
+    solution = [[0 for _ in range(N)] for _ in range(N)]
+    for (r, c, k) in variables.keys():
+        if model.getVal(variables[r, c, k]) == 1:
+            solution[r][c] = k
+    # 绘制数独结果
+    sudo_data = (''.join(f'{&quot;| &quot; if c % 3 == 0 else &quot; &quot;}{solution[r][c]}{&quot; &quot; if matrix[r][c] == 0 else &quot;*&quot;}' for c in range(N)) + '|' + ('\n'+ '-' * 31 if (r + 1) % 3 == 0 and r != N - 1 else '') for r in range(N))
+    print('\n'.join(sudo_data))
+else: print('warning: no solution')
+</code></pre>
+<pre><code class="language-bash">sudoku solution:
+| 8* 1  2 | 7  5  3 | 6  4  9 |
+| 9  4  3*| 6* 8  2 | 1  7  5 |
+| 6  7* 5 | 4  9* 1 | 2* 8  3 |
+-------------------------------
+| 1  5* 4 | 2  3  7*| 8  9  6 |
+| 3  6  9 | 8  4* 5*| 7* 2  1 |
+| 2  8  7 | 1* 6  9 | 5  3* 4 |
+-------------------------------
+| 5  2  1*| 9  7  4 | 3  6* 8*|
+| 4  3  8*| 5* 2  6 | 9  1* 7 |
+| 7  9* 6 | 3  1  8 | 4* 5  2 |
+</code></pre>
+<h2 id="二-约束规划">二. 约束规划</h2>
+<p>使用<code>ortools</code>的规划约束来求解.</p>
+<p>整体的解决思路还是类似的, 但是由于<code>cp_model</code>模型提供了更为简单的方式来实现, 所以更为简单优雅.</p>
+<p><code>AddAllDifferent</code>这个函数的理解, 即对多个可迭代变量进行约束, 每个变量完全不重复.</p>
+<p>但是需要注意和<code>excel</code>提供的相类似的方法不同, <code>AddAllDifferent</code>对变量约束之后, 可以进行二度约束.</p>
+<pre><code class="language-,bash">def AddAllDifferent(self, variables)
+    Adds AllDifferent(variables).
+
+    This constraint forces all variables to have different values.
+
+    Args
+    variables
+    a list of integer variables.
+    Returns
+    An instance of the Constraint class.
+</code></pre>
+<p><code>vba</code>调用规划求解模块, 无法使用<code>AddAllDifferent</code>约束来实现数独的求解.</p>
+<pre><code class="language-vbscript">Sub sudoku_test()
+    Const N As Integer = 9, M As Integer = 3
+    Dim r As Integer, c As Integer, i As Integer, j As Integer
+
+    '重置求解器'
+    SolverReset
+
+    '设置求解器目标等 '
+    SolverOk MaxMinVal:=0, ValueOf:=0, ByChange:=&quot;$A$1:$I$9&quot;, Engine:=1, EngineDesc _
+        :=&quot;GRG Nonlinear&quot;
+    ' 整体约束 --------
+    ' 整数约束
+    SolverAdd CellRef:=&quot;$A$1:$I$9&quot;, Relation:=4, FormulaText:=&quot;整数&quot;
+
+    ' 数字约束,  大于等于1
+    SolverAdd CellRef:=&quot;$A$1:$I$9&quot;, Relation:=3, FormulaText:=&quot;1&quot;
+
+    ' 数字约束,  小于等于9
+    SolverAdd CellRef:=&quot;$A$1:$I$9&quot;, Relation:=1, FormulaText:=&quot;9&quot;
+
+    ' ------   整体约束
+
+    ' 已经填入的数字约束, 这部分的约束和AllDifferent冲突
+    For r = 1 To N
+        For c = 1 To N
+            i = Cells(r, c).Value
+            If i &gt; 0 Then
+                SolverAdd CellRef:=Range(Cells(r, c), Cells(r, c)), Relation:=2, FormulaText:=CStr(i)
+            End If
+        Next
+    Next
+
+    ' 行约束
+    For r = 1 To N
+        SolverAdd CellRef:=Range(Cells(r, 1), Cells(r, 9)), Relation:=6, FormulaText:=&quot;AllDifferent&quot;
+    Next
+
+    ' 列约束
+    For c = 1 To N
+        SolverAdd CellRef:=Range(Cells(1, c), Cells(9, c)), Relation:=6, FormulaText:=&quot;AllDifferent&quot;
+
+    Next
+
+    ' 小宫格约束
+    i = 1
+    j = 1
+    For r = 1 To M
+        For c = 1 To M
+            SolverAdd CellRef:=Range(Cells(i, j), Cells(i + 2, j + 2)), Relation:=6, FormulaText:=&quot;AllDifferent&quot;
+            j = j + 3
+        Next
+        i = i + 3
+        j = 1
+    Next
+
+    SolverSolve
+End Sub
+</code></pre>
+<p>已经填入的数字约束, 这部分的约束和<code>AllDifferent</code>冲突.</p>
+<pre><code class="language-python">from ortools.sat.python import cp_model
+
+# 在求解上稍微有点不一样, model并没有solver()
+model = cp_model.CpModel()
+
+# 需要创建一个求解器的实例
+solver = cp_model.CpSolver()
+
+variables = {}
+for r in range(N):
+    for c in range(N):
+        variables[r, c] = cell if (cell := matrix[r][c]) != 0 else model.NewIntVar(1, N, f'v[{r}{c}]')
+
+for r in range(N):
+	model.AddAllDifferent((variables[r, c] for c in range(N)))
+
+for c in range(N):
+	model.AddAllDifferent((variables[r, c] for r in range(N)))
+
+for row in range(n):
+    for col in range(n):
+        model.AddAllDifferent((variables[r + n * row, c + n * col] for r in range(n) for c in range(n)))
+
+status = solver.Solve(model)
+
+if status == cp_model.OPTIMAL:
+    print('sudoku solution:')
+    # 预先构造一个数独容器用于存放解析结果
+    solution = [[0 for _ in range(N)] for _ in range(N)]
+    for i in range(N):
+        for j in range(N):
+            solution[i][j] = int(solver.Value(variables[i, j]))
+    # 绘制数独结果
+    sudo_data = (''.join(f'{&quot;| &quot; if c % 3 == 0 else &quot; &quot;}{solution[r][c]}{&quot; &quot; if matrix[r][c] == 0 else &quot;*&quot;}' for c in range(N)) + '|' + ('\n'+ '-' * 31 if (r + 1) % 3 == 0 and r != N - 1 else '') for r in range(N))
+    print('\n'.join(sudo_data))
+else: print('warning: no solution')
+</code></pre>
+<pre><code class="language-bash">sudoku solution:
+| 8* 1  2 | 7  5  3 | 6  4  9 |
+| 9  4  3*| 6* 8  2 | 1  7  5 |
+| 6  7* 5 | 4  9* 1 | 2* 8  3 |
+-------------------------------
+| 1  5* 4 | 2  3  7*| 8  9  6 |
+| 3  6  9 | 8  4* 5*| 7* 2  1 |
+| 2  8  7 | 1* 6  9 | 5  3* 4 |
+-------------------------------
+| 5  2  1*| 9  7  4 | 3  6* 8*|
+| 4  3  8*| 5* 2  6 | 9  1* 7 |
+| 7  9* 6 | 3  1  8 | 4* 5  2 |
+</code></pre>
+<p>对于数独问题, 约束规划相对于整数规划更为容易理解.</p>
+<blockquote>
+<p>CP has a widespread and very active community around the world with dedicated scientific journals, conferences, and an arsenal of different solving techniques . CP has been successfully applied in planning, scheduling, and numerous other domains with heterogeneous constraints.</p>
+</blockquote>
+<p>在实际的应用中, 约束规划的求解可能有更好的适应性.</p>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/shu-du-wen-ti-gui-hua-qiu-jie/" title="数独问题 - 规划求解">https://Kyouichirou.github.io/post/shu-du-wen-ti-gui-hua-qiu-jie/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/k9nWgChF7/"># ortools</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/nVhK8pEaF/"># operational research</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/iAiJqHkOw/"># math model</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="小型工控机-软路由配置拾遗" href="https://Kyouichirou.github.io/post/xiao-xing-gong-kong-ji-ruan-lu-you-pei-zhi-shi-yi/">小型工控机-软路由配置拾遗</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="小型工控机-软路由配置拾遗" href="https://Kyouichirou.github.io/post/xiao-xing-gong-kong-ji-ruan-lu-you-pei-zhi-shi-yi/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Excel规划求解示例 - 上架商品利润最大化" href="https://Kyouichirou.github.io/post/excel-gui-hua-qiu-jie-shi-li-shang-jia-shang-pin-li-run-zui-da-hua/">Excel规划求解示例 - 上架商品利润最大化</a>
+        <a class="nav-mobile-next" title="Excel规划求解示例 - 上架商品利润最大化" href="https://Kyouichirou.github.io/post/excel-gui-hua-qiu-jie-shi-li-shang-jia-shang-pin-li-run-zui-da-hua/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

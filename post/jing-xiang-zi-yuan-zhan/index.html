@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>镜像资源站 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="镜像资源站" />
+  <meta name="keywords" content="nodejs,python" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一. 前言</a></li>
+<li><a href="#%E4%BA%8C-%E4%BC%81%E4%B8%9A%E7%AB%99">二. 企业站</a></li>
+<li><a href="#%E4%B8%89-%E5%9B%BD%E5%86%85%E5%A4%A7%E5%AD%A6%E9%95%9C%E5%83%8F%E7%AB%99">三. 国内大学镜像站</a>
+<ul>
+<li><a href="#31-%E6%B8%85%E5%8D%8E%E9%95%9C%E5%83%8F%E6%BA%90">3.1 清华镜像源</a></li>
+<li><a href="#32-%E5%B0%8F%E7%BB%93">3.2 小结</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E4%BF%AE%E6%94%B9%E6%BA%90">四. 修改源</a>
+<ul>
+<li><a href="#41-pip">4.1 pip</a></li>
+<li><a href="#42-conda">4.2 conda</a></li>
+<li><a href="#43-npm">4.3 npm</a></li>
+<li><a href="#44-ubuntu">4.4 ubuntu</a></li>
+<li><a href="#45-docker">4.5 docker</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-js%E9%9D%99%E6%80%81%E8%B5%84%E6%BA%90%E5%BA%93">五. JS静态资源库</a></li>
+<li><a href="#%E5%85%AD-%E6%80%BB%E7%BB%93">六. 总结</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/jing-xiang-zi-yuan-zhan/"> 镜像资源站 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2025-09-22 12:35:00">2025-09-22</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/DbOxEVUvJ/"> <span>nodejs</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/x52r92_VNV/">
+        <span>python</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >17<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >3706<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <p><span class="md-image"><img alt="img" src="data:image/webp;base64,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" referrerpolicy="no-referrer"></span></p>
+<h2 id="一-前言">一. 前言</h2>
+<pre><code class="language-bash"># Windows预置的时间同步服务器, time.windows.com, 就属于可访问, 但速度慢不稳地
+ntp.ntsc.ac.cn 　　# 中国国家授时中心
+</code></pre>
+<p>由于大清特殊的国情和外部的某些原因, 不少境外站点的访问很多时候都是问题. 不是无法访问就是速度如蜗牛, 亦或者135墙, 246放, 间歇性的可访问.</p>
+<p>尽管有梯子存在, 但是在下载大文件, 代理的设置方面都存在各种问题, 镜像资源站的存在就很重要了.</p>
+<p>以下为一些镜像站和<code>js</code>的静态资源站以及基本的配置.</p>
+<!--more-->
+<h2 id="二-企业站">二. 企业站</h2>
+<p>企业站可能速度没问题, 但是在使用上总不是很顺手, 如, 使用华为的源, 在安装<code>TensorFlow</code>时报错, 但是换成清华源就没问题.</p>
+<table>
+<thead>
+<tr>
+<th>镜像站</th>
+<th>地址</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>阿里云镜像站</td>
+<td><a href="https://developer.aliyun.com/mirror">https://developer.aliyun.com/mirror</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>华为云镜像</td>
+<td><a href="https://mirrors.huaweicloud.com">https://mirrors.huaweicloud.com</a></td>
+<td>1Gbps</td>
+</tr>
+<tr>
+<td>腾讯软件源</td>
+<td><a href="https://mirrors.tencent.com">https://mirrors.tencent.com</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>火山引擎镜像站</td>
+<td><a href="https://developer.volcengine.com/mirror/">https://developer.volcengine.com/mirror/</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>天翼云开源镜像站</td>
+<td><a href="https://mirrors.ctyun.cn">http://mirrors.ctyun.cn</a></td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h2 id="三-国内大学镜像站">三. 国内大学镜像站</h2>
+<p>高校站最大的问题是服务的稳定性和速度, 毕竟相关服务除了技术之外, 硬件的投入也是颇大.</p>
+<p>[中国高校教育网及科技网开源镜像列表 <a href="https://lug.org.cn/doku.php?id=china-edu-open-source-mirrors">China GNU/Linux User Group]</a></p>
+<p><span class="md-image"><img alt="img" src="data:image/webp;base64,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" referrerpolicy="no-referrer"></span></p>
+<p><em>在一众理工科大学中, 有个相对独特的存在: <a href="http://mirrors.sdwu.edu.cn/">山东女子学院镜像站</a>, 可惜网站下线了.</em></p>
+<table>
+<thead>
+<tr>
+<th>镜像站</th>
+<th>地址</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>清华大学开源软件镜像站</td>
+<td><a href="https://mirrors.tuna.tsinghua.edu.cn">https://mirrors.tuna.tsinghua.edu.cn</a></td>
+<td>20Gbps</td>
+</tr>
+<tr>
+<td>浙江大学开源软件镜像站</td>
+<td><a href="https://mirrors.zju.edu.cn">https://mirrors.zju.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>中国科学技术大学开源软件镜像</td>
+<td><a href="https://mirrors.ustc.edu.cn">https://mirrors.ustc.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>上海交大致远镜像站</td>
+<td><a href="https://mirrors.sjtug.sjtu.edu.cn">https://mirrors.sjtug.sjtu.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>南京大学开源镜像站</td>
+<td><a href="https://mirror.nju.edu.cn">https://mirror.nju.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>北京外国语大学开源软件镜像站</td>
+<td><a href="https://mirrors.bfsu.edu.cn">https://mirrors.bfsu.edu.cn</a></td>
+<td>2Gbps,tunasync</td>
+</tr>
+<tr>
+<td>山东大学镜像站</td>
+<td><a href="https://mirrors.sdu.edu.cn">https://mirrors.sdu.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>齐鲁工业大学开源软件镜像站</td>
+<td><a href="https://mirrors.qlu.edu.cn">https://mirrors.qlu.edu.cn</a></td>
+<td>10Gbps,tunasync</td>
+</tr>
+<tr>
+<td>南阳理工学院开源软件镜像站</td>
+<td><a href="https://mirror.nyist.edu.cn">https://mirror.nyist.edu.cn</a></td>
+<td>10Gbps,tunasync</td>
+</tr>
+<tr>
+<td>南方科技大学开源软件镜像站</td>
+<td><a href="https://mirrors.sustech.edu.cn">https://mirrors.sustech.edu.cn</a></td>
+<td>tunasync</td>
+</tr>
+<tr>
+<td>北京交通大学自由与开源软件镜像站</td>
+<td><a href="https://mirror.bjtu.edu.cn">https://mirror.bjtu.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>西安交通大学软件镜像站</td>
+<td><a href="https://mirrors.xjtu.edu.cn">https://mirrors.xjtu.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>吉林大学开源镜像站</td>
+<td><a href="https://mirrors.jlu.edu.cn">https://mirrors.jlu.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>兰州大学开源社区镜像站</td>
+<td><a href="https://mirror.lzu.edu.cn">https://mirror.lzu.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>哈尔滨工业大学开源镜像站</td>
+<td><a href="https://mirrors.hit.edu.cn">https://mirrors.hit.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>ISCAS 镜像站</td>
+<td><a href="https://mirror.iscas.ac.cn">https://mirror.iscas.ac.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>南京工业大学开源软件镜像站</td>
+<td><a href="https://mirrors.njtech.edu.cn">https://mirrors.njtech.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>西北农业大学</td>
+<td><a href="https://mirrors.nwafu.edu.cn">https://mirrors.nwafu.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>北京大学开源镜像站</td>
+<td><a href="https://mirrors.pku.edu.cn">https://mirrors.pku.edu.cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>华中科技大学开源镜像站</td>
+<td><a href="https://mirrors.hust.edu.cn">https://mirrors.hust.edu.cn</a></td>
+<td>tunasync</td>
+</tr>
+<tr>
+<td>上海交通大学FTP</td>
+<td><a href="https://ftp.sjtu.edu.cn/html/index.xml">https://ftp.sjtu.edu.cn/html/index.xml</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>交大資工系計算機中心</td>
+<td><a href="https://linux.cs.nctu.edu.tw">https://linux.cs.nctu.edu.tw</a></td>
+<td>1Gbps</td>
+</tr>
+<tr>
+<td>國研院國網中心自由軟體實驗室</td>
+<td><a href="https://free.nchc.org.tw/pmwiki">https://free.nchc.org.tw/pmwiki</a></td>
+<td>1Gbps</td>
+</tr>
+<tr>
+<td>Taiwan Digital Streaming</td>
+<td><a href="https://mirror.twds.com.tw">https://mirror.twds.com.tw</a></td>
+<td>80Gbps,tunasync</td>
+</tr>
+<tr>
+<td>北京交通大学</td>
+<td><a href="https://mirror.bjtu.edu.cn/cn">http://mirror.bjtu.edu.cn/cn</a></td>
+<td>-</td>
+</tr>
+<tr>
+<td>中山大学开源软件镜像站</td>
+<td><a href="https://mirror.sysu.edu.cn">http://mirror.sysu.edu.cn</a></td>
+<td>试运行,tunasync</td>
+</tr>
+<tr>
+<td>西北农林科技大学</td>
+<td><a href="https://mirrors.nwsuaf.edu.cn">https://mirrors.nwsuaf.edu.cn</a></td>
+<td>tunasync</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://zhuanlan.zhihu.com/p/1913923780805386617">(国内软件源镜像站一览表(2025年状态更新) - 知乎</a></p>
+<h3 id="31-清华镜像源">3.1 清华镜像源</h3>
+<p>清华源是相对特殊的, 在一众高校镜像源中, 清华大学这个站, 上线时间相对较早, 资源丰富, 近些年来服务的稳定性得到保障, 以及帮助手册对新手很好, 应该是国内用户量最大的镜像站点.</p>
+<p>例如, <code>pip</code>的某些包在官方原站点没有, 但是清华站却依然可以下载到.</p>
+<p>除此之外, <a href="https://tuna.moe/">清华大学 TUNA 协会</a> 还有其他更多的服务支持, <a href="https://tuna.moe/oh-my-tuna/">Oh My TUNA</a>, 提供了一个集成脚本修改相关设置.</p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>适用场景</th>
+<th>核心操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Pypi</code></td>
+<td>Python 的 pip 工具</td>
+<td>修改 <code>pip.conf</code> 配置文件, 设置索引 URL 为清华 PyPI 镜像.</td>
+</tr>
+<tr>
+<td><code>ArchLinux</code></td>
+<td>Arch Linux 系统</td>
+<td>修改 <code>/etc/pacman.d/mirrorlist</code>, 添加清华 Arch 镜像源.</td>
+</tr>
+<tr>
+<td><code>Homebrew</code></td>
+<td>macOS 的 Homebrew 包管理</td>
+<td>修改 brew 仓库远程地址, 设置 <code>HOMEBREW_BOTTLE_DOMAIN</code> 环境变量.</td>
+</tr>
+<tr>
+<td><code>CTAN</code></td>
+<td>TeX Live 的 tlmgr 工具</td>
+<td>通过 <code>tlmgr</code> 命令切换 CTAN 镜像源为清华镜像.</td>
+</tr>
+<tr>
+<td><code>Anaconda</code></td>
+<td>Anaconda/Miniconda</td>
+<td>通过 <code>conda config</code> 添加清华 Anaconda 镜像通道.</td>
+</tr>
+<tr>
+<td><code>Debian</code></td>
+<td>Debian 系统</td>
+<td>替换 <code>/etc/apt/sources.list</code> 为清华 Debian 镜像源( 备份原文件) .</td>
+</tr>
+<tr>
+<td><code>Ubuntu</code></td>
+<td>Ubuntu 系统</td>
+<td>类似 Debian, 替换 <code>sources.list</code> 为清华 Ubuntu 镜像源( 含 ports 支持) .</td>
+</tr>
+<tr>
+<td><code>CentOS</code></td>
+<td>CentOS 系统</td>
+<td>修改 <code>/etc/yum.repos.d/CentOS-Base.repo</code>, 替换为清华 CentOS 镜像.</td>
+</tr>
+<tr>
+<td><code>AOSCOS</code></td>
+<td>AOSC OS 系统</td>
+<td>通过 <code>apt-gen-list</code> 命令添加清华 AOSC 镜像源.</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/">清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
+<h3 id="32-小结">3.2 小结</h3>
+<p>集合版本: <a href="https://mirrors.cernet.edu.cn/">校园网联合镜像站</a></p>
+<h2 id="四-修改源">四. 修改源</h2>
+<p>使用清华源全家桶, 中科大和阿里作为备份.</p>
+<h3 id="41-pip">4.1 pip</h3>
+<pre><code class="language-bash"># 单独使用
+pip install -i https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple some-package_name
+
+# 全局设置
+pip config set global.index-url https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
+
+# 备用中科大: https://mirrors.ustc.edu.cn/pypi/web/simple
+</code></pre>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/help/pypi/">pypi | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
+<h3 id="42-conda">4.2 conda</h3>
+<pre><code class="language-bash">channels:
+  - defaults
+show_channel_urls: true
+default_channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud
+</code></pre>
+<p>备用中科大: <a href="https://mirrors.ustc.edu.cn/help/anaconda.html">Anaconda - USTC Mirror Help</a></p>
+<pre><code class="language-bash">channels:
+  - defaults
+show_channel_urls: true
+default_channels:
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/main
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/r
+  - https://mirrors.ustc.edu.cn/anaconda/pkgs/msys2
+custom_channels:
+  conda-forge: https://mirrors.ustc.edu.cn/anaconda/cloud
+  bioconda: https://mirrors.ustc.edu.cn/anaconda/cloud
+</code></pre>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/">anaconda | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
+<h3 id="43-npm">4.3 npm</h3>
+<pre><code class="language-bash">npm config set registry https://mirrors.tuna.tsinghua.edu.cn/npm/
+
+npm config get registry # 查看
+npm config set registry https://registry.npmjs.org # 恢复默认
+
+npm config set registry https://registry.npmmirror.com # 备用淘宝
+</code></pre>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/help/nodejs-release/">nodejs-release | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
+<h3 id="44-ubuntu">4.4 ubuntu</h3>
+<p>新的路径:</p>
+<pre><code class="language-bash">sudo vi /etc/apt/sources.list.d/ubuntu.sources
+</code></pre>
+<p><code>ubuntu24</code>修改了源文件的位置: <code>/etc/apt/sources.list</code></p>
+<pre><code class="language-bash">Types: deb
+URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu
+Suites: noble noble-updates noble-backports
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+# 默认注释了源码镜像以提高 apt update 速度, 如有需要可自行取消注释
+# Types: deb-src
+# URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu
+# Suites: noble noble-updates noble-backports
+# Components: main restricted universe multiverse
+# Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+# 以下安全更新软件源包含了官方源与镜像站配置, 如有需要可自行修改注释切换
+Types: deb
+URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu
+Suites: noble-security
+Components: main restricted universe multiverse
+Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+# Types: deb-src
+# URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu
+# Suites: noble-security
+# Components: main restricted universe multiverse
+# Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+# 预发布软件源, 不建议启用
+
+# Types: deb
+# URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu
+# Suites: noble-proposed
+# Components: main restricted universe multiverse
+# Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+
+# # Types: deb-src
+# # URIs: https://mirrors.tuna.tsinghua.edu.cn/ubuntu
+# # Suites: noble-proposed
+# # Components: main restricted universe multiverse
+# # Signed-By: /usr/share/keyrings/ubuntu-archive-keyring.gpg
+</code></pre>
+<p><a href="https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/">ubuntu | 镜像站使用帮助 | 清华大学开源软件镜像站 | Tsinghua Open Source Mirror</a></p>
+<h3 id="45-docker">4.5 docker</h3>
+<p><code>docker</code> 镜像源不知道是因为商业缘故(docker公司对拉取镜像进行收费)还是清廷的干预, 并没有规模组织开设相关的镜像站点.</p>
+<p>管理工具, 这里使用的是<a href="https://podman.io/">podman.io</a>, 不是用原版<code>docker</code>, 在使用上和<code>docker</code>一致.</p>
+<p>安装</p>
+<pre><code class="language-bash"># Ubuntu 20.10 and newer
+sudo apt-get update
+sudo apt-get -y install podman
+
+(base) lian@jarvis:~$ podman version
+Client:       Podman Engine
+Version:      4.9.3
+API Version:  4.9.3
+Go Version:   go1.22.2
+Built:        Thu Jan  1 00:00:00 1970
+OS/Arch:      linux/amd64
+</code></pre>
+<p><a href="https://podman.org.cn/docs/installation">Podman 安装 | Podman 容器工具</a></p>
+<p>拉取镜像, 只能是八仙过海各显神通.</p>
+<p>一些常见的镜像: <a href="https://mcr.microsoft.com/">Microsoft Artifact Registry</a></p>
+<p>需要重点关注的是GitHub出品: <a href="https://github.blog/news-insights/product-news/introducing-github-container-registry/">Introducing GitHub Container Registry - The GitHub Blog</a></p>
+<p><a href="https://oalahurikar.github.io/app-dev-blog/Github/Github-Container-Registry">Github Container Registry</a></p>
+<p><a href="https://juejin.cn/post/7310412232611954697">使用github action 构建镜像并上传到github registry在这篇文章中, 我将讨论 GHCR 是什么,  - 掘金</a></p>
+<pre><code class="language-bash">sudo vi /etc/containers/registries.conf
+
+# 配置 Podman 使用 Xget 镜像加速
+# 编辑 /etc/containers/registries.conf
+[[registry]]
+prefix = &quot;ghcr.io&quot;
+location = &quot;xget.xi-xu.me/cr/ghcr&quot;
+
+# 或者直接拉取
+podman pull xget.xi-xu.me/cr/ghcr/alpine/alpine:latest
+podman pull xget.xi-xu.me/cr/ghcr/nginxinc/nginx-unprivileged:latest
+</code></pre>
+<pre><code class="language-bash">sudo systemctl restart podman
+
+podman info | grep -A 10 &quot;Registry Mirrors&quot;
+</code></pre>
+<p>修改之后重启服务, 查看修改是否生效, 假如配置存在问题会报错.</p>
+<p><a href="https://docker-0.unsee.tech/">Docker Hub 镜像加速服务</a></p>
+<pre><code class="language-bash">podman pull docker-0.unsee.tech/soulteary/flare
+
+# 查看镜像文件
+(base) lian@jarvis:~$ podman images
+REPOSITORY                           TAG         IMAGE ID      CREATED        SIZE
+ghcr.io/ajnart/homarr                latest      706a61f2e7a1  6 weeks ago    1.02 GB
+docker-0.unsee.tech/soulteary/flare  latest      4b05693db111  17 months ago  14.8 MB
+
+# 运行, 第一次运行
+podman run -d --name flare -p 5005:5005 docker-0.unsee.tech/soulteary/flare # 这个项目只能使用5005端口, 否则无法正常运行
+
+# 查看容器状态( 是否运行中)
+podman ps | grep flare
+
+# 查看容器
+(base) lian@jarvis:~$ podman ps
+CONTAINER ID  IMAGE                                       COMMAND     CREATED      STATUS        PORTS
+     NAMES
+20bce8d071c3  docker-0.unsee.tech/soulteary/flare:latest  flare       4 hours ago  Up 2 minutes  0.0.0.0:5005-&gt;5005/tcp  flare
+
+# 查看容器的端口映射关系
+podman port flare
+
+# 重启容器
+podman restart flare
+
+# 启动容器, 下次启用不需要run
+podman start flare
+
+# 实时查看日志输出( 启动过程的详细信息)
+podman logs -f flare
+</code></pre>
+<p><span class="md-image"><img alt="img" src="data:image/webp;base64,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" referrerpolicy="no-referrer"></span></p>
+<p>南京大学对相关内容做了比较清晰的整理, <a href="https://sci.nju.edu.cn/9e/05/c30384a564741/page.htm">容器缓存镜像添新丁了</a></p>
+<p><a href="https://docker.aityp.com/">渡渡鸟镜像同步站</a></p>
+<hr>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>命令</strong></th>
+<th style="text-align:left"><strong>功能</strong></th>
+<th style="text-align:left"><strong>示例</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>docker run</code></td>
+<td style="text-align:left">启动一个新的容器并运行命令</td>
+<td style="text-align:left"><code>docker run -d ubuntu</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker ps</code></td>
+<td style="text-align:left">列出当前正在运行的容器</td>
+<td style="text-align:left"><code>docker ps</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker ps -a</code></td>
+<td style="text-align:left">列出所有容器( 包括已停止的容器)</td>
+<td style="text-align:left"><code>docker ps -a</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker build</code></td>
+<td style="text-align:left">使用 Dockerfile 构建镜像</td>
+<td style="text-align:left"><code>docker build -t my-image .</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker images</code></td>
+<td style="text-align:left">列出本地存储的所有镜像</td>
+<td style="text-align:left"><code>docker images</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker pull</code></td>
+<td style="text-align:left">从 Docker 仓库拉取镜像</td>
+<td style="text-align:left"><code>docker pull ubuntu</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker push</code></td>
+<td style="text-align:left">将镜像推送到 Docker 仓库</td>
+<td style="text-align:left"><code>docker push my-image</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker exec</code></td>
+<td style="text-align:left">在运行的容器中执行命令</td>
+<td style="text-align:left"><code>docker exec -it container_name bash</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker stop</code></td>
+<td style="text-align:left">停止一个或多个容器</td>
+<td style="text-align:left"><code>docker stop container_name</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker start</code></td>
+<td style="text-align:left">启动已停止的容器</td>
+<td style="text-align:left"><code>docker start container_name</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker restart</code></td>
+<td style="text-align:left">重启一个容器</td>
+<td style="text-align:left"><code>docker restart container_name</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker rm</code></td>
+<td style="text-align:left">删除一个或多个容器</td>
+<td style="text-align:left"><code>docker rm container_name</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker rmi</code></td>
+<td style="text-align:left">删除一个或多个镜像</td>
+<td style="text-align:left"><code>docker rmi my-image</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker logs</code></td>
+<td style="text-align:left">查看容器的日志</td>
+<td style="text-align:left"><code>docker logs container_name</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker inspect</code></td>
+<td style="text-align:left">获取容器或镜像的详细信息</td>
+<td style="text-align:left"><code>docker inspect container_name</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker exec -it</code></td>
+<td style="text-align:left">进入容器的交互式终端</td>
+<td style="text-align:left"><code>docker exec -it container_name /bin/bash</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker network ls</code></td>
+<td style="text-align:left">列出所有 Docker 网络</td>
+<td style="text-align:left"><code>docker network ls</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker volume ls</code></td>
+<td style="text-align:left">列出所有 Docker 卷</td>
+<td style="text-align:left"><code>docker volume ls</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker-compose up</code></td>
+<td style="text-align:left">启动多容器应用( 从 <code>docker-compose.yml</code> 文件)</td>
+<td style="text-align:left"><code>docker-compose up</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker-compose down</code></td>
+<td style="text-align:left">停止并删除由 <code>docker-compose</code> 启动的容器, 网络等</td>
+<td style="text-align:left"><code>docker-compose down</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker info</code></td>
+<td style="text-align:left">显示 Docker 系统的详细信息</td>
+<td style="text-align:left"><code>docker info</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker version</code></td>
+<td style="text-align:left">显示 Docker 客户端和守护进程的版本信息</td>
+<td style="text-align:left"><code>docker version</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker stats</code></td>
+<td style="text-align:left">显示容器的实时资源使用情况</td>
+<td style="text-align:left"><code>docker stats</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker login</code></td>
+<td style="text-align:left">登录 Docker 仓库</td>
+<td style="text-align:left"><code>docker login</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>docker logout</code></td>
+<td style="text-align:left">登出 Docker 仓库</td>
+<td style="text-align:left"><code>docker logout</code></td>
+</tr>
+</tbody>
+</table>
+<p>常用选项说明:</p>
+<ul>
+<li><strong><code>-d</code></strong>: 后台运行容器, 例如 <code>docker run -d ubuntu</code>.</li>
+<li><strong><code>-it</code></strong>: 以交互式终端运行容器, 例如 <code>docker exec -it container_name bash</code>.</li>
+<li><strong><code>-t</code></strong>: 为镜像指定标签, 例如 <code>docker build -t my-image .</code>.</li>
+</ul>
+<p><a href="https://www.runoob.com/docker/docker-container-usage.html">Docker 容器使用 | 菜鸟教程</a></p>
+<h2 id="五-js静态资源库">五. JS静态资源库</h2>
+<p><em>在使用镜像站/资源站时, 各位是否会想一个问题, 镜像站会不会修改其保存的文件, 如常见的加入广告.</em></p>
+<p><a href="https://www.ithome.com/0/748/126.htm">npm 软件包网站被滥用, 开发者上传超 700 个&lt; 武林外传&gt; 切片视频 - IT之家</a>, <code>npm</code>的脆弱.</p>
+<p>[XZ Utils( CVE-2024-3094)  供应链投毒深度分析 | 天融信阿尔法实验室](https://blog.topsec.com.cn/xz-utils( cve-2024-3094) -供应链投毒深度分析/), 软件供应链投毒在当下成为一种高效的计算机攻击方式, <code>js</code>静态资源也不能幸免成为受害者.</p>
+<p><span class="md-image"><img alt="img" src="data:image/webp;base64,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" referrerpolicy="no-referrer"></span></p>
+<p><a href="https://cdn.bytedance.com/">字节跳动静态资源公共库( 已下线) </a></p>
+<p>国内各家曾经上线过一些带有一定公益属性的项目, 但是大多下架, 例如新浪, 百度, 360等均不在提供相关资源.</p>
+<p><a href="https://config.net.cn/tools/JsCdn.html">前端公共资源CDN存储库大全-持续更新</a></p>
+<p>一些来路有点存疑的站点成为了很多人的选择, 特别自建小型站点时调用.</p>
+<p><a href="https://www.v2ex.com/t/950163">Bootcss CDN 疑似被投毒 - V2EX</a></p>
+<p><a href="https://linux.do/t/topic/160500">【转载】继Bootcdn之后, Goedge被官方通过jQueryJS投毒 - 前沿快讯 - LINUX DO</a></p>
+<p>但需要注意替换掉<code>Bootcss CDN</code>时需要检查在其他的站点是否也同样存在目标资源.</p>
+<p><span class="md-image"><img alt="img" src="data:image/webp;base64,UklGRu4ZAABXRUJQVlA4IOIZAAAwcACdASqWAogAPpFInUqlpKMiJDY6uLASCWVu/HyZGuZow6FGS/n+bv16oQdyvz3l5wV+hr/Pbr3nhvSF/melk/1n//9yT+tf8P//+4B+wHrZ+qZ/o/S+9AD/9cFz4q/xnZx/Z/yq89e+x5h9wfXQzT9X2o18g+xP5/+2+aP+k8EfdV/Qf2f2Avy7+Vf6Xw9/47teNG/w/oBeyX0L/Z/4H8m/OM/aP7h+8HuB+R/z3/Sfmj9AH8m/oX+09Ov9H4H32b/LfsJ8AX8u/rP/T/w35IfSb++/+P/Nf6z93vZ9+e/4n/wf574CP5n/XP+h/gv9D73fsI/eT2Uv2///5DeHsyDhQKCataDIhkDoA+LNqg14l7+OmKpzQlrrQoEYTjkZKJPMoCX1If1FHHQOdnS771KJtMQACfjvwIpocNdw0cNXL9ovV/eLefe1DRb7Z1zmB9aKO8HfRvMviaSchhF3U2n/Hbc7WvY23O0nmq4SO41Wn+7Jc3hWa9q6utSaabeiQs7kynF/y/pLxTON46bpYMybWpZaMapTpMR84XqT5cV+6Zq0ZseC6ZqgE3+4oHWwWjc+2c9gLjJySyMy+3b7ZNPO3AgPa0bheDNktMdWk2OnTnnu1Dg3imVGqNQVVcM42Dpjv8qkOLG2mF1vqKa4kfX8SGD3/UyShajFqnZUqowNon2jqH145Z7jHqPp3dv2biEPgT/LTBBoiIp1GngwKsAaZe4g1pi/MgeH6TiHS+4pN8rkEj16ENSaNvyXQaLGKyVrL+F1qXzJ99vsNw+UNhOU4QGHvgTDDjFz8E5YLaMAf5AW5wRxakBpy+yoksPJhfuEBwQTV2xhlx6pMANoPAWWlLGhLBWlPn+jwZte4IiIOuwP3yeSX9qDUWEAjFQvcFE6EQnOx1G52DlArgKoVgdXmQZZEndFkKmKf4sQ9vHmanrkwQ/j5WBS9pnK10n/r4IcZzhHoNiggiNKdonzmCclEHdtrC9bDQcq3TEXLlBqPIMbRglKMwwhf12JtsqXaBScwWhFovuARBbRsCPzw3jtIDEQW0YOj88N46GbblH48bIuT/Zo2QxInGrl3ysVnIUbx23O1r2Ntzta9jbc7WvY23O1r2Ntzta9jbc7WvY23O1r2Ntzta9jbc7WvY23O1r2Ntzta9jbc7WvY23O1r2Ntzta9jbc7WvY23O1r2Ntzta9jbc7QAAA/uaUD2Ni3QW9o3wRwbMkZOql0VZYKrP5F+/neiVvPysAtBUOj9cl7IyOgZqFOc/3UiCFu8eUkf6ShCyPfQnekcgsBvnYjHeD9/pn8CTWbVdbrpuFXiwXtSgR0YDjmbHaGHDgjlo3fgmEPx/EF5TaqiMa0alEdvy4B2yJFapEz99uGhm6Zj8Nt3rdnH90Cshbzb+5cKfkcZGj3jyvi34/Jpd8bvIkNGB5Ql/Ki1PfGLFMeiZG7pW/uycE1WlDKGwos++jgih1dSfTaIg/KW6pkL+tukP8fjmvPAoq8tHDbhjvx0XNEXpcqW/tymejw+gxqjSJR9lAYY2Ddo87ZJ2Q4FC1iW9KxA0kk1E7X9MfyclUeG0TNDDF4aiHQINj8JBWGikSuHrvW6pSvh+59QpTHUDfXleTo+xK4LarseNbXxTvdh1J+uQO2gyfrMUWfuxDsXDc64RPosWbdyPS301G1mQ8YCXLe6dpEgjBqffB4KbUn2mc7OTNoidOB1/SyOoI4KRSw4j3nH/h6kl7tS+FUSqIE78PI/9mPX6tMAkMagarmsa+Wons6ByasjD2Live7/FgWYWZZxjt5KhK6z9Lh/RPAeuL3raxnCx5zshNV7WDxrsE2HBDWTqC4HJoB+LxXNhNttnBVqZffpagMU1RwBzFx5fYlfi0OBHA9pDTWcJi8dZ1zJGbMaM3G/+s1/Ktbd0oDU5GaA3lwP63VU+B10StDez01Cehp2hSvfb84EUmRhTLECieSe+EspHNDJB29wNareWbVf5o6tr7y1A+xlGkRwwst3AjSUaJYn28pbuuCg+43kidjJDrAJTJb9/bMYytxjHe2fHsIAY3xf/F9CM400IlPuBVPDsznGPNW/jtIG9mSQsx02wtT3cAL2OKuhTud/VQEjDCCa2+VGAUioVFYPs96YIYY/WuX5Mkfk3nSlpYp+h4BjeJC+ylgmsVBSBcKwW4SjJs3B1HdZ202xHKLACwvfOUEeMYCYVv4uME08yvyLOV9KKagK8m08G4ypuK+3gzlp5boLnjS5Afi8sWQTbHUvm3AazqO9WzDm6bUHgOylQpr0rF08joQruw+gMuUxeq7dwwZng9KHCzq8ad1O0wIoYKSVTVTdKWFxfhCGofz2eK6jS7t7iW7KxGLq8u+9afCyRtnYa2FDGEKPtTWWJKfi+hGbFG1/r612ESZBulO07yGsgUZk/Gb+5vVHt5zr2nxA4T2exuHCZUWMsxyGh+yuQDkNopRoVLK3Uo3c9N4KfFXNQkLMdNnQZiAF+eGpfr2LswAzPKDpsre/6BTY9n9o1P/JJtBk1JFnpsWacNGRsWX+++QWXIhv0Q0EYhNQeHJFNCrQJdTsv63FLN+J6Ea9KyjnRF2xdFXoXKYlE85IEF4wQ3Yo6AcX5CJxhuwd/QwHl1F/Vwt2wVxsApZt8gW4Yw+kdGOUIH/PjQfWIPEXHrdasCAI5D14Lj9Tvj7/8nqjC9u4f139oTHKY8duNxN+e/Dq2FfssNlo2AFvqnlGgex+aU10gqy0XVUELF7ko2jFdZ38mgXoZ5NfsKRJOnfc0Efzg0/eYnxZRHfvAEcd0O5Q2TNqcR7xxF5nXE+OYff9waV6LfZfluqfU/hIhTNhKDdoJw/RWlIw9Vxou6QPFHv5WMZPGYTqxkBqPAd1D4popaCxAK/xke4xsLa/Umfjf4p3PqPcrWllL99cDYoOGhMkhwzN7SfRx7+60TPp0kIADB5zR9rHkzIyQZ0uMiiFbyikI8RRLgAY1dhBakqvteGszQX5PLCQEoDnf6FFdZmfSz5AWwHr8nwAAZ3OWpK8V6YIT9jIdV86gjesqWZ0sYM4kZM0JZZMoUsX0njwAybNIpXgAY/IkSFRJ8/8CdAC9cvnay0uiXShGadCoKD0hbw4yf2A3lFsgbbZhiSC9XQsS7krBVFR5QaOQOp/e9DYFFndJ/rk2sIR5Bb+ovah6BA/5++Eipb23HDqAAnZVXBPaDuiso67U4IkbLULYdx3YGl9WmgtvEB3uGvxW+ynF8kH0N5OV4gmmeWLtr7HADJcGW2zJ8GZszg3PkKa1uJ1lQbaKIQ1taBZ5Mk5DaVuweQS5cxGk4su8JPiZWPmPFvaaWKDKudFqdQaNMvCvlPev4JK4RqpNBU5lafiZchns1ITl4LmvcMf9ux7Vwi/f+1sHhm062X+3BWpqOT/0znO0EW0nLVj7yGYSZt0W+Uvb5vZxjho8nCDH5wx3c1m24qUoNRMf1Ko/jrTYCBMzlttvJnBe88DPz5f7XRawz0GHj0WTzRyz/Mq0GDjJCEwSJGOe6yYEAo3WaACQUklPHP3GgI26lJfqxWfb2daA0dlwAQRdcFgDRYPvw2ktFb5E/rP44mtuhF6V4szLNIkogCfmuNDC65RLeuFGyRtbxxeekyqfqz8AfOJujPmHoew82KdPy9gODs82foy//vXCjZI2t44p9K4DONwjIJnAJ2vXVFTALUL0HU718m44VR9G/WuADJoExrl+pK+TDnVGur/c43DO0PgJaQkxilscLgMMeeNxzhpcJXejERIh6ewnPqoiFEMbf4Nta8/tyzfVktyyaSOjmuahJaiEQn6qAagi4p2kpJRjTFjFpFU9TzvWrgmYUA39QtASRV/INWJhoAnaOlJFoxO8vMVVSDSdGgrt4Ufy3vFKXcCHH4aoJSuAzGm8+aEH67ztMy8tkP7QGJmmpM6+5PGetw3RQ3xc9TSJyLGXqdKg3FnkMTUDH6scbaj/uLu763P7cs31ZLcsmkjo5rm3stjjxZ/z4ZcvyrX6wNJgArz1Xsx5qxsuUi6CMm2/bkh0ieE3Hd9C6d3QrKLMra1A/tth4lus1jjQ1AauUuSNfi/rMWo6DSCMokv4Vk68cjziKm0Wa+y9RZJicppAsRFokdIcoM1u2L6C8DoZS7MsG9AklEaHeg4ZejOrY80h0Zg9fO+DgkhZ+e7STuSrBWH3cT7PKl7D5dAtWZ5B1sEs4ox6WYE4Ezi+QZTemFJN9S42KXfoqWWt0RgxGfrWVCy9L2TPgA5JesRGmunu9eSOjnZGooAocNDJlEj2CsJeQeSurAwqUrmJv/ePUs+5ry8amO4XRoizCkob8ba8bPDkrK4j46PTnGsKEb6RRkVLg2PFzcwz8dLrgZ49bGBv+n3p/rMVu1SdsDvQyNgsH9n+gvkNvHF961AxbwkvlgTx1yuz/nfByCUejFpa5ByM3pfxScS/dAdbFfu2KUZIdBuIxEXknzHxPZorpsxJ2zGtrTD0DMqz2kyLDpnWkvPLwlPBdNb698VT4MJG91KdWUE2Z1rfgoUqRMDMBi98uXuSGM7rWvfXBW3szwVgNs43v7GAN0gikQO8E4ddW52mOFUlXud3j4QEWHgzcwnb7RaFQdVEqAu6+znx5tgr7JSqzHnKU5J0rPQmno0wlE/+DQeSDrs9Jd1dzUrNiJZ0jAzrKAt6LL+/9gBJoauovxmoARlmfdEczHtSjbkglnBpaCro3OFT+wG9boJbCeuiZjb0GDZJ5cIaMKxZDWM50gADIhXHNNPGszhW8XoIWGQYgWuORQNqqnUk7llM6hhhy7qvVOdlZMxFPpfwYN2BYq045Us6O+wcfHF+fCq+3QRNtIJbc8he+XqzFXW+2hV/yYHYKsFqlDtx3sjdLJlu6utHLGWa3gycIaaNgE42xEMssi/tNUE2N31zIEE1BdGVCN07S+hZ9B0scHkaxTxd7GQwHyshA02EMKtYLamxe9zp5oMH/2A/Hz0dSPHNa2MKv9hJCz6KLa+i+2TN0GIEKBqLDs4jIg4/oHeJ+eLN6sVsXf57JRmshH9hMKkCTVVViYsn45Alj2LOkdCVgovzWioe13ghD7E9ZdQ4Bio+gJCh5CjOiLjxY2lM1XxlcZ+WmOchAg/PpAfLZ5BxdzmyWfrvDUQgmOkXTHpoo66pSBdrlq++wAi+Pn8aJ5hiOZkkZHtcgcC5/POFtIwsQIgPBETtlSfmYD37tZ5LNjkLGNoFyQzDbH5oanZAMkLwET1GwuGouNJfHPJk9+1tocSdrmuZZJ2moHfhFJb19sjpp3lIbeYSkghdoYYKg3z1rayKuG9aRKM0frPEU4KZD48JUh/P11tjLSs0Ilz/yMu6OodDuDeekURyRbIIBw4al+4KB7Kuer/RT3FbPUrUgWZvGYzPKgYe2rjotKSQ4Pa0Yt4ee7ql07m04onZXqjKF2I+V6Zw16scXkMVk6R4SMFWJrc4jb5bkY7pQEfN31OnhY7f6eJbsMl6Asl5o8F+9B4qIgYp+T1CuwGh5odihBwxinlhvCQ9b40w0YueYT6rB4zF+AxN2HmfaGQiHi86IwM8tywxdTQM9ve9I2SD4biEe3msaIo3GlMyCH0WqQ/0878CV9VAI5AZ8P0y507PYspiiJ09tByaoRfGz/ijtXhV9vEIPDr2ZwaLaFXQC/Nh1XIxTnfYQ5TCRQMmewddp5qGuh/ij22ku8fQqyIRdRRgRJqF/VbVDM++weuIpNtwyUaMmHMAc8uxvgUaV0UrimG4yTcbs3gzgUntC0G/oZjad/EJUsntu5aktkMJEN46+h1vxzZBm9mWtc6X5awAocjLzYWcuxKwYKEgEGqZnIbfzGxHxRM+qrnE/HAvjAV/1UfJJwqJrLtEVfqj0zXP01i3PrNxNlL9UN+TMbpXzqcA3yoFcc4qJuYmYhAwWgM3ZiJ/upC7Gf7HOK47CM9E7fVPs6UD4uO504++hlBoeXoK66elD8mXEQ+IJ1jU+digREm84jpMK9XORflc7rTnikFBg5uOG6QCnr1cLi8T3SOdR0gtKduObqaPlTxbSwylSDpGEuuP3c1UzkkxnUvE4EZuyNjhvHdcqKb8GtMnx0BRNwMkXPFXwnArZC4Aa7d/oRGuTBBtWgX6F+YTGuJ4kc3UVeWEaBk48zjoTcoWMr3j1zCDjdiy2uW3FYtaRpblwo/n4+Q75q9RjDukFXYfFINGi/qbUrubQBso5ZGJ5CZEu1ZjFNTFzBOnGft9CcWTKqaCV3irVBdbBZszK8wXVN9kkWICO5EjZ2r2jRCRTHRPOj0brw8HzZuEqqfPpHWZutinboYEoKgJP+pPz+TGor2nZtJD2OV+FmFfnJgFVqBl18hfdo6HXNjmDeHiEGOqSn7WQ2AiTkVVtgVDbvfELqP4opzH/hM02yb5DwvBqTYY8OTjDgCBll9yEzryDcUYOAoJGqMr4ZWZZM25uE8p2Yfti9XDKtHRNTwzOMx3uZ/uN3W1Z+61p5ypcRvtpKE764xBZjoShH1DkDTLAVWl39xiARb2KspB5Df78seYH2Wf++sWT7BYLPYlj4GAhK0M9+/DVBNQ2haH8moSd/4m4K15cBvAS7GeTVZQdXw6tLIBSjbmH0l6YHCCA9RH48NEppbXpVhYFV2RtHDNmsbTIaPIoswLnn4gcRU+MBcxyMxka8ybrQSYndB9Go8ACkcHdT8tJB41wxCrGCxbAPn8juhjpRa12p5ToG9ObwdI0hU8Ej/PjIc9yLtxGaimYC8sLwKVi6m8YtqgVl3ue6MMUlaLOkYya3Znh9orAYs1HSAJhtweOI+fvR7/XLAL3W24s64QI/0BnZ4OCJQUJIf7TeB2753jgHmx3tQVZdtB3+VP+rLgx3zopnmttevOsYHpoqFcDX9Qwpiy+XAzBZ32QsfAaaQbaJ5Qgz+q57zJosQqUQWYoLbXYK8oU/HQqLdfLFVL8V4eYFXaXe0kp+1SVv2dV1BQ1jq28ADZoQ4AnQ5QmnZyHyWpGn18hsXZ7eCPu1N3QVLXewU+7aJrrq6pFVXA8VqSutu3xYOJHgnfOLamE+xqxAgkwGl79+ZFujlAz9aGN5r1eqNxx5U7RSRDANJpw4eq8+a72I3VC54Vc8HTauppg0lAeGJRETwhOJQj1A/WceQEDH4DbhffP0oRW//c5WFOwT4UFTs4rqwffcicXhPKymrinYlNoTwMq7iwagsJnDfGiDypz/bbCcAB+SY11bWuE8qisx3fZZ70ZihYHNQcRzoU/62FLNmJOQr0+Ie9Ns5CB1gBDFLTe0NkVOhWZ7Sps/4op5yVU46VnYjErqmaFPYsXq59SHIpQ8rP6212WLhansQKp5ataLn/pKo9TTHyNdq04MS6K6jg3mokuteR3QB948JiqRZvcbkHVvfeHXIuYe1+p2IchfKx/XW/LAr3eFQBwMfZVyKb1Vtd+9XIQ8Up1G18lN6u0DnBPjw0OiMDw8PUkTs/cZOUp53WqBCYo75wIPTKu4yfgYVlDUdknE3110HPvXqAR1K1ftVLqCBjwTGhym9miEOv1Zyo0WARNfiUI9IJrMwoKsz5Jia02ReDKGkE5GX1cF/JlxBpwtMKhuMqWbxhx1qIEmQCZT+tTb7v7U5PNJsodeEuRhRDLgiCqErW+uga4LzMms9qOC0J29fWMRydY6fr1tb4kGXYv17uMIxaNzrVQiuDYIU1hMiCwiBfhhfZ/J63LDGXTkaUCt/MQ+YWNWx8iXYiXEWoN/xu0vNfZX/S8B2XgTRAQ3IYEkkkgvuAOHR334daHqdLg7f/lFdqm1DY1gi+4kuuQnyk7Yh8iWVtGX4Xb4l/872d5T5Mr4iFk6x/Tc36MsvZ+pYswMnyUld5yV4eXwbSZWRcQKZzQVgRdQXjxLpqB1CFUpKJ7A82GdiI/l9bE2D/Bd3cESbv+FnVK73p6Q6G6LdAJm9Y5g2vcVop7sBRt6d1Umr9dfQHgX8asfngI0DaSXjeLic2eyP7OApXjq2k9gYkAGa0OBa0TwZkcRoOxht/Q2Ge5hM79/JvMwniEf9RB5qbE6ibQDA5+q5/OqCMyZ1Q1RdogXBkCt0lXDI/Sgt/1QzG4V0I+xGnIh0/cN2WPWkngdBmyaGsWW3lIcLlmeCO4Rfo+biRBvffiVd2zsourpTuM07G/Cb9CwVFs4sUbYEg3W1lpZTpoVqC7KUsAhyokaztfB+CzPHmyMZhoauAIt4Gb3JQ787EFwh18MjKVPSnlZlolAiJY+f8S4H/n17e1CH5ecWggurlMUacC34pZ2w13+kTCPUYp5iDlTUgRd7Yy7e8bksxggF05K0cQu9eG+DSgjds+DBt93/BAkVNliJp72XrR81MMNRyZdDWYousLJZXTI0PWDpUyH17CcYa+b/+gjoK6Z9dpapglpojbmhlX2aHPlRI3znLPwA1lXjxsWiao35M+wAAAAAAAAAAAAAIYuFyoI36dKJN/jcr49lHLlWH4rYaivMqjLDIsCB8tG483yvYyRqZ2dMlZN3it+3PV16RYWZAz7/S0wYxH9+luXpqRbQwTc8KBPxIMBSgUBSp3inmldtUUioo2tw65Idp7p5RwdImxG5omFiWZ5rUglT7Q0UP71Qc+aj7wub1XQ0OQZLp5DmGzTWHZE9zdCIeV+ESzlleGMvVDY8PEgIPOudnLzaQJNtYWTT74qhHSp5Ta6I64S5juSy12uveg5qu1D7xwu4xuRhlaoibEZGcO6UY57quAwYwoPgkSE8rjJ7dU5jiTM2Oc9+v2rAJt2xWCJhAcWiOK2VOJpoDRr1bKocn7skf6JegAAKb7UAAAEFyAAAAAAAAAAA==" referrerpolicy="no-referrer"></span></p>
+<p><em>清廷很恶心, 对很多境外站点采用间歇式阻挡, 让站点可用也不可用, 如<code>jsDelivr</code>, 很多时候访问没问题, 但是换个时间段, 换个地点, 又不可访问.</em> 导致一些项目会用这些站点的资源, 在用的时候不得不将这些资源替换掉.</p>
+<hr>
+<p><a href="https://www.7ed.net/">7ED | Services</a></p>
+<p><a href="https://www.zstatic.net/">静态资源 Zstatic.net</a></p>
+<p><a href="https://cdn.jsdmirror.com/">JSDMirror镜像站-jsdelivr国内;jsdelivr镜像</a></p>
+<p>以上得到较多推荐, 安全性据说有一定保证的, 同时速度也很快.</p>
+<p><span class="md-image"><img alt="img" src="data:image/webp;base64,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" referrerpolicy="no-referrer"></span></p>
+<p><span class="md-image"><img alt="img" src="data:image/webp;base64,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" referrerpolicy="no-referrer"></span></p>
+<p>但需要注意上面有个站点, 但不知道搞什么, <code>tampermonkey</code> 一直无法加载脚本,换一个源就可以正常加载.</p>
+<h2 id="六-总结">六. 总结</h2>
+<p>除上述的方式之外, 还有针对处理单一链接的, 支持<code>docker</code>.</p>
+<p><a href="https://github.com/xixu-me/Xget">xixu-me/Xget: 超高性能, 安全的一站式开发者资源访问加速引擎. 其性能远超传统加速器, 为您提供跨多个平台的统一高效的加速体验, 涵盖代码储存库, 包管理, AI 推理 API, 容器镜像, 模型及数据集等 | Ultra-high-performance, secure, all-in-one acceleration engine for developer resource access. Its performance far exceeds that of traditional accelerators, providing you with a unified and efficient acceleration experience across multiple platforms</a></p>
+<pre><code class="language-python">import sys
+import pyperclip as pc
+
+def copy_data_to_clip(data_text: str):
+    print(&quot;\n&quot; + data_text + &quot;\n&quot;)
+    pc.copy(data_text)
+    pc.paste()
+
+def replace(url: str):
+    data_list = [
+        ('https://github.com/', 'gh',),
+        ('https://gitlab.com/', 'gl',),
+        ('https://gitea.com/', 'gitea',),
+        ('https://codeberg.org/', 'codeberg',),
+        ('https://sourceforge.net/', 'sf',),
+        ('https://android.googlesource.com/', 'aosp',),
+        ('https://huggingface.co/', 'hf',),
+        ('https://civitai.com/', 'civitai',),
+        ('https://registry.npmjs.org/', 'npm',),
+        ('https://pypi.org/', 'pypi',),
+        ('https://repo.anaconda.com/', 'conda',),
+        ('https://repo1.maven.org/', 'maven',),
+        ('https://downloads.apache.org/', 'apache',),
+        ('https://plugins.gradle.org/', 'gradle',),
+        ('https://github.com/Homebrew/', 'homebrew',),
+        ('https://rubygems.org/', 'rubygems',),
+        ('https://cran.r-project.org/', 'cran',),
+        ('https://www.cpan.org/', 'cpan',),
+        ('https://tug.ctan.org/', 'ctan',),
+        ('https://proxy.golang.org/', 'golang',),
+        ('https://api.nuget.org/', 'nuget',),
+        ('https://crates.io/', 'crates',),
+        ('https://repo.packagist.org/', 'packagist',),
+        ('https://deb.debian.org/', 'debian',),
+        ('https://archive.ubuntu.com/', 'ubuntu',),
+        ('https://dl.fedoraproject.org/', 'fedora',),
+        ('https://download.rockylinux.org/', 'rocky',),
+        ('https://download.opensuse.org/', 'opensuse',),
+        ('https://geo.mirror.pkgbuild.com/', 'arch',),
+        ('https://arxiv.org/', 'arxiv',),
+        ('https://f-droid.org/', 'fdroid',),
+        ('https://updates.jenkins.io/', 'jenkins',)
+    ]
+    for pref, flag in data_list:
+        if url.startswith(pref):
+            new_url = f'https://xget.xi-xu.me/{flag}/{url[len(pref):]}'
+            copy_data_to_clip(new_url)
+            break
+
+def main():
+    if len(sys.argv) == 2:
+        if url := sys.argv[1].strip():
+            replace(url)
+
+if __name__ == '__main__':
+    main()
+</code></pre>
+<p>写了脚本方便在终端上转为<code>url</code>.</p>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/jing-xiang-zi-yuan-zhan/" title="镜像资源站">https://Kyouichirou.github.io/post/jing-xiang-zi-yuan-zhan/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/DbOxEVUvJ/"># nodejs</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/x52r92_VNV/"># python</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="规划求解 - 单纯形" href="https://Kyouichirou.github.io/post/gui-hua-qiu-jie-dan-chun-xing/">规划求解 - 单纯形</a>
+        <a class="nav-mobile-next" title="规划求解 - 单纯形" href="https://Kyouichirou.github.io/post/gui-hua-qiu-jie-dan-chun-xing/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

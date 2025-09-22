@@ -1,0 +1,1539 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item nav-item-active">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        <div id="sidebarMeta" class="sidebar">
+    
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+</div>
+<script>
+  let sidebarMeta = document.querySelector('#sidebarMeta');
+  let scheme = 'mist';
+  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
+  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
+    document.addEventListener('scroll', function(e) {
+      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
+        sidebarWrapper.classList.add('home-sidebar-fixed')
+      } else {
+        sidebarWrapper.classList.remove('home-sidebar-fixed')
+      }
+    });
+  }
+  </script>
+        <div class="section-box mist">
+          <section class="section bg-color posts-expand slide-down-in">
+            
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/javascript-jin-jie-lan-jie-he-xiu-gai-fetch-response-nei-rong-yi-b-zhan-wei-li/"> JavaScript进阶-拦截和修改fetch response内容-以B站为例 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-08-04 11:58:41">2023-08-04</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/0yrIeY7PQ/"> <span>web</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/E38WzLDCl/"> <span>tampermonkey</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/DfKIjrFyU/"> <span>trick</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/L2PRjWatc/">
+        <span>javascript</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >9<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >1651<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+      <div class="post-body">
+        
+        
+          
+            <h2 id="一-前言">一. 前言</h2>
+<figure data-type="image" tabindex="1"><img src="https://ts1.cn.mm.bing.net/th/id/R-C.3771a45e363a94f6d3cd9857fa3136c7?rik=J7ahB%2bdnI1rfOg&amp;riu=http%3a%2f%2f5b0988e595225.cdn.sohucs.com%2fimages%2f20180525%2fdba2447a2f3b41d9bb30bb677f868e10.gif&amp;ehk=3WKmCHWVnlvFfbLNQp6D3ZBIoxeAJjfCCWdglz9zvR4%3d&amp;risl=&amp;pid=ImgRaw&amp;r=0" alt="img" loading="lazy"></figure>
+<p>B站页面普遍采用的模式, 主<code>html</code>带有部分初始化页面的数据, 之后的更多数据采用异步加载的方式实现, 这是一种经典的即保证页面渲染呈现, 同时不影响页面的加载速度的页面模式.</p>
+
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://Kyouichirou.github.io/post/javascript-jin-jie-lan-jie-he-xiu-gai-fetch-response-nei-rong-yi-b-zhan-wei-li/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/tampermonkey-jin-jie-zhi-nan/"> Tampermonkey进阶指南 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-08-01 12:13:45">2023-08-01</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/0yrIeY7PQ/"> <span>web</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/E38WzLDCl/"> <span>tampermonkey</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"> <span>priority</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/L2PRjWatc/">
+        <span>javascript</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >72<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >13655<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+      <div class="post-body">
+        
+        
+          
+            <h2 id="一-前言">一. 前言</h2>
+<p><span class="md-image"><img alt="img" src="data:image/webp;base64,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" referrerpolicy="no-referrer"></span></p>
+<p><span class="md-image"><img alt="img" src="data:image/webp;base64,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" referrerpolicy="no-referrer"></span></p>
+<blockquote>
+<p><strong>Tampermonkey</strong> is one of the most popular browser extension with <strong>over 10 million users</strong>. It's available for <a href="https://www.tampermonkey.net/index.php?browser=chrome"><strong>Chrome</strong></a>, <a href="https://www.tampermonkey.net/index.php?browser=edge"><strong>Microsoft Edge</strong></a>, <a href="https://www.tampermonkey.net/index.php?browser=safari"><strong>Safari</strong></a>, <a href="https://www.tampermonkey.net/index.php?browser=opera"><strong>Opera Next</strong></a>, and <a href="https://www.tampermonkey.net/index.php?browser=firefox"><strong>Firefox</strong></a>.</p>
+<p>It allows its users to customize and <strong>enhance the functionality of your favorite web pages</strong>. Userscripts are small JavaScript programs that can be used to add new features or modify existing ones on web pages. With Tampermonkey, you can easily create, manage, and run these userscripts on any website you visit.</p>
+</blockquote>
+<p>本文以<a href="https://www.tampermonkey.net/documentation.php">Documentation | Tampermonkey</a>内容展开, 将对其中内容进行翻译和注释, 以及实际的使用例子.</p>
+
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://Kyouichirou.github.io/post/tampermonkey-jin-jie-zhi-nan/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/vba-zhong-de-lei/"> VBA高阶系列4: 类 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-06-29 14:56:17">2023-06-29</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"> <span>priority</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/apPj1Ua6ig/">
+        <span>vba</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >15<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >3532<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+      <div class="post-body">
+        
+        
+          
+            <h2 id="一-前言">一. 前言</h2>
+<p>类(class), 这个话题在各种语言中的入门知识中, 是很多懂哥喜欢装神弄鬼的话题, 假如检索类相关的信息, 很容找到以下相关的内容:</p>
+<ul>
+<li>多态</li>
+<li>继承</li>
+<li>封装</li>
+<li>抽象</li>
+<li>类</li>
+<li>对象</li>
+<li>实例</li>
+<li>方法</li>
+<li>重载</li>
+</ul>
+<blockquote>
+<ul>
+<li><strong>对象</strong>: 对象是类的一个实例, 有状态和行为. 例如, 一条狗是一个对象, 它的状态有: 颜色, 名字, 品种; 行为有: 摇尾巴, 叫, 吃等.</li>
+<li><strong>类</strong>: 类是一个模板, 它描述一类对象的行为和状态.</li>
+</ul>
+</blockquote>
+
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://Kyouichirou.github.io/post/vba-zhong-de-lei/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/vba-shu-zu-man-tan/"> VBA高阶系列1: 数组漫谈 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-06-28 15:35:35">2023-06-28</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"> <span>priority</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/apPj1Ua6ig/">
+        <span>vba</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >16<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >3515<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+      <div class="post-body">
+        
+        
+          
+            <h2 id="一-前言">一. 前言</h2>
+<p>数组(列表), 字典(集合), 类, 这三者不会因为语言的差异而其重要性会发生变化.</p>
+<p>数组, 字典, 操作数据的基础容器.</p>
+<p>类, 清晰代码结构的基础.</p>
+<p>需要注意的是, 在<code>vba</code>中只有数组的概念, 没有列表的概念(当然也可以自定义封装一个类来实现列表的功能).</p>
+<p>在看<code>vba</code>的数组前, 先来看看<code>python</code>和<code>JavaScript</code>中的数组.</p>
+<pre><code class="language-python">&gt;&gt;&gt; from array import array
+&gt;&gt;&gt; a = array('i', [1,2,3,4])
+&gt;&gt;&gt; print(a[0])
+1
+
+# 不允许混合存储数据
+&gt;&gt;&gt; a = array('i', ['a',2,3,4])
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+TypeError: an integer is required (got type str)
+&gt;&gt;&gt;
+</code></pre>
+
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://Kyouichirou.github.io/post/vba-shu-zu-man-tan/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/markdown-wen-dang-qian-ru-base64-tu-pian/"> Markdown文档嵌入base64图片 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-06-26 17:32:56">2023-06-26</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/WEi9UOBEnh/"> <span>markdown</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/DfKIjrFyU/">
+        <span>trick</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >10<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >2007<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+      <div class="post-body">
+        
+        
+          
+            <h2 id="一-前言">一. 前言</h2>
+<p>独立博客最麻烦就是图片存储, 第三方的免费图床, 国内的基本没法用(乱删图片, 服务高度不稳定, 随时关站...), 国外的有几个相对稳定的, 但是访问是个问题. Gitee封禁了外链, GitHub访问又是高度不稳定的....</p>
+<p>由于<a href="https://imgse.com/">路过图床 - 免费图片上传, 专业图片外链, 免费公共图床 (imgse.com)</a>收紧了免费上传图片, 只能将图片转为base64嵌入markdown文档, 但是由于截图不希望过度压缩, 希望保存一份截图的高清版本, 这导致图片文件非常大, 直接嵌入markdown文档, 虽然这种方式可以摆脱网络的依赖, 但是会导致文档非常臃肿.</p>
+<p>直接嵌入<code>base64</code>图片没办法直接使用这种方式实现.</p>
+<pre><code class="language-bash">![image](img_url)
+# 在typora上, img_url直接使用base64替换没办法直接显示图片
+</code></pre>
+<pre><code class="language-html">&lt;img src=&quot;&quot;&gt;&lt;/img&gt;
+</code></pre>
+<p>直接使用<code>img</code>标签, 也无法显示图片.</p>
+
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://Kyouichirou.github.io/post/markdown-wen-dang-qian-ru-base64-tu-pian/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/markdown-jin-jie/"> Markdown进阶 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-06-05 18:38:54">2023-06-05</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/WEi9UOBEnh/">
+        <span>markdown</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >18<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >4120<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+      <div class="post-body">
+        
+        
+          
+            <h2 id="一-前言">一. 前言</h2>
+<blockquote>
+<p>John Gruber在2004年创造了Markdown语言 在语法上有很大一部分是跟[亚伦- 斯沃茨](https://baike.baidu.com/item/亚伦- 斯沃茨/4027108?fromModule=lemma_inlink)( Aaron Swartz) 共同合作的. 这个语言的目的是希望大家使用&quot; 易于阅读 易于撰写的纯文字格式 并选择性的转换成有效的X<a href="https://baike.baidu.com/item/HTML/97049?fromModule=lemma_inlink">HTML</a>( 或是HTML) &quot; . 其中最重要的设计是可读性 也就是说这个语言应该要能直接在字面上的被阅读 而不用被一些格式化指令标记( 像是RTF与HTML) . 因此 它是现行<a href="https://baike.baidu.com/item/%E7%94%B5%E5%AD%90%E9%82%AE%E4%BB%B6/111106?fromModule=lemma_inlink">电子邮件</a>标记格式的惯例 虽然它也借鉴了很多早期的<a href="https://baike.baidu.com/item/%E6%A0%87%E8%AE%B0%E8%AF%AD%E8%A8%80/5964436?fromModule=lemma_inlink">标记语言</a> 如: Setext Texile reStructuredText.</p>
+</blockquote>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/49936222">笔记应用 Bear 评测系列前传: Markdown 的发展史 - 知乎 (zhihu.com)</a></li>
+</ul>
+
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://Kyouichirou.github.io/post/markdown-jin-jie/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/vba-zi-fu-chuan-chu-li-yu-yan-ceng-ji-bug/">  VBA高阶系列2: 字符串处理-语言层级bug </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-06-05 17:45:40">2023-06-05</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"> <span>priority</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/apPj1Ua6ig/">
+        <span>vba</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >6<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >1185<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+      <div class="post-body">
+        
+        
+          
+            <h2 id="一-前言">一. 前言</h2>
+<p>最近碰到一个比较有趣的<code>vba</code>编写的错误, 处理该问题时, 突然想起很早之前的一个<code>vba</code>语言层的<code>bug</code>.</p>
+<p>相关内容见本人在这个帖子上的描述, <a href="https://club.excelhome.net/thread-1541545-1-1.html">@liucqa你的问题暂时解决了_VBA字符串/字符编码/字符集谜题-Excel VBA程序开发-ExcelHome技术论坛 -</a>.</p>
+<h2 id="二-问题">二. 问题</h2>
+<p>该问题为语言层级的<code>bug</code>所导致.</p>
+<p>该问题在百度上能够检索到的相关页面最早见于可能是在<code>2010</code>版本的<code>office</code>上出现.</p>
+<p>问题很简单, 当使用<code>instr, split</code>函数处理字符串时, 部分的字符串上会出现异常错误.</p>
+
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://Kyouichirou.github.io/post/vba-zi-fu-chuan-chu-li-yu-yan-ceng-ji-bug/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/di-zhi-chai-fen-excel-gong-shi-zhi-xing-xun-huan-cao-zuo/"> 地址拆分-Excel公式执行循环操作 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-05-24 18:18:21">2023-05-24</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/o92WZxFqN/">
+        <span>excel</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >8<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >1833<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+      <div class="post-body">
+        
+        
+          
+            <h2 id="一-前言">一. 前言</h2>
+<p>问题来源于</p>
+<pre><code class="language-bash">=LEFT(P2,MIN(FIND({&quot;省&quot;,&quot;市&quot;,&quot;区&quot;}, P2&amp;&quot;省市区&quot;)))
+</code></pre>
+<p>被问及一个问题, <code>find()</code>中的大括号是什么意思.</p>
+<p>这个, 很简单, 大括号是excel在表格公式实现数组的符号, 具体见<a href="https://kyouichirou.github.io/post/excel-you-qu-han-shu-xi-lie-lookup/">Excel有趣函数系列-lookup | Lian (kyouichirou.github.io)</a>.</p>
+<p>关键不在于此, 而是突然对于<code>excel</code>公式如何处理地址切割问题起了兴趣.</p>
+<p>检索了一下必应, 并未发现相对可行的演示案例, 大部分的示例excel公式不是过于简陋, 就是各种函数层层叠叠, 令人望而生畏. 有没有简单易于理解的切割方式呢, 于是动手尝试一下.</p>
+
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://Kyouichirou.github.io/post/di-zhi-chai-fen-excel-gong-shi-zhi-xing-xun-huan-cao-zuo/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/xian-xing-hui-gui-yi-chang/"> 线性回归 - 异常 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-05-23 15:44:05">2023-05-23</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/Q2P6FXAzPd/"> <span>spss</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/bxmmKSW1O/">
+        <span>math</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >21<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >4295<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+      <div class="post-body">
+        
+        
+          
+            <h2 id="一-前言">一. 前言</h2>
+<p>在<a href="https://kyouichirou.github.io/post/yi-yuan-xian-xing-hui-gui-xiang-jie/">一元线性回归详解 | Lian (kyouichirou.github.io)</a>, 在学生化残差章节中, 部分提及了关于帽子矩阵的内容, 这里对该部分的内容进行扩充.</p>
+
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://Kyouichirou.github.io/post/xian-xing-hui-gui-yi-chang/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/2022-kaggle-data-science-and-ml-survey/"> 2022 Kaggle Data Science &amp; ML Survey </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-05-20 12:31:45">2023-05-20</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/dm08QIQf_/"> <span>other</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/w2qaY4U6Ss/">
+        <span>machine learning</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >2<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >311<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+      <div class="post-body">
+        
+        
+          
+            <p>2022年 <code>kaggle</code> 数据科学 &amp; 机器学习调查报告</p>
+
+          
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://Kyouichirou.github.io/post/2022-kaggle-data-science-and-ml-survey/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+  
+            
+            
+<div class="page bg-color">
+  <ul class="pagination-ul">
+    
+      <li class="pagination-dir">
+        <a href="https://Kyouichirou.github.io/page/4/">
+          <i class="fa fa-angle-left"></i>
+        </a>
+      </li>
+    
+    
+      <!-- 1 2 3 4 ... N -->
+      
+        <li class="pagination-li">
+          <a href="/">1</a>
+        </li>
+        <li class="pagination-li">
+          …
+        </li>
+        <li class="pagination-li">
+          <a href="/page/4">4</a>
+        </li>
+        <li class="pagination-li pagination-active">
+          <a href="/page/5">5</a>
+        </li>
+        <li class="pagination-li">
+          <a href="/page/6">6</a>
+        </li>
+        <li class="pagination-li">
+          …
+        </li>
+        <li class="pagination-li">
+          <a href="/page/11">11</a>
+        </li>
+      
+    
+    
+      <li class="pagination-dir">
+        <a href="/page/6">
+          <i class="fa fa-angle-right"></i>
+        </a>
+      </li>
+    
+  </ul>
+</div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+
+</html>

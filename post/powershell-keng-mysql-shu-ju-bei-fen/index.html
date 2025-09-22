@@ -1,0 +1,2281 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>Powershell坑-MySQL数据备份 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="Powershell坑-MySQL数据备份" />
+  <meta name="keywords" content="trick,windows,powershell,terminal,mysql" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a></li>
+<li><a href="#%E9%97%AE%E9%A2%98">问题</a></li>
+<li><a href="#%E8%A7%A3%E5%86%B3">解决</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96">其他</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/powershell-keng-mysql-shu-ju-bei-fen/"> Powershell坑-MySQL数据备份 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-01-29 18:18:43">2023-01-29</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/DfKIjrFyU/"> <span>trick</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/V24rpoUbq/"> <span>windows</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/lxLXc3ZygQ/"> <span>powershell</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/ccTETwDeA/"> <span>terminal</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/">
+        <span>mysql</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >14<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >2253<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <h2 id="前言">前言</h2>
+<p>由于迁移系统, 对<code>MySQL</code>存储的数据进行迁移, 使用<code>MySQL</code>自带的<a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html"><code>mysqldump</code></a>命令进行数据迁移.</p>
+<pre><code class="language-mysql">mysqldump -hlocalhost -uroot -ppass database_name &gt; d:/backupfile.sql
+</code></pre>
+<!--more-->
+<p>使用<code>mysqldump</code>备份好数据后, 由于数据量较大, 为保障万无一失, 使用<code>navicat</code>进行了额外的增量备份(<code>navicat</code>备份数据, 生成的文件更小).</p>
+<p><em>注: 备份数据, 注意安全冗余.</em></p>
+<h2 id="问题">问题</h2>
+<p>恢复数据, 使用<code>source</code>命令</p>
+<pre><code class="language-bash">d:
+</code></pre>
+<pre><code class="language-mysql">source backupfile.sql
+</code></pre>
+<blockquote>
+<pre><code class="language-sql">ERROR: ASCII '\0' appeared in the statement, but this is not allowed unless option --binary-mode is enabled and mysql is run in non-interactive mode. 
+Set --binary-mode to 1 if ASCII '\0' is expected. Query: ''.
+</code></pre>
+</blockquote>
+<blockquote>
+<p>-- 添加该参数, 依然还是会出现错误.</p>
+<p>I have tried putting <code>--binary-mode</code> in the ini file but it still gives the same error. What should I do? Please help.</p>
+</blockquote>
+<p>问题出现, 出现了编码的异常, 同时还有报 <code>Error 22</code>错误, <code>can't open file</code>.</p>
+<p>查询一下, <code>stackflow</code>有相关的问题.</p>
+<p><a href="https://stackoverflow.com/questions/38383975/mysql-error-ascii-0-while-importing-sql-file-on-linux-server">问题_a</a></p>
+<p><a href="https://stackoverflow.com/questions/17158367/enable-binary-mode-while-restoring-a-database-from-an-sql-dump">问题_b</a></p>
+<p>这里隐藏着<code>powershell</code>的一个潜在坑, <code>powershell</code>默认使用的编码类型是<a href="https://www.liuyixiang.com/post/82326.html"><code>utf-16</code></a></p>
+<blockquote>
+<p>The problem comes from the default encoding of powershell is UTF16. To look deeper into this, we can use &quot;file&quot; utility of GNU, and there exists a windows version <a href="http://gnuwin32.sourceforge.net/packages/file.htm">here</a>.<br>
+The output of my dump file is:</p>
+</blockquote>
+<figure data-type="image" tabindex="1"><img src="https://p0.meituan.net/dpplatform/f39b889b32aeea7f7384fdd6a1e9053849086.png" alt="utf_16" loading="lazy"></figure>
+<p><em>注: notepad++, 打开大型的文本, 注意卡顿</em></p>
+<p>在<code>mysql</code>的文档中, 也提及了这个<a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_default-character-set:~:text=A%20dump%20made%20using%20PowerShell%20on%20Windows%20with%20output%20redirection%20creates%20a%20file%20that%20has%20UTF%2D16%20encoding%3A">问题</a></p>
+<blockquote>
+<p>A dump made using PowerShell on Windows with output redirection creates a file that has <strong>UTF-16</strong> encoding:</p>
+</blockquote>
+<blockquote>
+<p>However, UTF-16 is not permitted as a connection character set (see <a href="https://dev.mysql.com/doc/refman/8.0/en/charset-connection.html#charset-connection-impermissible-client-charset">Impermissible Client Character Sets</a>), so the dump file cannot be loaded correctly. To work around this issue, use the <code>--result-file</code> option, which creates the output in ASCII format:</p>
+</blockquote>
+<figure data-type="image" tabindex="2"><img src="https://p0.meituan.net/dpplatform/d67f109e42545edc72b6bc3c10b82a41214330.png" alt="error" loading="lazy"></figure>
+<p>同时也需要注意这个问题, 在<code>powershell</code>执行输出结果到文本时.</p>
+<figure data-type="image" tabindex="3"><img src="https://p0.meituan.net/dpplatform/1ed16d508fdc5b044f3161e378b410f078010.png" alt="u" loading="lazy"></figure>
+<p>进一步延申应该和Windows上编码问题<a href="https://stackoverflow.com/questions/66072117/why-does-windows-use-utf-16le">unicode - Why does Windows use UTF-16LE? - Stack Overflow</a></p>
+<blockquote>
+<p>Windows was one of the first Operating Systems to adopt Unicode. Back then, there was indeed no UTF-8 yet, and UCS-2 was the most common encoding used for Unicode. So Windows' initial Unicode support was based on UCS-2.</p>
+<p>By the time Unicode outgrew UCS-2, and UTF-8 and UTF-16 became more popular, it was too late for Windows to change over to UTF-8 without breaking tons of existing code 1, however UTF-16 is backwards compatible with UCS-2, so Microsoft was able to switch to UTF-16 with minimal effort, and little-to-no changes to existing user code.</p>
+<p>1: and now, 20-odd years later, in Windows 10, Microsoft is only just starting to really begin to support UTF-8 <strong>at the Win32 API layer</strong>, but that functionality is still experimental, has to be enabled manually by the user or on a per-application basis via app manifests, and typically requires changes to user code to take advantage of UTF8-enabled APIs rather than UTF16-based APIs.</p>
+</blockquote>
+<p><code>windows10</code>上<code>utf-8</code>的支持, 该特性还处于<code>beta</code>状态.</p>
+<figure data-type="image" tabindex="4"><a href="https://imgse.com/i/pSdA2p4"><img src="https://s1.ax1x.com/2023/01/29/pSdA2p4.png" alt="pSdA2p4.png" loading="lazy"></a></figure>
+<h2 id="解决">解决</h2>
+<p>根据上述的文档, 调整<code>mysqldump</code>命令的参数.</p>
+<p><em>注: 这里的<code>utf-8</code>和<code>mysql</code> <code>utf8mb4</code>完全一致?.</em></p>
+<pre><code class="language-bash">mysqldump -hlocalhost -uroot -pMySQL@2022 --default-character-set=UTF8 --databases test_logistics --hex-blob --result-file=C:\Users\Lian\Desktop\backupfile_utf_8.sql
+</code></pre>
+<p><code>--default-character-set=UTF8</code>, 指定字符编码</p>
+<p><code>--hex-blob</code></p>
+<blockquote>
+<p>Dump binary columns using hexadecimal notation (for example, <code>'abc'</code> becomes <code>0x616263</code>). The affected data types are <a href="https://dev.mysql.com/doc/refman/8.0/en/binary-varbinary.html"><code>BINARY</code></a>, <a href="https://dev.mysql.com/doc/refman/8.0/en/binary-varbinary.html"><code>VARBINARY</code></a>, <a href="https://dev.mysql.com/doc/refman/8.0/en/blob.html"><code>BLOB</code></a> types, <a href="https://dev.mysql.com/doc/refman/8.0/en/bit-type.html"><code>BIT</code></a>, all spatial data types, and other non-binary data types when used with the <a href="https://dev.mysql.com/doc/refman/8.0/en/charset-binary-set.html"><code>binary</code> character set</a>.</p>
+</blockquote>
+<p><code>--result-file</code></p>
+<blockquote>
+<p>Direct output to the named file. The result file is created and its previous contents overwritten, even if an error occurs while generating the dump.This option should be used on Windows to prevent newline <code>\n</code> characters from being converted to <code>\r\n</code> carriage return/newline sequences.</p>
+</blockquote>
+<p>针对windows的专用命令</p>
+<h2 id="其他">其他</h2>
+<p><code>powershell</code>和<code>cmd</code>在<code>cd</code>命令上的差异</p>
+<figure data-type="image" tabindex="5"><img src="https://p0.meituan.net/dpplatform/b4d7b49a8026fcb202b3c6f60feb703f9630.png" alt="cmd" loading="lazy"></figure>
+<p><code>powershell</code>字符集相关, <a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_character_encoding?view=powershell-7.2#character-encoding-in-windows-powershell">URL</a></p>
+<p><code>mysqldump</code>参数:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Option Name</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Introduced</th>
+<th style="text-align:left">Deprecated</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-drop-database">--add-drop-database</a></td>
+<td style="text-align:left">Add DROP DATABASE statement before each CREATE DATABASE statement</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td>删除数据库</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-drop-table">--add-drop-table</a></td>
+<td style="text-align:left">Add DROP TABLE statement before each CREATE TABLE statement</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td>删除表</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-drop-trigger">--add-drop-trigger</a></td>
+<td style="text-align:left">Add DROP TRIGGER statement before each CREATE TRIGGER statement</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td>删除触发器</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-locks">--add-locks</a></td>
+<td style="text-align:left">Surround each table dump with LOCK TABLES and UNLOCK TABLES statements</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td>备份时锁表</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_all-databases">--all-databases</a></td>
+<td style="text-align:left">Dump all tables in all databases</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_allow-keywords">--allow-keywords</a></td>
+<td style="text-align:left">Allow creation of column names that are keywords</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_apply-replica-statements">--apply-replica-statements</a></td>
+<td style="text-align:left">Include STOP REPLICA prior to CHANGE REPLICATION SOURCE TO statement and START REPLICA at end of output</td>
+<td style="text-align:left">8.0.26</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_apply-slave-statements">--apply-slave-statements</a></td>
+<td style="text-align:left">Include STOP SLAVE prior to CHANGE MASTER statement and START SLAVE at end of output</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">8.0.26</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_bind-address">--bind-address</a></td>
+<td style="text-align:left">Use specified network interface to connect to MySQL Server</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_character-sets-dir">--character-sets-dir</a></td>
+<td style="text-align:left">Directory where character sets are installed</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_column-statistics">--column-statistics</a></td>
+<td style="text-align:left">Write ANALYZE TABLE statements to generate statistics histograms</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_comments">--comments</a></td>
+<td style="text-align:left">Add comments to dump file</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_compact">--compact</a></td>
+<td style="text-align:left">Produce more compact output</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_compatible">--compatible</a></td>
+<td style="text-align:left">Produce output that is more compatible with other database systems or with older MySQL servers</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_complete-insert">--complete-insert</a></td>
+<td style="text-align:left">Use complete INSERT statements that include column names</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_compress">--compress</a></td>
+<td style="text-align:left">Compress all information sent between client and server</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">8.0.18</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_compression-algorithms">--compression-algorithms</a></td>
+<td style="text-align:left">Permitted compression algorithms for connections to server</td>
+<td style="text-align:left">8.0.18</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_create-options">--create-options</a></td>
+<td style="text-align:left">Include all MySQL-specific table options in CREATE TABLE statements</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_databases">--databases</a></td>
+<td style="text-align:left">Interpret all name arguments as database names</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_debug">--debug</a></td>
+<td style="text-align:left">Write debugging log</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_debug-check">--debug-check</a></td>
+<td style="text-align:left">Print debugging information when program exits</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_debug-info">--debug-info</a></td>
+<td style="text-align:left">Print debugging information, memory, and CPU statistics when program exits</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_default-auth">--default-auth</a></td>
+<td style="text-align:left">Authentication plugin to use</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_default-character-set">--default-character-set</a></td>
+<td style="text-align:left">Specify default character set</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_defaults-extra-file">--defaults-extra-file</a></td>
+<td style="text-align:left">Read named option file in addition to usual option files</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_defaults-file">--defaults-file</a></td>
+<td style="text-align:left">Read only named option file</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_defaults-group-suffix">--defaults-group-suffix</a></td>
+<td style="text-align:left">Option group suffix value</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_delete-master-logs">--delete-master-logs</a></td>
+<td style="text-align:left">On a replication source server, delete the binary logs after performing the dump operation</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">8.0.26</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_delete-source-logs">--delete-source-logs</a></td>
+<td style="text-align:left">On a replication source server, delete the binary logs after performing the dump operation</td>
+<td style="text-align:left">8.0.26</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_disable-keys">--disable-keys</a></td>
+<td style="text-align:left">For each table, surround INSERT statements with statements to disable and enable keys</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_dump-date">--dump-date</a></td>
+<td style="text-align:left">Include dump date as &quot;Dump completed on&quot; comment if --comments is given</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_dump-replica">--dump-replica</a></td>
+<td style="text-align:left">Include CHANGE REPLICATION SOURCE TO statement that lists binary log coordinates of replica's source</td>
+<td style="text-align:left">8.0.26</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_dump-slave">--dump-slave</a></td>
+<td style="text-align:left">Include CHANGE MASTER statement that lists binary log coordinates of replica's source</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">8.0.26</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_enable-cleartext-plugin">--enable-cleartext-plugin</a></td>
+<td style="text-align:left">Enable cleartext authentication plugin</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_events">--events</a></td>
+<td style="text-align:left">Dump events from dumped databases</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_extended-insert">--extended-insert</a></td>
+<td style="text-align:left">Use multiple-row INSERT syntax</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_fields">--fields-enclosed-by</a></td>
+<td style="text-align:left">This option is used with the --tab option and has the same meaning as the corresponding clause for LOAD DATA</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_fields">--fields-escaped-by</a></td>
+<td style="text-align:left">This option is used with the --tab option and has the same meaning as the corresponding clause for LOAD DATA</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_fields">--fields-optionally-enclosed-by</a></td>
+<td style="text-align:left">This option is used with the --tab option and has the same meaning as the corresponding clause for LOAD DATA</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_fields">--fields-terminated-by</a></td>
+<td style="text-align:left">This option is used with the --tab option and has the same meaning as the corresponding clause for LOAD DATA</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_flush-logs">--flush-logs</a></td>
+<td style="text-align:left">Flush MySQL server log files before starting dump</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_flush-privileges">--flush-privileges</a></td>
+<td style="text-align:left">Emit a FLUSH PRIVILEGES statement after dumping mysql database</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_force">--force</a></td>
+<td style="text-align:left">Continue even if an SQL error occurs during a table dump</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_get-server-public-key">--get-server-public-key</a></td>
+<td style="text-align:left">Request RSA public key from server</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_help">--help</a></td>
+<td style="text-align:left">Display help message and exit</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_hex-blob">--hex-blob</a></td>
+<td style="text-align:left">Dump binary columns using hexadecimal notation</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_host">--host</a></td>
+<td style="text-align:left">Host on which MySQL server is located</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ignore-error">--ignore-error</a></td>
+<td style="text-align:left">Ignore specified errors</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ignore-table">--ignore-table</a></td>
+<td style="text-align:left">Do not dump given table</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_include-master-host-port">--include-master-host-port</a></td>
+<td style="text-align:left">Include MASTER_HOST/MASTER_PORT options in CHANGE MASTER statement produced with --dump-slave</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">8.0.26</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_include-source-host-port">--include-source-host-port</a></td>
+<td style="text-align:left">Include SOURCE_HOST and SOURCE_PORT options in CHANGE REPLICATION SOURCE TO statement produced with --dump-replica</td>
+<td style="text-align:left">8.0.26</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_insert-ignore">--insert-ignore</a></td>
+<td style="text-align:left">Write INSERT IGNORE rather than INSERT statements</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_lines-terminated-by">--lines-terminated-by</a></td>
+<td style="text-align:left">This option is used with the --tab option and has the same meaning as the corresponding clause for LOAD DATA</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_lock-all-tables">--lock-all-tables</a></td>
+<td style="text-align:left">Lock all tables across all databases</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_lock-tables">--lock-tables</a></td>
+<td style="text-align:left">Lock all tables before dumping them</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_log-error">--log-error</a></td>
+<td style="text-align:left">Append warnings and errors to named file</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_login-path">--login-path</a></td>
+<td style="text-align:left">Read login path options from .mylogin.cnf</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_master-data">--master-data</a></td>
+<td style="text-align:left">Write the binary log file name and position to the output</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">8.0.26</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_max-allowed-packet">--max-allowed-packet</a></td>
+<td style="text-align:left">Maximum packet length to send to or receive from server</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_mysqld-long-query-time">--mysqld-long-query-time</a></td>
+<td style="text-align:left">Session value for slow query threshold</td>
+<td style="text-align:left">8.0.30</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_net-buffer-length">--net-buffer-length</a></td>
+<td style="text-align:left">Buffer size for TCP/IP and socket communication</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_network-timeout">--network-timeout</a></td>
+<td style="text-align:left">Increase network timeouts to permit larger table dumps</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_no-autocommit">--no-autocommit</a></td>
+<td style="text-align:left">Enclose the INSERT statements for each dumped table within SET autocommit = 0 and COMMIT statements</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_no-create-db">--no-create-db</a></td>
+<td style="text-align:left">Do not write CREATE DATABASE statements</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_no-create-info">--no-create-info</a></td>
+<td style="text-align:left">Do not write CREATE TABLE statements that re-create each dumped table</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_no-data">--no-data</a></td>
+<td style="text-align:left">Do not dump table contents</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_no-defaults">--no-defaults</a></td>
+<td style="text-align:left">Read no option files</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_no-set-names">--no-set-names</a></td>
+<td style="text-align:left">Same as --skip-set-charset</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_no-tablespaces">--no-tablespaces</a></td>
+<td style="text-align:left">Do not write any CREATE LOGFILE GROUP or CREATE TABLESPACE statements in output</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_opt">--opt</a></td>
+<td style="text-align:left">Shorthand for --add-drop-table --add-locks --create-options --disable-keys --extended-insert --lock-tables --quick --set-charset</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_order-by-primary">--order-by-primary</a></td>
+<td style="text-align:left">Dump each table's rows sorted by its primary key, or by its first unique index</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_password">--password</a></td>
+<td style="text-align:left">Password to use when connecting to server</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_password1">--password1</a></td>
+<td style="text-align:left">First multifactor authentication password to use when connecting to server</td>
+<td style="text-align:left">8.0.27</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_password2">--password2</a></td>
+<td style="text-align:left">Second multifactor authentication password to use when connecting to server</td>
+<td style="text-align:left">8.0.27</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_password3">--password3</a></td>
+<td style="text-align:left">Third multifactor authentication password to use when connecting to server</td>
+<td style="text-align:left">8.0.27</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_pipe">--pipe</a></td>
+<td style="text-align:left">Connect to server using named pipe (Windows only)</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_plugin-dir">--plugin-dir</a></td>
+<td style="text-align:left">Directory where plugins are installed</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_port">--port</a></td>
+<td style="text-align:left">TCP/IP port number for connection</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_print-defaults">--print-defaults</a></td>
+<td style="text-align:left">Print default options</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_protocol">--protocol</a></td>
+<td style="text-align:left">Transport protocol to use</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_quick">--quick</a></td>
+<td style="text-align:left">Retrieve rows for a table from the server a row at a time</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_quote-names">--quote-names</a></td>
+<td style="text-align:left">Quote identifiers within backtick characters</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_replace">--replace</a></td>
+<td style="text-align:left">Write REPLACE statements rather than INSERT statements</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_result-file">--result-file</a></td>
+<td style="text-align:left">Direct output to a given file</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_routines">--routines</a></td>
+<td style="text-align:left">Dump stored routines (procedures and functions) from dumped databases</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_server-public-key-path">--server-public-key-path</a></td>
+<td style="text-align:left">Path name to file containing RSA public key</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_set-charset">--set-charset</a></td>
+<td style="text-align:left">Add SET NAMES default_character_set to output</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_set-gtid-purged">--set-gtid-purged</a></td>
+<td style="text-align:left">Whether to add SET @@GLOBAL.GTID_PURGED to output</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_shared-memory-base-name">--shared-memory-base-name</a></td>
+<td style="text-align:left">Shared-memory name for shared-memory connections (Windows only)</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_show-create-skip-secondary-engine">--show-create-skip-secondary-engine</a></td>
+<td style="text-align:left">Exclude SECONDARY ENGINE clause from CREATE TABLE statements</td>
+<td style="text-align:left">8.0.18</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_single-transaction">--single-transaction</a></td>
+<td style="text-align:left">Issue a BEGIN SQL statement before dumping data from server</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-drop-table">--skip-add-drop-table</a></td>
+<td style="text-align:left">Do not add a DROP TABLE statement before each CREATE TABLE statement</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_add-locks">--skip-add-locks</a></td>
+<td style="text-align:left">Do not add locks</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_skip-comments">--skip-comments</a></td>
+<td style="text-align:left">Do not add comments to dump file</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_compact">--skip-compact</a></td>
+<td style="text-align:left">Do not produce more compact output</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_disable-keys">--skip-disable-keys</a></td>
+<td style="text-align:left">Do not disable keys</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_extended-insert">--skip-extended-insert</a></td>
+<td style="text-align:left">Turn off extended-insert</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_skip-generated-invisible-primary-key">--skip-generated-invisible-primary-key</a></td>
+<td style="text-align:left">Do not include generated invisible primary keys in dump file</td>
+<td style="text-align:left">8.0.30</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_skip-opt">--skip-opt</a></td>
+<td style="text-align:left">Turn off options set by --opt</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_quick">--skip-quick</a></td>
+<td style="text-align:left">Do not retrieve rows for a table from the server a row at a time</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_quote-names">--skip-quote-names</a></td>
+<td style="text-align:left">Do not quote identifiers</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_set-charset">--skip-set-charset</a></td>
+<td style="text-align:left">Do not write SET NAMES statement</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_triggers">--skip-triggers</a></td>
+<td style="text-align:left">Do not dump triggers</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_tz-utc">--skip-tz-utc</a></td>
+<td style="text-align:left">Turn off tz-utc</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_socket">--socket</a></td>
+<td style="text-align:left">Unix socket file or Windows named pipe to use</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_source-data">--source-data</a></td>
+<td style="text-align:left">Write the binary log file name and position to the output</td>
+<td style="text-align:left">8.0.26</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl">--ssl-ca</a></td>
+<td style="text-align:left">File that contains list of trusted SSL Certificate Authorities</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl">--ssl-capath</a></td>
+<td style="text-align:left">Directory that contains trusted SSL Certificate Authority certificate files</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl">--ssl-cert</a></td>
+<td style="text-align:left">File that contains X.509 certificate</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl">--ssl-cipher</a></td>
+<td style="text-align:left">Permissible ciphers for connection encryption</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl">--ssl-crl</a></td>
+<td style="text-align:left">File that contains certificate revocation lists</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl">--ssl-crlpath</a></td>
+<td style="text-align:left">Directory that contains certificate revocation-list files</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl-fips-mode">--ssl-fips-mode</a></td>
+<td style="text-align:left">Whether to enable FIPS mode on client side</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl">--ssl-key</a></td>
+<td style="text-align:left">File that contains X.509 key</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl">--ssl-mode</a></td>
+<td style="text-align:left">Desired security state of connection to server</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl">--ssl-session-data</a></td>
+<td style="text-align:left">File that contains SSL session data</td>
+<td style="text-align:left">8.0.29</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_ssl">--ssl-session-data-continue-on-failed-reuse</a></td>
+<td style="text-align:left">Whether to establish connections if session reuse fails</td>
+<td style="text-align:left">8.0.29</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_tab">--tab</a></td>
+<td style="text-align:left">Produce tab-separated data files</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_tables">--tables</a></td>
+<td style="text-align:left">Override --databases or -B option</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_tls-ciphersuites">--tls-ciphersuites</a></td>
+<td style="text-align:left">Permissible TLSv1.3 ciphersuites for encrypted connections</td>
+<td style="text-align:left">8.0.16</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_tls-version">--tls-version</a></td>
+<td style="text-align:left">Permissible TLS protocols for encrypted connections</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_triggers">--triggers</a></td>
+<td style="text-align:left">Dump triggers for each dumped table</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_tz-utc">--tz-utc</a></td>
+<td style="text-align:left">Add SET TIME_ZONE='+00:00' to dump file</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_user">--user</a></td>
+<td style="text-align:left">MySQL user name to use when connecting to server</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_verbose">--verbose</a></td>
+<td style="text-align:left">Verbose mode</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_version">--version</a></td>
+<td style="text-align:left">Display version information and exit</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_where">--where</a></td>
+<td style="text-align:left">Dump only rows selected by given WHERE condition</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_xml">--xml</a></td>
+<td style="text-align:left">Produce XML output</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/mysqldump.html#option_mysqldump_zstd-compression-level">--zstd-compression-level</a></td>
+<td style="text-align:left">Compression level for connections to server that use zstd compression</td>
+<td style="text-align:left">8.0.18</td>
+<td style="text-align:left"></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/powershell-keng-mysql-shu-ju-bei-fen/" title="Powershell坑-MySQL数据备份">https://Kyouichirou.github.io/post/powershell-keng-mysql-shu-ju-bei-fen/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/DfKIjrFyU/"># trick</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/V24rpoUbq/"># windows</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/lxLXc3ZygQ/"># powershell</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/ccTETwDeA/"># terminal</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/"># mysql</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="MongoDB使用手册" href="https://Kyouichirou.github.io/post/mongodb-shi-yong-shou-ce/">MongoDB使用手册</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="MongoDB使用手册" href="https://Kyouichirou.github.io/post/mongodb-shi-yong-shou-ce/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Python外部参数传入" href="https://Kyouichirou.github.io/post/python-wai-bu-can-shu-chuan-ru/">Python外部参数传入</a>
+        <a class="nav-mobile-next" title="Python外部参数传入" href="https://Kyouichirou.github.io/post/python-wai-bu-can-shu-chuan-ru/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

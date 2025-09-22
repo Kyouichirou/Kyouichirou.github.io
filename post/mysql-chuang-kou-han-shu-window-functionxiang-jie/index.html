@@ -1,0 +1,3131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>MySQL窗口函数(Window Function)详解 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="MySQL窗口函数(Window Function)详解" />
+  <meta name="keywords" content="priority,mysql" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一. 前言</a>
+<ul>
+<li><a href="#11-olap">1.1  OLAP</a></li>
+<li><a href="#12-%E7%A4%BA%E4%BE%8B">1.2 示例</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3rolling-window%E8%A7%A3%E6%9E%90">二. 滑动窗口(Rolling Window)解析</a></li>
+<li><a href="#%E4%B8%89-%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3">三. 函数详解</a>
+<ul>
+<li><a href="#31-first_valuelast_value">3.1 <code>first_value()</code>/<code>last_value()</code></a></li>
+<li><a href="#32-leadlag">3.2 <code>lead()</code>/<code>lag()</code></a></li>
+<li><a href="#33-percent_rank-cume_dist">3.3 <code>percent_rank()</code> /<code>cume_dist()</code></a></li>
+<li><a href="#34-row_numberrankdense_rank">3.4 <code>row_number()</code>/<code>rank()</code>/<code>dense_rank()</code></a></li>
+<li><a href="#35-nth_value">3.5 <code>nth_value()</code></a></li>
+<li><a href="#36-ntile">3.6 <code>ntile()</code></a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E6%95%B0%E6%8D%AE">四. 数据</a></li>
+<li><a href="#%E4%BA%94-%E6%A1%88%E4%BE%8B">五. 案例</a>
+<ul>
+<li><a href="#51-%E7%94%A8%E6%88%B7%E7%AB%AF">5.1 用户端</a>
+<ul>
+<li><a href="#511-%E4%BA%A4%E6%98%93">5.1.1 交易</a>
+<ul>
+<li><a href="#5111-%E6%83%85%E6%99%AF1">5.1.1.1 情景1</a>
+<ul>
+<li><a href="#51111-%E8%A7%A3%E6%9E%90">5.1.1.1.1 解析</a></li>
+</ul>
+</li>
+<li><a href="#5112-%E6%83%85%E6%99%AF2">5.1.1.2 情景2</a></li>
+<li><a href="#5113-%E6%83%85%E6%99%AF3">5.1.1.3 情景3</a></li>
+<li><a href="#5114-%E6%83%85%E6%99%AF4">5.1.1.4 情景4</a></li>
+<li><a href="#5115-%E6%83%85%E6%99%AF5">5.1.1.5 情景5</a></li>
+</ul>
+</li>
+<li><a href="#512-%E6%B4%BB%E8%B7%83">5.1.2 活跃</a></li>
+<li><a href="#513-%E7%94%A8%E6%88%B7%E5%88%92%E5%88%86">5.1.3 用户划分</a>
+<ul>
+<li><a href="#5131-%E6%83%85%E6%99%AF1">5.1.3.1 情景1</a></li>
+<li><a href="#5132-%E6%83%85%E6%99%AF2">5.1.3.2 情景2</a>
+<ul>
+<li><a href="#51321-%E8%A7%A3%E6%9E%90">5.13.2.1 解析</a></li>
+</ul>
+</li>
+<li><a href="#5133-%E6%83%85%E6%99%AF3">5.1.3.3 情景3</a>
+<ul>
+<li><a href="#51331-%E8%A7%A3%E6%9E%90">5.1.3.3.1 解析</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#52-%E4%BA%A7%E5%93%81%E7%AB%AF">5.2 产品端</a>
+<ul>
+<li><a href="#521-%E6%83%85%E6%99%AF1">5.2.1 情景1</a></li>
+<li><a href="#522-%E6%83%85%E6%99%AF2">5.2.2 情景2</a></li>
+<li><a href="#523-%E6%83%85%E6%99%AF3">5.2.3 情景3</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%85%AD-%E9%80%9F%E6%9F%A5%E8%A1%A8">六. 速查表</a></li>
+<li><a href="#%E4%B8%83-%E6%80%BB%E7%BB%93">七. 总结</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/mysql-chuang-kou-han-shu-window-functionxiang-jie/"> MySQL窗口函数(Window Function)详解 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item">
+      <i class="fa fa-thumb-tack"></i>
+      <span class="language" data-lan="top">置顶</span>
+      <span class="post-meta-divider">|</span>
+    </span>
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-02-02 16:42:34">2023-02-02</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"> <span>priority</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/">
+        <span>mysql</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >44<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >8280<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <h2 id="一-前言">一. 前言</h2>
+<figure data-type="image" tabindex="1"><a href="https://imgse.com/i/ppnYa7R"><img src="https://s1.ax1x.com/2023/03/09/ppnYa7R.png" alt="ppnYa7R.png" loading="lazy"></a></figure>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/window-functions.html">窗口函数(<code>window function</code>)</a>, 也称作<a href="https://docs.aws.amazon.com/dms/latest/oracle-to-aurora-mysql-migration-playbook/chap-oracle-aurora-mysql.sql.olap.html"><code>OLAP</code></a>, <code>Online Analytical Processing</code>，实时分析处理.</p>
+<blockquote>
+<p><em>They can help boost query performance as an alternative to achieving the same result using more complex non-OLAP SQL code.</em></p>
+</blockquote>
+<p>简而言之, 窗口函数大大强化了<code>MySQL</code>在数据分析上的能力, 通过窗口函数可以以相对简单的方式实现较为复杂的常态化数据输出, 例如经典的多层级汇总, <code>topN</code>问题, 多个区间之间得运算等.</p>
+<p>以下内容, 先以简单的例子展示窗口函数的使用,  后使用相对复杂的内容来对窗口函数进行较深入的应用.</p>
+<p><em>由于是在<code>8.0</code>后才增加的新特性, 搜索引擎/相关书籍提供的介绍较为简单和粗略, 相关参考主要以官方文档为主.</em></p>
+<!--more-->
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_cume-dist"><code>CUME_DIST()</code></a></td>
+<td style="text-align:left">Cumulative distribution value</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_dense-rank"><code>DENSE_RANK()</code></a></td>
+<td style="text-align:left">Rank of current row within its partition, without gaps</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_first-value"><code>FIRST_VALUE()</code></a></td>
+<td style="text-align:left">Value of argument from first row of window frame</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_lag"><code>LAG()</code></a></td>
+<td style="text-align:left">Value of argument from row lagging current row within partition</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_last-value"><code>LAST_VALUE()</code></a></td>
+<td style="text-align:left">Value of argument from last row of window frame</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_lead"><code>LEAD()</code></a></td>
+<td style="text-align:left">Value of argument from row leading current row within partition</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_nth-value"><code>NTH_VALUE()</code></a></td>
+<td style="text-align:left">Value of argument from N-th row of window frame</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_ntile"><code>NTILE()</code></a></td>
+<td style="text-align:left">Bucket number of current row within its partition.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_percent-rank"><code>PERCENT_RANK()</code></a></td>
+<td style="text-align:left">Percentage rank value</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_rank"><code>RANK()</code></a></td>
+<td style="text-align:left">Rank of current row within its partition, with gaps</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://dev.mysql.com/doc/refman/8.0/en/window-function-descriptions.html#function_row-number"><code>ROW_NUMBER()</code></a></td>
+<td style="text-align:left">Number of current row within its partition</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>语法:</li>
+</ul>
+<pre><code class="language-mysql">SELECT
+  val,
+  ROW_NUMBER() OVER (ORDER BY val) AS 'row_number',
+  RANK()       OVER (ORDER BY val) AS 'rank',
+  DENSE_RANK() OVER (ORDER BY val) AS 'dense_rank'
+FROM numbers;
+
+# 等价
+
+SELECT
+  val,
+  ROW_NUMBER() OVER w AS 'row_number',
+  RANK()       OVER w AS 'rank',
+  DENSE_RANK() OVER w AS 'dense_rank'
+FROM numbers
+WINDOW w AS (ORDER BY val);
+</code></pre>
+<p>在理解窗口函数的时候, 需要有一个认知框架, 即在<code>MySQL</code>中对数据运算可能遇到的操作</p>
+<ul>
+<li>区间运算, 对某个区域执行</li>
+<li>横向运算(列之间的运算)</li>
+<li>纵向运算(行之间的运算)</li>
+<li>行转置为列进行运算(行与行之间进行, 将数据转为列)</li>
+<li>混合执行上述的情形(例如行的数据转置为列, 在行之间进行区间运算...).</li>
+</ul>
+<blockquote>
+<p><em>MySQL supports window functions that, for each row from a query, perform a calculation using rows related to that row.</em></p>
+<p>官方文档对于窗口函数的使用的介绍: 解决行之间的运算.</p>
+</blockquote>
+<p>一个&quot;<strong>简单</strong>&quot;的要求, 对<strong>行之间</strong>的数据进行<strong>减法</strong>的操作示例(在没有引入窗口函数时的操作):</p>
+<figure data-type="image" tabindex="2"><a href="https://imgse.com/i/pS6EOL8"><img src="https://s1.ax1x.com/2023/02/05/pS6EOL8.png" alt="pS6EOL8.png" loading="lazy"></a></figure>
+<pre><code class="language-bash">+--------+------------+------------+--------+------------+
+| emp_no | first_name | hire_date  | salary | to_date    |
++--------+------------+------------+--------+------------+
+|  10001 | Georgi     | 2001-06-22 |  85097 | 2002-06-22 | # 这两行数据相减
+|  10001 | Georgi     | 2001-06-22 |  88958 | 9999-01-01 | # 
+|  10002 | Bezalel    | 1999-08-03 |  72527 | 2000-08-02 | # 当emp_no出现次数等于2
++--------+------------+------------+--------+------------+
+
+# 这种看似很简单的运算操作, 在传统方式的角度来看, 其实现是相对困难的
+# 可能需要多次的join, 或者是引入临时的变量
+</code></pre>
+<p>在没有窗口函数时, 进行复杂的操作, 如多层级的汇总操作, 需要引入大量的临时表, 甚至是加入辅助变量进行操作, 这使得<code>MySQL</code>语句的可阅读性变得非常差, 在性能上可能也是相对较差的, 窗口函数很大程度解决了这些弊端.</p>
+<p>简易搭配<a href="https://dev.mysql.com/doc/refman/8.0/en/with.html"><code>with</code></a>一起使用</p>
+<pre><code class="language-mysql"># 让代码逻辑更为清晰
+# 多余需要聚合大量的表(临时表), with的更衣分清楚层次
+
+WITH
+  cte1 AS (SELECT a, b FROM table1),
+  cte2 AS (SELECT c, d FROM table2)
+SELECT b, d FROM cte1 JOIN cte2
+WHERE cte1.a = cte2.c;
+</code></pre>
+<h3 id="11-olap">1.1  OLAP</h3>
+<figure data-type="image" tabindex="3"><img src="https://image-static.segmentfault.com/187/068/1870684214-6103715954cf7_fix732" alt="pic" loading="lazy"></figure>
+<blockquote>
+<p>The <code>GROUP BY</code> clause permits a <code>WITH ROLLUP</code> modifier that causes summary output to include extra rows that represent higher-level (that is, super-aggregate) summary operations. <code>ROLLUP</code> thus enables you to answer questions at multiple levels of analysis with a single query. For example, <code>ROLLUP</code> can be used to provide support for <em><strong>OLAP (Online Analytical Processing)</strong></em> operations.</p>
+</blockquote>
+<ul>
+<li>参考链接: <a href="https://segmentfault.com/a/1190000040428093">什么是OLAP？主流八大开源OLAP技术架构对比</a></li>
+</ul>
+<h3 id="12-示例">1.2 示例</h3>
+<pre><code class="language-mysql"># 仅作演示, 未优化的语句
+WITH a AS ( SELECT *, IF ( goods_quality &lt; 0, 1, 0 ) AS is_return FROM qian WHERE store_name = '抖音小店' AND type_week &lt; 4 ),
+b AS (
+	SELECT
+		store_name,
+		goods_code,
+		types,
+		type_week,
+		is_return,
+		sum( goods_quality ) AS gq_sum,
+		sum( cost_price ) AS cp_sum,
+		sum( share_cost ) AS sc_sum,
+		sum( supply_price ) AS sp_sum 
+	FROM
+		a 
+	GROUP BY
+		goods_code,
+		type_week,
+		is_return 
+	),
+	c AS (
+	SELECT
+		t1.*,
+		t2.type_week AS nw,
+		t2.gq_sum AS n_gq_sum,
+		t2.cp_sum AS n_cp_sum,
+		t2.sc_sum AS n_sc_sum,
+		t2.sp_sum AS n_sp_sum 
+	FROM
+		b AS t1
+		LEFT JOIN b AS t2 ON t1.goods_code = t2.goods_code 
+		AND t1.is_return = t2.is_return 
+		AND t2.type_week = t1.type_week + 1 
+	),
+	d AS (
+	SELECT
+		*,
+		sum( gq_sum ) over w AS c_w_r_sales,
+		sum( n_gq_sum ) over w AS n_w_r_sales 
+	FROM
+		c window w AS ( PARTITION BY types, type_week, is_return ) 
+	),
+	e AS (
+	SELECT
+		*,
+		gq_sum / c_w_r_sales AS cr,
+		n_gq_sum / n_w_r_sales AS nr,
+	IF
+		( n_w_r_sales IS NULL OR c_w_r_sales IS NULL, - 1, ( n_w_r_sales - c_w_r_sales ) / c_w_r_sales ) *
+	IF
+		( is_return = 1, - 1, 1 ) AS c_ratio 
+	FROM
+		d 
+	),
+	f AS (
+	SELECT
+		*,
+		DENSE_RANK() over w AS rk 
+	FROM
+	e window w AS ( PARTITION BY types, type_week, is_return ORDER BY gq_sum DESC )),
+	h AS (
+	SELECT
+		*,
+		DENSE_RANK() over w AS tmp_r 
+	FROM
+	f window w AS ( PARTITION BY goods_code, is_return ORDER BY type_week )),
+	i AS ( SELECT *, IF ( type_week = 0, type_week + 1 = tmp_r, tmp_r = type_week ) AS tmp_x FROM h ),
+	j AS (
+	SELECT
+		*,
+		sum( tmp_x ) over w AS continue_w,
+		sum( sc_sum ) over w AS total_sales,
+		sum( gq_sum ) over w AS total_gq,
+		sum( cp_sum ) over w AS total_cp 
+	FROM
+	i window w AS ( PARTITION BY goods_code, is_return )) SELECT
+	*,
+	sum( total_sales ) over w AS t_sales,
+	sum( total_gq ) over w AS t_q,
+	sum( total_cp ) over w AS t_c 
+FROM
+	j window w AS ( PARTITION BY types, is_return ) 
+ORDER BY
+	goods_code,
+	type_week;
+</code></pre>
+<figure data-type="image" tabindex="4"><a href="https://imgse.com/i/pSxYZxH"><img src="https://s1.ax1x.com/2023/02/23/pSxYZxH.png" alt="pSxYZxH.png" loading="lazy"></a></figure>
+<p><em>整体概览, 局部细分.</em></p>
+<p>这种看起来非常复杂的多层级数据分析, 在窗口函数加持之下, 只是按需获取的数据, 不需要各种临时表, 辅助变量即可实现</p>
+<p>可以根据探索维度需要不断地进行调整, 但是不需要将数据进行拆分, 然后再合并, 可以将所有的数据都整合在一起实现.</p>
+<blockquote>
+<p>As of MySQL 8.0.28, a maximum of 127 windows is supported for a given <a href="https://dev.mysql.com/doc/refman/8.0/en/select.html"><code>SELECT</code></a>. Note that a single query may use multiple <code>SELECT</code> clauses, and each of these clauses supports up to 127 windows. The number of distinct windows is defined as the sum of the named windows and any implicit windows specified as part of any window function's <code>OVER</code> clause. You should also be aware that queries using very large numbers of windows may require increasing the default thread stack size (<a href="https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html#sysvar_thread_stack"><code>thread_stack</code></a> system variable).</p>
+<p>MySQL 8.0.28以上版本, 单个<code>select</code>子语句支持多达127个窗口.</p>
+</blockquote>
+<p>相对遗憾的是<code>navicat</code>的绘图部分暂不支持<code>with语句</code>.</p>
+<h2 id="二-滑动窗口rolling-window解析">二. 滑动窗口(Rolling Window)解析</h2>
+<blockquote>
+<p><em>By defining a frame as extending <code>N</code> rows on either side of the current row, you can compute rolling averages.</em></p>
+</blockquote>
+<p>区间(可能是特定的行号之间, 也可能是数据范围之间)范围的数据的<strong>局部</strong>处理, 这个特性, 需要格外注意, 是相对容易搞混的知识点.</p>
+<figure data-type="image" tabindex="5"><a href="https://imgse.com/i/pSDEAb9"><img src="https://s1.ax1x.com/2023/02/01/pSDEAb9.png" alt="pSDEAb9.png" loading="lazy"></a></figure>
+<figure data-type="image" tabindex="6"><a href="https://imgse.com/i/pSWphVg"><img src="https://s1.ax1x.com/2023/02/09/pSWphVg.png" alt="pSWphVg.png" loading="lazy"></a></figure>
+<p>注意执行的顺序.</p>
+<pre><code class="language-mysql">mysql&gt; select * from test_f;
++------+------+
+| c    | v    |
++------+------+
+| a    |    1 |
+| b    |    2 |
+| c    |    3 |
+| d    |    4 |
++------+------+
+4 rows in set (0.00 sec)
+
+SELECT
+	c,
+	v,
+	avg( v ) OVER ( ORDER BY v rows BETWEEN 1 preceding AND current ROW ) AS average_1,
+	avg( v ) OVER ( ORDER BY v rows BETWEEN 2 preceding AND current ROW ) AS average_2 
+FROM
+	test_f;
+</code></pre>
+<pre><code class="language-bash">+------+------+-----------+-----------+
+| c    | v    | average_1 | average_2 |
++------+------+-----------+-----------+
+| a    |    1 |    1.0000 |    1.0000 |
+| b    |    2 |    1.5000 |    1.5000 |
+| c    |    3 |    2.5000 |    2.0000 |
+| d    |    4 |    3.5000 |    3.0000 |
++------+------+-----------+-----------+
+4 rows in set (0.00 sec)
+</code></pre>
+<p>上述结果的计算方式:</p>
+<p><code>ETWEEN 1 preceding AND current ROW</code>理论上包含<code>2</code>行数据</p>
+<ul>
+<li>前一行</li>
+<li>自身</li>
+</ul>
+<p><strong>avg1</strong>:</p>
+<ul>
+<li>1.0, 这个值是在1 开始, 往后找1行, 找不到,  1 / 1 = 1</li>
+<li>1.5, 这个是2 往后找1行, 找到1, (1 + 2) / 2 = 1.5</li>
+<li>2.5, 这是从3往后找1行, 找到2, (2 + 3) / 2 = 2.5</li>
+<li>3.5, 这是从4 开始找1行, 找到3, (3 + 4) / 2 = 3.5</li>
+</ul>
+<p><strong>avg2</strong>:</p>
+<ul>
+<li>1.0, 这个值是在1开始, 往后找 2行, 找不到, 1 / 1 = 1</li>
+<li>1.5, 这个是2 往后找, 找到2行(没有两行), 只能找到1, (1 + 2) / 2 = 1.5</li>
+<li>2, 这是从3往后找, 向后找2行, 找到1, 2, (1 + 3 + 2) / 3 = 2</li>
+<li>3, 这是从4 开始找, 向后找2行, 找到2, 3, (2 + 4 + 2) / 3 = 3</li>
+</ul>
+<pre><code class="language-mysql">SELECT
+	c,
+	v,
+	avg( v ) OVER ( ORDER BY v rows BETWEEN 1 preceding AND 1 following ) AS average_3,
+	avg( v ) OVER ( ORDER BY v rows BETWEEN 2 preceding AND 2 following ) AS average_4 
+FROM
+	test_f;
+</code></pre>
+<pre><code class="language-bash">+------+------+-----------+-----------+
+| c    | v    | average_3 | average_4 |
++------+------+-----------+-----------+
+| a    |    1 |    1.5000 |    2.0000 |
+| b    |    2 |    2.0000 |    2.5000 |
+| c    |    3 |    3.0000 |    2.5000 |
+| d    |    4 |    3.5000 |    3.0000 |
++------+------+-----------+-----------+
+4 rows in set (0.00 sec)
+</code></pre>
+<p>上述结果的计算方式:</p>
+<p><code>BETWEEN 1 preceding AND 1 following</code>理论上包含3行数据</p>
+<ul>
+<li>前一行</li>
+<li>自身</li>
+<li>后一行</li>
+</ul>
+<p><strong>avg3</strong>:</p>
+<ul>
+<li>1.5, 这个值是在1 开始, 往后找1行, 找不到, 往后找2,  (2 + 1 / 2) = 1.5</li>
+<li>2.5, 这个是2 往后找1行, 找到1, 向后找1行, 找到3, (1 + 2 + 3) / 3 = 2</li>
+<li>3.0, 这是从3往后找1行, 找到2, 向后找一行, 找到4, (2 + 3 + 4) / 3 = 3</li>
+<li>3.5, 这是从4 开始找1行, 找到3, 向前没找到, (3 + 4) / 2 = 3.5</li>
+</ul>
+<p><strong>avg4</strong>:</p>
+<ul>
+<li>2.0, 这个值是在1开始, 往后找 2行, 找不到, 向前找2行, 2, 3 (1 + 2 + 3)  / 2 = 2</li>
+<li>2.5, 这个是2 往后找 , 找到2行(没有两行), 只能找到1, (2 + 1 + 3 + 4)  / 4 = 2.5</li>
+<li>2.5, 这是从3往后找, 向后找2行, 找到1, 2, 往前找4, (1 + 2 + 3 + 4)  / 4 = 2.5</li>
+<li>3.0, 这是从4 开始找, 向后找2行, 找到2, 3, (2 + 3 + 4) / 3 = 3</li>
+</ul>
+<pre><code class="language-mysql">CUME_DIST()
+DENSE_RANK()
+LAG()
+LEAD()
+NTILE()
+PERCENT_RANK()
+RANK()
+ROW_NUMBER()
+</code></pre>
+<blockquote>
+<p>Standard SQL specifies that window functions that operate on the entire partition should have no frame clause. MySQL permits a frame clause for such functions but ignores it. These functions use the entire partition even if a frame is specified:</p>
+</blockquote>
+<p>注意以上函数是作用于整个分区(<code>partition</code>)的, 就算显式声明<code>roll window</code>也无效.</p>
+<h2 id="三-函数详解">三. 函数详解</h2>
+<h3 id="31-first_valuelast_value">3.1 <code>first_value()</code>/<code>last_value()</code></h3>
+<ul>
+<li>
+<p><code>FIRST_VALUE()</code>函数返回<code>expression</code>窗口框架第一行的值.</p>
+<blockquote>
+<pre><code class="language-mysql">FIRST_VALUE(expression) OVER (
+        [partition_clause]
+        [order_clause]
+        [frame_clause]
+) 
+</code></pre>
+</blockquote>
+</li>
+<li>
+<p><code>LAST_VALUE()</code>函数返回<code>expression</code>有序行集的最后一行的值.</p>
+<blockquote>
+<pre><code class="language-mysql">LAST_VALUE (expression) OVER (
+    [partition_clause]
+    [order_clause]
+    [frame_clause]
+) 
+</code></pre>
+</blockquote>
+</li>
+</ul>
+<pre><code class="language-mysql">SELECT
+	v,
+	FIRST_VALUE( v ) over w AS 'f_val',
+	FIRST_VALUE(v) over (PARTITION by v order by v) as 'f_val_2',
+	LAST_VALUE( v ) over () AS 'l_1',
+	LAST_VALUE( v ) over w AS 'l_2',
+	LAST_VALUE( v ) over ( ORDER BY v RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING ) AS 'l_3',
+	n
+FROM
+	test_g WINDOW w AS ( ORDER BY v );
+# 注意区别
++------+-------+---------+------+------+------+
+| v    | f_val | f_val_2 | l_1  | l_2  | l_3  |
++------+-------+---------+------+------+------+
+|    1 |     1 |       1 |    5 |    1 |    5 |
+|    1 |     1 |       1 |    5 |    1 |    5 |
+|    2 |     1 |       2 |    5 |    2 |    5 |
+|    3 |     1 |       3 |    5 |    3 |    5 |
+|    3 |     1 |       3 |    5 |    3 |    5 |
+|    3 |     1 |       3 |    5 |    3 |    5 |
+|    4 |     1 |       4 |    5 |    4 |    5 |
+|    4 |     1 |       4 |    5 |    4 |    5 |
+|    5 |     1 |       5 |    5 |    5 |    5 |
++------+-------+---------+------+------+------+
+9 rows in set (0.00 sec)
+</code></pre>
+<ul>
+<li><code>order by</code>的作用</li>
+</ul>
+<blockquote>
+<p>With <code>ORDER BY</code>: The default frame includes rows from the partition start through the current row, including all peers of the current row (rows equal to the current row according to the <code>ORDER BY</code> clause). The default is equivalent to this frame specification:</p>
+<blockquote>
+<p>RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</p>
+<p>等价于此语句</p>
+</blockquote>
+<p>Without <code>ORDER BY</code>: The default frame includes all partition rows (because, without <code>ORDER BY</code>, all partition rows are peers). The default is equivalent to this frame specification:</p>
+<p>假如没有<code>order by</code>将包括所有的行(没有<code>order by</code>所有的(分区)的行都被视作等同的行)</p>
+</blockquote>
+<p><code>f_val</code>, 使用<code>order by</code>, 排序后返回第一行的数据, 即1, 1是最小的, 每一个行和1相比 都是返回1</p>
+<p><code>f_val_2</code>, 强制假如<code>partition</code>进行显式分区, 即, 每一行, 都是本身.</p>
+<p><code>l_1</code>, 没有使用<code>order by</code>, 即如上所述, 作用于全部的行, 最后一行是5, 所以返回的结果全是5</p>
+<p><code>l_2</code>, 使用<code>order by</code>, 即返回当前行和第一行中的最后一行, 由于已经进行排序, 最后显然是本身.</p>
+<p><code>l_3</code>, 使用<code>order by</code>, 同时手动指定窗体的<strong>范围</strong>(<code>RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING</code>)是作用于全局, 即返回的是最后一行 和 <code>l_1</code>类似.</p>
+<h3 id="32-leadlag">3.2 <code>lead()</code>/<code>lag()</code></h3>
+<p>滑动函数</p>
+<ul>
+<li>
+<p><code>lead()</code>, 向前</p>
+<blockquote>
+<pre><code class="language-mysql">LEAD(&lt;expression&gt;[,offset[, default_value]]) OVER (
+    PARTITION BY (expr)
+    ORDER BY (expr)
+) 
+</code></pre>
+</blockquote>
+</li>
+<li>
+<p><code>lag()</code>, 向后</p>
+<blockquote>
+<pre><code class="language-mysql">LAG(&lt;expression&gt;[,offset[, default_value]]) OVER (
+    PARTITION BY expr,...
+    ORDER BY expr [ASC|DESC],...
+) 
+</code></pre>
+</blockquote>
+</li>
+</ul>
+<p>支持参数:</p>
+<ul>
+<li><code>col_name</code></li>
+<li><code>offset</code>, 偏移值</li>
+<li><code>default_value</code>, 默认值(不传入默认值, 则默认为<code>null</code>)</li>
+</ul>
+<pre><code class="language-mysql">lag(col, 2, 0)
+</code></pre>
+<pre><code class="language-bash">mysql&gt; select * from test_f;
++------+------+
+| c    | v    |
++------+------+
+| a    |    1 |
+| b    |    2 |
+| c    |    3 |
+| d    |    4 |
++------+------+
+4 rows in set (0.00 sec)
+
+# lag 向后
+mysql&gt; select *, lag(v) over() from test_f;
++------+------+---------------+
+| c    | v    | lag(v) over() |
++------+------+---------------+
+| a    |    1 |          NULL |
+| b    |    2 |             1 |
+| c    |    3 |             2 |
+| d    |    4 |             3 |
++------+------+---------------+
+4 rows in set (0.00 sec)
+
+# lad前
+mysql&gt; select *, lead(v) over() from test_f;
++------+------+----------------+
+| c    | v    | lead(v) over() |
++------+------+----------------+
+| a    |    1 |              2 |
+| b    |    2 |              3 |
+| c    |    3 |              4 |
+| d    |    4 |           NULL |
++------+------+----------------+
+4 rows in set (0.01 sec)
+</code></pre>
+<h3 id="33-percent_rank-cume_dist">3.3 <code>percent_rank()</code> /<code>cume_dist()</code></h3>
+<p>分布函数</p>
+<blockquote>
+<pre><code class="language-mysql"># CUME_DIST()函数的返回值大于零且小于或等于1（0 CUME_DIST()&lt;&lt; = 1）。重复的列值接收相同的CUME_DIST()值
+CUME_DIST() OVER (
+ PARTITION BY expr, ...
+ ORDER BY expr [ASC | DESC], ...
+) 
+</code></pre>
+<pre><code class="language-mysql">PERCENT_RANK()
+    OVER (
+        PARTITION BY expr,...
+        ORDER BY expr [ASC|DESC],...
+    ) 
+计算公式: (rank - 1) / (total_rows - 1) 
+rank 来自于 rank() 函数
+</code></pre>
+</blockquote>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		v,
+		ROW_NUMBER() OVER w AS 'row_number',
+		rank() over w AS 'rank_number',
+		CUME_DIST() OVER w AS 'cume_dist',
+		PERCENT_RANK() OVER w AS 'percent_rank',
+		count(*) over w AS 'total_row',
+		count(*) over () AS 'max_index' 
+	FROM
+		test_g WINDOW w AS ( ORDER BY v ) 
+	) SELECT
+	*,
+	(( 1 / max_index ) * total_row ) ascum_cal,
+	((
+			rank_number - 1 
+		) / ( max_index - 1 )) AS per_cal 
+FROM
+	a;
+	
+# 差异 / 计算方法
+# 
++------+------------+-------------+-----------+--------------+-----------+-----------+-----------+---------+
+| v    | row_number | rank_number | cume_dist | percent_rank | total_row | max_index | ascum_cal | per_cal |
++------+------------+-------------+-----------+--------------+-----------+-----------+-----------+---------+
+|    1 |          1 |           1 |      0.22 |            0 |         2 |         9 |    0.2222 |  0.0000 |
+|    1 |          2 |           1 |      0.22 |            0 |         2 |         9 |    0.2222 |  0.0000 |
+|    2 |          3 |           3 |      0.33 |         0.25 |         3 |         9 |    0.3333 |  0.2500 |
+|    3 |          4 |           4 |      0.67 |        0.375 |         6 |         9 |    0.6667 |  0.3750 |
+|    3 |          5 |           4 |      0.67 |        0.375 |         6 |         9 |    0.6667 |  0.3750 |
+|    3 |          6 |           4 |      0.67 |        0.375 |         6 |         9 |    0.6667 |  0.3750 |
+|    4 |          7 |           7 |      0.89 |         0.75 |         8 |         9 |    0.8889 |  0.7500 |
+|    4 |          8 |           7 |      0.89 |         0.75 |         8 |         9 |    0.8889 |  0.7500 |
+|    5 |          9 |           9 |         1 |            1 |         9 |         9 |    1.0000 |  1.0000 |
++------+------------+-------------+-----------+--------------+-----------+-----------+-----------+---------+
+9 rows in set (0.00 sec)
+</code></pre>
+<h3 id="34-row_numberrankdense_rank">3.4 <code>row_number()</code>/<code>rank()</code>/<code>dense_rank()</code></h3>
+<p>排名函数</p>
+<pre><code class="language-mysql">SELECT
+	v,
+	ROW_NUMBER() over w AS 'rn',
+	rank() over w AS 'r',
+	DENSE_RANK() over w AS 'dr' 
+FROM
+	test_g window w AS ( ORDER BY v );
+	
++------+----+---+----+
+| v    | rn | r | dr |
++------+----+---+----+
+|    1 |  1 | 1 |  1 |
+|    1 |  2 | 1 |  1 |
+|    2 |  3 | 3 |  2 |
+|    3 |  4 | 4 |  3 |
+|    3 |  5 | 4 |  3 |
+|    3 |  6 | 4 |  3 |
+|    4 |  7 | 7 |  4 |
+|    4 |  8 | 7 |  4 |
+|    5 |  9 | 9 |  5 |
++------+----+---+----+
+9 rows in set (0.00 sec)
+</code></pre>
+<h3 id="35-nth_value">3.5 <code>nth_value()</code></h3>
+<p>取排名<code>N</code>(使用的是行号(<code>row_number()</code>))</p>
+<pre><code class="language-mysql">SELECT
+	v,
+	NTH_VALUE( v, 3 ) over w AS 'a',
+	NTH_VALUE( v, 3 ) over ( ORDER BY v rows BETWEEN unbounded preceding AND unbounded following ) AS 'b' 
+FROM
+	test_g window w AS ( ORDER BY v );
+	
++------+------+------+
+| v    | a    | b    |
++------+------+------+
+|    1 | NULL |    2 |
+|    1 | NULL |    2 | # 默认是空缺
+|    2 |    2 |    2 | # 手动指定分区为全局模式, 不希望为null
+|    3 |    2 |    2 |
+|    3 |    2 |    2 |
+|    3 |    2 |    2 |
+|    4 |    2 |    2 |
+|    4 |    2 |    2 |
+|    5 |    2 |    2 |
++------+------+------+
+9 rows in set (0.00 sec)
+</code></pre>
+<h3 id="36-ntile">3.6 <code>ntile()</code></h3>
+<p>分桶函数, <code>NTILE(N)</code>, <code>N</code>即需要分的数量</p>
+<pre><code class="language-mysql">SELECT
+	v,
+	NTILE(3) over w as 'bucket'
+FROM
+	test_g window w AS ( ORDER BY v );
+
++------+--------+
+| v    | bucket |
++------+--------+
+|    1 |      1 |
+|    1 |      1 |
+|    2 |      1 |
+|    3 |      2 |
+|    3 |      2 |
+|    3 |      2 |
+|    4 |      3 |
+|    4 |      3 |
+|    5 |      3 |
++------+--------+
+9 rows in set (0.00 sec)
+</code></pre>
+<h2 id="四-数据">四. 数据</h2>
+<p><a href="https://gitee.com/hu-weiqing/datasource/blob/master/user_trade.xlsx">gitee_数据源</a></p>
+<pre><code class="language-bash"># 表结构
+mysql&gt; desc user_trade;
++----------------+-------------------+------+-----+---------+-------+
+| Field          | Type              | Null | Key | Default | Extra |
++----------------+-------------------+------+-----+---------+-------+
+| user_name      | varchar(16)       | NO   |     | NULL    |       |
+| piece          | smallint unsigned | YES  |     | NULL    |       |
+| price          | float             | YES  |     | NULL    |       |
+| pay_amount     | float             | YES  |     | NULL    |       |
+| goods_category | varchar(16)       | YES  |     | NULL    |       |
+| pay_time       | timestamp         | YES  |     | NULL    |       |
++----------------+-------------------+------+-----+---------+-------+
+6 rows in set (0.00 sec)
+
+# 数据简要
+mysql&gt; select * from user_trade limit 10;
++-----------+-------+-------+------------+----------------+---------------------+
+| user_name | piece | price | pay_amount | goods_category | pay_time            |
++-----------+-------+-------+------------+----------------+---------------------+
+| Allison   |     4 | 688.8 |     2755.2 | shoes          | 2018-01-07 00:00:00 |
+| Francis   |    83 |   1.1 |       91.3 | food           | 2018-01-07 00:00:00 |
+| DEMI      |    26 |  2222 |      57772 | electronics    | 2018-01-12 00:00:00 |
+| DEMI      |    39 |   200 |       7800 | clothes        | 2018-01-12 00:00:00 |
+| Enid      |    15 |  6666 |      99990 | computer       | 2018-01-12 00:00:00 |
+| Heidi     |    93 | 688.8 |    64058.4 | shoes          | 2018-01-12 00:00:00 |
+| Jackson   |    43 |   200 |       8600 | clothes        | 2018-01-12 00:00:00 |
+| Carroll   |     1 | 688.8 |      688.8 | shoes          | 2018-01-22 00:00:00 |
+| Carlos    |    52 |   8.9 |      462.8 | book           | 2018-02-05 00:00:00 |
+| Aviva     |    74 |  2222 |     164428 | electronics    | 2018-02-05 00:00:00 |
++-----------+-------+-------+------------+----------------+---------------------+
+10 rows in set (0.00 sec)
+</code></pre>
+<h2 id="五-案例">五. 案例</h2>
+<p>基于上述数据, 简单演示生成相关常用指标数据.</p>
+<h3 id="51-用户端">5.1 用户端</h3>
+<h4 id="511-交易">5.1.1 交易</h4>
+<h5 id="5111-情景1">5.1.1.1 情景1</h5>
+<ul>
+<li>统计2019年的各个月的支付总额</li>
+<li>计算出每个月的累积额</li>
+<li>保留两位小数</li>
+<li>按照月份排序</li>
+</ul>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT MONTH
+		( pay_time ) AS mon,
+		CONVERT (
+			sum( pay_amount ),
+		DECIMAL ( 10, 2 )) AS mon_pay 
+	FROM
+		user_trade 
+	WHERE
+		YEAR ( pay_time ) = 2019 
+	GROUP BY
+		mon 
+	) SELECT
+	a.mon,
+	a.mon_pay,
+	sum( a.mon_pay ) over ( ORDER BY a.mon ) AS sum_amount 
+FROM
+	a;
+</code></pre>
+<pre><code class="language-bash">+------+------------+-------------+
+| mon  | mon_pay    | sum_amount  |
++------+------------+-------------+
+|    1 |  317697.20 |   317697.20 |
+|    2 | 2214537.10 |  2532234.30 |
+|    3 | 3108435.90 |  5640670.20 |
+|    4 | 2717482.60 |  8358152.80 |
+|    5 | 2723670.10 | 11081822.90 |
+|    6 | 3808041.30 | 14889864.20 |
+|    7 | 5426222.30 | 20316086.50 |
+|    8 | 2749747.00 | 23065833.50 |
+|    9 |  891197.00 | 23957030.50 |
+|   10 | 1510374.30 | 25467404.80 |
+|   11 | 2307257.40 | 27774662.20 |
+|   12 | 1759487.20 | 29534149.40 |
++------+------------+-------------+
+12 rows in set (0.00 sec)
+</code></pre>
+<h6 id="51111-解析">5.1.1.1.1 解析</h6>
+<pre><code class="language-bash"># round函数
+mysql&gt; select round(1, 2) as a, round(1.1, 2) as c, round(1.234, 2) as c;
++---+-----+------+
+| a | c   | c    |
++---+-----+------+
+| 1 | 1.1 | 1.23 |
++---+-----+------+
+1 row in set (0.00 sec)
+
+# 即, 运算的内容是多少位的, round只会截取, 但不会主动补位
+mysql&gt; select round(1 * 1.00, 2) as a, round(1.1 * 1.00, 2) as c, round(1.234 * 1.00, 2) as c;
++------+------+------+
+| a    | c    | c    |
++------+------+------+
+| 1.00 | 1.10 | 1.23 |
++------+------+------+
+1 row in set (0.00 sec)
+
+mysql&gt; select round(1.235, 2);
++-----------------+
+| round(1.235, 2) |
++-----------------+
+|            1.24 |
++-----------------+
+1 row in set (0.00 sec)
+</code></pre>
+<p><code>CONVERT</code> 语法</p>
+<pre><code class="language-mysql"># 将数据进行类型的转换
+CONVERT(*value*, *type*)
+OR:
+CONVERT(*value* USING *charset*)
+</code></pre>
+<p>参数值</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><em>value</em></td>
+<td style="text-align:left">必需, 要转换的值</td>
+</tr>
+<tr>
+<td style="text-align:left"><em>type</em></td>
+<td style="text-align:left">见下表</td>
+</tr>
+<tr>
+<td style="text-align:left"><em>charset</em></td>
+<td style="text-align:left">必需。要转换成的字符集</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">值</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">DATE</td>
+<td style="text-align:left">将 <em>value</em> 转换为 DATE, 格式： &quot;YYYY-MM-DD&quot;</td>
+</tr>
+<tr>
+<td style="text-align:left">DATETIME</td>
+<td style="text-align:left">将 <em>value</em> 转换为 <code>DATETIME.Format</code>： &quot;YYYY-MM-DD HH:MM:SS&quot;</td>
+</tr>
+<tr>
+<td style="text-align:left">DECIMAL</td>
+<td style="text-align:left">将 <em>value</em> 转换为 DECIMAL。 使用可选的 M 和 D 参数指定最大位数 (M) 和小数点后的位数 (D)。</td>
+</tr>
+<tr>
+<td style="text-align:left">TIME</td>
+<td style="text-align:left">将 <em>值</em> 转换为 TIME。 格式： &quot;HH:MM:SS&quot;</td>
+</tr>
+<tr>
+<td style="text-align:left">CHAR</td>
+<td style="text-align:left">将 <em>value</em> 转换为 CHAR（固定长度字符串）</td>
+</tr>
+<tr>
+<td style="text-align:left">NCHAR</td>
+<td style="text-align:left">将 <em>value</em> 转换为 NCHAR（类似于 CHAR，但生成带有地区字符集的字符串）</td>
+</tr>
+<tr>
+<td style="text-align:left">SIGNED</td>
+<td style="text-align:left">将 <em>value</em> 转换为 SIGNED（带符号的 64 位整数）</td>
+</tr>
+<tr>
+<td style="text-align:left">UNSIGNED</td>
+<td style="text-align:left">将 <em>value</em> 转换为 UNSIGNED（无符号 64 位整数）</td>
+</tr>
+<tr>
+<td style="text-align:left">BINARY</td>
+<td style="text-align:left">将 <em>value</em> 转换为 BINARY（二进制字符串）</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT MONTH
+		( pay_time ) AS mon,
+		CONVERT (
+			sum( pay_amount ),
+		DECIMAL ( 10, 2 )) AS mon_pay 
+	FROM
+		user_trade 
+	WHERE
+		YEAR ( pay_time ) = 2019 
+	GROUP BY
+		mon 
+	) SELECT
+	a.mon,
+	a.mon_pay,
+	# 这里去掉 over() 中的参数
+	# 得到的是最终的sum
+	sum( a.mon_pay ) over () AS sum_amount 
+FROM
+	a;
+</code></pre>
+<pre><code>+------+------------+-------------+
+| mon  | mon_pay    | sum_amount  |
++------+------------+-------------+
+|    1 |  317697.20 | 29534149.40 |
+|    2 | 2214537.10 | 29534149.40 |
+|    3 | 3108435.90 | 29534149.40 |
+|    4 | 2717482.60 | 29534149.40 |
+|    5 | 2723670.10 | 29534149.40 |
+|    6 | 3808041.30 | 29534149.40 |
+|    7 | 5426222.30 | 29534149.40 |
+|    8 | 2749747.00 | 29534149.40 |
+|    9 |  891197.00 | 29534149.40 |
+|   10 | 1510374.30 | 29534149.40 |
+|   11 | 2307257.40 | 29534149.40 |
+|   12 | 1759487.20 | 29534149.40 |
++------+------------+-------------+
+12 rows in set (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT MONTH
+		( pay_time ) AS mon,
+		CONVERT (
+			sum( pay_amount ),
+		DECIMAL ( 10, 2 )) AS mon_pay 
+	FROM
+		user_trade 
+	WHERE
+		YEAR ( pay_time ) = 2019 
+	GROUP BY
+		mon 
+	) SELECT
+	a.mon,
+	a.mon_pay,
+	# 将参数修改
+	# 即实际上就是汇总自己
+	sum( a.mon_pay ) over (PARTITION by a.mon) AS sum_amount 
+FROM
+	a;
+</code></pre>
+<pre><code>+------+------------+------------+
+| mon  | mon_pay    | sum_amount |
++------+------------+------------+
+|    1 |  317697.20 |  317697.20 |
+|    2 | 2214537.10 | 2214537.10 |
+|    3 | 3108435.90 | 3108435.90 |
+|    4 | 2717482.60 | 2717482.60 |
+|    5 | 2723670.10 | 2723670.10 |
+|    6 | 3808041.30 | 3808041.30 |
+|    7 | 5426222.30 | 5426222.30 |
+|    8 | 2749747.00 | 2749747.00 |
+|    9 |  891197.00 |  891197.00 |
+|   10 | 1510374.30 | 1510374.30 |
+|   11 | 2307257.40 | 2307257.40 |
+|   12 | 1759487.20 | 1759487.20 |
++------+------------+------------+
+12 rows in set (0.00 sec)
+</code></pre>
+<h5 id="5112-情景2">5.1.1.2 情景2</h5>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+    	# 用户
+		user_name,
+    	# 支付的月份
+		substring( pay_time, 1, 7 ) AS pay_mon,
+    	# 该用户的支付总额
+    	sum(pay_amount) as user_pay_sum,
+    	# 平均支付额
+		avg( pay_amount ) AS avg_user_pay,
+    	# 累积支付次数
+		count( user_name ) AS pay_times 
+	FROM
+		user_trade 
+	WHERE
+		YEAR ( pay_time ) = 2018 
+	GROUP BY
+		user_name,
+		pay_mon 
+	),
+	b AS (
+	SELECT
+		*,
+        # 月的整体支付额
+		sum( avg_user_pay ) over ( PARTITION BY pay_mon ) AS mon_pay_total,
+        # 月整体支付笔
+		sum( pay_times ) over ( PARTITION BY pay_mon ) AS total_mon_pay_times,
+        # 月平均每个用户支付额
+		avg( avg_user_pay ) over ( PARTITION BY pay_mon ) AS total_avg_user_pay 
+	FROM
+		a 
+	) SELECT
+	*,
+	# 月平局每一笔的支付额
+	mon_pay_total / total_mon_pay_times AS total_avg_one_pay 
+FROM
+	b;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>user_name</th>
+<th>pay_mon</th>
+<th>user_pay_sum</th>
+<th>avg_user_pay</th>
+<th>pay_times</th>
+<th>mon_pay_total</th>
+<th>total_mon_pay_times</th>
+<th>total_avg_user_pay</th>
+<th>total_avg_one_pay</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Francis</td>
+<td>2018-01</td>
+<td>91.3</td>
+<td>91.3</td>
+<td>1</td>
+<td>208969.7</td>
+<td>8</td>
+<td>29852.81405</td>
+<td>26121.21</td>
+</tr>
+<tr>
+<td>DEMI</td>
+<td>2018-01</td>
+<td>65572</td>
+<td>32786</td>
+<td>2</td>
+<td>208969.7</td>
+<td>8</td>
+<td>29852.81405</td>
+<td>26121.21</td>
+</tr>
+<tr>
+<td>Enid</td>
+<td>2018-01</td>
+<td>99990</td>
+<td>99990</td>
+<td>1</td>
+<td>208969.7</td>
+<td>8</td>
+<td>29852.81405</td>
+<td>26121.21</td>
+</tr>
+<tr>
+<td>Heidi</td>
+<td>2018-01</td>
+<td>64058.4</td>
+<td>64058.4</td>
+<td>1</td>
+<td>208969.7</td>
+<td>8</td>
+<td>29852.81405</td>
+<td>26121.21</td>
+</tr>
+<tr>
+<td>Jackson</td>
+<td>2018-01</td>
+<td>8600</td>
+<td>8600</td>
+<td>1</td>
+<td>208969.7</td>
+<td>8</td>
+<td>29852.81405</td>
+<td>26121.21</td>
+</tr>
+<tr>
+<td>Carroll</td>
+<td>2018-01</td>
+<td>688.8</td>
+<td>688.8</td>
+<td>1</td>
+<td>208969.7</td>
+<td>8</td>
+<td>29852.81405</td>
+<td>26121.21</td>
+</tr>
+<tr>
+<td>Allison</td>
+<td>2018-01</td>
+<td>2755.2</td>
+<td>2755.2</td>
+<td>1</td>
+<td>208969.7</td>
+<td>8</td>
+<td>29852.81405</td>
+<td>26121.21</td>
+</tr>
+</tbody>
+</table>
+<h5 id="5113-情景3">5.1.1.3 情景3</h5>
+<ul>
+<li>2020年支付金额排名前30%的用户, 以及该用户支付的金额占当年的总额的百分比</li>
+</ul>
+<pre><code class="language-mysql">WITH a AS ( SELECT user_name, sum( pay_amount ) AS total FROM test_c WHERE YEAR ( pay_time ) = 2020 GROUP BY user_name ),
+b AS (
+	SELECT
+		user_name,
+		total,
+		sum( total ) over ( PARTITION BY NULL ) AS all_total,
+		ntile( 10 ) over ( ORDER BY total DESC ) AS s_part 
+	FROM
+		a 
+	) SELECT
+	user_name,
+	round( total, 2 ) AS user_pay_total,
+	concat( round( total / all_total * 100, 2 ), '%' ) AS user_percent 
+FROM
+	b 
+WHERE
+	s_part &lt; 4;
+</code></pre>
+<pre><code>+-----------+----------------+--------------+
+| user_name | user_pay_total | user_percent |
++-----------+----------------+--------------+
+| Moore     |         686598 | 8.1%         |
+| KAREN     |         626604 | 7.39%        |
+| Marshall  |       586654.2 | 6.92%        |
+| Frank     |         579942 | 6.84%        |
+| Emma      |         564388 | 6.66%        |
+| King      |         553344 | 6.53%        |
+| Keith     |       493580.9 | 5.82%        |
+| JUNE      |         379962 | 4.48%        |
+| Amanda    |         359964 | 4.24%        |
+| Morris    |         318814 | 3.76%        |
+| Bonnie    |         310746 | 3.66%        |
+| Francis   |       236731.2 | 2.79%        |
+| Carroll   |         228866 | 2.7%         |
+| Christy   |       218186.4 | 2.57%        |
+| Ethan     |         208736 | 2.46%        |
+| Ray       |         202202 | 2.38%        |
+| Regan     |         195536 | 2.31%        |
+| Knight    |         193314 | 2.28%        |
+| DAISY     |         188870 | 2.23%        |
+| Ailsa     |         151096 | 1.78%        |
+| Iris      |         139986 | 1.65%        |
++-----------+----------------+--------------+
+21 rows in set (0.01 sec)
+</code></pre>
+<h5 id="5114-情景4">5.1.1.4 情景4</h5>
+<ul>
+<li>每个月的支付总额</li>
+<li>每4个月(<em>不一定是连续的月份</em>), 挑出支付总额最大的</li>
+</ul>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		SUBSTRING( pay_time, 1, 7 ) AS mon,
+		sum( pay_amount ) AS pay_amount 
+	FROM
+		user_trade
+	GROUP BY
+		SUBSTRING( pay_time, 1, 7 ) 
+	) SELECT
+	a.mon,
+	a.pay_amount,
+	max( a.pay_amount ) over ( ORDER BY a.mon rows BETWEEN 3 preceding AND current ROW ) AS max_amount 
+FROM
+	a;
+</code></pre>
+<pre><code class="language-bash">+---------+--------------------+--------------------+
+| mon     | pay_amount         | max_amount         |
++---------+--------------------+--------------------+
+| 2018-01 |  241755.6983795166 |  241755.6983795166 |
+| 2018-02 |  2582410.601480484 |  2582410.601480484 |
+| 2018-03 |  1977644.698231697 |  2582410.601480484 |
+| 2018-04 | 1162322.8000335693 |  2582410.601480484 | # 每4个月, 就挑出最大的
+| 2018-05 | 3038255.1976127625 | 3038255.1976127625 |
+| 2018-06 |  2773154.397846222 | 3038255.1976127625 |
+| 2018-07 | 1677527.2999550104 | 3038255.1976127625 |
+| 2018-08 | 2135214.4019756317 | 3038255.1976127625 |
+| 2018-09 | 1355307.2950782776 |  2773154.397846222 |
+| 2018-10 | 1380672.7007484436 | 2135214.4019756317 |
+| 2018-11 | 2428753.8984622955 | 2428753.8984622955 |
+| 2018-12 | 3580954.6004139185 | 3580954.6004139185 |
+| 2019-01 | 317697.20156288147 | 3580954.6004139185 |
+| 2019-02 |  2214537.096616745 | 3580954.6004139185 |
+| 2019-03 | 3108435.8980026245 | 3580954.6004139185 |
+| 2019-04 |  2717482.603122711 | 3108435.8980026245 |
+| 2019-05 |  2723670.100774765 | 3108435.8980026245 |
+| 2019-06 |  3808041.298687935 |  3808041.298687935 |
+| 2019-07 |  5426222.302730083 |  5426222.302730083 |
+| 2019-08 |  2749746.999607086 |  5426222.302730083 |
+| 2019-09 |  891197.0007789135 |  5426222.302730083 |
+| 2019-10 |   1510374.30027318 |  5426222.302730083 |
+| 2019-11 |  2307257.399263382 |  2749746.999607086 |
+| 2019-12 | 1759487.2003774643 |  2307257.399263382 |
+| 2020-01 |  1480003.602306366 |  2307257.399263382 |
+| 2020-02 |   3180078.69924736 |   3180078.69924736 |
+| 2020-03 | 2394982.3970298767 |   3180078.69924736 |
+| 2020-04 | 1424853.5996108055 |   3180078.69924736 |
++---------+--------------------+--------------------+
+28 rows in set (0.01 sec)
+</code></pre>
+<h5 id="5115-情景5">5.1.1.5 情景5</h5>
+<ul>
+<li>2018 -2019的各个月累积支付</li>
+</ul>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT YEAR( a.pay_time ) AS year,
+		MONTH ( a.pay_time ) AS mon,
+		sum( a.pay_amount ) AS pay_amount 
+	FROM
+		user_trade a 
+	GROUP BY
+		year,
+		mon having year in (2018, 2019) 
+	) SELECT
+	a.*,
+	sum( a.pay_amount ) over ( PARTITION BY a.year ORDER BY a.mon ) AS sum_amount 
+FROM
+	a;
+# 记住order by = between unbounded preceding and current row
+</code></pre>
+<pre><code class="language-bash">+------+------+--------------------+--------------------+
+| year | mon  | pay_amount         | sum_amount         |
++------+------+--------------------+--------------------+
+| 2018 |    1 |  241755.6983795166 |  241755.6983795166 |
+| 2018 |    2 |  2582410.601480484 | 2824166.2998600006 |
+| 2018 |    3 |  1977644.698231697 |  4801810.998091698 |
+| 2018 |    4 | 1162322.8000335693 |  5964133.798125267 |
+| 2018 |    5 | 3038255.1976127625 |   9002388.99573803 |
+| 2018 |    6 |  2773154.397846222 | 11775543.393584251 |
+| 2018 |    7 | 1677527.2999550104 | 13453070.693539262 |
+| 2018 |    8 | 2135214.4019756317 | 15588285.095514894 |
+| 2018 |    9 | 1355307.2950782776 |  16943592.39059317 |
+| 2018 |   10 | 1380672.7007484436 | 18324265.091341615 |
+| 2018 |   11 | 2428753.8984622955 |  20753018.98980391 |
+| 2018 |   12 | 3580954.6004139185 |  24333973.59021783 |
+| 2019 |    1 | 317697.20156288147 | 317697.20156288147 |
+| 2019 |    2 |  2214537.096616745 | 2532234.2981796265 |
+| 2019 |    3 | 3108435.8980026245 |  5640670.196182251 |
+| 2019 |    4 |  2717482.603122711 |  8358152.799304962 |
+| 2019 |    5 |  2723670.100774765 | 11081822.900079727 |
+| 2019 |    6 |  3808041.298687935 | 14889864.198767662 |
+| 2019 |    7 |  5426222.302730083 | 20316086.501497746 |
+| 2019 |    8 |  2749746.999607086 |  23065833.50110483 |
+| 2019 |    9 |  891197.0007789135 | 23957030.501883745 |
+| 2019 |   10 |   1510374.30027318 | 25467404.802156925 |
+| 2019 |   11 |  2307257.399263382 | 27774662.201420307 |
+| 2019 |   12 | 1759487.2003774643 |  29534149.40179777 |
++------+------+--------------------+--------------------+
+24 rows in set (0.00 sec)
+</code></pre>
+<h4 id="512-活跃">5.1.2 活跃</h4>
+<pre><code class="language-mysql"># 连续两天产生支付行为的用户
+# 类似于连续登录问题
+# 注意连续问题
+WITH tmp AS ( SELECT DISTINCT user_name, pay_time FROM user_trade ),
+temp AS (
+		SELECT
+			*,
+    		# 注意需求, 是否要求连续, 如 1, 2, 3, 还是 1, 3, 5这种情况也满足要求
+			count( user_name ) over ( PARTITION BY user_name ORDER BY pay_time RANGE BETWEEN INTERVAL 1 day preceding AND current ROW ) AS ic 
+		FROM
+			tmp 
+		) SELECT
+		temp.user_name,
+		temp.ic 
+	FROM
+		temp 
+WHERE
+	temp.ic &gt; 1 order by temp.ic;
+
+### or
+
+### 显然没有滚动窗口的实现方方式来的简洁
+# 但是这种方式使用处理不确定区间的, 只是希望取得最长的连续区间的情况
+
+WITH tmp AS ( SELECT DISTINCT user_name, pay_time FROM user_trade ),
+tmp_a AS ( SELECT *, dense_rank() over ( PARTITION BY user_name ORDER BY pay_time ) AS r FROM tmp ),
+tmp_b AS ( SELECT *, DATE_SUB( pay_time, INTERVAL r DAY ) AS sub FROM tmp_a ) SELECT
+tmp_b.user_name,
+count(*) AS c 
+FROM
+	tmp_b 
+GROUP BY
+	tmp_b.user_name,
+	tmp_b.sub 
+HAVING
+	c &gt; 1;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>user_name</th>
+<th>c</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>David</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Dunn</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Gordon</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Grant</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Jocelyn</td>
+<td>2</td>
+</tr>
+<tr>
+<td>JOY</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Judy</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<pre><code>mysql&gt; SELECT DISTINCT user_name, pay_time FROM user_trade where user_name = 'Allen';
++-----------+---------------------+
+| user_name | pay_time            |
++-----------+---------------------+
+| Allen     | 2018-08-19 00:00:00 |
+| Allen     | 2019-08-14 00:00:00 |
+| Allen     | 2019-08-15 00:00:00 |
+| Allen     | 2020-04-21 00:00:00 |
++-----------+---------------------+
+4 rows in set (0.00 sec)
+
+mysql&gt; SELECT DISTINCT user_name, pay_time FROM user_trade where user_name = 'David';
++-----------+---------------------+
+| user_name | pay_time            |
++-----------+---------------------+
+| David     | 2018-03-03 00:00:00 |
+| David     | 2018-12-01 00:00:00 |
+| David     | 2019-03-29 00:00:00 |
+| David     | 2019-03-30 00:00:00 |
++-----------+---------------------+
+4 rows in set (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql"># 连续2个月(及以上)支付情况
+WITH tmp AS ( SELECT DISTINCT user_name, convert(concat(substring(pay_time, 1, 7), '-01'), date) as pay_mon FROM user_trade ),
+temp AS (
+		SELECT
+			*,
+			count( user_name ) over ( PARTITION BY user_name ORDER BY pay_mon RANGE BETWEEN INTERVAL 2 month preceding AND current ROW ) AS ic 
+		FROM
+			tmp 
+		) SELECT
+		temp.user_name,
+		temp.ic 
+	FROM
+		temp 
+WHERE
+	temp.ic &gt; 1 order by temp.ic;
+</code></pre>
+<pre><code class="language-bash"># 该用户连续三个月活跃
+# 这个活跃度问题, 在算法中就是有趣的连续数字的问题
+# 找出最长的连续数字部分, 1,4,2,3,5,7,8,9,0, =&gt; 7,8,9
+mysql&gt; SELECT DISTINCT user_name, convert(concat(substring(pay_time, 1, 7), '-01'), date) as pay_mon FROM user_trade where user_name ='Andrea';
++-----------+------------+
+| user_name | pay_mon    |
++-----------+------------+
+| Andrea    | 2019-06-01 |
+| Andrea    | 2019-07-01 |
+| Andrea    | 2019-08-01 |
++-----------+------------+
+3 rows in set (0.00 sec)
+</code></pre>
+<p>用户的月活跃情况</p>
+<ul>
+<li>用户的月支付总额, 支付次数, 平均单笔支付金额</li>
+<li>月整体用户支付次数, 支付/用户平均金额, 支付/支付次数平均金额</li>
+<li>用户连续N天/月内产生支付行为.</li>
+<li>哪些用户的低于平均值</li>
+<li>月的支付总次数的变化, 单笔支付平均金额的变化, 用户平均支付金额的变化</li>
+<li>最大最小值, 在月支付总额, 单笔平均支付, 单个用户平均支付.</li>
+<li>哪些用户的活跃度最高/低</li>
+</ul>
+<h4 id="513-用户划分">5.1.3 用户划分</h4>
+<h5 id="5131-情景1">5.1.3.1 情景1</h5>
+<ul>
+<li>根据2020-02用户支付的总额对用户进行分桶, 分成5份</li>
+</ul>
+<pre><code class="language-mysql">SELECT
+	a.user_name,
+	CONVERT (
+		sum( a.pay_amount ),
+	DECIMAL ( 10, 2 )) AS pay_amount,
+	ntile( 5 ) over ( ORDER BY sum( a.pay_amount ) DESC ) AS level
+FROM
+	user_trade a 
+WHERE
+	SUBSTRING( a.pay_time, 1, 7 ) = '2020-02' 
+GROUP BY
+	a.user_name;
+</code></pre>
+<figure data-type="image" tabindex="7"><a href="https://imgse.com/i/pSBygL8"><img src="https://s1.ax1x.com/2023/02/01/pSBygL8.png" alt="pSBygL8.png" loading="lazy"></a></figure>
+<figure data-type="image" tabindex="8"><img src="https://pic1.zhimg.com/v2-edb7269b4f87587398edcd0f6fb2deb8_r.jpg" alt="pic" loading="lazy"></figure>
+<p>根据用户的支付情况, 对用户进行划分</p>
+<p>根据用户的支付情况, 对比成本, 获得收益情况, 根据收益情况(如毛利高于多少的)对用户进行划分.</p>
+<p>根据用户的活跃情况, 对用户进行划分.</p>
+<p>根据用户的情况, 对用户进行差异化管理和使用不同的营销策略.</p>
+<h5 id="5132-情景2">5.1.3.2 情景2</h5>
+<ul>
+<li>查询每年支付时间间隔最长的用户.</li>
+</ul>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT YEAR
+		( pay_time ) AS years,
+		user_name,
+		pay_time,
+		lag( pay_time ) over ( PARTITION BY user_name, YEAR ( pay_time ) ORDER BY pay_time ) AS lg 
+	FROM
+		user_trade 
+	),
+	b AS (
+	SELECT
+		a.years,
+		a.user_name,
+		datediff( a.pay_time, a.lg ) AS pay_days,
+		rank() over ( PARTITION BY a.years ORDER BY datediff( a.pay_time, a.lg ) DESC ) AS rk 
+	FROM
+		a 
+	where
+		a.lg IS NOT NULL 
+	) SELECT
+	b.years,
+	b.user_name,
+	b.pay_days 
+FROM
+	b 
+WHERE
+	b.rk = 1;
+</code></pre>
+<h6 id="51321-解析">5.13.2.1 解析</h6>
+<pre><code class="language-mysql"># 以年-用户作为维度
+# lag
+SELECT YEAR
+		( pay_time ) AS years,
+		user_name,
+		pay_time,
+		lag( pay_time ) over ( PARTITION BY user_name, YEAR ( pay_time ) ORDER BY pay_time ) AS lg 
+	FROM
+		user_trade limit 10;
+</code></pre>
+<pre><code class="language-bash">+-------+-----------+---------------------+---------------------+
+| years | user_name | pay_time            | lg                  |
++-------+-----------+---------------------+---------------------+
+|  2018 | Abby      | 2018-06-29 00:00:00 | NULL                |
+|  2019 | Abby      | 2019-07-02 00:00:00 | NULL                |
+|  2019 | Abby      | 2019-09-01 00:00:00 | 2019-07-02 00:00:00 |
+|  2019 | Abby      | 2019-09-01 00:00:00 | 2019-09-01 00:00:00 |
+|  2018 | Ailsa     | 2018-12-13 00:00:00 | NULL                |
+|  2018 | Ailsa     | 2018-12-13 00:00:00 | 2018-12-13 00:00:00 |
+|  2019 | Ailsa     | 2019-02-03 00:00:00 | NULL                |
+|  2020 | Ailsa     | 2020-02-20 00:00:00 | NULL                |
+|  2018 | Albert    | 2018-07-15 00:00:00 | NULL                |
+|  2019 | Albert    | 2019-09-03 00:00:00 | NULL                |
++-------+-----------+---------------------+---------------------+
+10 rows in set (0.00 sec)
+</code></pre>
+<h5 id="5133-情景3">5.1.3.3 情景3</h5>
+<ul>
+<li>找出支付时间间隔超过1年的用户</li>
+</ul>
+<pre><code class="language-mysql">with a as (
+	SELECT
+		user_name,
+		pay_time,
+		lag( pay_time ) over ( PARTITION BY user_name ORDER BY pay_time ) AS lg 
+	FROM
+		user_trade
+)
+
+SELECT
+	DISTINCT a.user_name as user, DATEDIFF( a.pay_time, a.lg ) as gap
+FROM a 
+having
+	gap &gt; 365;
+</code></pre>
+<pre><code>+------------+------+
+| user       | gap  |
++------------+------+
+| Abby       |  368 |
+| Ailsa      |  382 |
+| Albert     |  415 |
+| Andy       |  379 |
+| Angela     |  510 |
+| Ann        |  500 |
+| Annie      |  538 |
+| April      |  644 |
+| Aviva      |  529 |
+| Baker      |  464 |
+| Bonnie     |  631 |
+| Brooklyn   |  418 |
+| Candice    |  467 |
+| Carl       |  465 |
+| Carlos     |  602 |
+| Carroll    |  547 |
+| Christine  |  372 |
+| Christy    |  570 |
+| Cloris     |  593 |
+| DAISY      |  451 |
+| DEBBIE     |  448 |
+| EDITHA     |  409 |
+| ELLIE      |  433 |
+| Elliott    |  378 |
+| Ellis      |  509 |
+| Emma       |  420 |
+| Ethan      |  399 |
+| Eva        |  409 |
+| Eve        |  481 |
+| Fiona      |  486 |
+| Francis    |  420 |
+| Frank      |  429 |
+| Franklin   |  380 |
+| Gloria     |  622 |
+| Harris     |  372 |
+| Harrison   |  491 |
+| HELLEN     |  538 |
+| Henry      |  377 |
+| Hunter     |  575 |
+| Iris       |  395 |
+| Jackson    |  517 |
+| Jessica    |  574 |
+| Jill       |  625 |
+| Johnson    |  417 |
+| JUNE       |  728 |
+| KATHY      |  506 |
+| KELLY      |  514 |
+| KITTY      |  448 |
+| Klein      |  476 |
+| Knight     |  501 |
+| Lawrence   |  430 |
+| Lee        |  502 |
+| Marshall   |  475 |
+| Mason      |  637 |
+| Morris     |  656 |
+| Murphy     |  366 |
+| Pearson    |  382 |
+| Perry      |  367 |
+| Peterson   |  413 |
+| Phillips   |  496 |
+| Powell     |  391 |
+| Regan      |  483 |
+| Rupert     |  398 |
+| Taylor     |  499 |
+| Ward       |  571 |
+| Washington |  423 |
+| Webb       |  372 |
+| West       |  491 |
+| Wheeler    |  705 |
+| Willis     |  390 |
++------------+------+
+70 rows in set (0.01 sec)
+</code></pre>
+<h6 id="51331-解析">5.1.3.3.1 解析</h6>
+<ul>
+<li>
+<p><code>DATEDIFF</code>函数</p>
+<p>语法</p>
+<p><code>DATEDIFF(date1, date2)</code></p>
+<p>参数值</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><em>date1, date2</em></td>
+<td style="text-align:left">必需。计算两个日期之间的天数。 (日期 1 - 日期 2)</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><code>lag</code>函数</p>
+<blockquote>
+<pre><code class="language-mysql">LAG(&lt;expression&gt;[,offset[, default_value]]) OVER (
+ PARTITION BY expr,...
+ ORDER BY expr [ASC|DESC],...
+) 
+# 如果没有前一行，则LAG()函数返回default_value。例如，如果offset为2，则第一行的返回值为default_value。如果省略default_value，则默认LAG()返回函数NULL。
+</code></pre>
+</blockquote>
+<p><code>lag</code>函数从同一结果集中的当前行访问上一行的数据.</p>
+<pre><code class="language-bash">mysql&gt; SELECT
+    -&gt;
+    -&gt; user_name,
+    -&gt;
+    -&gt; pay_time,
+    -&gt;
+    -&gt; lag( pay_time ) over ( PARTITION BY user_name ORDER BY pay_time ) AS lg
+ROM
+    -&gt; FROM
+    -&gt;
+    -&gt; user_trade limit 10;
++-----------+---------------------+---------------------+
+| user_name | pay_time            | lg                  |
++-----------+---------------------+---------------------+
+| Abby      | 2018-06-29 00:00:00 | NULL                |
+| Abby      | 2019-07-02 00:00:00 | 2018-06-29 00:00:00 |
+| Abby      | 2019-09-01 00:00:00 | 2019-07-02 00:00:00 |
+| Abby      | 2019-09-01 00:00:00 | 2019-09-01 00:00:00 |
+| Ailsa     | 2018-12-13 00:00:00 | NULL                |
+| Ailsa     | 2018-12-13 00:00:00 | 2018-12-13 00:00:00 |
+| Ailsa     | 2019-02-03 00:00:00 | 2018-12-13 00:00:00 |
+| Ailsa     | 2020-02-20 00:00:00 | 2019-02-03 00:00:00 |
+| Albert    | 2018-07-15 00:00:00 | NULL                |
+| Albert    | 2019-09-03 00:00:00 | 2018-07-15 00:00:00 |
++-----------+---------------------+---------------------+
+10 rows in set (0.00 sec)
+</code></pre>
+<pre><code class="language-bash"># lag 带有参数 2
+mysql&gt; SELECT
+    -&gt;
+    -&gt; user_name,
+    -&gt;
+    -&gt; pay_time,
+    -&gt;
+    -&gt; lag( pay_time, 2 ) over ( PARTITION BY user_name ORDER BY pay_time ) AS lg
+r_trade    -&gt; FROM
+0;    -&gt;
+    -&gt; user_trade limit 10;
++-----------+---------------------+---------------------+
+| user_name | pay_time            | lg                  |
++-----------+---------------------+---------------------+
+| Abby      | 2018-06-29 00:00:00 | NULL                |
+| Abby      | 2019-07-02 00:00:00 | NULL                |
+| Abby      | 2019-09-01 00:00:00 | 2018-06-29 00:00:00 |
+| Abby      | 2019-09-01 00:00:00 | 2019-07-02 00:00:00 |
+| Ailsa     | 2018-12-13 00:00:00 | NULL                |
+| Ailsa     | 2018-12-13 00:00:00 | NULL                |
+| Ailsa     | 2019-02-03 00:00:00 | 2018-12-13 00:00:00 |
+| Ailsa     | 2020-02-20 00:00:00 | 2018-12-13 00:00:00 |
+| Albert    | 2018-07-15 00:00:00 | NULL                |
+| Albert    | 2019-09-03 00:00:00 | NULL                |
++-----------+---------------------+---------------------+
+10 rows in set (0.00 sec)
+</code></pre>
+</li>
+</ul>
+<h3 id="52-产品端">5.2 产品端</h3>
+<h4 id="521-情景1">5.2.1 情景1</h4>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		goods_category,
+		CONVERT ( concat( substring( pay_time, 1, 7 ), '-01' ), date ) AS pay_mon,
+		sum( piece ) AS pcs 
+	FROM
+		user_trade 
+	WHERE
+		YEAR ( pay_time ) = 2018 
+	GROUP BY
+		goods_category,
+		pay_mon 
+	),
+	b AS ( SELECT *, lag( pcs, 1, - 1 ) over ( PARTITION BY goods_category ORDER BY pay_mon ) AS qoq FROM a ) SELECT
+	*, 	IF(qoq &lt; 0, 'None',  concat(left((pcs - qoq ) / pcs * 100, 5), '%')) AS q_rate 
+FROM
+	b;
+</code></pre>
+<pre><code class="language-bash"># 月份销售
+# 数据太长, 只提取book的数据
+# 环比情况(pcs)
++----------------+------------+------+------+--------+
+| goods_category | pay_mon    | pcs  | qoq  | q_rate |
++----------------+------------+------+------+--------+
+| book           | 2018-02-01 |  190 |   -1 | None   |
+| book           | 2018-03-01 |  344 |  190 | 44.76% |
+| book           | 2018-04-01 |  114 |  344 | -201.% |
+| book           | 2018-05-01 |  545 |  114 | 79.08% |
+| book           | 2018-06-01 |  466 |  545 | -16.9% |
+| book           | 2018-07-01 |  411 |  466 | -13.3% |
+| book           | 2018-08-01 |  109 |  411 | -277.% |
+| book           | 2018-09-01 |  406 |  109 | 73.15% |
+| book           | 2018-10-01 |  100 |  406 | -306.% |
+| book           | 2018-11-01 |   81 |  100 | -23.4% |
+| book           | 2018-12-01 |  255 |   81 | 68.23% |
++----------------+------------+------+------+--------+
+11 rows in set (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		goods_category,
+    	# 因为后面使用了range, 这里需要将string转为date
+		CONVERT ( concat( substring( pay_time, 1, 7 ), '-01' ), date ) AS pay_mon,
+		sum( piece ) AS pcs 
+	FROM
+		user_trade 
+	WHERE
+		YEAR ( pay_time ) = 2018 
+	GROUP BY
+		goods_category,
+		pay_mon 
+	),
+	b AS ( SELECT *, lag( pcs, 1, - 1 ) over ( PARTITION BY goods_category ORDER BY pay_mon ) AS qoq FROM a ),
+	c AS ( SELECT *, IF ( qoq &lt; 0, 'None', pcs - qoq ) AS q_rate FROM b HAVING q_rate != 'None' AND q_rate &gt; 0 ),
+	d as (SELECT
+	goods_category,
+     # 剔除掉了负增长的行(这里不将负增长的那个月包含在内)
+     # 这里设置前后的间隔为1个月
+	count( goods_category ) over ( PARTITION BY goods_category ORDER BY pay_mon RANGE BETWEEN INTERVAL 1 MONTH preceding AND INTERVAL 1 MONTH following ) AS ic 
+FROM
+	c)
+	select goods_category, max(ic) from d GROUP BY goods_category;
+</code></pre>
+<pre><code class="language-bash"># 产品连续月份销售增长
+# 即book这个类别再2018年没有形成过连续的正增长
++----------------+---------+
+| goods_category | max(ic) |
++----------------+---------+
+| book           |       1 |
+| clothes        |       3 |
+| computer       |       3 |
+| electronics    |       2 |
+| food           |       2 |
+| shoes          |       2 |
++----------------+---------+
+6 rows in set (0.00 sec)
+</code></pre>
+<ul>
+<li>销量的连续变化情况.</li>
+<li>哪些产品的销量较为异常(连续增长或者减少)</li>
+<li>产品的销售的波动幅度.</li>
+</ul>
+<h4 id="522-情景2">5.2.2 情景2</h4>
+<pre><code class="language-mysql"># 找出每个月销售的产品数量排名第二的类目
+WITH a AS (
+	SELECT
+		goods_category,
+		CONVERT ( concat( substring( pay_time, 1, 7 ), '-01' ), date ) AS pay_mon,
+		sum( piece ) AS pcs 
+	FROM
+		user_trade 
+	WHERE
+		YEAR ( pay_time ) = 2018 
+	GROUP BY
+		goods_category,
+		pay_mon 
+	) SELECT
+	*,
+	# NTH_VALUE(col, N), 需要获取的排名的位置
+	NTH_VALUE( goods_category, 2 ) over ( PARTITION BY pay_mon ORDER BY pcs DESC RANGE BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING ) AS second_good 
+FROM
+	a;
+</code></pre>
+<pre><code class="language-bash">+----------------+------------+------+-------------+
+| goods_category | pay_mon    | pcs  | second_good |
++----------------+------------+------+-------------+
+| shoes          | 2018-01-01 |   98 | food        |
+| food           | 2018-01-01 |   83 | food        |
+| clothes        | 2018-01-01 |   82 | food        |
+| electronics    | 2018-01-01 |   26 | food        |
+| computer       | 2018-01-01 |   15 | food        |
+| electronics    | 2018-02-01 |  421 | computer    |
+| computer       | 2018-02-01 |  229 | computer    |
+| clothes        | 2018-02-01 |  224 | computer    |
+| food           | 2018-02-01 |  220 | computer    |
+| book           | 2018-02-01 |  190 | computer    |
+| shoes          | 2018-02-01 |  107 | computer    |
+| shoes          | 2018-03-01 |  364 | book        |
+| book           | 2018-03-01 |  344 | book        |
+| food           | 2018-03-01 |  309 | book        |
+| computer       | 2018-03-01 |  215 | book        |
+| clothes        | 2018-03-01 |  174 | book        |
+| electronics    | 2018-03-01 |  115 | book        |
+| electronics    | 2018-04-01 |  226 | food        |
+| food           | 2018-04-01 |  182 | food        |
+| book           | 2018-04-01 |  114 | food        |
+| computer       | 2018-04-01 |   96 | food        |
+| clothes        | 2018-04-01 |   95 | food        |
+| book           | 2018-05-01 |  545 | computer    |
+| computer       | 2018-05-01 |  366 | computer    |
+| shoes          | 2018-05-01 |  272 | computer    |
+| electronics    | 2018-05-01 |  169 | computer    |
+| food           | 2018-05-01 |  161 | computer    |
+| clothes        | 2018-05-01 |  153 | computer    |
+| shoes          | 2018-06-01 |  506 | book        |
+| book           | 2018-06-01 |  466 | book        |
+| electronics    | 2018-06-01 |  338 | book        |
+| clothes        | 2018-06-01 |  280 | book        |
+| computer       | 2018-06-01 |  242 | book        |
+| food           | 2018-06-01 |  242 | book        |
+| clothes        | 2018-07-01 |  559 | shoes       |
+| shoes          | 2018-07-01 |  435 | shoes       |
+| book           | 2018-07-01 |  411 | shoes       |
+| electronics    | 2018-07-01 |  385 | shoes       |
+| food           | 2018-07-01 |  314 | shoes       |
+| computer       | 2018-07-01 |   61 | shoes       |
+| clothes        | 2018-08-01 |  302 | computer    |
+| computer       | 2018-08-01 |  258 | computer    |
+| food           | 2018-08-01 |  253 | computer    |
+| shoes          | 2018-08-01 |  220 | computer    |
+| book           | 2018-08-01 |  109 | computer    |
+| electronics    | 2018-08-01 |   91 | computer    |
+| book           | 2018-09-01 |  406 | shoes       |
+| shoes          | 2018-09-01 |  350 | shoes       |
+| clothes        | 2018-09-01 |  286 | shoes       |
+| food           | 2018-09-01 |  169 | shoes       |
+| computer       | 2018-09-01 |  158 | shoes       |
+| clothes        | 2018-10-01 |  205 | computer    |
+| computer       | 2018-10-01 |  170 | computer    |
+| shoes          | 2018-10-01 |  166 | computer    |
+| food           | 2018-10-01 |  109 | computer    |
+| book           | 2018-10-01 |  100 | computer    |
+| electronics    | 2018-10-01 |   41 | computer    |
+| clothes        | 2018-11-01 |  380 | computer    |
+| computer       | 2018-11-01 |  306 | computer    |
+| food           | 2018-11-01 |  186 | computer    |
+| shoes          | 2018-11-01 |  153 | computer    |
+| electronics    | 2018-11-01 |   93 | computer    |
+| book           | 2018-11-01 |   81 | computer    |
+| clothes        | 2018-12-01 |  553 | food        |
+| food           | 2018-12-01 |  437 | food        |
+| computer       | 2018-12-01 |  378 | food        |
+| electronics    | 2018-12-01 |  359 | food        |
+| book           | 2018-12-01 |  255 | food        |
+| shoes          | 2018-12-01 |  218 | food        |
++----------------+------------+------+-------------+
+</code></pre>
+<h4 id="523-情景3">5.2.3 情景3</h4>
+<ul>
+<li>2020-01的用户购买的商品品类数量</li>
+<li>各个用户购买商品品类排名</li>
+</ul>
+<pre><code class="language-mysql">WITH a AS ( SELECT user_name, count( DISTINCT goods_category ) AS cat_num FROM user_trade WHERE SUBSTRING( pay_time, 1, 7 ) = '2020-01' GROUP BY user_name ) SELECT
+a.user_name,
+a.cat_num,
+# 按顺序, 实际上返回的是行号
+ROW_NUMBER() over ( ORDER BY a.cat_num ) AS rank1,
+# rank(). 排名相同的, 同意序号, 延续行号, 下一开始, 直接从行号开始
+rank() over ( ORDER BY a.cat_num ) AS rank2,
+# DENSE_RANK(). 排名相同的, 同意序号, 不延续行号, 下一开始从当前序号开始
+DENSE_RANK() over ( ORDER BY a.cat_num ) AS rank3 
+FROM
+	a;
+</code></pre>
+<pre><code>+-----------+---------+-------+-------+-------+
+| user_name | cat_num | rank1 | rank2 | rank3 |
++-----------+---------+-------+-------+-------+
+| Amanda    |       1 |     1 |     1 |     1 |
+| Cameron   |       1 |     2 |     1 |     1 |
+| Ward      |       1 |     3 |     1 |     1 |
+| Cathy     |       1 |     4 |     1 |     1 |
+| Cherry    |       1 |     5 |     1 |     1 |
+| Rupert    |       1 |     6 |     1 |     1 |
+| Cloris    |       1 |     7 |     1 |     1 |
+| Fiona     |       1 |     8 |     1 |     1 |
+| Peterson  |       1 |     9 |     1 |     1 |
+| Janet     |       1 |    10 |     1 |     1 |
+| Jill      |       1 |    11 |     1 |     1 |
+| Marshall  |       1 |    12 |     1 |     1 |
+| Mitchell  |       1 |    13 |     1 |     1 |
+| Parker    |       1 |    14 |     1 |     1 |
+| Payne     |       1 |    15 |     1 |     1 |
+| Wheeler   |       2 |    16 |    16 |     2 |
+| Ingrid    |       2 |    17 |    16 |     2 |
+| Christy   |       2 |    18 |    16 |     2 |
+| Catherine |       2 |    19 |    16 |     2 |
+| Angelia   |       2 |    20 |    16 |     2 |
++-----------+---------+-------+-------+-------+
+20 rows in set (0.01 sec)
+</code></pre>
+<h2 id="六-速查表">六. 速查表</h2>
+<blockquote>
+<p><em>from @不剪发的Tony老师</em></p>
+</blockquote>
+<p><a href="https://imgse.com/i/pSrvMut"><img src="https://s1.ax1x.com/2023/02/03/pSrvMut.png" alt="pSrvMut.png" loading="lazy"></a><br>
+<a href="https://imgse.com/i/pSrvujI"><img src="https://s1.ax1x.com/2023/02/03/pSrvujI.png" alt="pSrvujI.png" loading="lazy"></a></p>
+<h2 id="七-总结">七. 总结</h2>
+<p>只有两(五)个字: <strong>必学(必掌握)</strong></p>
+<p>对于从事数据分析以及相关工作的用户, 不掌握<strong>数据库</strong>(查询), 不掌握<strong>窗口函数</strong>, 这是难以想象的.</p>
+<p>窗口函数的深度使用, 将在<code>牛客网-SQL测试(困难)</code>中详细展示出来.</p>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/mysql-chuang-kou-han-shu-window-functionxiang-jie/" title="MySQL窗口函数(Window Function)详解">https://Kyouichirou.github.io/post/mysql-chuang-kou-han-shu-window-functionxiang-jie/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"># priority</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/"># mysql</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="MySQL翻译系列-Window Function Restrictions" href="https://Kyouichirou.github.io/post/mysql-fan-yi-xi-lie-window-function-restrictions/">MySQL翻译系列-Window Function Restrictions</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="MySQL翻译系列-Window Function Restrictions" href="https://Kyouichirou.github.io/post/mysql-fan-yi-xi-lie-window-function-restrictions/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="pyecharts绘制销售地图" href="https://Kyouichirou.github.io/post/pyecharts-hui-zhi-xiao-shou-di-tu/">pyecharts绘制销售地图</a>
+        <a class="nav-mobile-next" title="pyecharts绘制销售地图" href="https://Kyouichirou.github.io/post/pyecharts-hui-zhi-xiao-shou-di-tu/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

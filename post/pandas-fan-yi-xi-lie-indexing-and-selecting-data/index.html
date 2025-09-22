@@ -1,0 +1,4275 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>Pandas翻译系列-Indexing and selecting data | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="Pandas翻译系列-Indexing and selecting data" />
+  <meta name="keywords" content="pandas,python,translation" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-different-choices-for-indexing">一. Different choices for indexing</a></li>
+<li><a href="#%E4%BA%8C-basics">二. Basics</a></li>
+<li><a href="#%E4%B8%89-attribute-access">三. Attribute access</a></li>
+<li><a href="#%E5%9B%9B-slicing-ranges">四. Slicing ranges</a></li>
+<li><a href="#%E4%BA%94-selection-by-label">五. Selection by label</a>
+<ul>
+<li><a href="#51-slicing-with-labels">5.1 Slicing with labels</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%AD-selection-by-position">六. Selection by position</a></li>
+<li><a href="#%E4%B8%83-selection-by-callable">七. Selection by callable</a></li>
+<li><a href="#%E5%85%AB-combining-positional-and-label-based-indexing">八. Combining positional and label-based indexing</a></li>
+<li><a href="#%E4%B9%9D-indexing-with-list-with-missing-labels-is-deprecated">九. Indexing with list with missing labels is deprecated</a>
+<ul>
+<li><a href="#91-reindexing">9.1 Reindexing</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81-selecting-random-samples">十. Selecting random samples</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80-setting-with-enlargement">十一. Setting with enlargement</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8C-fast-scalar-value-getting-and-setting">十二. Fast scalar value getting and setting</a></li>
+<li><a href="#%E5%8D%81%E4%B8%89-boolean-indexing">十三. Boolean indexing</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B-indexing-with-isin">十四. Indexing with isin</a></li>
+<li><a href="#%E5%8D%81%E4%BA%94-the-wherehttpspandaspydataorgpandas-docsstablereferenceapipandasdataframewherehtml-%E5%8D%81%E4%BA%94-pandasdataframewhere-method-and-masking">十五. The <code>where()</code> Method and Masking</a>
+<ul>
+<li><a href="#151-mask">15.1 Mask</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E5%85%AD-setting-with-enlargement-conditionally-using-numpy">十六. Setting with enlargement conditionally using <code>numpy()</code></a></li>
+<li><a href="#%E5%8D%81%E4%B8%83-the-queryhttpspandaspydataorgpandas-docsstablereferenceapipandasdataframequeryhtml-%E5%8D%81%E4%B8%83-pandasdataframequery-method">十七. The <code>query()</code> Method</a>
+<ul>
+<li><a href="#171-multiindexhttpspandaspydataorgpandas-docsstablereferenceapipandasmultiindexhtml-171-pandasmultiindex-queryhttpspandaspydataorgpandas-docsstablereferenceapipandasdataframequeryhtml-171-pandasdataframequery-syntax">17.1 <code>MultiIndex</code> <code>query()</code> Syntax</a></li>
+<li><a href="#172-queryhttpspandaspydataorgpandas-docsstablereferenceapipandasdataframequeryhtml-172-pandasdataframequery-use-cases">17.2 <code>query()</code> Use Cases</a></li>
+<li><a href="#173-queryhttpspandaspydataorgpandas-docsstablereferenceapipandasdataframequeryhtml-173-pandasdataframequery-python-versus-pandas-syntax-comparison">17.3 <code>query()</code> Python versus pandas Syntax Comparison</a></li>
+<li><a href="#174-the-in-and-not-in-operators">17.4 The <code>in</code> and <code>not in</code> operators</a></li>
+<li><a href="#175-special-use-of-the-operator-with-list-objects">17.5 Special use of the <code>==</code> operator with <code>list</code> objects</a></li>
+<li><a href="#176-boolean-operators">17.6 Boolean operators</a></li>
+<li><a href="#177-performance-of-queryhttpspandaspydataorgpandas-docsstablereferenceapipandasdataframequeryhtml-177-pandasdataframequery">17.7 Performance of <code>query()</code></a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E5%85%AB-duplicate-data">十八. Duplicate data</a></li>
+<li><a href="#%E5%8D%81%E4%B9%9D-dictionary-like-gethttpspandaspydataorgpandas-docsstablereferenceapipandasdataframegethtml-%E5%8D%81%E4%B9%9D-pandasdataframeget-method">十九. Dictionary-like <code>get()</code> method</a></li>
+<li><a href="#%E4%BA%8C%E5%8D%81-looking-up-values-by-indexcolumn-labels">二十. Looking up values by index/column labels</a></li>
+<li><a href="#%E4%BA%8C%E5%8D%81%E4%B8%80-index-objects">二十一. Index objects</a>
+<ul>
+<li><a href="#211-setting-metadata">21.1 Setting metadata</a></li>
+<li><a href="#212-set-operations-on-index-objects">21.2 Set operations on Index objects</a></li>
+<li><a href="#213-missing-values">21.3 Missing values</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C%E5%8D%81%E4%BA%8C-set-reset-index">二十二. Set / reset index</a>
+<ul>
+<li><a href="#221-set-an-index">22.1 Set an index</a></li>
+<li><a href="#222-reset-the-index">22.2 Reset the index</a></li>
+<li><a href="#223-adding-an-ad-hoc-index">22.3 Adding an ad hoc index</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C%E5%8D%81%E4%B8%89-returning-a-view-versus-a-copy">二十三. Returning a view versus a copy</a>
+<ul>
+<li><a href="#231-why-does-assignment-fail-when-using-chained-indexing">23.1 Why does assignment fail when using chained indexing?</a></li>
+<li><a href="#232-evaluation-order-matters">23.2 Evaluation order matters</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/pandas-fan-yi-xi-lie-indexing-and-selecting-data/"> Pandas翻译系列-Indexing and selecting data </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-03-03 11:22:09">2023-03-03</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/CSsHD95Uh/"> <span>pandas</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/x52r92_VNV/"> <span>python</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/T5dhhKFc0/">
+        <span>translation</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >106<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >18178<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <blockquote>
+<p><em>简化, 并不是逐句翻译, 只关注重点部分, 部分内容加入了自己的理解.</em></p>
+</blockquote>
+<p>索引和数据选取.</p>
+<p>The axis labeling information in pandas objects serves many purposes:</p>
+<p>轴标签信息在<code>pandas</code>对象中有多个用途:</p>
+<ul>
+<li>Identifies data (i.e. provides <em>metadata</em>) using known indicators, important for analysis, visualization, and interactive console display.</li>
+<li>数据的识别交互, 这非常重要在数据分析和可视化中.</li>
+<li>Enables automatic and explicit data alignment.</li>
+<li>能够让数据可以显式自动对齐.</li>
+<li>Allows intuitive getting and setting of subsets of the data set.</li>
+<li>能够直观明了的设置或者获取数据集中的子集.</li>
+</ul>
+<p>In this section, we will focus on the final point: namely, how to slice, dice, and generally get and set subsets of pandas objects. The primary focus will be on Series and DataFrame as they have received more development attention in this area.</p>
+<p>在这部分中, 将着重讨论最后一点, 如何对pandas的对象进行切片获取其中的部分数据(<em>即读写操作</em>). 这是<code>pandas</code>的开发<strong>优先关注</strong>的.</p>
+<!--more-->
+<blockquote>
+<p>Note 注意</p>
+<p>The Python and NumPy indexing operators <code>[]</code> and attribute operator <code>.</code> provide quick and easy access to pandas data structures across a wide range of use cases. This makes interactive work intuitive, as there’s little new to learn if you already know how to deal with Python dictionaries and NumPy arrays. However, since the type of the data to be accessed isn’t known in advance, directly using standard operators has some optimization limits. For production code, we recommended that you take advantage of the optimized pandas data access methods exposed in this chapter.</p>
+<p>在<code>python</code>和<code>numpy</code>中, 索引操作符<code>[]</code>和属性操作符逗号, 提供了非常方便的方式访问<code>pandas</code>中的数据在大多数情况下. 如果你<code>python</code>的字典和<code>numpy</code>的数据已经非常熟悉, 这种交互是非常直观明了的.然而, 直接使用标准操作符有一些限制, 这种操作并不是已知最高级的. 对于生产力的代码, 我们推荐你利用本章中提及的方式去访问pandas的数据.</p>
+</blockquote>
+<blockquote>
+<p>Warning 警告</p>
+<p>Whether a copy or a reference is returned for a setting operation, may depend on the context. This is sometimes called <code>chained assignment</code> and should be avoided. See <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-view-versus-copy">Returning a View versus Copy</a>.</p>
+<p>注意链式操作引发的问题.</p>
+<p>See the <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/advanced.html#advanced">MultiIndex / Advanced Indexing</a> for <code>MultiIndex</code> and more advanced indexing documentation.</p>
+<p>查看多索引和高级索引.</p>
+<p>See the <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/cookbook.html#cookbook-selection">cookbook</a> for some advanced strategies.</p>
+<p>cookbook还有更多的高级应用案例.</p>
+</blockquote>
+<h2 id="一-different-choices-for-indexing">一. Different choices for indexing</h2>
+<p>索引的不同选择</p>
+<p>Object selection has had a number of user-requested additions in order to support more explicit location based indexing. pandas now supports three types of multi-axis indexing.</p>
+<p>(数据)对象的获取是用户的高频操作, 现在<code>pandas</code>提供三种不同的多轴索引的支持.</p>
+<ul>
+<li>
+<p><code>.loc</code> is primarily label based, but may also be used with a boolean array. <code>.loc</code> will raise <code>KeyError</code> when the items are not found. Allowed inputs are:</p>
+</li>
+<li>
+<p><code>.loc</code>是基于标签的方式, 通常使用布尔数组. 当用户传入不存在的索引时, 会触发键值错误. 以下是允许输入的索引:</p>
+<blockquote>
+<ul>
+<li>
+<p>A single label, e.g. <code>5</code> or <code>'a'</code> (Note that <code>5</code> is interpreted as a <em>label</em> of the index. This use is <strong>not</strong> an integer position along the index.).</p>
+</li>
+<li>
+<p>单个标签, 如数字或者字母, 注意数字在<code>loc</code>中将被当作标签来使用(而不是表示其数字的特性, 指示行的位置, 可以视作文本型的数字).</p>
+</li>
+</ul>
+<p>In [55]: s = pd.Series(list('abcde'), index=[0, 3, 2, 5, 4])</p>
+<p>In [56]: s.loc[3:5], 注意这里, 只是表示标签3-标签5之间的数据, 而不是数字意义上3 - 4 - 5<br>
+Out[56]:<br>
+3 b<br>
+2 c<br>
+5 d<br>
+dtype: object</p>
+<ul>
+<li>
+<p>A list or array of labels <code>['a', 'b', 'c']</code>.</p>
+</li>
+<li>
+<p>一列数组的标签</p>
+</li>
+<li>
+<p>A slice object with labels <code>'a':'f'</code> (Note that contrary to usual Python slices, <strong>both</strong> the start and the stop are included, when present in the index! See <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-slicing-with-labels">Slicing with labels</a> and <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/advanced.html#advanced-endpoints-are-inclusive">Endpoints are inclusive</a>.)</p>
+</li>
+<li>
+<p>切片式的标签, 注意和python的切片相反, pandas是包含终点部分的数据,.(python是不包含的)</p>
+</li>
+<li>
+<p>A boolean array (any <code>NA</code> values will be treated as <code>False</code>).</p>
+</li>
+<li>
+<p>一个布尔数组</p>
+</li>
+<li>
+<p>A <code>callable</code> function with one argument (the calling Series or DataFrame) and that returns valid output for indexing (one of the above).</p>
+</li>
+<li>
+<p>一个函数(这个函数会返回上述的索引值内容)</p>
+</li>
+</ul>
+</blockquote>
+<p>See more at <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-label">Selection by Label</a>.</p>
+<p>更多内容见使用标签选择</p>
+</li>
+<li>
+<p><code>.iloc</code> is primarily integer position based (from <code>0</code> to <code>length-1</code> of the axis), but may also be used with a boolean array. <code>.iloc</code> will raise <code>IndexError</code> if a requested indexer is out-of-bounds, except <em>slice</em> indexers which allow out-of-bounds indexing. (this conforms with Python/NumPy <em>slice</em> semantics). Allowed inputs are:</p>
+</li>
+<li>
+<p><code>.iloc</code>是基于数字(从 整数0 到 数据长度-1 范围内)的方式. 但是也可以使用布尔型数组.</p>
+<blockquote>
+<ul>
+<li>An integer e.g. <code>5</code>.</li>
+<li>单个数字</li>
+<li>A list or array of integers <code>[4, 3, 0]</code>.</li>
+<li>数组列表或者数组</li>
+<li>A slice object with ints <code>1:7</code>.</li>
+<li>切片对象</li>
+<li>A boolean array (any <code>NA</code> values will be treated as <code>False</code>).</li>
+<li>布尔数组</li>
+<li>A <code>callable</code> function with one argument (the calling Series or DataFrame) and that returns valid output for indexing (one of the above).</li>
+<li>可返回上述索引的函数</li>
+</ul>
+</blockquote>
+<p>See more at <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-integer">Selection by Position</a>, <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/advanced.html#advanced">Advanced Indexing</a> and <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/advanced.html#advanced-advanced-hierarchical">Advanced Hierarchical</a>.</p>
+</li>
+<li>
+<p><code>.loc</code>, <code>.iloc</code>, and also <code>[]</code> indexing can accept a <code>callable</code> as indexer. See more at <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-callable">Selection By Callable</a>.</p>
+</li>
+<li>
+<p>上述的三种方式均接受一个函数作为索引.</p>
+</li>
+</ul>
+<p>Getting values from an object with multi-axes selection uses the following notation (using <code>.loc</code> as an example, but the following applies to <code>.iloc</code> as well). Any of the axes accessors may be the null slice <code>:</code>. Axes left out of the specification are assumed to be <code>:</code>, e.g. <code>p.loc['a']</code> is equivalent to <code>p.loc['a', :]</code>.</p>
+<p>上述的操作<code>e.g</code>. <code>p.loc['a']</code> is equivalent to <code>p.loc['a', :]</code>, 二者是等价的.</p>
+<table>
+<thead>
+<tr>
+<th>Object Type</th>
+<th>Indexers</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Series</td>
+<td><code>s.loc[indexer]</code></td>
+</tr>
+<tr>
+<td>DataFrame</td>
+<td><code>df.loc[row_indexer,column_indexer]</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="二-basics">二. Basics</h2>
+<p>基本使用</p>
+<p>As mentioned when introducing the data structures in the <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/basics.html#basics">last section</a>, the primary function of indexing with <code>[]</code> (a.k.a. <code>__getitem__</code> for those familiar with implementing class behavior in Python) is selecting out lower-dimensional slices. The following table shows return type values when indexing pandas objects with <code>[]</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Object Type</th>
+<th>Selection</th>
+<th>Return Value Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Series</td>
+<td><code>series[label]</code></td>
+<td>scalar value</td>
+</tr>
+<tr>
+<td>DataFrame</td>
+<td><code>frame[colname]</code></td>
+<td><code>Series</code> corresponding to colname</td>
+</tr>
+</tbody>
+</table>
+<p>Here we construct a simple time series data set to use for illustrating the indexing functionality:</p>
+<pre><code>In [1]: dates = pd.date_range('1/1/2000', periods=8)
+
+In [2]: df = pd.DataFrame(np.random.randn(8, 4),
+   ...:                   index=dates, columns=['A', 'B', 'C', 'D'])
+   ...:
+
+In [3]: df
+Out[3]:
+                   A         B         C         D
+2000-01-01  0.469112 -0.282863 -1.509059 -1.135632
+2000-01-02  1.212112 -0.173215  0.119209 -1.044236
+2000-01-03 -0.861849 -2.104569 -0.494929  1.071804
+2000-01-04  0.721555 -0.706771 -1.039575  0.271860
+2000-01-05 -0.424972  0.567020  0.276232 -1.087401
+2000-01-06 -0.673690  0.113648 -1.478427  0.524988
+2000-01-07  0.404705  0.577046 -1.715002 -1.039268
+2000-01-08 -0.370647 -1.157892 -1.344312  0.844885
+</code></pre>
+<blockquote>
+<p>Note</p>
+<p>None of the indexing functionality is time series specific unless specifically stated.</p>
+<p>除非特别说明 否则没有索引功能是特定于时间序列的.</p>
+</blockquote>
+<p>Thus, as per above, we have the most basic indexing using <code>[]</code>:</p>
+<p>因此, 上述内容, 最为基本得操作是使用<code>[]</code>.</p>
+<pre><code>In [4]: s = df['A']
+
+In [5]: s[dates[5]]
+Out[5]: -0.6736897080883706
+</code></pre>
+<p>You can pass a list of columns to <code>[]</code> to select columns in that order. If a column is not contained in the DataFrame, an exception will be raised. Multiple columns can also be set in this manner:</p>
+<pre><code class="language-bash">In [6]: df
+Out[6]:
+                   A         B         C         D
+2000-01-01  0.469112 -0.282863 -1.509059 -1.135632
+2000-01-02  1.212112 -0.173215  0.119209 -1.044236
+2000-01-03 -0.861849 -2.104569 -0.494929  1.071804
+2000-01-04  0.721555 -0.706771 -1.039575  0.271860
+2000-01-05 -0.424972  0.567020  0.276232 -1.087401
+2000-01-06 -0.673690  0.113648 -1.478427  0.524988
+2000-01-07  0.404705  0.577046 -1.715002 -1.039268
+2000-01-08 -0.370647 -1.157892 -1.344312  0.844885
+
+# 直接交换内容
+In [7]: df[['B', 'A']] = df[['A', 'B']]
+
+In [8]: df
+Out[8]:
+                   A         B         C         D
+2000-01-01 -0.282863  0.469112 -1.509059 -1.135632
+2000-01-02 -0.173215  1.212112  0.119209 -1.044236
+2000-01-03 -2.104569 -0.861849 -0.494929  1.071804
+2000-01-04 -0.706771  0.721555 -1.039575  0.271860
+2000-01-05  0.567020 -0.424972  0.276232 -1.087401
+2000-01-06  0.113648 -0.673690 -1.478427  0.524988
+2000-01-07  0.577046  0.404705 -1.715002 -1.039268
+2000-01-08 -1.157892 -0.370647 -1.344312  0.844885
+</code></pre>
+<p>You may find this useful for applying a transform (in-place) to a subset of the columns.</p>
+<p>你也许会发现这对于转置数据非常有用.</p>
+<blockquote>
+<p>Warning</p>
+<p>pandas aligns all AXES when setting <code>Series</code> and <code>DataFrame</code> from <code>.loc</code>, and <code>.iloc</code>.</p>
+<p>pandas允许所有的轴设置series或者dataframe, 当使用<code>.loc</code>, and <code>.iloc</code></p>
+<p>This will <strong>not</strong> modify <code>df</code> because the column alignment is before value assignment.</p>
+<p>这不会修改dataframe, 因为列对其实在赋值之前.(这句话说的是什么?)</p>
+</blockquote>
+<pre><code>In [9]: df[['A', 'B']]
+Out[9]:
+                   A         B
+2000-01-01 -0.282863  0.469112
+2000-01-02 -0.173215  1.212112
+2000-01-03 -2.104569 -0.861849
+2000-01-04 -0.706771  0.721555
+2000-01-05  0.567020 -0.424972
+2000-01-06  0.113648 -0.673690
+2000-01-07  0.577046  0.404705
+2000-01-08 -1.157892 -0.370647
+
+In [10]: df.loc[:, ['B', 'A']] = df[['A', 'B']]
+
+In [11]: df[['A', 'B']]
+Out[11]:
+                   A         B
+2000-01-01 -0.282863  0.469112
+2000-01-02 -0.173215  1.212112
+2000-01-03 -2.104569 -0.861849
+2000-01-04 -0.706771  0.721555
+2000-01-05  0.567020 -0.424972
+2000-01-06  0.113648 -0.673690
+2000-01-07  0.577046  0.404705
+2000-01-08 -1.157892 -0.370647
+</code></pre>
+<p>The correct way to swap column values is by using raw values:</p>
+<p>交换两列数据的方式</p>
+<pre><code>In [12]: df.loc[:, ['B', 'A']] = df[['A', 'B']].to_numpy()
+
+In [13]: df[['A', 'B']]
+Out[13]:
+                   A         B
+2000-01-01  0.469112 -0.282863
+2000-01-02  1.212112 -0.173215
+2000-01-03 -0.861849 -2.104569
+2000-01-04  0.721555 -0.706771
+2000-01-05 -0.424972  0.567020
+2000-01-06 -0.673690  0.113648
+2000-01-07  0.404705  0.577046
+2000-01-08 -0.370647 -1.157892
+</code></pre>
+<h2 id="三-attribute-access">三. Attribute access</h2>
+<p>You may access an index on a <code>Series</code> or column on a <code>DataFrame</code> directly as an attribute:</p>
+<p>属性操作符访问(逗号)</p>
+<pre><code>In [14]: sa = pd.Series([1, 2, 3], index=list('abc'))
+
+In [15]: dfa = df.copy()
+</code></pre>
+<pre><code>In [16]: sa.b
+Out[16]: 2
+
+In [17]: dfa.A
+Out[17]:
+2000-01-01    0.469112
+2000-01-02    1.212112
+2000-01-03   -0.861849
+2000-01-04    0.721555
+2000-01-05   -0.424972
+2000-01-06   -0.673690
+2000-01-07    0.404705
+2000-01-08   -0.370647
+Freq: D, Name: A, dtype: float64
+</code></pre>
+<pre><code>In [18]: sa.a = 5
+
+In [19]: sa
+Out[19]:
+a    5
+b    2
+c    3
+dtype: int64
+
+In [20]: dfa.A = list(range(len(dfa.index)))  # ok if A already exists
+
+In [21]: dfa
+Out[21]:
+            A         B         C         D
+2000-01-01  0 -0.282863 -1.509059 -1.135632
+2000-01-02  1 -0.173215  0.119209 -1.044236
+2000-01-03  2 -2.104569 -0.494929  1.071804
+2000-01-04  3 -0.706771 -1.039575  0.271860
+2000-01-05  4  0.567020  0.276232 -1.087401
+2000-01-06  5  0.113648 -1.478427  0.524988
+2000-01-07  6  0.577046 -1.715002 -1.039268
+2000-01-08  7 -1.157892 -1.344312  0.844885
+
+In [22]: dfa['A'] = list(range(len(dfa.index)))  # use this form to create a new column
+
+In [23]: dfa
+Out[23]:
+            A         B         C         D
+2000-01-01  0 -0.282863 -1.509059 -1.135632
+2000-01-02  1 -0.173215  0.119209 -1.044236
+2000-01-03  2 -2.104569 -0.494929  1.071804
+2000-01-04  3 -0.706771 -1.039575  0.271860
+2000-01-05  4  0.567020  0.276232 -1.087401
+2000-01-06  5  0.113648 -1.478427  0.524988
+2000-01-07  6  0.577046 -1.715002 -1.039268
+2000-01-08  7 -1.157892 -1.344312  0.844885
+</code></pre>
+<blockquote>
+<p>Warning</p>
+<ul>
+<li>You can use this access only if the index element is a valid Python identifier, e.g. <code>s.1</code> is not allowed. See <a href="https://docs.python.org/3/reference/lexical_analysis.html#identifiers">here for an explanation of valid identifiers</a>.</li>
+<li>你的访问应当是使用存在的索引.</li>
+<li>The attribute will not be available if it conflicts with an existing method name, e.g. <code>s.min</code> is not allowed, but <code>s['min']</code> is possible.</li>
+<li>属性操作符的方式不适合用在存在冲突名称的情况, 但是[]操作符可以.</li>
+<li>Similarly, the attribute will not be available if it conflicts with any of the following list: <code>index</code>, <code>major_axis</code>, <code>minor_axis</code>, <code>items</code>.</li>
+<li>类似的, 属性操作符同样不适用于以下存在冲突的情况.</li>
+<li>In any of these cases, standard indexing will still work, e.g. <code>s['1']</code>, <code>s['min']</code>, and <code>s['index']</code> will access the corresponding element or column.</li>
+<li>以上的冲突的操作, 在[]操作符下并无影响.</li>
+</ul>
+</blockquote>
+<p>If you are using the IPython environment, you may also use tab-completion to see these accessible attributes.</p>
+<p>You can also assign a <code>dict</code> to a row of a <code>DataFrame</code>:</p>
+<p>通过字典的方式对其中的行数据进行修改</p>
+<pre><code>In [24]: x = pd.DataFrame({'x': [1, 2, 3], 'y': [3, 4, 5]})
+
+In [25]: x.iloc[1] = {'x': 9, 'y': 99}
+
+In [26]: x
+Out[26]:
+   x   y
+0  1   3
+1  9  99
+2  3   5
+</code></pre>
+<p>You can use attribute access to modify an existing element of a Series or column of a DataFrame, but be careful; if you try to use attribute access to create a new column, it creates a new attribute rather than a new column. In 0.21.0 and later, this will raise a <code>UserWarning</code>:</p>
+<pre><code>In [1]: df = pd.DataFrame({'one': [1., 2., 3.]})
+In [2]: df.two = [4, 5, 6]
+UserWarning: Pandas doesn't allow Series to be assigned into nonexistent columns - see https://pandas.pydata.org/pandas-docs/stable/indexing.html#attribute_access
+In [3]: df
+Out[3]:
+   one
+0  1.0
+1  2.0
+2  3.0
+</code></pre>
+<h2 id="四-slicing-ranges">四. Slicing ranges</h2>
+<p>切片范围</p>
+<p>The most robust and consistent way of slicing ranges along arbitrary axes is described in the <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-integer">Selection by Position</a> section detailing the <code>.iloc</code> method. For now, we explain the semantics of slicing using the <code>[]</code> operator.</p>
+<p>With Series, the syntax works exactly as with an ndarray, returning a slice of the values and the corresponding labels:</p>
+<pre><code>In [27]: s[:5]
+Out[27]:
+2000-01-01    0.469112
+2000-01-02    1.212112
+2000-01-03   -0.861849
+2000-01-04    0.721555
+2000-01-05   -0.424972
+Freq: D, Name: A, dtype: float64
+
+In [28]: s[::2]
+Out[28]:
+2000-01-01    0.469112
+2000-01-03   -0.861849
+2000-01-05   -0.424972
+2000-01-07    0.404705
+Freq: 2D, Name: A, dtype: float64
+
+In [29]: s[::-1]
+Out[29]:
+2000-01-08   -0.370647
+2000-01-07    0.404705
+2000-01-06   -0.673690
+2000-01-05   -0.424972
+2000-01-04    0.721555
+2000-01-03   -0.861849
+2000-01-02    1.212112
+2000-01-01    0.469112
+Freq: -1D, Name: A, dtype: float64
+</code></pre>
+<p>Note that setting works as well:</p>
+<pre><code>In [30]: s2 = s.copy()
+
+In [31]: s2[:5] = 0
+
+In [32]: s2
+Out[32]:
+2000-01-01    0.000000
+2000-01-02    0.000000
+2000-01-03    0.000000
+2000-01-04    0.000000
+2000-01-05    0.000000
+2000-01-06   -0.673690
+2000-01-07    0.404705
+2000-01-08   -0.370647
+Freq: D, Name: A, dtype: float64
+</code></pre>
+<p>With DataFrame, slicing inside of <code>[]</code> <strong>slices the rows</strong>. This is provided largely as a convenience since it is such a common operation.</p>
+<pre><code>In [33]: df[:3]
+Out[33]:
+                   A         B         C         D
+2000-01-01  0.469112 -0.282863 -1.509059 -1.135632
+2000-01-02  1.212112 -0.173215  0.119209 -1.044236
+2000-01-03 -0.861849 -2.104569 -0.494929  1.071804
+
+In [34]: df[::-1]
+Out[34]:
+                   A         B         C         D
+2000-01-08 -0.370647 -1.157892 -1.344312  0.844885
+2000-01-07  0.404705  0.577046 -1.715002 -1.039268
+2000-01-06 -0.673690  0.113648 -1.478427  0.524988
+2000-01-05 -0.424972  0.567020  0.276232 -1.087401
+2000-01-04  0.721555 -0.706771 -1.039575  0.271860
+2000-01-03 -0.861849 -2.104569 -0.494929  1.071804
+2000-01-02  1.212112 -0.173215  0.119209 -1.044236
+2000-01-01  0.469112 -0.282863 -1.509059 -1.135632
+</code></pre>
+<h2 id="五-selection-by-label">五. Selection by label</h2>
+<p>基于标签</p>
+<blockquote>
+<p>Warning</p>
+<p>Whether a copy or a reference is returned for a setting operation, may depend on the context. This is sometimes called <code>chained assignment</code> and should be avoided. See <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-view-versus-copy">Returning a View versus Copy</a>.</p>
+<p>注意链式索引操作</p>
+</blockquote>
+<blockquote>
+<p>Warning</p>
+<p><code>.loc</code> is strict when you present slicers that are not compatible (or convertible) with the index type. For example using integers in a <code>DatetimeIndex</code>. These will raise a <code>TypeError</code>.</p>
+<p>.loc是严格区分数据类型的, 假如输入的数据类型和当前的索引的数据类型不一致将直接报错</p>
+</blockquote>
+<pre><code>In [35]: dfl = pd.DataFrame(np.random.randn(5, 4),
+   ....:                    columns=list('ABCD'),
+   ....:                    index=pd.date_range('20130101', periods=5))
+   ....:
+
+In [36]: dfl
+Out[36]:
+                   A         B         C         D
+2013-01-01  1.075770 -0.109050  1.643563 -1.469388
+2013-01-02  0.357021 -0.674600 -1.776904 -0.968914
+2013-01-03 -1.294524  0.413738  0.276662 -0.472035
+2013-01-04 -0.013960 -0.362543 -0.006154 -0.923061
+2013-01-05  0.895717  0.805244 -1.206412  2.565646
+</code></pre>
+<pre><code>In [4]: dfl.loc[2:3]
+TypeError: cannot do slice indexing on &lt;class 'pandas.tseries.index.DatetimeIndex'&gt; with these indexers [2] of &lt;type 'int'&gt;
+</code></pre>
+<p>String likes in slicing <em>can</em> be convertible to the type of the index and lead to natural slicing.</p>
+<pre><code>In [37]: dfl.loc['20130102':'20130104']
+Out[37]:
+                   A         B         C         D
+2013-01-02  0.357021 -0.674600 -1.776904 -0.968914
+2013-01-03 -1.294524  0.413738  0.276662 -0.472035
+2013-01-04 -0.013960 -0.362543 -0.006154 -0.923061
+</code></pre>
+<blockquote>
+<p>Warning</p>
+<p><em>Changed in version 1.0.0.</em></p>
+<p>pandas will raise a <code>KeyError</code> if indexing with a list with missing labels. See <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-deprecate-loc-reindex-listlike">list-like Using loc with missing keys in a list is Deprecated</a>.</p>
+<p>pandas会报键值错误, 对不存在的标签进行索引.</p>
+</blockquote>
+<p>pandas provides a suite of methods in order to have <strong>purely label based indexing</strong>. This is a strict inclusion based protocol. Every label asked for must be in the index, or a <code>KeyError</code> will be raised. When slicing, both the start bound <strong>AND</strong> the stop bound are <em>included</em>, if present in the index. Integers are valid labels, but they refer to the label <strong>and not the position</strong>.</p>
+<p>The <code>.loc</code> attribute is the primary access method. The following are valid inputs:</p>
+<ul>
+<li>A single label, e.g. <code>5</code> or <code>'a'</code> (Note that <code>5</code> is interpreted as a <em>label</em> of the index. This use is <strong>not</strong> an integer position along the index.).</li>
+<li>A list or array of labels <code>['a', 'b', 'c']</code>.</li>
+<li>A slice object with labels <code>'a':'f'</code> (Note that contrary to usual Python slices, <strong>both</strong> the start and the stop are included, when present in the index! See <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-slicing-with-labels">Slicing with labels</a>.</li>
+<li>A boolean array.</li>
+<li>A <code>callable</code>, see <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-callable">Selection By Callable</a>.</li>
+</ul>
+<pre><code>In [38]: s1 = pd.Series(np.random.randn(6), index=list('abcdef'))
+
+In [39]: s1
+Out[39]:
+a    1.431256
+b    1.340309
+c   -1.170299
+d   -0.226169
+e    0.410835
+f    0.813850
+dtype: float64
+
+In [40]: s1.loc['c':]
+Out[40]:
+c   -1.170299
+d   -0.226169
+e    0.410835
+f    0.813850
+dtype: float64
+
+In [41]: s1.loc['b']
+Out[41]: 1.3403088497993827
+</code></pre>
+<p>Note that setting works as well:</p>
+<p>注意这种操作对于赋值也是可行的</p>
+<pre><code>In [42]: s1.loc['c':] = 0
+
+In [43]: s1
+Out[43]:
+a    1.431256
+b    1.340309
+c    0.000000
+d    0.000000
+e    0.000000
+f    0.000000
+dtype: float64
+</code></pre>
+<p>With a DataFrame:</p>
+<pre><code>In [44]: df1 = pd.DataFrame(np.random.randn(6, 4),
+   ....:                    index=list('abcdef'),
+   ....:                    columns=list('ABCD'))
+   ....:
+
+In [45]: df1
+Out[45]:
+          A         B         C         D
+a  0.132003 -0.827317 -0.076467 -1.187678
+b  1.130127 -1.436737 -1.413681  1.607920
+c  1.024180  0.569605  0.875906 -2.211372
+d  0.974466 -2.006747 -0.410001 -0.078638
+e  0.545952 -1.219217 -1.226825  0.769804
+f -1.281247 -0.727707 -0.121306 -0.097883
+
+In [46]: df1.loc[['a', 'b', 'd'], :]
+Out[46]:
+          A         B         C         D
+a  0.132003 -0.827317 -0.076467 -1.187678
+b  1.130127 -1.436737 -1.413681  1.607920
+d  0.974466 -2.006747 -0.410001 -0.078638
+</code></pre>
+<p>Accessing via label slices:</p>
+<pre><code>In [47]: df1.loc['d':, 'A':'C']
+Out[47]:
+          A         B         C
+d  0.974466 -2.006747 -0.410001
+e  0.545952 -1.219217 -1.226825
+f -1.281247 -0.727707 -0.121306
+</code></pre>
+<p>For getting a cross section using a label (equivalent to <code>df.xs('a')</code>):</p>
+<p>等价操作</p>
+<pre><code>In [48]: df1.loc['a']
+Out[48]:
+A    0.132003
+B   -0.827317
+C   -0.076467
+D   -1.187678
+Name: a, dtype: float64
+</code></pre>
+<p>For getting values with a boolean array:</p>
+<p>使用布尔数组取值</p>
+<pre><code>In [49]: df1.loc['a'] &gt; 0
+Out[49]:
+A     True
+B    False
+C    False
+D    False
+Name: a, dtype: bool
+
+In [50]: df1.loc[:, df1.loc['a'] &gt; 0]
+Out[50]:
+          A
+a  0.132003
+b  1.130127
+c  1.024180
+d  0.974466
+e  0.545952
+f -1.281247
+</code></pre>
+<p>NA values in a boolean array propagate as <code>False</code>:</p>
+<p><code>NA</code>值会被视作<code>False</code></p>
+<p><em>Changed in version 1.0.2.</em></p>
+<pre><code>In [51]: mask = pd.array([True, False, True, False, pd.NA, False], dtype=&quot;boolean&quot;)
+
+In [52]: mask
+Out[52]:
+&lt;BooleanArray&gt;
+[True, False, True, False, &lt;NA&gt;, False]
+Length: 6, dtype: boolean
+
+In [53]: df1[mask]
+Out[53]:
+          A         B         C         D
+a  0.132003 -0.827317 -0.076467 -1.187678
+c  1.024180  0.569605  0.875906 -2.211372
+</code></pre>
+<p>For getting a value explicitly:</p>
+<pre><code class="language-bash"># 等价操作
+# this is also equivalent to ``df1.at['a','A']``
+In [54]: df1.loc['a', 'A']
+Out[54]: 0.13200317033032932
+</code></pre>
+<h3 id="51-slicing-with-labels">5.1 Slicing with labels</h3>
+<p>When using <code>.loc</code> with slices, if both the start and the stop labels are present in the index, then elements <em>located</em> between the two (including them) are returned:</p>
+<pre><code>In [55]: s = pd.Series(list('abcde'), index=[0, 3, 2, 5, 4])
+
+In [56]: s.loc[3:5]
+Out[56]:
+3    b
+2    c
+5    d
+dtype: object
+</code></pre>
+<p>If at least one of the two is absent, but the index is sorted, and can be compared against start and stop labels, then slicing will still work as expected, by selecting labels which <em>rank</em> between the two:</p>
+<p>如果传入标签在index上是存在缺失的, 假如索引被排序过(或者是有序的index), 将对比于起始和结尾标签, 将返回对比后的内容.</p>
+<p><strong>注意这里的特性.</strong></p>
+<p>不管是数字类型的<code>index</code>还是字符串类型的<code>index</code>, 都满足只要是有序的, 均可以如此访问.</p>
+<pre><code class="language-bash">In [57]: s.sort_index()
+Out[57]:
+0    a
+2    c
+3    b
+4    e
+5    d
+dtype: object
+
+In [58]: s.sort_index().loc[1:6] # 关键在于这里, 要求 数据是有序的
+Out[58]:
+2    c
+3    b
+4    e
+5    d
+dtype: object
+</code></pre>
+<p>However, if at least one of the two is absent <em>and</em> the index is not sorted, an error will be raised (since doing otherwise would be computationally expensive, as well as potentially ambiguous for mixed type indexes). For instance, in the above example, <code>s.loc[1:6]</code> would raise <code>KeyError</code>.</p>
+<p>缺失的<code>index</code>或者是无序的<code>index</code>, 都会引发错误. 这样做是非常耗费资源的, 以及潜在的问题, 在多级的index中.</p>
+<p>For the rationale behind this behavior, see <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/advanced.html#advanced-endpoints-are-inclusive">Endpoints are inclusive</a>.</p>
+<p>终点包含的操作</p>
+<pre><code>In [59]: s = pd.Series(list('abcdef'), index=[0, 3, 2, 5, 4, 2])
+
+In [60]: s.loc[3:5]
+Out[60]:
+3    b
+2    c
+5    d
+dtype: object
+</code></pre>
+<p>Also, if the index has duplicate labels <em>and</em> either the start or the stop label is duplicated, an error will be raised. For instance, in the above example, <code>s.loc[2:5]</code> would raise a <code>KeyError</code>.</p>
+<p><code>index</code>中存在相同的<code>label</code>将触发错误, 当传入的索引<code>label</code>包含有这重复的<code>label</code>.</p>
+<p>For more information about duplicate labels, see <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/duplicates.html#duplicates">Duplicate Labels</a>.</p>
+<h2 id="六-selection-by-position">六. Selection by position</h2>
+<p>基于位置</p>
+<blockquote>
+<p>Warning</p>
+<p>Whether a copy or a reference is returned for a setting operation, may depend on the context. This is sometimes called <code>chained assignment</code> and should be avoided. See <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-view-versus-copy">Returning a View versus Copy</a>.</p>
+</blockquote>
+<p>pandas provides a suite of methods in order to get <strong>purely integer based indexing</strong>. The semantics follow closely Python and NumPy slicing. These are <code>0-based</code> indexing. When slicing, the start bound is <em>included</em>, while the upper bound is <em>excluded</em>. Trying to use a non-integer, even a <strong>valid</strong> label will raise an <code>IndexError</code>.</p>
+<p>The <code>.iloc</code> attribute is the primary access method. The following are valid inputs:</p>
+<ul>
+<li>An integer e.g. <code>5</code>.</li>
+<li>A list or array of integers <code>[4, 3, 0]</code>.</li>
+<li>A slice object with ints <code>1:7</code>.</li>
+<li>A boolean array.</li>
+<li>A <code>callable</code>, see <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-callable">Selection By Callable</a>.</li>
+</ul>
+<pre><code>In [61]: s1 = pd.Series(np.random.randn(5), index=list(range(0, 10, 2)))
+
+In [62]: s1
+Out[62]:
+0    0.695775
+2    0.341734
+4    0.959726
+6   -1.110336
+8   -0.619976
+dtype: float64
+
+In [63]: s1.iloc[:3]
+Out[63]:
+0    0.695775
+2    0.341734
+4    0.959726
+dtype: float64
+
+In [64]: s1.iloc[3]
+Out[64]: -1.110336102891167
+</code></pre>
+<p>Note that setting works as well:</p>
+<pre><code>In [65]: s1.iloc[:3] = 0
+
+In [66]: s1
+Out[66]:
+0    0.000000
+2    0.000000
+4    0.000000
+6   -1.110336
+8   -0.619976
+dtype: float64
+</code></pre>
+<p>With a DataFrame:</p>
+<pre><code>In [67]: df1 = pd.DataFrame(np.random.randn(6, 4),
+   ....:                    index=list(range(0, 12, 2)),
+   ....:                    columns=list(range(0, 8, 2)))
+   ....:
+
+In [68]: df1
+Out[68]:
+           0         2         4         6
+0   0.149748 -0.732339  0.687738  0.176444
+2   0.403310 -0.154951  0.301624 -2.179861
+4  -1.369849 -0.954208  1.462696 -1.743161
+6  -0.826591 -0.345352  1.314232  0.690579
+8   0.995761  2.396780  0.014871  3.357427
+10 -0.317441 -1.236269  0.896171 -0.487602
+</code></pre>
+<p>Select via integer slicing:</p>
+<pre><code>In [69]: df1.iloc[:3]
+Out[69]:
+          0         2         4         6
+0  0.149748 -0.732339  0.687738  0.176444
+2  0.403310 -0.154951  0.301624 -2.179861
+4 -1.369849 -0.954208  1.462696 -1.743161
+
+In [70]: df1.iloc[1:5, 2:4]
+Out[70]:
+          4         6
+2  0.301624 -2.179861
+4  1.462696 -1.743161
+6  1.314232  0.690579
+8  0.014871  3.357427
+</code></pre>
+<p>Select via integer list:</p>
+<pre><code>In [71]: df1.iloc[[1, 3, 5], [1, 3]]
+Out[71]:
+           2         6
+2  -0.154951 -2.179861
+6  -0.345352  0.690579
+10 -1.236269 -0.487602
+</code></pre>
+<pre><code>In [72]: df1.iloc[1:3, :]
+Out[72]:
+          0         2         4         6
+2  0.403310 -0.154951  0.301624 -2.179861
+4 -1.369849 -0.954208  1.462696 -1.743161
+</code></pre>
+<pre><code>In [73]: df1.iloc[:, 1:3]
+Out[73]:
+           2         4
+0  -0.732339  0.687738
+2  -0.154951  0.301624
+4  -0.954208  1.462696
+6  -0.345352  1.314232
+8   2.396780  0.014871
+10 -1.236269  0.896171
+</code></pre>
+<pre><code># this is also equivalent to ``df1.iat[1,1]``
+In [74]: df1.iloc[1, 1]
+Out[74]: -0.1549507744249032
+</code></pre>
+<p>For getting a cross section using an integer position (equiv to <code>df.xs(1)</code>):</p>
+<pre><code>In [75]: df1.iloc[1]
+Out[75]:
+0    0.403310
+2   -0.154951
+4    0.301624
+6   -2.179861
+Name: 2, dtype: float64
+</code></pre>
+<p>Out of range slice indexes are handled gracefully just as in Python/NumPy.</p>
+<p>超出范围处理, 起点和终点超出范围, 返回空值, 终点超出范围, 起点开始截取到最后的位置.</p>
+<pre><code># these are allowed in Python/NumPy.
+In [76]: x = list('abcdef')
+
+In [77]: x
+Out[77]: ['a', 'b', 'c', 'd', 'e', 'f']
+
+In [78]: x[4:10]
+Out[78]: ['e', 'f']
+
+In [79]: x[8:10]
+Out[79]: []
+
+In [80]: s = pd.Series(x)
+
+In [81]: s
+Out[81]:
+0    a
+1    b
+2    c
+3    d
+4    e
+5    f
+dtype: object
+
+In [82]: s.iloc[4:10]
+Out[82]:
+4    e
+5    f
+dtype: object
+
+In [83]: s.iloc[8:10]
+Out[83]: Series([], dtype: object)
+</code></pre>
+<p>Note that using slices that go out of bounds can result in an empty axis (e.g. an empty DataFrame being returned).</p>
+<pre><code>In [84]: dfl = pd.DataFrame(np.random.randn(5, 2), columns=list('AB'))
+
+In [85]: dfl
+Out[85]:
+          A         B
+0 -0.082240 -2.182937
+1  0.380396  0.084844
+2  0.432390  1.519970
+3 -0.493662  0.600178
+4  0.274230  0.132885
+
+In [86]: dfl.iloc[:, 2:3], 列超出范围, 起点和终点都超出
+Out[86]:
+Empty DataFrame
+Columns: []
+Index: [0, 1, 2, 3, 4]
+
+In [87]: dfl.iloc[:, 1:3], 列, 起点没超出
+Out[87]:
+          B
+0 -2.182937
+1  0.084844
+2  1.519970
+3  0.600178
+4  0.132885
+
+In [88]: dfl.iloc[4:6]
+Out[88]:
+         A         B
+4  0.27423  0.132885
+</code></pre>
+<p>A single indexer that is out of bounds will raise an <code>IndexError</code>. A list of indexers where any element is out of bounds will raise an <code>IndexError</code>.</p>
+<p>单个索引的情况下(含多个索引值列表, 即除了切片范围的情况下), 超出范围将导致错误.</p>
+<pre><code>&gt;&gt;&gt; dfl.iloc[[4, 5, 6]]
+IndexError: positional indexers are out-of-bounds
+
+&gt;&gt;&gt; dfl.iloc[:, 4]
+IndexError: single positional indexer is out-of-bounds
+</code></pre>
+<h2 id="七-selection-by-callable">七. Selection by callable</h2>
+<p>基于函数</p>
+<p><code>.loc</code>, <code>.iloc</code>, and also <code>[]</code> indexing can accept a <code>callable</code> as indexer. The <code>callable</code> must be a function with one argument (the calling Series or DataFrame) that returns valid output for indexing.</p>
+<p>实际上就是函数返回值而已</p>
+<pre><code>In [89]: df1 = pd.DataFrame(np.random.randn(6, 4),
+   ....:                    index=list('abcdef'),
+   ....:                    columns=list('ABCD'))
+   ....:
+
+In [90]: df1
+Out[90]:
+          A         B         C         D
+a -0.023688  2.410179  1.450520  0.206053
+b -0.251905 -2.213588  1.063327  1.266143
+c  0.299368 -0.863838  0.408204 -1.048089
+d -0.025747 -0.988387  0.094055  1.262731
+e  1.289997  0.082423 -0.055758  0.536580
+f -0.489682  0.369374 -0.034571 -2.484478
+
+In [91]: df1.loc[lambda df: df['A'] &gt; 0, :]
+Out[91]:
+          A         B         C         D
+c  0.299368 -0.863838  0.408204 -1.048089
+e  1.289997  0.082423 -0.055758  0.536580
+
+In [92]: df1.loc[:, lambda df: ['A', 'B']]
+Out[92]:
+          A         B
+a -0.023688  2.410179
+b -0.251905 -2.213588
+c  0.299368 -0.863838
+d -0.025747 -0.988387
+e  1.289997  0.082423
+f -0.489682  0.369374
+
+In [93]: df1.iloc[:, lambda df: [0, 1]]
+Out[93]:
+          A         B
+a -0.023688  2.410179
+b -0.251905 -2.213588
+c  0.299368 -0.863838
+d -0.025747 -0.988387
+e  1.289997  0.082423
+f -0.489682  0.369374
+
+In [94]: df1[lambda df: df.columns[0]]
+Out[94]:
+a   -0.023688
+b   -0.251905
+c    0.299368
+d   -0.025747
+e    1.289997
+f   -0.489682
+Name: A, dtype: float64
+</code></pre>
+<p>You can use callable indexing in <code>Series</code>.</p>
+<pre><code>In [95]: df1['A'].loc[lambda s: s &gt; 0]
+Out[95]:
+c    0.299368
+e    1.289997
+Name: A, dtype: float64
+</code></pre>
+<p>Using these methods / indexers, you can chain data selection operations without using a temporary variable.</p>
+<pre><code>In [96]: bb = pd.read_csv('data/baseball.csv', index_col='id')
+
+In [97]: (bb.groupby(['year', 'team']).sum(numeric_only=True)
+   ....:    .loc[lambda df: df['r'] &gt; 100])
+   ....:
+Out[97]:
+           stint    g    ab    r    h  X2b  ...     so   ibb   hbp    sh    sf  gidp
+year team                                   ...
+2007 CIN       6  379   745  101  203   35  ...  127.0  14.0   1.0   1.0  15.0  18.0
+     DET       5  301  1062  162  283   54  ...  176.0   3.0  10.0   4.0   8.0  28.0
+     HOU       4  311   926  109  218   47  ...  212.0   3.0   9.0  16.0   6.0  17.0
+     LAN      11  413  1021  153  293   61  ...  141.0   8.0   9.0   3.0   8.0  29.0
+     NYN      13  622  1854  240  509  101  ...  310.0  24.0  23.0  18.0  15.0  48.0
+     SFN       5  482  1305  198  337   67  ...  188.0  51.0   8.0  16.0   6.0  41.0
+     TEX       2  198   729  115  200   40  ...  140.0   4.0   5.0   2.0   8.0  16.0
+     TOR       4  459  1408  187  378   96  ...  265.0  16.0  12.0   4.0  16.0  38.0
+
+[8 rows x 18 columns]
+</code></pre>
+<h2 id="八-combining-positional-and-label-based-indexing">八. Combining positional and label-based indexing</h2>
+<p>If you wish to get the 0th and the 2nd elements from the index in the ‘A’ column, you can do:</p>
+<pre><code>In [98]: dfd = pd.DataFrame({'A': [1, 2, 3],
+   ....:                     'B': [4, 5, 6]},
+   ....:                    index=list('abc'))
+   ....:
+
+In [99]: dfd
+Out[99]:
+   A  B
+a  1  4
+b  2  5
+c  3  6
+
+In [100]: dfd.loc[dfd.index[[0, 2]], 'A']
+Out[100]:
+a    1
+c    3
+Name: A, dtype: int64
+</code></pre>
+<p>This can also be expressed using <code>.iloc</code>, by explicitly getting locations on the indexers, and using <em>positional</em> indexing to select things.</p>
+<pre><code>In [101]: dfd.iloc[[0, 2], dfd.columns.get_loc('A')]
+Out[101]:
+a    1
+c    3
+Name: A, dtype: int64
+</code></pre>
+<p>For getting <em>multiple</em> indexers, using <code>.get_indexer</code>:</p>
+<pre><code>In [102]: dfd.iloc[[0, 2], dfd.columns.get_indexer(['A', 'B'])]
+Out[102]:
+   A  B
+a  1  4
+c  3  6
+</code></pre>
+<h2 id="九-indexing-with-list-with-missing-labels-is-deprecated">九. Indexing with list with missing labels is deprecated</h2>
+<p>注意使用不存在的标签进行索引, 这种方法将被逐步废弃.</p>
+<blockquote>
+<p>Warning</p>
+<p><em>Changed in version 1.0.0.</em></p>
+<p>Using <code>.loc</code> or <code>[]</code> with a list with one or more missing labels will no longer reindex, in favor of <code>.reindex</code>.</p>
+</blockquote>
+<p>In prior versions, using <code>.loc[list-of-labels]</code> would work as long as <em>at least 1</em> of the keys was found (otherwise it would raise a <code>KeyError</code>). This behavior was changed and will now raise a <code>KeyError</code> if at least one label is missing. The recommended alternative is to use <code>.reindex()</code>.</p>
+<p>当传入的索引标签列中只要存在有一个不存在的标签, 就会出现<code>keyerror</code>的提示, 并推荐使用<code>reindex()</code>(即对替换为新的索引)</p>
+<p>For example.</p>
+<pre><code>In [103]: s = pd.Series([1, 2, 3])
+
+In [104]: s
+Out[104]:
+0    1
+1    2
+2    3
+dtype: int64
+</code></pre>
+<p>Selection with all keys found is unchanged.</p>
+<pre><code>In [105]: s.loc[[1, 2]]
+Out[105]:
+1    2
+2    3
+dtype: int64
+</code></pre>
+<p>Previous behavior</p>
+<p>未改版之前, 是返回一个NaN值填充超出范围的数据</p>
+<pre><code>In [4]: s.loc[[1, 2, 3]]
+Out[4]:
+1    2.0
+2    3.0
+3    NaN
+dtype: float64
+</code></pre>
+<p>Current behavior</p>
+<p>注意改版之后的变化, 多个<code>index</code>, 其中有不存在的, 将直接报错</p>
+<pre><code>In [4]: s.loc[[1, 2, 3]]
+Passing list-likes to .loc with any non-matching elements will raise
+KeyError in the future, you can use .reindex() as an alternative.
+
+See the documentation here:
+https://pandas.pydata.org/pandas-docs/stable/indexing.html#deprecate-loc-reindex-listlike
+
+Out[4]:
+1    2.0
+2    3.0
+3    NaN
+dtype: float64
+</code></pre>
+<h3 id="91-reindexing">9.1 Reindexing</h3>
+<p>重置索引</p>
+<p>注意不是<code>reset_index()</code></p>
+<blockquote>
+<p>Series.<strong>reindex</strong>(*<em>args</em>, **<em>kwargs</em>)[<a href="https://github.com/pandas-dev/pandas/blob/v1.5.3/pandas/core/series.py#L5077-L5094">source]</a></p>
+<p>Conform Series to new index with optional filling logic.</p>
+<p>Places NA/NaN in locations having no value in the previous index. A new object is produced unless the new index is equivalent to the current one and <code>copy=False</code>.</p>
+</blockquote>
+<p>The idiomatic way to achieve selecting potentially not-found elements is via <code>.reindex()</code>. See also the section on <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/basics.html#basics-reindexing">reindexing</a>.</p>
+<p>对于索引不存在的值, 常规方式是使用<code>reindex()</code>来取值, 这种方式会对空值进行填充而不是直接报错.</p>
+<p>这种方式实际这不算取值, 这是折中方案.</p>
+<pre><code>In [106]: s.reindex([1, 2, 3])
+Out[106]:
+1    2.0
+2    3.0
+3    NaN
+dtype: float64
+</code></pre>
+<p>Alternatively, if you want to select only <em>valid</em> keys, the following is idiomatic and efficient; it is guaranteed to preserve the dtype of the selection.</p>
+<p>可选方案, 可以使用<code>index.intersection</code></p>
+<blockquote>
+<p>Form the intersection of two Index objects.</p>
+<p>This returns a new Index with elements common to the index and other.</p>
+<p>取得二者的交集索引</p>
+</blockquote>
+<pre><code>In [107]: labels = [1, 2, 3]
+
+In [108]: s.loc[s.index.intersection(labels)]
+Out[108]:
+1    2
+2    3
+dtype: int64
+</code></pre>
+<p>Having a duplicated index will raise for a <code>.reindex()</code>:</p>
+<p>当存在重复值是, <code>reindex()</code>将报错.</p>
+<pre><code>In [109]: s = pd.Series(np.arange(4), index=['a', 'a', 'b', 'c'])
+
+In [110]: labels = ['c', 'd']
+</code></pre>
+<pre><code>In [17]: s.reindex(labels)
+ValueError: cannot reindex on an axis with duplicate labels
+</code></pre>
+<p>Generally, you can intersect the desired labels with the current axis, and then reindex.</p>
+<pre><code>In [111]: s.loc[s.index.intersection(labels)].reindex(labels)
+Out[111]:
+c    3.0
+d    NaN
+dtype: float64
+</code></pre>
+<p>However, this would <em>still</em> raise if your resulting index is duplicated.</p>
+<p>虽然使用了索引交集, 但是存在重复的<code>label</code>依然还是会报错.</p>
+<pre><code>In [41]: labels = ['a', 'd']
+
+In [42]: s.loc[s.index.intersection(labels)].reindex(labels)
+ValueError: cannot reindex on an axis with duplicate labels
+</code></pre>
+<h2 id="十-selecting-random-samples">十. Selecting random samples</h2>
+<p>随机样本的选取</p>
+<p>A random selection of rows or columns from a Series or DataFrame with the <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.sample.html#pandas.DataFrame.sample"><code>sample()</code></a> method. The method will sample rows by default, and accepts a specific number of rows/columns to return, or a fraction of rows.</p>
+<pre><code>In [112]: s = pd.Series([0, 1, 2, 3, 4, 5])
+
+# When no arguments are passed, returns 1 row.
+In [113]: s.sample()
+Out[113]:
+4    4
+dtype: int64
+
+# One may specify either a number of rows:
+In [114]: s.sample(n=3)
+Out[114]:
+0    0
+4    4
+1    1
+dtype: int64
+
+# Or a fraction of the rows:
+In [115]: s.sample(frac=0.5)
+Out[115]:
+5    5
+3    3
+1    1
+dtype: int64
+</code></pre>
+<p>By default, <code>sample</code> will return each row at most once, but one can also sample with replacement using the <code>replace</code> option:</p>
+<p>默认每一行随机样本只会返回一次, 需要多次, 可以设置参数<code>replace</code>.</p>
+<pre><code>In [116]: s = pd.Series([0, 1, 2, 3, 4, 5])
+
+# Without replacement (default):
+In [117]: s.sample(n=6, replace=False)
+Out[117]:
+0    0
+1    1
+5    5
+3    3
+2    2
+4    4
+dtype: int64
+
+# With replacement:
+In [118]: s.sample(n=6, replace=True)
+Out[118]:
+0    0
+4    4
+3    3
+2    2
+4    4
+4    4
+dtype: int64
+</code></pre>
+<p>By default, each row has an equal probability of being selected, but if you want rows to have different probabilities, you can pass the <code>sample</code> function sampling weights as <code>weights</code>. These weights can be a list, a NumPy array, or a Series, but they must be of the same length as the object you are sampling. Missing values will be treated as a weight of zero, and inf values are not allowed. If weights do not sum to 1, they will be re-normalized by dividing all weights by the sum of the weights. For example:</p>
+<p>默认状态下每一行数据的随机可能性是相同的, 但是可以手动制定被选中的几率权重.</p>
+<pre><code>In [119]: s = pd.Series([0, 1, 2, 3, 4, 5])
+
+In [120]: example_weights = [0, 0, 0.2, 0.2, 0.2, 0.4]
+
+In [121]: s.sample(n=3, weights=example_weights)
+Out[121]:
+5    5
+4    4
+3    3
+dtype: int64
+
+# Weights will be re-normalized automatically
+In [122]: example_weights2 = [0.5, 0, 0, 0, 0, 0]
+
+In [123]: s.sample(n=1, weights=example_weights2)
+Out[123]:
+0    0
+dtype: int64
+</code></pre>
+<p>When applied to a DataFrame, you can use a column of the DataFrame as sampling weights (provided you are sampling rows and not columns) by simply passing the name of the column as a string.</p>
+<p>也可以制定列的权重.</p>
+<pre><code>In [124]: df2 = pd.DataFrame({'col1': [9, 8, 7, 6],
+   .....:                     'weight_column': [0.5, 0.4, 0.1, 0]})
+   .....:
+
+In [125]: df2.sample(n=3, weights='weight_column')
+Out[125]:
+   col1  weight_column
+1     8            0.4
+0     9            0.5
+2     7            0.1
+</code></pre>
+<p><code>sample</code> also allows users to sample columns instead of rows using the <code>axis</code> argument.</p>
+<pre><code>In [126]: df3 = pd.DataFrame({'col1': [1, 2, 3], 'col2': [2, 3, 4]})
+
+In [127]: df3.sample(n=1, axis=1)
+Out[127]:
+   col1
+0     1
+1     2
+2     3
+</code></pre>
+<p>Finally, one can also set a seed for <code>sample</code>’s random number generator using the <code>random_state</code> argument, which will accept either an integer (as a seed) or a NumPy RandomState object.</p>
+<pre><code>In [128]: df4 = pd.DataFrame({'col1': [1, 2, 3], 'col2': [2, 3, 4]})
+
+# With a given seed, the sample will always draw the same rows.
+In [129]: df4.sample(n=2, random_state=2)
+Out[129]:
+   col1  col2
+2     3     4
+1     2     3
+
+In [130]: df4.sample(n=2, random_state=2)
+Out[130]:
+   col1  col2
+2     3     4
+1     2     3
+</code></pre>
+<h2 id="十一-setting-with-enlargement">十一. Setting with enlargement</h2>
+<p>扩增</p>
+<p>The <code>.loc/[]</code> operations can perform enlargement when setting a non-existent key for that axis.</p>
+<p><code>.loc[]</code>在设置一个不存在的索引(标签)时, 会自动执行扩增.</p>
+<p>In the <code>Series</code> case this is effectively an appending operation.</p>
+<p>在<code>series</code>中, 这就像<code>append</code>一样.</p>
+<pre><code>In [131]: se = pd.Series([1, 2, 3])
+
+In [132]: se
+Out[132]:
+0    1
+1    2
+2    3
+dtype: int64
+
+In [133]: se[5] = 5.
+
+In [134]: se
+Out[134]:
+0    1.0
+1    2.0
+2    3.0
+5    5.0
+dtype: float64
+</code></pre>
+<p>A <code>DataFrame</code> can be enlarged on either axis via <code>.loc</code>.</p>
+<p>在<code>dataframe</code>中也一样</p>
+<pre><code>In [135]: dfi = pd.DataFrame(np.arange(6).reshape(3, 2),
+   .....:                    columns=['A', 'B'])
+   .....:
+
+In [136]: dfi
+Out[136]:
+   A  B
+0  0  1
+1  2  3
+2  4  5
+
+In [137]: dfi.loc[:, 'C'] = dfi.loc[:, 'A']
+
+In [138]: dfi
+Out[138]:
+   A  B  C
+0  0  1  0
+1  2  3  2
+2  4  5  4
+</code></pre>
+<p>This is like an <code>append</code> operation on the <code>DataFrame</code>.</p>
+<pre><code>In [139]: dfi.loc[3] = 5
+
+In [140]: dfi
+Out[140]:
+   A  B  C
+0  0  1  0
+1  2  3  2
+2  4  5  4
+3  5  5  5
+</code></pre>
+<h2 id="十二-fast-scalar-value-getting-and-setting">十二. Fast scalar value getting and setting</h2>
+<p>更快的操作方式, <code>at</code> and <code>iat</code>, 适用于单个值的访问和设置.</p>
+<p>Since indexing with <code>[]</code> must handle a lot of cases (single-label access, slicing, boolean indexing, etc.), it has a bit of overhead in order to figure out what you’re asking for. If you only want to access a scalar value, the fastest way is to use the <code>at</code> and <code>iat</code> methods, which are implemented on all of the data structures.</p>
+<p>Similarly to <code>loc</code>, <code>at</code> provides <strong>label</strong> based scalar lookups, while, <code>iat</code> provides <strong>integer</strong> based lookups analogously to <code>iloc</code></p>
+<pre><code>In [141]: s.iat[5]
+Out[141]: 5
+
+In [142]: df.at[dates[5], 'A']
+Out[142]: -0.6736897080883706
+
+In [143]: df.iat[3, 0]
+Out[143]: 0.7215551622443669
+</code></pre>
+<p>You can also set using these same indexers.</p>
+<p>你也可以像使用坐标一样.</p>
+<pre><code>In [144]: df.at[dates[5], 'E'] = 7
+
+In [145]: df.iat[3, 0] = 7
+</code></pre>
+<p><code>at</code> may enlarge the object in-place as above if the indexer is missing.</p>
+<p><code>at</code>操作, 在索引不存在的情况下, 将自动扩增dataframe</p>
+<pre><code>In [146]: df.at[dates[-1] + pd.Timedelta('1 day'), 0] = 7
+
+In [147]: df
+Out[147]:
+                   A         B         C         D    E    0
+2000-01-01  0.469112 -0.282863 -1.509059 -1.135632  NaN  NaN
+2000-01-02  1.212112 -0.173215  0.119209 -1.044236  NaN  NaN
+2000-01-03 -0.861849 -2.104569 -0.494929  1.071804  NaN  NaN
+2000-01-04  7.000000 -0.706771 -1.039575  0.271860  NaN  NaN
+2000-01-05 -0.424972  0.567020  0.276232 -1.087401  NaN  NaN
+2000-01-06 -0.673690  0.113648 -1.478427  0.524988  7.0  NaN
+2000-01-07  0.404705  0.577046 -1.715002 -1.039268  NaN  NaN
+2000-01-08 -0.370647 -1.157892 -1.344312  0.844885  NaN  NaN
+2000-01-09       NaN       NaN       NaN       NaN  NaN  7.0
+</code></pre>
+<h2 id="十三-boolean-indexing">十三. Boolean indexing</h2>
+<p>布尔索引</p>
+<p>Another common operation is the use of boolean vectors to filter the data. The operators are: <code>|</code> for <code>or</code>, <code>&amp;</code> for <code>and</code>, and <code>~</code> for <code>not</code>. These <strong>must</strong> be grouped by using parentheses, since by default Python will evaluate an expression such as <code>df['A'] &gt; 2 &amp; df['B'] &lt; 3</code> as <code>df['A'] &gt; (2 &amp; df['B']) &lt; 3</code>, while the desired evaluation order is <code>(df['A'] &gt; 2) &amp; (df['B'] &lt; 3)</code>.</p>
+<p>多个布尔值对应的操作符为: <code>|</code> for <code>or</code>, <code>&amp;</code> for <code>and</code>, and <code>~</code> for <code>not</code></p>
+<p>Using a boolean vector to index a Series works exactly as in a NumPy ndarray:</p>
+<pre><code>In [148]: s = pd.Series(range(-3, 4))
+
+In [149]: s
+Out[149]:
+0   -3
+1   -2
+2   -1
+3    0
+4    1
+5    2
+6    3
+dtype: int64
+
+In [150]: s[s &gt; 0]
+Out[150]:
+4    1
+5    2
+6    3
+dtype: int64
+
+In [151]: s[(s &lt; -1) | (s &gt; 0.5)]
+Out[151]:
+0   -3
+1   -2
+4    1
+5    2
+6    3
+dtype: int64
+
+In [152]: s[~(s &lt; 0)]
+Out[152]:
+3    0
+4    1
+5    2
+6    3
+dtype: int64
+</code></pre>
+<p>You may select rows from a DataFrame using a boolean vector the same length as the DataFrame’s index (for example, something derived from one of the columns of the DataFrame):</p>
+<pre><code>In [153]: df[df['A'] &gt; 0]
+Out[153]:
+                   A         B         C         D   E   0
+2000-01-01  0.469112 -0.282863 -1.509059 -1.135632 NaN NaN
+2000-01-02  1.212112 -0.173215  0.119209 -1.044236 NaN NaN
+2000-01-04  7.000000 -0.706771 -1.039575  0.271860 NaN NaN
+2000-01-07  0.404705  0.577046 -1.715002 -1.039268 NaN NaN
+</code></pre>
+<p>List comprehensions and the <code>map</code> method of Series can also be used to produce more complex criteria:</p>
+<p>适用于更为复杂的筛选, 在<code>map</code>等函数中.</p>
+<pre><code>In [154]: df2 = pd.DataFrame({'a': ['one', 'one', 'two', 'three', 'two', 'one', 'six'],
+   .....:                     'b': ['x', 'y', 'y', 'x', 'y', 'x', 'x'],
+   .....:                     'c': np.random.randn(7)})
+   .....:
+
+# only want 'two' or 'three'
+In [155]: criterion = df2['a'].map(lambda x: x.startswith('t'))
+
+In [156]: df2[criterion]
+Out[156]:
+       a  b         c
+2    two  y  0.041290
+3  three  x  0.361719
+4    two  y -0.238075
+
+# equivalent but slower
+In [157]: df2[[x.startswith('t') for x in df2['a']]]
+Out[157]:
+       a  b         c
+2    two  y  0.041290
+3  three  x  0.361719
+4    two  y -0.238075
+
+# Multiple criteria
+In [158]: df2[criterion &amp; (df2['b'] == 'x')]
+Out[158]:
+       a  b         c
+3  three  x  0.361719
+</code></pre>
+<p>With the choice methods <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-label">Selection by Label</a>, <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#indexing-integer">Selection by Position</a>, and <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/advanced.html#advanced">Advanced Indexing</a> you may select along more than one axis using boolean vectors combined with other indexing expressions.</p>
+<p>混合使用, 同时使用其他的取值方式, 如切片.</p>
+<pre><code>In [159]: df2.loc[criterion &amp; (df2['b'] == 'x'), 'b':'c']
+Out[159]:
+   b         c
+3  x  0.361719
+</code></pre>
+<blockquote>
+<p>Warning</p>
+<p><code>iloc</code> supports two kinds of boolean indexing. If the indexer is a boolean <code>Series</code>, an error will be raised. For instance, in the following example, <code>df.iloc[s.values, 1]</code> is ok. The boolean indexer is an array. But <code>df.iloc[s, 1]</code> would raise <code>ValueError</code>.</p>
+<p>需要注意, <code>iloc</code>支持两种布尔索引, 假如执行的索引是一个序列的布尔索引, 将直接报错, 需要取出其中的值来执行.</p>
+</blockquote>
+<pre><code class="language-bash">In [160]: df = pd.DataFrame([[1, 2], [3, 4], [5, 6]],
+   .....:                   index=list('abc'),
+   .....:                   columns=['A', 'B'])
+   .....:
+
+In [161]: s = (df['A'] &gt; 2)
+
+In [162]: s
+Out[162]:
+a    False
+b     True
+c     True
+Name: A, dtype: bool
+
+In [163]: df.loc[s, 'B'] # 注意差异和 iloc
+Out[163]:
+b    4
+c    6
+Name: B, dtype: int64
+
+In [164]: df.iloc[s.values, 1] # 注意这里使用的是序列的值, 而不是直接的序列, 虽然这个序列是一个布尔值的序列
+Out[164]:
+b    4
+c    6
+Name: B, dtype: int64
+</code></pre>
+<h2 id="十四-indexing-with-isin">十四. Indexing with isin</h2>
+<p><code>isin</code>执行索引</p>
+<p>Consider the <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.isin.html#pandas.Series.isin"><code>isin()</code></a> method of</p>
+<p><code>Series</code>, which returns a boolean vector that is true wherever the <code>Series</code> elements exist in the passed list. This allows you to select rows where one or more columns have values you want:</p>
+<pre><code>In [165]: s = pd.Series(np.arange(5), index=np.arange(5)[::-1], dtype='int64')
+
+In [166]: s
+Out[166]:
+4    0
+3    1
+2    2
+1    3
+0    4
+dtype: int64
+
+In [167]: s.isin([2, 4, 6])
+Out[167]:
+4    False
+3    False
+2     True
+1    False
+0     True
+dtype: bool
+
+In [168]: s[s.isin([2, 4, 6])]
+Out[168]:
+2    2
+0    4
+dtype: int64
+</code></pre>
+<p>The same method is available for <code>Index</code> objects and is useful for the cases when you don’t know which of the sought labels are in fact present:</p>
+<pre><code>In [169]: s[s.index.isin([2, 4, 6])]
+Out[169]:
+4    0
+2    2
+dtype: int64
+
+# compare it to the following
+In [170]: s.reindex([2, 4, 6])
+Out[170]:
+2    2.0
+4    0.0
+6    NaN
+dtype: float64
+</code></pre>
+<p>In addition to that, <code>MultiIndex</code> allows selecting a separate level to use in the membership check:</p>
+<pre><code>In [171]: s_mi = pd.Series(np.arange(6),
+   .....:                  index=pd.MultiIndex.from_product([[0, 1], ['a', 'b', 'c']]))
+   .....:
+
+In [172]: s_mi
+Out[172]:
+0  a    0
+   b    1
+   c    2
+1  a    3
+   b    4
+   c    5
+dtype: int64
+
+In [173]: s_mi.iloc[s_mi.index.isin([(1, 'a'), (2, 'b'), (0, 'c')])]
+Out[173]:
+0  c    2
+1  a    3
+dtype: int64
+
+In [174]: s_mi.iloc[s_mi.index.isin(['a', 'c', 'e'], level=1)]
+Out[174]:
+0  a    0
+   c    2
+1  a    3
+   c    5
+dtype: int64
+</code></pre>
+<p>DataFrame also has an <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.isin.html#pandas.DataFrame.isin"><code>isin()</code></a> method. When calling <code>isin</code>, pass a set of values as either an array or dict. If values is an array, <code>isin</code> returns a DataFrame of booleans that is the same shape as the original DataFrame, with True wherever the element is in the sequence of values.</p>
+<pre><code>In [175]: df = pd.DataFrame({'vals': [1, 2, 3, 4], 'ids': ['a', 'b', 'f', 'n'],
+   .....:                    'ids2': ['a', 'n', 'c', 'n']})
+   .....:
+
+In [176]: values = ['a', 'b', 1, 3]
+
+In [177]: df.isin(values)
+Out[177]:
+    vals    ids   ids2
+0   True   True   True
+1  False   True  False
+2   True  False  False
+3  False  False  False
+</code></pre>
+<p>Oftentimes you’ll want to match certain values with certain columns. Just make values a <code>dict</code> where the key is the column, and the value is a list of items you want to check for.</p>
+<pre><code>In [178]: values = {'ids': ['a', 'b'], 'vals': [1, 3]}
+
+In [179]: df.isin(values)
+Out[179]:
+    vals    ids   ids2
+0   True   True  False
+1  False   True  False
+2   True  False  False
+3  False  False  False
+</code></pre>
+<p>To return the DataFrame of booleans where the values are <em>not</em> in the original DataFrame, use the <code>~</code> operator:</p>
+<p>执行 <code>~</code> 非操作.</p>
+<pre><code>In [180]: values = {'ids': ['a', 'b'], 'vals': [1, 3]}
+
+In [181]: ~df.isin(values)
+Out[181]:
+    vals    ids  ids2
+0  False  False  True
+1   True  False  True
+2  False   True  True
+3   True   True  True
+</code></pre>
+<p>Combine DataFrame’s <code>isin</code> with the <code>any()</code> and <code>all()</code> methods to quickly select subsets of your data that meet a given criteria. To select a row where each column meets its own criterion:</p>
+<p>和<code>any</code>和<code>all</code>一起搭配使用.</p>
+<pre><code>In [182]: values = {'ids': ['a', 'b'], 'ids2': ['a', 'c'], 'vals': [1, 3]}
+
+In [183]: row_mask = df.isin(values).all(1)
+
+In [184]: df[row_mask]
+Out[184]:
+   vals ids ids2
+0     1   a    a
+</code></pre>
+<h2 id="十五-the-wherehttpspandaspydataorgpandas-docsstablereferenceapipandasdataframewherehtml-十五-pandasdataframewhere-method-and-masking">十五. The [<code>where()</code>](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.where.html## 十五. pandas.DataFrame.where) Method and Masking</h2>
+<p><code>where()</code>的使用</p>
+<p>Selecting values from a Series with a boolean vector generally returns a subset of the data. To guarantee that selection output has the same shape as the original data, you can use the <code>where</code> method in <code>Series</code> and <code>DataFrame</code>.</p>
+<p><code>where()</code>的操作保证返回的数据内容大小和<code>series</code>一致.</p>
+<p>To return only the selected rows:</p>
+<pre><code>In [185]: s[s &gt; 0]
+Out[185]:
+3    1
+2    2
+1    3
+0    4
+dtype: int64
+</code></pre>
+<p>To return a Series of the same shape as the original:</p>
+<pre><code>In [186]: s.where(s &gt; 0)
+Out[186]:
+4    NaN
+3    1.0
+2    2.0
+1    3.0
+0    4.0
+dtype: float64
+</code></pre>
+<p>Selecting values from a DataFrame with a boolean criterion now also preserves input data shape. <code>where</code> is used under the hood as the implementation. The code below is equivalent to <code>df.where(df &lt; 0)</code>.</p>
+<p>在<code>df</code>中则等价于<code>[]</code>的操作.</p>
+<pre><code>In [187]: df[df &lt; 0]
+Out[187]:
+                   A         B         C         D
+2000-01-01 -2.104139 -1.309525       NaN       NaN
+2000-01-02 -0.352480       NaN -1.192319       NaN
+2000-01-03 -0.864883       NaN -0.227870       NaN
+2000-01-04       NaN -1.222082       NaN -1.233203
+2000-01-05       NaN -0.605656 -1.169184       NaN
+2000-01-06       NaN -0.948458       NaN -0.684718
+2000-01-07 -2.670153 -0.114722       NaN -0.048048
+2000-01-08       NaN       NaN -0.048788 -0.808838
+</code></pre>
+<p>In addition, <code>where</code> takes an optional <code>other</code> argument for replacement of values where the condition is False, in the returned copy.</p>
+<p>额外的参数提供自动填充的功能, 对返回<code>false</code>的项进行数据填充</p>
+<pre><code>In [188]: df.where(df &lt; 0, -df)
+Out[188]:
+                   A         B         C         D
+2000-01-01 -2.104139 -1.309525 -0.485855 -0.245166
+2000-01-02 -0.352480 -0.390389 -1.192319 -1.655824
+2000-01-03 -0.864883 -0.299674 -0.227870 -0.281059
+2000-01-04 -0.846958 -1.222082 -0.600705 -1.233203
+2000-01-05 -0.669692 -0.605656 -1.169184 -0.342416
+2000-01-06 -0.868584 -0.948458 -2.297780 -0.684718
+2000-01-07 -2.670153 -0.114722 -0.168904 -0.048048
+2000-01-08 -0.801196 -1.392071 -0.048788 -0.808838
+</code></pre>
+<p>You may wish to set values based on some boolean criteria. This can be done intuitively like so:</p>
+<pre><code>In [189]: s2 = s.copy()
+
+In [190]: s2[s2 &lt; 0] = 0
+
+In [191]: s2
+Out[191]:
+4    0
+3    1
+2    2
+1    3
+0    4
+dtype: int64
+
+In [192]: df2 = df.copy()
+
+In [193]: df2[df2 &lt; 0] = 0
+
+In [194]: df2
+Out[194]:
+                   A         B         C         D
+2000-01-01  0.000000  0.000000  0.485855  0.245166
+2000-01-02  0.000000  0.390389  0.000000  1.655824
+2000-01-03  0.000000  0.299674  0.000000  0.281059
+2000-01-04  0.846958  0.000000  0.600705  0.000000
+2000-01-05  0.669692  0.000000  0.000000  0.342416
+2000-01-06  0.868584  0.000000  2.297780  0.000000
+2000-01-07  0.000000  0.000000  0.168904  0.000000
+2000-01-08  0.801196  1.392071  0.000000  0.000000
+</code></pre>
+<p>By default, <code>where</code> returns a modified copy of the data. There is an optional parameter <code>inplace</code> so that the original data can be modified without creating a copy:</p>
+<pre><code>In [195]: df_orig = df.copy()
+
+In [196]: df_orig.where(df &gt; 0, -df, inplace=True)
+
+In [197]: df_orig
+Out[197]:
+                   A         B         C         D
+2000-01-01  2.104139  1.309525  0.485855  0.245166
+2000-01-02  0.352480  0.390389  1.192319  1.655824
+2000-01-03  0.864883  0.299674  0.227870  0.281059
+2000-01-04  0.846958  1.222082  0.600705  1.233203
+2000-01-05  0.669692  0.605656  1.169184  0.342416
+2000-01-06  0.868584  0.948458  2.297780  0.684718
+2000-01-07  2.670153  0.114722  0.168904  0.048048
+2000-01-08  0.801196  1.392071  0.048788  0.808838
+</code></pre>
+<blockquote>
+<p>Note</p>
+<p>The signature for <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.where.html#pandas.DataFrame.where"><code>DataFrame.where()</code></a> differs from <a href="https://numpy.org/doc/stable/reference/generated/numpy.where.html#numpy.where"><code>numpy.where()</code></a>. Roughly <code>df1.where(m, df2)</code> is equivalent to <code>np.where(m, df1, df2)</code>.</p>
+</blockquote>
+<pre><code>In [198]: df.where(df &lt; 0, -df) == np.where(df &lt; 0, df, -df)
+Out[198]:
+               A     B     C     D
+2000-01-01  True  True  True  True
+2000-01-02  True  True  True  True
+2000-01-03  True  True  True  True
+2000-01-04  True  True  True  True
+2000-01-05  True  True  True  True
+2000-01-06  True  True  True  True
+2000-01-07  True  True  True  True
+2000-01-08  True  True  True  True
+</code></pre>
+<p><strong>Alignment</strong></p>
+<p>Furthermore, <code>where</code> aligns the input boolean condition (ndarray or DataFrame), such that partial selection with setting is possible. This is analogous to partial setting via <code>.loc</code> (but on the contents rather than the axis labels).</p>
+<pre><code>In [199]: df2 = df.copy()
+
+In [200]: df2[df2[1:4] &gt; 0] = 3
+
+In [201]: df2
+Out[201]:
+                   A         B         C         D
+2000-01-01 -2.104139 -1.309525  0.485855  0.245166
+2000-01-02 -0.352480  3.000000 -1.192319  3.000000
+2000-01-03 -0.864883  3.000000 -0.227870  3.000000
+2000-01-04  3.000000 -1.222082  3.000000 -1.233203
+2000-01-05  0.669692 -0.605656 -1.169184  0.342416
+2000-01-06  0.868584 -0.948458  2.297780 -0.684718
+2000-01-07 -2.670153 -0.114722  0.168904 -0.048048
+2000-01-08  0.801196  1.392071 -0.048788 -0.808838
+</code></pre>
+<p>Where can also accept <code>axis</code> and <code>level</code> parameters to align the input when performing the <code>where</code>.</p>
+<pre><code>In [202]: df2 = df.copy()
+
+In [203]: df2.where(df2 &gt; 0, df2['A'], axis='index')
+Out[203]:
+                   A         B         C         D
+2000-01-01 -2.104139 -2.104139  0.485855  0.245166
+2000-01-02 -0.352480  0.390389 -0.352480  1.655824
+2000-01-03 -0.864883  0.299674 -0.864883  0.281059
+2000-01-04  0.846958  0.846958  0.600705  0.846958
+2000-01-05  0.669692  0.669692  0.669692  0.342416
+2000-01-06  0.868584  0.868584  2.297780  0.868584
+2000-01-07 -2.670153 -2.670153  0.168904 -2.670153
+2000-01-08  0.801196  1.392071  0.801196  0.801196
+</code></pre>
+<p>This is equivalent to (but faster than) the following.</p>
+<pre><code>In [204]: df2 = df.copy()
+
+In [205]: df.apply(lambda x, y: x.where(x &gt; 0, y), y=df['A'])
+Out[205]:
+                   A         B         C         D
+2000-01-01 -2.104139 -2.104139  0.485855  0.245166
+2000-01-02 -0.352480  0.390389 -0.352480  1.655824
+2000-01-03 -0.864883  0.299674 -0.864883  0.281059
+2000-01-04  0.846958  0.846958  0.600705  0.846958
+2000-01-05  0.669692  0.669692  0.669692  0.342416
+2000-01-06  0.868584  0.868584  2.297780  0.868584
+2000-01-07 -2.670153 -2.670153  0.168904 -2.670153
+2000-01-08  0.801196  1.392071  0.801196  0.801196
+</code></pre>
+<p><code>where</code> can accept a callable as condition and <code>other</code> arguments. The function must be with one argument (the calling Series or DataFrame) and that returns valid output as condition and <code>other</code> argument.</p>
+<pre><code>In [206]: df3 = pd.DataFrame({'A': [1, 2, 3],
+   .....:                     'B': [4, 5, 6],
+   .....:                     'C': [7, 8, 9]})
+   .....:
+
+In [207]: df3.where(lambda x: x &gt; 4, lambda x: x + 10)
+Out[207]:
+    A   B  C
+0  11  14  7
+1  12   5  8
+2  13   6  9
+</code></pre>
+<h3 id="151-mask">15.1 Mask</h3>
+<p><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.mask.html#pandas.DataFrame.mask"><code>mask()</code></a> is the inverse boolean operation of <code>where</code>.</p>
+<p>这个函式是<strong>逆布</strong>尔操作.</p>
+<pre><code class="language-bash">In [208]: s.mask(s &gt;= 0)
+Out[208]:
+4   NaN
+3   NaN
+2   NaN
+1   NaN
+0   NaN
+dtype: float64
+
+In [209]: df.mask(df &gt;= 0) # 将大于零的值全部标记未NaN
+Out[209]:
+                   A         B         C         D
+2000-01-01 -2.104139 -1.309525       NaN       NaN
+2000-01-02 -0.352480       NaN -1.192319       NaN
+2000-01-03 -0.864883       NaN -0.227870       NaN
+2000-01-04       NaN -1.222082       NaN -1.233203
+2000-01-05       NaN -0.605656 -1.169184       NaN
+2000-01-06       NaN -0.948458       NaN -0.684718
+2000-01-07 -2.670153 -0.114722       NaN -0.048048
+2000-01-08       NaN       NaN -0.048788 -0.808838
+</code></pre>
+<h2 id="十六-setting-with-enlargement-conditionally-using-numpy">十六. Setting with enlargement conditionally using <code>numpy()</code></h2>
+<p>使用<code>numpy</code>进行扩增.</p>
+<p>An alternative to <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.where.html#pandas.DataFrame.where"><code>where()</code></a> is to use <a href="https://numpy.org/doc/stable/reference/generated/numpy.where.html#numpy.where"><code>numpy.where()</code></a>. Combined with setting a new column, you can use it to enlarge a DataFrame where the values are determined conditionally.</p>
+<p>对于<code>where()</code>函数的备选<code>np.where()</code></p>
+<p>Consider you have two choices to choose from in the following DataFrame. And you want to set a new column color to ‘green’ when the second column has ‘Z’. You can do the following:</p>
+<pre><code>In [210]: df = pd.DataFrame({'col1': list('ABBC'), 'col2': list('ZZXY')})
+
+In [211]: df['color'] = np.where(df['col2'] == 'Z', 'green', 'red')
+
+In [212]: df
+Out[212]:
+  col1 col2  color
+0    A    Z  green
+1    B    Z  green
+2    B    X    red
+3    C    Y    red
+</code></pre>
+<p>If you have multiple conditions, you can use <a href="https://numpy.org/doc/stable/reference/generated/numpy.select.html#numpy.select"><code>numpy.select()</code></a> to achieve that. Say corresponding to three conditions there are three choice of colors, with a fourth color as a fallback, you can do the following.</p>
+<p>搭配<code>numpy.select()</code></p>
+<pre><code>In [213]: conditions = [
+   .....:     (df['col2'] == 'Z') &amp; (df['col1'] == 'A'),
+   .....:     (df['col2'] == 'Z') &amp; (df['col1'] == 'B'),
+   .....:     (df['col1'] == 'B')
+   .....: ]
+   .....:
+
+In [214]: choices = ['yellow', 'blue', 'purple']
+
+In [215]: df['color'] = np.select(conditions, choices, default='black')
+
+In [216]: df
+Out[216]:
+  col1 col2   color
+0    A    Z  yellow
+1    B    Z    blue
+2    B    X  purple
+3    C    Y   black
+</code></pre>
+<h2 id="十七-the-queryhttpspandaspydataorgpandas-docsstablereferenceapipandasdataframequeryhtml-十七-pandasdataframequery-method">十七. The [<code>query()</code>](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html## 十七. pandas.DataFrame.query) Method</h2>
+<p>类似于<code>sql</code>语句的执行</p>
+<ul>
+<li>用于于复杂条件的执行.</li>
+<li>对于大数据的检索效率更高.</li>
+</ul>
+<p><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame"><code>DataFrame</code></a> objects have a <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html#pandas.DataFrame.query"><code>query()</code></a> method that allows selection using an expression.</p>
+<p>You can get the value of the frame where column <code>b</code> has values between the values of columns <code>a</code> and <code>c</code>. For example:</p>
+<pre><code>In [217]: n = 10
+
+In [218]: df = pd.DataFrame(np.random.rand(n, 3), columns=list('abc'))
+
+In [219]: df
+Out[219]:
+          a         b         c
+0  0.438921  0.118680  0.863670
+1  0.138138  0.577363  0.686602
+2  0.595307  0.564592  0.520630
+3  0.913052  0.926075  0.616184
+4  0.078718  0.854477  0.898725
+5  0.076404  0.523211  0.591538
+6  0.792342  0.216974  0.564056
+7  0.397890  0.454131  0.915716
+8  0.074315  0.437913  0.019794
+9  0.559209  0.502065  0.026437
+
+# pure python
+In [220]: df[(df['a'] &lt; df['b']) &amp; (df['b'] &lt; df['c'])]
+Out[220]:
+          a         b         c
+1  0.138138  0.577363  0.686602
+4  0.078718  0.854477  0.898725
+5  0.076404  0.523211  0.591538
+7  0.397890  0.454131  0.915716
+
+# query, 执行cmd语句
+In [221]: df.query('(a &lt; b) &amp; (b &lt; c)')
+Out[221]:
+          a         b         c
+1  0.138138  0.577363  0.686602
+4  0.078718  0.854477  0.898725
+5  0.076404  0.523211  0.591538
+7  0.397890  0.454131  0.915716
+</code></pre>
+<p>Do the same thing but fall back on a named index if there is no column with the name <code>a</code>.</p>
+<pre><code>In [222]: df = pd.DataFrame(np.random.randint(n / 2, size=(n, 2)), columns=list('bc'))
+
+In [223]: df.index.name = 'a'
+
+In [224]: df
+Out[224]:
+   b  c
+a
+0  0  4
+1  0  1
+2  3  4
+3  4  3
+4  1  4
+5  0  3
+6  0  1
+7  3  4
+8  2  3
+9  1  1
+
+In [225]: df.query('a &lt; b and b &lt; c')
+Out[225]:
+   b  c
+a
+2  3  4
+</code></pre>
+<p>If instead you don’t want to or cannot name your index, you can use the name <code>index</code> in your query expression:</p>
+<pre><code>In [226]: df = pd.DataFrame(np.random.randint(n, size=(n, 2)), columns=list('bc'))
+
+In [227]: df
+Out[227]:
+   b  c
+0  3  1
+1  3  0
+2  5  6
+3  5  2
+4  7  4
+5  0  1
+6  2  5
+7  0  1
+8  6  0
+9  7  9
+
+In [228]: df.query('index &lt; b &lt; c')
+Out[228]:
+   b  c
+2  5  6
+</code></pre>
+<blockquote>
+<p>Note</p>
+<p>If the name of your index overlaps with a column name, the column name is given precedence. For example,</p>
+<p><strong>注意这里, 假如对索引进行命名, 出现覆盖了列的名称的情况, query优先使用的是索引的名称</strong></p>
+</blockquote>
+<pre><code>In [229]: df = pd.DataFrame({'a': np.random.randint(5, size=5)})
+
+In [230]: df.index.name = 'a'
+
+In [231]: df.query('a &gt; 2')  # uses the column 'a', not the index
+Out[231]:
+   a
+a
+1  3
+3  3
+</code></pre>
+<p>You can still use the index in a query expression by using the special identifier ‘index’:</p>
+<p>但是可以使用<code>index</code>来表示索引(虽然索引已经变更名称)</p>
+<pre><code>In [232]: df.query('index &gt; 2')
+Out[232]:
+   a
+a
+3  3
+4  2
+</code></pre>
+<p>If for some reason you have a column named <code>index</code>, then you can refer to the index as <code>ilevel_0</code> as well, but at this point you should consider renaming your columns to something less ambiguous.</p>
+<p>注意, 假如名称中存在<code>index</code>的列, 可以使用<code>ilevel_0</code>来表示<code>index</code></p>
+<h3 id="171-multiindexhttpspandaspydataorgpandas-docsstablereferenceapipandasmultiindexhtml-171-pandasmultiindex-queryhttpspandaspydataorgpandas-docsstablereferenceapipandasdataframequeryhtml-171-pandasdataframequery-syntax">17.1 [<code>MultiIndex</code>](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.MultiIndex.html### 17.1 pandas.MultiIndex) [<code>query()</code>](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html### 17.1 pandas.DataFrame.query) Syntax</h3>
+<p>多索引的情形</p>
+<p>You can also use the levels of a <code>DataFrame</code> with a <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.MultiIndex.html#pandas.MultiIndex"><code>MultiIndex</code></a> as if they were columns in the frame:</p>
+<pre><code>In [233]: n = 10
+
+In [234]: colors = np.random.choice(['red', 'green'], size=n)
+
+In [235]: foods = np.random.choice(['eggs', 'ham'], size=n)
+
+In [236]: colors
+Out[236]:
+array(['red', 'red', 'red', 'green', 'green', 'green', 'green', 'green',
+       'green', 'green'], dtype='&lt;U5')
+
+In [237]: foods
+Out[237]:
+array(['ham', 'ham', 'eggs', 'eggs', 'eggs', 'ham', 'ham', 'eggs', 'eggs',
+       'eggs'], dtype='&lt;U4')
+
+In [238]: index = pd.MultiIndex.from_arrays([colors, foods], names=['color', 'food'])
+
+In [239]: df = pd.DataFrame(np.random.randn(n, 2), index=index)
+
+In [240]: df
+Out[240]:
+                   0         1
+color food
+red   ham   0.194889 -0.381994
+      ham   0.318587  2.089075
+      eggs -0.728293 -0.090255
+green eggs -0.748199  1.318931
+      eggs -2.029766  0.792652
+      ham   0.461007 -0.542749
+      ham  -0.305384 -0.479195
+      eggs  0.095031 -0.270099
+      eggs -0.707140 -0.773882
+      eggs  0.229453  0.304418
+
+In [241]: df.query('color == &quot;red&quot;')
+Out[241]:
+                   0         1
+color food
+red   ham   0.194889 -0.381994
+      ham   0.318587  2.089075
+      eggs -0.728293 -0.090255
+</code></pre>
+<p>If the levels of the <code>MultiIndex</code> are unnamed, you can refer to them using special names:</p>
+<p>假如多层索引没有名称.</p>
+<pre><code>In [242]: df.index.names = [None, None]
+
+In [243]: df
+Out[243]:
+                   0         1
+red   ham   0.194889 -0.381994
+      ham   0.318587  2.089075
+      eggs -0.728293 -0.090255
+green eggs -0.748199  1.318931
+      eggs -2.029766  0.792652
+      ham   0.461007 -0.542749
+      ham  -0.305384 -0.479195
+      eggs  0.095031 -0.270099
+      eggs -0.707140 -0.773882
+      eggs  0.229453  0.304418
+
+In [244]: df.query('ilevel_0 == &quot;red&quot;')
+Out[244]:
+                 0         1
+red ham   0.194889 -0.381994
+    ham   0.318587  2.089075
+    eggs -0.728293 -0.090255
+</code></pre>
+<p>The convention is <code>ilevel_0</code>, which means &quot; index level 0&quot;  for the 0th level of the <code>index</code>.</p>
+<p>用<code>ilevel_n</code>来表示不同层级的索引</p>
+<h3 id="172-queryhttpspandaspydataorgpandas-docsstablereferenceapipandasdataframequeryhtml-172-pandasdataframequery-use-cases">17.2 [<code>query()</code>](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html### 17.2 pandas.DataFrame.query) Use Cases</h3>
+<p>A use case for <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html#pandas.DataFrame.query"><code>query()</code></a> is when you have a collection of <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame"><code>DataFrame</code></a> objects that have a subset of column names (or index levels/names) in common. You can pass the same query to both frames <em>without</em> having to specify which frame you’re interested in querying</p>
+<pre><code>In [245]: df = pd.DataFrame(np.random.rand(n, 3), columns=list('abc'))
+
+In [246]: df
+Out[246]:
+          a         b         c
+0  0.224283  0.736107  0.139168
+1  0.302827  0.657803  0.713897
+2  0.611185  0.136624  0.984960
+3  0.195246  0.123436  0.627712
+4  0.618673  0.371660  0.047902
+5  0.480088  0.062993  0.185760
+6  0.568018  0.483467  0.445289
+7  0.309040  0.274580  0.587101
+8  0.258993  0.477769  0.370255
+9  0.550459  0.840870  0.304611
+
+In [247]: df2 = pd.DataFrame(np.random.rand(n + 2, 3), columns=df.columns)
+
+In [248]: df2
+Out[248]:
+           a         b         c
+0   0.357579  0.229800  0.596001
+1   0.309059  0.957923  0.965663
+2   0.123102  0.336914  0.318616
+3   0.526506  0.323321  0.860813
+4   0.518736  0.486514  0.384724
+5   0.190804  0.505723  0.614533
+6   0.891939  0.623977  0.676639
+7   0.480559  0.378528  0.460858
+8   0.420223  0.136404  0.141295
+9   0.732206  0.419540  0.604675
+10  0.604466  0.848974  0.896165
+11  0.589168  0.920046  0.732716
+
+In [249]: expr = '0.0 &lt;= a &lt;= c &lt;= 0.5'
+
+In [250]: map(lambda frame: frame.query(expr), [df, df2])
+Out[250]: &lt;map at 0x7f12a67b9940&gt;
+</code></pre>
+<h3 id="173-queryhttpspandaspydataorgpandas-docsstablereferenceapipandasdataframequeryhtml-173-pandasdataframequery-python-versus-pandas-syntax-comparison">17.3 [<code>query()</code>](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html### 17.3 pandas.DataFrame.query) Python versus pandas Syntax Comparison</h3>
+<p>Full numpy-like syntax:</p>
+<pre><code>In [251]: df = pd.DataFrame(np.random.randint(n, size=(n, 3)), columns=list('abc'))
+
+In [252]: df
+Out[252]:
+   a  b  c
+0  7  8  9
+1  1  0  7
+2  2  7  2
+3  6  2  2
+4  2  6  3
+5  3  8  2
+6  1  7  2
+7  5  1  5
+8  9  8  0
+9  1  5  0
+
+In [253]: df.query('(a &lt; b) &amp; (b &lt; c)')
+Out[253]:
+   a  b  c
+0  7  8  9
+
+In [254]: df[(df['a'] &lt; df['b']) &amp; (df['b'] &lt; df['c'])]
+Out[254]:
+   a  b  c
+0  7  8  9
+</code></pre>
+<p>Slightly nicer by removing the parentheses (comparison operators bind tighter than <code>&amp;</code> and <code>|</code>):</p>
+<pre><code>In [255]: df.query('a &lt; b &amp; b &lt; c')
+Out[255]:
+   a  b  c
+0  7  8  9
+</code></pre>
+<p>Use English instead of symbols:</p>
+<pre><code>In [256]: df.query('a &lt; b and b &lt; c')
+Out[256]:
+   a  b  c
+0  7  8  9
+</code></pre>
+<p>Pretty close to how you might write it on paper:</p>
+<pre><code>In [257]: df.query('a &lt; b &lt; c')
+Out[257]:
+   a  b  c
+0  7  8  9
+</code></pre>
+<h3 id="174-the-in-and-not-in-operators">17.4 The <code>in</code> and <code>not in</code> operators</h3>
+<p><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html#pandas.DataFrame.query"><code>query()</code></a> also supports special use of Python’s <code>in</code> and <code>not in</code> comparison operators, providing a succinct syntax for calling the <code>isin</code> method of a <code>Series</code> or <code>DataFrame</code>.</p>
+<pre><code># get all rows where columns &quot;a&quot; and &quot;b&quot; have overlapping values
+In [258]: df = pd.DataFrame({'a': list('aabbccddeeff'), 'b': list('aaaabbbbcccc'),
+   .....:                    'c': np.random.randint(5, size=12),
+   .....:                    'd': np.random.randint(9, size=12)})
+   .....:
+
+In [259]: df
+Out[259]:
+    a  b  c  d
+0   a  a  2  6
+1   a  a  4  7
+2   b  a  1  6
+3   b  a  2  1
+4   c  b  3  6
+5   c  b  0  2
+6   d  b  3  3
+7   d  b  2  1
+8   e  c  4  3
+9   e  c  2  0
+10  f  c  0  6
+11  f  c  1  2
+
+In [260]: df.query('a in b')
+Out[260]:
+   a  b  c  d
+0  a  a  2  6
+1  a  a  4  7
+2  b  a  1  6
+3  b  a  2  1
+4  c  b  3  6
+5  c  b  0  2
+
+# How you'd do it in pure Python
+In [261]: df[df['a'].isin(df['b'])]
+Out[261]:
+   a  b  c  d
+0  a  a  2  6
+1  a  a  4  7
+2  b  a  1  6
+3  b  a  2  1
+4  c  b  3  6
+5  c  b  0  2
+
+In [262]: df.query('a not in b')
+Out[262]:
+    a  b  c  d
+6   d  b  3  3
+7   d  b  2  1
+8   e  c  4  3
+9   e  c  2  0
+10  f  c  0  6
+11  f  c  1  2
+
+# pure Python
+In [263]: df[~df['a'].isin(df['b'])]
+Out[263]:
+    a  b  c  d
+6   d  b  3  3
+7   d  b  2  1
+8   e  c  4  3
+9   e  c  2  0
+10  f  c  0  6
+11  f  c  1  2
+</code></pre>
+<p>You can combine this with other expressions for very succinct queries:</p>
+<pre><code># rows where cols a and b have overlapping values
+# and col c's values are less than col d's
+In [264]: df.query('a in b and c &lt; d')
+Out[264]:
+   a  b  c  d
+0  a  a  2  6
+1  a  a  4  7
+2  b  a  1  6
+4  c  b  3  6
+5  c  b  0  2
+
+# pure Python
+In [265]: df[df['b'].isin(df['a']) &amp; (df['c'] &lt; df['d'])]
+Out[265]:
+    a  b  c  d
+0   a  a  2  6
+1   a  a  4  7
+2   b  a  1  6
+4   c  b  3  6
+5   c  b  0  2
+10  f  c  0  6
+11  f  c  1  2
+</code></pre>
+<blockquote>
+<p>Note</p>
+<p>Note that <code>in</code> and <code>not in</code> are evaluated in Python, since <code>numexpr</code> has no equivalent of this operation. However, <strong>only the</strong> <code>in</code>/<code>not in</code> <strong>expression itself</strong> is evaluated in vanilla Python. For example, in the expression</p>
+</blockquote>
+<pre><code>df.query('a in b + c + d')
+# 等价于
+a in (b, c, d)
+</code></pre>
+<p><code>(b + c + d)</code> is evaluated by <code>numexpr</code> and <em>then</em> the <code>in</code> operation is evaluated in plain Python. In general, any operations that can be evaluated using <code>numexpr</code> will be.</p>
+<h3 id="175-special-use-of-the-operator-with-list-objects">17.5 Special use of the <code>==</code> operator with <code>list</code> objects</h3>
+<p>Comparing a <code>list</code> of values to a column using <code>==</code>/<code>!=</code> works similarly to <code>in</code>/<code>not in</code>.</p>
+<pre><code>In [266]: df.query('b == [&quot;a&quot;, &quot;b&quot;, &quot;c&quot;]')
+Out[266]:
+    a  b  c  d
+0   a  a  2  6
+1   a  a  4  7
+2   b  a  1  6
+3   b  a  2  1
+4   c  b  3  6
+5   c  b  0  2
+6   d  b  3  3
+7   d  b  2  1
+8   e  c  4  3
+9   e  c  2  0
+10  f  c  0  6
+11  f  c  1  2
+
+# pure Python
+In [267]: df[df['b'].isin([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;])]
+Out[267]:
+    a  b  c  d
+0   a  a  2  6
+1   a  a  4  7
+2   b  a  1  6
+3   b  a  2  1
+4   c  b  3  6
+5   c  b  0  2
+6   d  b  3  3
+7   d  b  2  1
+8   e  c  4  3
+9   e  c  2  0
+10  f  c  0  6
+11  f  c  1  2
+
+In [268]: df.query('c == [1, 2]')
+Out[268]:
+    a  b  c  d
+0   a  a  2  6
+2   b  a  1  6
+3   b  a  2  1
+7   d  b  2  1
+9   e  c  2  0
+11  f  c  1  2
+
+In [269]: df.query('c != [1, 2]')
+Out[269]:
+    a  b  c  d
+1   a  a  4  7
+4   c  b  3  6
+5   c  b  0  2
+6   d  b  3  3
+8   e  c  4  3
+10  f  c  0  6
+
+# using in/not in
+In [270]: df.query('[1, 2] in c')
+Out[270]:
+    a  b  c  d
+0   a  a  2  6
+2   b  a  1  6
+3   b  a  2  1
+7   d  b  2  1
+9   e  c  2  0
+11  f  c  1  2
+
+In [271]: df.query('[1, 2] not in c')
+Out[271]:
+    a  b  c  d
+1   a  a  4  7
+4   c  b  3  6
+5   c  b  0  2
+6   d  b  3  3
+8   e  c  4  3
+10  f  c  0  6
+
+# pure Python
+In [272]: df[df['c'].isin([1, 2])]
+Out[272]:
+    a  b  c  d
+0   a  a  2  6
+2   b  a  1  6
+3   b  a  2  1
+7   d  b  2  1
+9   e  c  2  0
+11  f  c  1  2
+</code></pre>
+<h3 id="176-boolean-operators">17.6 Boolean operators</h3>
+<p>You can negate boolean expressions with the word <code>not</code> or the <code>~</code> operator.</p>
+<pre><code>In [273]: df = pd.DataFrame(np.random.rand(n, 3), columns=list('abc'))
+
+In [274]: df['bools'] = np.random.rand(len(df)) &gt; 0.5
+
+In [275]: df.query('~bools')
+Out[275]:
+          a         b         c  bools
+2  0.697753  0.212799  0.329209  False
+7  0.275396  0.691034  0.826619  False
+8  0.190649  0.558748  0.262467  False
+
+In [276]: df.query('not bools')
+Out[276]:
+          a         b         c  bools
+2  0.697753  0.212799  0.329209  False
+7  0.275396  0.691034  0.826619  False
+8  0.190649  0.558748  0.262467  False
+
+In [277]: df.query('not bools') == df[~df['bools']]
+Out[277]:
+      a     b     c  bools
+2  True  True  True   True
+7  True  True  True   True
+8  True  True  True   True
+</code></pre>
+<p>Of course, expressions can be arbitrarily complex too:</p>
+<pre><code># short query syntax
+In [278]: shorter = df.query('a &lt; b &lt; c and (not bools) or bools &gt; 2')
+
+# equivalent in pure Python
+In [279]: longer = df[(df['a'] &lt; df['b'])
+   .....:             &amp; (df['b'] &lt; df['c'])
+   .....:             &amp; (~df['bools'])
+   .....:             | (df['bools'] &gt; 2)]
+   .....:
+
+In [280]: shorter
+Out[280]:
+          a         b         c  bools
+7  0.275396  0.691034  0.826619  False
+
+In [281]: longer
+Out[281]:
+          a         b         c  bools
+7  0.275396  0.691034  0.826619  False
+
+In [282]: shorter == longer
+Out[282]:
+      a     b     c  bools
+7  True  True  True   True
+</code></pre>
+<h3 id="177-performance-of-queryhttpspandaspydataorgpandas-docsstablereferenceapipandasdataframequeryhtml-177-pandasdataframequery">17.7 Performance of [<code>query()</code>](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.query.html### 17.7 pandas.DataFrame.query)</h3>
+<p><code>query()</code>执行效率</p>
+<p><code>DataFrame.query()</code> using <code>numexpr</code> is slightly faster than Python for large frames.</p>
+<figure data-type="image" tabindex="1"><img src="https://pandas.pydata.org/pandas-docs/stable/_images/query-perf.png" alt="../_images/query-perf.png" loading="lazy"></figure>
+<p>Note</p>
+<p>You will only see the performance benefits of using the <code>numexpr</code> engine with <code>DataFrame.query()</code> if your frame has more than approximately <strong>200,000</strong> rows.</p>
+<p>大概在超过20万行数据, 这种差异更为明显</p>
+<blockquote>
+<figure data-type="image" tabindex="2"><img src="https://pandas.pydata.org/pandas-docs/stable/_images/query-perf-small.png" alt="../_images/query-perf-small.png" loading="lazy"></figure>
+</blockquote>
+<p>This plot was created using a <code>DataFrame</code> with 3 columns each containing floating point values generated using <code>numpy.random.randn()</code>.</p>
+<h2 id="十八-duplicate-data">十八. Duplicate data</h2>
+<p>重复的数据</p>
+<p>If you want to identify and remove duplicate rows in a DataFrame, there are two methods that will help: <code>duplicated</code> and <code>drop_duplicates</code>. Each takes as an argument the columns to use to identify duplicated rows.</p>
+<ul>
+<li><code>duplicated</code> returns a boolean vector whose length is the number of rows, and which indicates whether a row is duplicated.</li>
+<li><code>drop_duplicates</code> removes duplicate rows.</li>
+</ul>
+<p>By default, the first observed row of a duplicate set is considered unique, but each method has a <code>keep</code> parameter to specify targets to be kept.</p>
+<ul>
+<li><code>keep='first'</code> (default): mark / drop duplicates except for the first occurrence.</li>
+<li>保留第一个出现得重复值</li>
+<li><code>keep='last'</code>: mark / drop duplicates except for the last occurrence.</li>
+<li>保留最后出现得重复值</li>
+<li><code>keep=False</code>: mark / drop all duplicates.</li>
+<li>删除掉所有得重复值</li>
+</ul>
+<pre><code>In [283]: df2 = pd.DataFrame({'a': ['one', 'one', 'two', 'two', 'two', 'three', 'four'],
+   .....:                     'b': ['x', 'y', 'x', 'y', 'x', 'x', 'x'],
+   .....:                     'c': np.random.randn(7)})
+   .....:
+
+In [284]: df2
+Out[284]:
+       a  b         c
+0    one  x -1.067137
+1    one  y  0.309500
+2    two  x -0.211056
+3    two  y -1.842023
+4    two  x -0.390820
+5  three  x -1.964475
+6   four  x  1.298329
+
+In [285]: df2.duplicated('a')
+Out[285]:
+0    False
+1     True
+2    False
+3     True
+4     True
+5    False
+6    False
+dtype: bool
+
+In [286]: df2.duplicated('a', keep='last')
+Out[286]:
+0     True
+1    False
+2     True
+3     True
+4    False
+5    False
+6    False
+dtype: bool
+
+In [287]: df2.duplicated('a', keep=False)
+Out[287]:
+0     True
+1     True
+2     True
+3     True
+4     True
+5    False
+6    False
+dtype: bool
+
+In [288]: df2.drop_duplicates('a')
+Out[288]:
+       a  b         c
+0    one  x -1.067137
+2    two  x -0.211056
+5  three  x -1.964475
+6   four  x  1.298329
+
+In [289]: df2.drop_duplicates('a', keep='last')
+Out[289]:
+       a  b         c
+1    one  y  0.309500
+4    two  x -0.390820
+5  three  x -1.964475
+6   four  x  1.298329
+
+In [290]: df2.drop_duplicates('a', keep=False)
+Out[290]:
+       a  b         c
+5  three  x -1.964475
+6   four  x  1.298329
+</code></pre>
+<p>Also, you can pass a list of columns to identify duplications.</p>
+<pre><code>In [291]: df2.duplicated(['a', 'b'])
+Out[291]:
+0    False
+1    False
+2    False
+3    False
+4     True
+5    False
+6    False
+dtype: bool
+
+In [292]: df2.drop_duplicates(['a', 'b'])
+Out[292]:
+       a  b         c
+0    one  x -1.067137
+1    one  y  0.309500
+2    two  x -0.211056
+3    two  y -1.842023
+5  three  x -1.964475
+6   four  x  1.298329
+</code></pre>
+<p>To drop duplicates by index value, use <code>Index.duplicated</code> then perform slicing. The same set of options are available for the <code>keep</code> parameter.</p>
+<pre><code>In [293]: df3 = pd.DataFrame({'a': np.arange(6),
+   .....:                     'b': np.random.randn(6)},
+   .....:                    index=['a', 'a', 'b', 'c', 'b', 'a'])
+   .....:
+
+In [294]: df3
+Out[294]:
+   a         b
+a  0  1.440455
+a  1  2.456086
+b  2  1.038402
+c  3 -0.894409
+b  4  0.683536
+a  5  3.082764
+
+In [295]: df3.index.duplicated()
+Out[295]: array([False,  True, False, False,  True,  True])
+
+In [296]: df3[~df3.index.duplicated()]
+Out[296]:
+   a         b
+a  0  1.440455
+b  2  1.038402
+c  3 -0.894409
+
+In [297]: df3[~df3.index.duplicated(keep='last')]
+Out[297]:
+   a         b
+c  3 -0.894409
+b  4  0.683536
+a  5  3.082764
+
+In [298]: df3[~df3.index.duplicated(keep=False)]
+Out[298]:
+   a         b
+c  3 -0.894409
+</code></pre>
+<h2 id="十九-dictionary-like-gethttpspandaspydataorgpandas-docsstablereferenceapipandasdataframegethtml-十九-pandasdataframeget-method">十九. Dictionary-like [<code>get()</code>](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.get.html## 十九. pandas.DataFrame.get) method</h2>
+<p>类字典的取值方式</p>
+<p>Each of Series or DataFrame have a <code>get</code> method which can return a default value.</p>
+<p>每个series和df都有一个get方法进行取值, 和字典类似, 也可以定义一个默认值</p>
+<pre><code class="language-python">dic = {'a': 0}
+dic.get('b', default=-1)
+</code></pre>
+<pre><code class="language-bash">In [299]: s = pd.Series([1, 2, 3], index=['a', 'b', 'c'])
+
+In [300]: s.get('a')  # equivalent to s['a']
+Out[300]: 1
+
+In [301]: s.get('x', default=-1)
+Out[301]: -1
+</code></pre>
+<h2 id="二十-looking-up-values-by-indexcolumn-labels">二十. Looking up values by index/column labels</h2>
+<p>Sometimes you want to extract a set of values given a sequence of row labels and column labels, this can be achieved by <code>pandas.factorize</code> and NumPy indexing. For instance:</p>
+<blockquote>
+<ul>
+<li>pd.factorize</li>
+</ul>
+<p>This method is useful for obtaining a numeric representation of an array when all that matters is identifying distinct values. factorize is available as both a top-level function [<code>pandas.factorize()</code>](https://pandas.pydata.org/docs/reference/api/pandas.factorize.html?highlight=pd factorize#pandas.factorize), and as a method <a href="https://pandas.pydata.org/docs/reference/api/pandas.Series.factorize.html#pandas.Series.factorize"><code>Series.factorize()</code></a> and <a href="https://pandas.pydata.org/docs/reference/api/pandas.Index.factorize.html#pandas.Index.factorize"><code>Index.factorize()</code></a>.</p>
+</blockquote>
+<pre><code>In [302]: df = pd.DataFrame({'col': [&quot;A&quot;, &quot;A&quot;, &quot;B&quot;, &quot;B&quot;],
+   .....:                    'A': [80, 23, np.nan, 22],
+   .....:                    'B': [80, 55, 76, 67]})
+   .....:
+
+In [303]: df
+Out[303]:
+  col     A   B
+0   A  80.0  80
+1   A  23.0  55
+2   B   NaN  76
+3   B  22.0  67
+
+In [304]: idx, cols = pd.factorize(df['col'])
+
+In [305]: df.reindex(cols, axis=1).to_numpy()[np.arange(len(df)), idx]
+Out[305]: array([80., 23., 76., 67.])
+</code></pre>
+<p>Formerly this could be achieved with the dedicated <strong><code>DataFrame.lookup</code> method which was deprecated in version 1.2.0.</strong></p>
+<p><code>lookup</code>方法将逐步废弃, 自1.2.0版本.</p>
+<h2 id="二十一-index-objects">二十一. Index objects</h2>
+<p>索引对象</p>
+<p>The pandas <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Index.html#pandas.Index"><code>Index</code></a> class and its subclasses can be viewed as implementing an <em>ordered multiset</em>. Duplicates are allowed. However, if you try to convert an <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Index.html#pandas.Index"><code>Index</code></a> object with duplicate entries into a <code>set</code>, an exception will be raised.</p>
+<p>索引可以设置重复值, 但是在转换带有重复值索引到<code>set</code>时会触发异常.</p>
+<p><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Index.html#pandas.Index"><code>Index</code></a> also provides the infrastructure necessary for lookups, data alignment, and reindexing. The easiest way to create an <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Index.html#pandas.Index"><code>Index</code></a> directly is to pass a <code>list</code> or other sequence to <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Index.html#pandas.Index"><code>Index</code></a>:</p>
+<pre><code>In [306]: index = pd.Index(['e', 'd', 'a', 'b'])
+
+In [307]: index
+Out[307]: Index(['e', 'd', 'a', 'b'], dtype='object')
+
+In [308]: 'd' in index
+Out[308]: True
+</code></pre>
+<p>You can also pass a <code>name</code> to be stored in the index:</p>
+<pre><code>In [309]: index = pd.Index(['e', 'd', 'a', 'b'], name='something')
+
+In [310]: index.name
+Out[310]: 'something'
+</code></pre>
+<p>The name, if set, will be shown in the console display:</p>
+<pre><code>In [311]: index = pd.Index(list(range(5)), name='rows')
+
+In [312]: columns = pd.Index(['A', 'B', 'C'], name='cols')
+
+In [313]: df = pd.DataFrame(np.random.randn(5, 3), index=index, columns=columns)
+
+In [314]: df
+Out[314]:
+cols         A         B         C
+rows
+0     1.295989 -1.051694  1.340429
+1    -2.366110  0.428241  0.387275
+2     0.433306  0.929548  0.278094
+3     2.154730 -0.315628  0.264223
+4     1.126818  1.132290 -0.353310
+
+In [315]: df['A']
+Out[315]:
+rows
+0    1.295989
+1   -2.366110
+2    0.433306
+3    2.154730
+4    1.126818
+Name: A, dtype: float64
+</code></pre>
+<h3 id="211-setting-metadata">21.1 Setting metadata</h3>
+<p>设置元数据</p>
+<p>Indexes are &quot; mostly immutable&quot; , but it is possible to set and change their <code>name</code> attribute. You can use the <code>rename</code>, <code>set_names</code> to set these attributes directly, and they default to returning a copy.</p>
+<p>索引对象通常是不变得, 但是有时会改变<code>name</code>属性.</p>
+<p><code>rename</code>, <code>set_names</code>默认返回新得副本.</p>
+<p>See <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/advanced.html#advanced">Advanced Indexing</a> for usage of MultiIndexes.</p>
+<pre><code>In [316]: ind = pd.Index([1, 2, 3])
+
+In [317]: ind.rename(&quot;apple&quot;)
+Out[317]: Int64Index([1, 2, 3], dtype='int64', name='apple')
+
+In [318]: ind
+Out[318]: Int64Index([1, 2, 3], dtype='int64')
+
+In [319]: ind.set_names([&quot;apple&quot;], inplace=True)
+
+In [320]: ind.name = &quot;bob&quot;
+
+In [321]: ind
+Out[321]: Int64Index([1, 2, 3], dtype='int64', name='bob')
+</code></pre>
+<p><code>set_names</code>, <code>set_levels</code>, and <code>set_codes</code> also take an optional <code>level</code> argument</p>
+<p><code>set_names</code>, <code>set_levels</code>, and <code>set_codes</code>均支持<code>level</code>参数.</p>
+<pre><code>In [322]: index = pd.MultiIndex.from_product([range(3), ['one', 'two']], names=['first', 'second'])
+
+In [323]: index
+Out[323]:
+MultiIndex([(0, 'one'),
+            (0, 'two'),
+            (1, 'one'),
+            (1, 'two'),
+            (2, 'one'),
+            (2, 'two')],
+           names=['first', 'second'])
+
+In [324]: index.levels[1]
+Out[324]: Index(['one', 'two'], dtype='object', name='second')
+
+In [325]: index.set_levels([&quot;a&quot;, &quot;b&quot;], level=1)
+Out[325]:
+MultiIndex([(0, 'a'),
+            (0, 'b'),
+            (1, 'a'),
+            (1, 'b'),
+            (2, 'a'),
+            (2, 'b')],
+           names=['first', 'second'])
+</code></pre>
+<h3 id="212-set-operations-on-index-objects">21.2 Set operations on Index objects</h3>
+<p>索引对象的<code>set</code>操作.</p>
+<p>The two main operations are <code>union</code> and <code>intersection</code>. Difference is provided via the <code>.difference()</code> method.</p>
+<p>两个主要的操作符是<code>union</code>和<code>intersection</code>, <code>difference()</code>提供差异的数值.</p>
+<pre><code>In [326]: a = pd.Index(['c', 'b', 'a'])
+
+In [327]: b = pd.Index(['c', 'e', 'd'])
+
+In [328]: a.difference(b)
+Out[328]: Index(['a', 'b'], dtype='object')
+</code></pre>
+<p>Also available is the <code>symmetric_difference</code> operation, which returns elements that appear in either <code>idx1</code> or <code>idx2</code>, but not in both. This is equivalent to the Index created by <code>idx1.difference(idx2).union(idx2.difference(idx1))</code>, with duplicates dropped.</p>
+<p><code>symmetric_difference</code>, 删除掉相同值, 只保留二者差异的部分, 等价于 <code>idx1.difference(idx2).union(idx2.difference(idx1))</code></p>
+<pre><code>In [329]: idx1 = pd.Index([1, 2, 3, 4])
+
+In [330]: idx2 = pd.Index([2, 3, 4, 5])
+
+In [331]: idx1.symmetric_difference(idx2)
+Out[331]: Int64Index([1, 5], dtype='int64')
+</code></pre>
+<blockquote>
+<p>Important</p>
+<p>Even though <code>Index</code> can hold missing values (<code>NaN</code>), it should be avoided if you do not want any unexpected results. For example, some operations exclude missing values implicitly.</p>
+<p>注意索然索引会处理空值, 但是空值的存在会导致不确定的结果.</p>
+<p>例如一些操作可能会隐式忽略丢失的空值(例如<code>sum()</code>).</p>
+</blockquote>
+<pre><code>In [332]: idx1 = pd.Index([0, 1, 2])
+
+In [333]: idx2 = pd.Index([0.5, 1.5])
+
+In [334]: idx1.union(idx2)
+Out[334]: Float64Index([0.0, 0.5, 1.0, 1.5, 2.0], dtype='float64')
+</code></pre>
+<h3 id="213-missing-values">21.3 Missing values</h3>
+<p>处理空值</p>
+<blockquote>
+<p>Important</p>
+<p>Even though <code>Index</code> can hold missing values (<code>NaN</code>), it should be avoided if you do not want any unexpected results. For example, some operations exclude missing values implicitly.</p>
+</blockquote>
+<p><code>Index.fillna</code> fills missing values with specified scalar value.</p>
+<p>填充丢失的空值</p>
+<pre><code>In [335]: idx1 = pd.Index([1, np.nan, 3, 4])
+
+In [336]: idx1
+Out[336]: Float64Index([1.0, nan, 3.0, 4.0], dtype='float64')
+
+In [337]: idx1.fillna(2)
+Out[337]: Float64Index([1.0, 2.0, 3.0, 4.0], dtype='float64')
+
+In [338]: idx2 = pd.DatetimeIndex([pd.Timestamp('2011-01-01'),
+   .....:                          pd.NaT,
+   .....:                          pd.Timestamp('2011-01-03')])
+   .....:
+
+In [339]: idx2
+Out[339]: DatetimeIndex(['2011-01-01', 'NaT', '2011-01-03'], dtype='datetime64[ns]', freq=None)
+
+In [340]: idx2.fillna(pd.Timestamp('2011-01-02'))
+Out[340]: DatetimeIndex(['2011-01-01', '2011-01-02', '2011-01-03'], dtype='datetime64[ns]', freq=None)
+</code></pre>
+<h2 id="二十二-set-reset-index">二十二. Set / reset index</h2>
+<p>设置/重置索引</p>
+<p>Occasionally you will load or create a data set into a DataFrame and want to add an index after you’ve already done so. There are a couple of different ways.</p>
+<h3 id="221-set-an-index">22.1 Set an index</h3>
+<p>设置索引</p>
+<p>DataFrame has a <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.set_index.html#pandas.DataFrame.set_index"><code>set_index()</code></a> method which takes a column name (for a regular <code>Index</code>) or a list of column names (for a <code>MultiIndex</code>). To create a new, re-indexed DataFrame:</p>
+<pre><code>In [341]: data
+Out[341]:
+     a    b  c    d
+0  bar  one  z  1.0
+1  bar  two  y  2.0
+2  foo  one  x  3.0
+3  foo  two  w  4.0
+
+In [342]: indexed1 = data.set_index('c')
+
+In [343]: indexed1
+Out[343]:
+     a    b    d
+c
+z  bar  one  1.0
+y  bar  two  2.0
+x  foo  one  3.0
+w  foo  two  4.0
+
+In [344]: indexed2 = data.set_index(['a', 'b'])
+
+In [345]: indexed2
+Out[345]:
+         c    d
+a   b
+bar one  z  1.0
+    two  y  2.0
+foo one  x  3.0
+    two  w  4.0
+</code></pre>
+<p>The <code>append</code> keyword option allow you to keep the existing index and append the given columns to a MultiIndex:</p>
+<p><code>append</code>参数, 添加索引到现有索引上.</p>
+<pre><code>In [346]: frame = data.set_index('c', drop=False)
+
+In [347]: frame = frame.set_index(['a', 'b'], append=True)
+
+In [348]: frame
+Out[348]:
+           c    d
+c a   b
+z bar one  z  1.0
+y bar two  y  2.0
+x foo one  x  3.0
+w foo two  w  4.0
+</code></pre>
+<p>Other options in <code>set_index</code> allow you not drop the index columns or to add the index in-place (without creating a new object):</p>
+<p><code>inplace</code>参数, 在原对象上进行.</p>
+<pre><code>In [349]: data.set_index('c', drop=False)
+Out[349]:
+     a    b  c    d
+c
+z  bar  one  z  1.0
+y  bar  two  y  2.0
+x  foo  one  x  3.0
+w  foo  two  w  4.0
+
+In [350]: data.set_index(['a', 'b'], inplace=True)
+
+In [351]: data
+Out[351]:
+         c    d
+a   b
+bar one  z  1.0
+    two  y  2.0
+foo one  x  3.0
+    two  w  4.0
+</code></pre>
+<h3 id="222-reset-the-index">22.2 Reset the index</h3>
+<p>重置索引(不同于<code>reindex</code>)</p>
+<p>As a convenience, there is a new function on DataFrame called <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index"><code>reset_index()</code></a> which transfers the index values into the DataFrame’s columns and sets a simple integer index. This is the inverse operation of <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.set_index.html#pandas.DataFrame.set_index"><code>set_index()</code></a>.</p>
+<p>和<code>set_index()</code>进行的是相反的操作, 注意撤销掉索引之后, 索引的列重新放置的位置.</p>
+<pre><code>In [352]: data
+Out[352]:
+         c    d
+a   b
+bar one  z  1.0
+    two  y  2.0
+foo one  x  3.0
+    two  w  4.0
+
+In [353]: data.reset_index()
+Out[353]:
+     a    b  c    d
+0  bar  one  z  1.0
+1  bar  two  y  2.0
+2  foo  one  x  3.0
+3  foo  two  w  4.0
+</code></pre>
+<p>The output is more similar to a SQL table or a record array. The names for the columns derived from the index are the ones stored in the <code>names</code> attribute.</p>
+<p>You can use the <code>level</code> keyword to remove only a portion of the index:</p>
+<p>多层的索引, 可以制定一个<code>level</code>参数来控制重置的索引.</p>
+<pre><code>In [354]: frame
+Out[354]:
+           c    d
+c a   b
+z bar one  z  1.0
+y bar two  y  2.0
+x foo one  x  3.0
+w foo two  w  4.0
+
+In [355]: frame.reset_index(level=1)
+Out[355]:
+         a  c    d
+c b
+z one  bar  z  1.0
+y two  bar  y  2.0
+x one  foo  x  3.0
+w two  foo  w  4.0
+</code></pre>
+<p><code>reset_index</code> takes an optional parameter <code>drop</code> which if true simply discards the index, instead of putting index values in the DataFrame’s columns.</p>
+<p>支持一个可选参数<code>drop</code>, 如果设置为True, 则将撤销索引(而不会将扯些索引重新添加到新的列上, 这种事默认的操作)</p>
+<h3 id="223-adding-an-ad-hoc-index">22.3 Adding an ad hoc index</h3>
+<p>增加一个 <code>ad hoc</code>索引</p>
+<p>If you create an index yourself, you can just assign it to the <code>index</code> field:</p>
+<pre><code>data.index = index
+</code></pre>
+<h2 id="二十三-returning-a-view-versus-a-copy">二十三. Returning a view versus a copy</h2>
+<p><em>(这部分的内容见另一篇更为详细的翻译.)</em></p>
+<p>When setting values in a pandas object, care must be taken to avoid what is called <code>chained indexing</code>. Here is an example.</p>
+<pre><code>In [356]: dfmi = pd.DataFrame([list('abcd'),
+   .....:                      list('efgh'),
+   .....:                      list('ijkl'),
+   .....:                      list('mnop')],
+   .....:                     columns=pd.MultiIndex.from_product([['one', 'two'],
+   .....:                                                         ['first', 'second']]))
+   .....:
+
+In [357]: dfmi
+Out[357]:
+    one          two
+  first second first second
+0     a      b     c      d
+1     e      f     g      h
+2     i      j     k      l
+3     m      n     o      p
+</code></pre>
+<p>Compare these two access methods:</p>
+<pre><code>In [358]: dfmi['one']['second']
+Out[358]:
+0    b
+1    f
+2    j
+3    n
+Name: second, dtype: object
+</code></pre>
+<pre><code>In [359]: dfmi.loc[:, ('one', 'second')]
+Out[359]:
+0    b
+1    f
+2    j
+3    n
+Name: (one, second), dtype: object
+</code></pre>
+<p>These both yield the same results, so which should you use? It is instructive to understand the order of operations on these and why method 2 (<code>.loc</code>) is much preferred over method 1 (chained <code>[]</code>).</p>
+<p><code>dfmi['one']</code> selects the first level of the columns and returns a DataFrame that is singly-indexed. Then another Python operation <code>dfmi_with_one['second']</code> selects the series indexed by <code>'second'</code>. This is indicated by the variable <code>dfmi_with_one</code> because pandas sees these operations as separate events. e.g. separate calls to <code>__getitem__</code>, so it has to treat them as linear operations, they happen one after another.</p>
+<p>Contrast this to <code>df.loc[:,('one','second')]</code> which passes a nested tuple of <code>(slice(None),('one','second'))</code> to a single call to <code>__getitem__</code>. This allows pandas to deal with this as a single entity. Furthermore this order of operations <em>can</em> be significantly faster, and allows one to index <em>both</em> axes if so desired.</p>
+<h3 id="231-why-does-assignment-fail-when-using-chained-indexing">23.1 Why does assignment fail when using chained indexing?</h3>
+<p>链式操作赋值为什么失败?</p>
+<p>The problem in the previous section is just a performance issue. What’s up with the <code>SettingWithCopy</code> warning? We don’t <strong>usually</strong> throw warnings around when you do something that might cost a few extra milliseconds!</p>
+<p>在上一章这个只是一个执行效率的问题, 但是pandas不会为了那么一丁点事件的差异而发出一个警告.</p>
+<p>But it turns out that assigning to the product of chained indexing has inherently unpredictable results. To see this, think about how the Python interpreter executes this code:</p>
+<p>这是因为链式操作可能产生的不可预测的结果.这需要从python的解析器执行的具体代码来查看问题.</p>
+<pre><code>dfmi.loc[:, ('one', 'second')] = value
+# becomes
+dfmi.loc.__setitem__((slice(None), ('one', 'second')), value)
+</code></pre>
+<p>But this code is handled differently:</p>
+<p>代码上处理的差异</p>
+<pre><code class="language-bash"># 链式操作
+
+dfmi['one']['second'] = value
+# becomes
+dfmi.__getitem__('one').__setitem__('second', value)
+</code></pre>
+<p>See that <code>__getitem__</code> in there? Outside of simple cases, it’s very hard to predict whether it will return a view or a copy (it depends on the memory layout of the array, about which pandas makes no guarantees), and therefore whether the <code>__setitem__</code> will modify <code>dfmi</code> or a temporary object that gets thrown out immediately afterward. <strong>That’s</strong> what <code>SettingWithCopy</code> is warning you about!</p>
+<p>注意<code>__getitem__</code>的位置, 这一步的操作很难预测到底是返回视图还是一个副本(这可能取决于数组内存的占用, 这不是pandas可以控制的). 然后才执行<code>__setitem__</code>, 这就会马上触发异常警告.</p>
+<blockquote>
+<p>Note</p>
+<p>You may be wondering whether we should be concerned about the <code>loc</code> property in the first example. But <code>dfmi.loc</code> is guaranteed to be <code>dfmi</code> itself with modified indexing behavior, so <code>dfmi.loc.__getitem__</code> / <code>dfmi.loc.__setitem__</code> operate on <code>dfmi</code> directly. Of course, <code>dfmi.loc.__getitem__(idx)</code> may be a view or a copy of <code>dfmi</code>.</p>
+</blockquote>
+<p>Sometimes a <code>SettingWithCopy</code> warning will arise at times when there’s no obvious chained indexing going on. <strong>These</strong> are the bugs that <code>SettingWithCopy</code> is designed to catch! pandas is probably trying to warn you that you’ve done this:</p>
+<p>注意, 有时这个警告的触发并不是明显的链式操作中. 这是pandas的设计机制, 旨在警告用户曾试图发起类似的操作.</p>
+<pre><code>def do_something(df):
+    foo = df[['bar', 'baz']]  # Is foo a view? A copy? Nobody knows!
+    # ... many lines here ...
+    # We don't know whether this will modify df or not!
+    foo['quux'] = value
+    return foo
+</code></pre>
+<p>Yikes!</p>
+<h3 id="232-evaluation-order-matters">23.2 Evaluation order matters</h3>
+<p>对于警告的处理方式.</p>
+<p>When you use chained indexing, the order and type of the indexing operation partially determine whether the result is a slice into the original object, or a copy of the slice.</p>
+<p>pandas has the <code>SettingWithCopyWarning</code> because assigning to a copy of a slice is frequently not intentional, but a mistake caused by chained indexing returning a copy where a slice was expected.</p>
+<p>If you would like pandas to be more or less trusting about assignment to a chained indexing expression, you can set the <a href="https://pandas.pydata.org/pandas-docs/stable/user_guide/options.html#options">option</a> <code>mode.chained_assignment</code> to one of these values:</p>
+<ul>
+<li><code>'warn'</code>, the default, means a <code>SettingWithCopyWarning</code> is printed.</li>
+<li><code>'raise'</code> means pandas will raise a <code>SettingWithCopyError</code> you have to deal with.</li>
+<li><code>None</code> will suppress the warnings entirely.</li>
+</ul>
+<pre><code>In [360]: dfb = pd.DataFrame({'a': ['one', 'one', 'two',
+   .....:                           'three', 'two', 'one', 'six'],
+   .....:                     'c': np.arange(7)})
+   .....:
+
+# This will show the SettingWithCopyWarning
+# but the frame values will be set
+In [361]: dfb['c'][dfb['a'].str.startswith('o')] = 42
+</code></pre>
+<p>This however is operating on a copy and will not work.</p>
+<pre><code>&gt;&gt;&gt; pd.set_option('mode.chained_assignment','warn')
+&gt;&gt;&gt; dfb[dfb['a'].str.startswith('o')]['c'] = 42
+Traceback (most recent call last)
+     ...
+SettingWithCopyWarning:
+     A value is trying to be set on a copy of a slice from a DataFrame.
+     Try using .loc[row_index,col_indexer] = value instead
+</code></pre>
+<p>A chained assignment can also crop up in setting in a mixed dtype frame.</p>
+<blockquote>
+<p>Note</p>
+<p>These setting rules apply to all of <code>.loc/.iloc</code>.</p>
+<p>The following is the recommended access method using <code>.loc</code> for multiple items (using <code>mask</code>) and a single item using a fixed index:</p>
+</blockquote>
+<pre><code>In [362]: dfc = pd.DataFrame({'a': ['one', 'one', 'two',
+   .....:                           'three', 'two', 'one', 'six'],
+   .....:                     'c': np.arange(7)})
+   .....:
+
+In [363]: dfd = dfc.copy()
+
+# Setting multiple items using a mask
+In [364]: mask = dfd['a'].str.startswith('o')
+
+In [365]: dfd.loc[mask, 'c'] = 42
+
+In [366]: dfd
+Out[366]:
+       a   c
+0    one  42
+1    one  42
+2    two   2
+3  three   3
+4    two   4
+5    one  42
+6    six   6
+
+# Setting a single item
+In [367]: dfd = dfc.copy()
+
+In [368]: dfd.loc[2, 'a'] = 11
+
+In [369]: dfd
+Out[369]:
+       a  c
+0    one  0
+1    one  1
+2     11  2
+3  three  3
+4    two  4
+5    one  5
+6    six  6
+</code></pre>
+<p>The following <em>can</em> work at times, but it is not guaranteed to, and therefore should be avoided:</p>
+<pre><code>In [370]: dfd = dfc.copy()
+
+In [371]: dfd['a'][2] = 111
+
+In [372]: dfd
+Out[372]:
+       a  c
+0    one  0
+1    one  1
+2    111  2
+3  three  3
+4    two  4
+5    one  5
+6    six  6
+</code></pre>
+<p>Last, the subsequent example will <strong>not</strong> work at all, and so should be avoided:</p>
+<pre><code>&gt;&gt;&gt; pd.set_option('mode.chained_assignment','raise')
+&gt;&gt;&gt; dfd.loc[0]['a'] = 1111
+Traceback (most recent call last)
+     ...
+SettingWithCopyError:
+     A value is trying to be set on a copy of a slice from a DataFrame.
+     Try using .loc[row_index,col_indexer] = value instead
+</code></pre>
+<blockquote>
+<p>Warning</p>
+<p>The chained assignment warnings / exceptions are aiming to inform the user of a possibly invalid assignment. There may be false positives; situations where a chained assignment is inadvertently reported.</p>
+</blockquote>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/pandas-fan-yi-xi-lie-indexing-and-selecting-data/" title="Pandas翻译系列-Indexing and selecting data">https://Kyouichirou.github.io/post/pandas-fan-yi-xi-lie-indexing-and-selecting-data/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/CSsHD95Uh/"># pandas</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/x52r92_VNV/"># python</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/T5dhhKFc0/"># translation</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="Pandas翻译系列-2.0版本前瞻" href="https://Kyouichirou.github.io/post/pandas-fan-yi-xi-lie-20-ban-ben-qian-zhan/">Pandas翻译系列-2.0版本前瞻</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="Pandas翻译系列-2.0版本前瞻" href="https://Kyouichirou.github.io/post/pandas-fan-yi-xi-lie-20-ban-ben-qian-zhan/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Pandas翻译系列-SettingWithCopyWarning - 视图 OR 副本" href="https://Kyouichirou.github.io/post/pandas-fan-yi-xi-lie-settingwithcopywarning-shi-tu-or-fu-ben/">Pandas翻译系列-SettingWithCopyWarning - 视图 OR 副本</a>
+        <a class="nav-mobile-next" title="Pandas翻译系列-SettingWithCopyWarning - 视图 OR 副本" href="https://Kyouichirou.github.io/post/pandas-fan-yi-xi-lie-settingwithcopywarning-shi-tu-or-fu-ben/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

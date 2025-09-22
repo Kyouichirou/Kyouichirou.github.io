@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>Pandas系列翻译-SettingWithCopyWarning-视图 OR 副本 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="Pandas系列翻译-SettingWithCopyWarning-视图 OR 副本" />
+  <meta name="keywords" content="pandas,python,translation,config" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E9%97%AE%E9%A2%98%E7%9A%84%E8%B5%B7%E6%BA%90">一. 问题的起源</a></li>
+<li><a href="#%E4%BA%8C-%E8%BF%94%E5%9B%9E%E4%B8%80%E4%B8%AA%E8%A7%86%E5%9B%BEview-vs-%E5%89%AF%E6%9C%ACcopy">二. 返回一个视图(view) VS 副本(copy)</a></li>
+<li><a href="#%E4%B8%89-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%B5%8B%E5%80%BC%E5%A4%B1%E8%B4%A5%E5%BD%93%E4%BD%BF%E7%94%A8%E9%93%BE%E5%BC%8F%E7%B4%A2%E5%BC%95%E6%97%B6">三. 为什么会出现赋值失败当使用链式索引时?</a></li>
+<li><a href="#%E5%9B%9B-%E8%AF%84%E4%BC%B0%E9%A1%BA%E5%BA%8F%E7%9A%84%E4%BA%8B%E9%A1%B9">四. 评估顺序的事项</a></li>
+<li><a href="#%E4%BA%94-%E8%AF%91%E8%80%85%E5%90%8E%E8%AE%B0">五. 译者后记</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/pandas-xi-lie-fan-yi-settingwithcopywarning-shi-tu-or-fu-ben/"> Pandas系列翻译-SettingWithCopyWarning-视图 OR 副本 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-01-29 17:26:03">2023-01-29</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/CSsHD95Uh/"> <span>pandas</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/x52r92_VNV/"> <span>python</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/T5dhhKFc0/"> <span>translation</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/5ynN9Bbk-/">
+        <span>config</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >10<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >2274<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <h2 id="一-问题的起源">一. 问题的起源</h2>
+<p>在使用<code>pandas</code>进行处理数据时, 时不时会出现一个异常的<strong>警告</strong>(注意这不是<strong>错误</strong>)</p>
+<blockquote>
+<p><code>C:\Users\Lian\AppData\Local\Temp/ipykernel_15272/2330773252.py:4: SettingWithCopyWarning: </code><br>
+<code>A value is trying to be set on a copy of a slice from a DataFrame.</code><br>
+<code>Try using .loc[row_indexer,col_indexer] = value instead</code></p>
+<p><code>See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy tmp['c'] = tmp['a'] + tmp['b']</code></p>
+</blockquote>
+<p>一开始简单查阅一下该警告的来源, 但是大部分检索信息只是简单提及该问题如何出现, 如何解决(例如使用<code>copy</code>), 并未提及该问题出现的具体原因所在. 由于只是简单的警告, 忽略该警告对于计算结果不产生影响, 一直没有真正探究问题所在, 终于还是遇到麻烦, 这个错误的出现的同时, 同时引发其他的错误.</p>
+<p>开始着手了解和解决这个问题.</p>
+<p>以下是随手构造一个触发该警告的示例代码, 二者皆会触发上面所提及的警告提示.</p>
+<pre><code class="language-python">def test():
+    x = {
+        'a': [0, -2, -2, 90],
+        'b': [2, 3, 4, 5]
+    }
+    df = pd.DataFrame(x)
+    # 注意这里的取值方式
+    tmp = df[df['a'] &lt; 0]
+    
+    tmp['c'] = tmp['a'] + tmp['b']
+    print(tmp)
+    print(df)
+    
+test()
+</code></pre>
+<pre><code class="language-python">def test():
+    x = {
+        'a': [0, -2, -2, 90],
+        'b': [2, 3, 4, 5]
+    }
+    df = pd.DataFrame(x)
+    # 注意这里的取值方式
+    tmp = df.loc[df['a'] &lt; 0]
+    
+    # 不管是loc, 返回的obj, 还是[]返回的obj, 在执行下面的一步时都会触发警告
+    
+    # tmp = df.loc[df['a'] &lt; 0].copy(), 即可消除警告
+    
+    tmp['c'] = tmp['a'] + tmp['b']
+    print(tmp)
+    print(df)
+    
+test()
+</code></pre>
+<h2 id="二-返回一个视图view-vs-副本copy">二. 返回一个视图(view) VS 副本(copy)</h2>
+<figure data-type="image" tabindex="1"><img src="https://img-blog.csdnimg.cn/20210312201944283.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xpbGRu,size_16,color_FFFFFF,t_70" alt="图示" loading="lazy"></figure>
+<p><em>(译者注: 上图引用<a href="https://blog.csdn.net/lildn/article/details/114705689"><code>csdn</code>博客</a>, 注意上图的定义并非严谨(仅仅是理论状况)</em></p>
+<figure data-type="image" tabindex="2"><img src="https://p1.meituan.net/csc/eaa00cd3568ffe8d2199ab7112f7f18a64803.jpg" alt="例外" loading="lazy"></figure>
+<p><em>(译者注: <code>.loc</code>在特定的案例中, <code>get</code>操作依然可能会返回副本)</em></p>
+<p>以下是官方文档所提及的内容翻译:</p>
+<p>当在pandas对象中设置值时, 应当小心避免使用被称之为&quot;<strong>链式索引</strong>&quot;(<code>chained indexing</code>)的方式.</p>
+<pre><code class="language-python">dfmi = pd.DataFrame([list('abcd'),
+                     list('efgh'),
+                     list('ijkl'),
+                     list('mnop')],
+                    columns=pd.MultiIndex.from_product([['one', 'two'],
+                                                        ['first', 'second']]))
+
+
+dfmi
+    one          two
+  first second first second
+0     a      b     c      d
+1     e      f     g      h
+2     i      j     k      l
+3     m      n     o      p
+</code></pre>
+<p><em>(译者注: 文档中构造的示例)</em></p>
+<p>对比两种访问元素的方法</p>
+<pre><code class="language-python">dfmi['one']['second']
+Out[358]:
+0    b
+1    f
+2    j
+3    n
+Name: second, dtype: object
+</code></pre>
+<pre><code class="language-python">dfmi.loc[:, ('one', 'second')]
+Out[359]:
+0    b
+1    f
+2    j
+3    n
+Name: (one, second), dtype: object
+</code></pre>
+<p>这两种方法都能得到相同的结果, 哪一种是你应该使用的呢?了解这些操作的顺序, 对于理解为什么使用<code>.loc</code>方法要远优于方法1(链式操作)是有益的.</p>
+<p><code>dfmi['one']</code>的操作是选择(<code>select</code>)列的第一级, 返回一个单独索引(<code>single_indexed</code>)的<code>dataframe</code>. 然后后续的操作, <code>dfmi_with_one['second']</code>, 这一操作执行返回的以'second'为索引的列(<code>series</code>). 这些操作表明, <code>pandas</code>将这些操作视作单独的事件, 每次单独调用__<code>getitem</code>__, 因此这些操作是线式的, 执行完了一个之后, 然后再执行后续的操作.</p>
+<p>将上述的操作和<code>.loc</code>方法相对比, 后者一次性将传递一个元组参数给__<code>getitem</code>__, 这允许pandas将之视作一个整体来执行. 此外, <code>.loc</code>操作的执行速度更快, 假如有需要的话, 同时可以对1个或者2个轴进行进行索引.</p>
+<h2 id="三-为什么会出现赋值失败当使用链式索引时">三. 为什么会出现赋值失败当使用链式索引时?</h2>
+<p>这个问题在上一节当中还只是一个执行效率的问题. 什么原因会触发&quot;<code>SettingWithCopy warning</code>&quot;这个警告呢? <code>pandas</code>通常情况下是不会触发这个警告的, 假如执行操作只是额外多消耗几毫秒时.</p>
+<p>但是事实证明链式赋值通常会导致不可预测的结果, 要了解其中原因, 需要仔思考<code>Python</code>的解释器是如何知行这些代码的.</p>
+<pre><code class="language-python">dfmi.loc[:, ('one', 'second')] = value
+# becomes
+dfmi.loc.__setitem__((slice(None), ('one', 'second')), value)
+</code></pre>
+<p>处理上的差异:</p>
+<pre><code class="language-python">dfmi['one']['second'] = value
+# becomes
+dfmi.__getitem__('one').__setitem__('second', value)
+</code></pre>
+<p>看到__<code>getitem</code>__的位置没? 通常情况下, 这非常难预测返回的执行结果到底是视图还是副本(这取决于数组消耗的内存的大小, pandas不保证其结果). 因此__<code>getitem</code>__修改<code>dfmi</code>这个对象或者其他的临时对象后, 是否马上销毁掉该对象, 这是<code>SettingWithCopy</code>触发的原因.</p>
+<p><em>(译者注: 作者所提及的关于数组大小的问题, 就是pandas执行链式操作之后, Python的解释器会根据生成的数据大小来决定返回的结果是视图还是副本, 这一点在实践当, 这种警告的出现没有什么特定的场景, 这是因为你操作的数据很小, 没问题, 但是数据大了(但这并不完全是), 就触发警告.)</em></p>
+<blockquote>
+<p><strong>注意:</strong></p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><code>你也许会好奇我们应该关心一下第一个案例中的loc属性. 但是案例一中提及的dfmi.loc只是保证其自身修改索引的行为, 所以dfmi.loc.\_\_getitem\_\_ / dfmi.loc.\_\_setitem\_\_ 的操作是在dfmi中直接进行的. 当然dfmi.loc.\_\_getitem\_\_也可能得到一个dfmi的视图或者副本.</code></p>
+</blockquote>
+</blockquote>
+<p><em>(译者注: 即<code>loc</code>并不一定得到一个视图, 也可能是副本)</em></p>
+<p>有时当没有明显的链式操作时也会触发一个<code>SettingWithCopy</code>警告, 这些并不是<code>bugs</code>, 是<code>pandas</code>程序的故意而为的, 旨在捕捉这种错误. 可能仅仅是<code>pandas</code>想警告你, 你曾经试图这样操作过.</p>
+<p>例如:</p>
+<pre><code class="language-python">def do_something(df):
+    foo = df[['bar', 'baz']]  # Is foo a view? A copy? Nobody knows!
+    # ... many lines here ...
+    # We don't know whether this will modify df or not!
+    foo['quux'] = value
+    return foo
+</code></pre>
+<h2 id="四-评估顺序的事项">四. 评估顺序的事项</h2>
+<p>当你使用链式索引时, 链式操作的顺序和类型部分程度决定了执行结果返回的是原始对象的切片还是切片的副本.</p>
+<p><code>pandas</code>触发<code>SettingWithCopyWarning</code>通常情况下是意外给一个副本进行赋值操作, 以及链式索引操作预期返回的是视图切片而实际返回的是副本.</p>
+<p>如果你希望pandas或多或少地信任链式索引表达式赋值操作, 你可以将<code>mode.chained_assignment</code>设置为以下的其中一个值:</p>
+<ul>
+<li><code>'warn'</code>, <code>SettingWithCopyWarning</code>的默认值, 只是打印出来提醒.</li>
+<li><code>'raise'</code> 意味着 pandas 将会触发<code>SettingWithCopyException</code>, 你必须处理这个问题</li>
+<li><code>None</code>, 将完全忽略警告</li>
+</ul>
+<pre><code class="language-python">dfb = pd.DataFrame({'a': ['one', 'one', 'two',
+                          'three', 'two', 'one', 'six'],
+                    'c': np.arange(7)})
+
+
+# This will show the SettingWithCopyWarning
+# but the frame values will be set
+dfb['c'][dfb['a'].str.startswith('o')] = 42
+</code></pre>
+<p>然而这种在副本上的操作是不可行的</p>
+<pre><code class="language-python">pd.set_option('mode.chained_assignment','warn')
+dfb[dfb['a'].str.startswith('o')]['c'] = 42
+Traceback (most recent call last)
+     ...
+SettingWithCopyWarning:
+     A value is trying to be set on a copy of a slice from a DataFrame.
+     Try using .loc[row_index,col_indexer] = value instead
+</code></pre>
+<p>链式赋值可以突然出现在混合类型的dataframe上.</p>
+<blockquote>
+<p><strong>注意:</strong></p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>这些规则适用于所有的 <code>.loc/.iloc</code></p>
+</blockquote>
+</blockquote>
+<p>以下的操作建议使用<code>.loc</code>方式访问多个项(使用掩码)或者是使用固定索引访问单个项</p>
+<pre><code class="language-python">dfc = pd.DataFrame({'a': ['one', 'one', 'two',
+                          'three', 'two', 'one', 'six'],
+                    'c': np.arange(7)})
+
+
+dfd = dfc.copy()
+
+# Setting multiple items using a mask
+mask = dfd['a'].str.startswith('o')
+
+# 实际上就是布尔索引
+dfd.loc[mask, 'c'] = 42
+
+dfd
+Out[366]: 
+       a   c
+0    one  42
+1    one  42
+2    two   2
+3  three   3
+4    two   4
+5    one  42
+6    six   6
+
+# Setting a single item
+dfd = dfc.copy()
+
+dfd.loc[2, 'a'] = 11
+
+dfd
+Out[369]: 
+       a  c
+0    one  0
+1    one  1
+2     11  2
+3  three  3
+4    two  4
+5    one  5
+6    six  6
+</code></pre>
+<p>以下操作有时会起作用, 但是并无法保证其可靠性, 建议避免使用.</p>
+<pre><code class="language-python">dfd = dfc.copy()
+
+dfd['a'][2] = 111
+
+dfd
+Out[372]: 
+       a  c
+0    one  0
+1    one  1
+2    111  2
+3  three  3
+4    two  4
+5    one  5
+6    six  6
+</code></pre>
+<p>最后的这个例子没有起作用, 应当避免使用:</p>
+<pre><code class="language-python">pd.set_option('mode.chained_assignment','raise')
+dfd.loc[0]['a'] = 1111
+Traceback (most recent call last)
+     ...
+SettingWithCopyException:
+     A value is trying to be set on a copy of a slice from a DataFrame.
+     Try using .loc[row_index,col_indexer] = value instead
+</code></pre>
+<blockquote>
+<p><strong>警告:</strong></p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>链式操作警告和异常旨在提醒用户可能的无效任务. 也许一些警告是误报, 在某些特殊情况下.</p>
+</blockquote>
+</blockquote>
+<h2 id="五-译者后记">五. 译者后记</h2>
+<p>该问题并没有一个很好的解释, 尽管某些解释或者操作似乎看起来满足区分视图和副本, 但在<code>stackflow</code>和<code>GitHub</code>中依然有大量的问题涉及到这些内容而没有很好的解释的, 尽管其中的一些问题并不影响使用, 但是还是需要注意这些问题对于代码的健壮产生潜在的负面影响, 故而切勿忽略隐藏pandas这个警告提醒.</p>
+<p><a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.copy.html"><code>pandas</code>复制</a></p>
+<p><a href="https://stackoverflow.com/questions/61578453/python-pandas-df-copy-ist-not-deep/61582117#61582117"><code>stackflow</code>问题1</a></p>
+<p><a href="https://stackoverflow.com/questions/46327494/python-pandas-dataframe-copydeep-false-vs-copydeep-true-vs"><code>stackflow</code>问题2</a></p>
+<p><a href="https://stackoverflow.com/questions/61578453/python-pandas-df-copy-ist-not-deep/61582117#61582117"><code>stackflow</code>问题3</a></p>
+<p><a href="https://github.com/pandas-dev/pandas/issues/17406"><code>GitHub issue</code></a></p>
+<p>为了减少出现异常, 在操作上应当:</p>
+<ol>
+<li>减少链式索引的操作</li>
+<li>赋值操作应当以<code>.loc/.iloc</code>为主</li>
+<li>对于不确定的操作, 使用<code>copy</code>来尽可能保证操作的安全.</li>
+</ol>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/pandas-xi-lie-fan-yi-settingwithcopywarning-shi-tu-or-fu-ben/" title="Pandas系列翻译-SettingWithCopyWarning-视图 OR 副本">https://Kyouichirou.github.io/post/pandas-xi-lie-fan-yi-settingwithcopywarning-shi-tu-or-fu-ben/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/CSsHD95Uh/"># pandas</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/x52r92_VNV/"># python</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/T5dhhKFc0/"># translation</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/5ynN9Bbk-/"># config</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="零宽度字符问题" href="https://Kyouichirou.github.io/post/ling-kuan-du-zi-fu-wen-ti/">零宽度字符问题</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="零宽度字符问题" href="https://Kyouichirou.github.io/post/ling-kuan-du-zi-fu-wen-ti/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title=" 百度LAC(NLP)工具使用问题记录" href="https://Kyouichirou.github.io/post/bai-du-lacnlpgong-ju-shi-yong-wen-ti-ji-lu/"> 百度LAC(NLP)工具使用问题记录</a>
+        <a class="nav-mobile-next" title=" 百度LAC(NLP)工具使用问题记录" href="https://Kyouichirou.github.io/post/bai-du-lacnlpgong-ju-shi-yong-wen-ti-ji-lu/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

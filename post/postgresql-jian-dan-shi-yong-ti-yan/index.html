@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>PostgreSQL简单使用体验 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="PostgreSQL简单使用体验" />
+  <meta name="keywords" content="postgresql,mysql" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E5%89%8D%E8%A8%80">前言</a>
+<ul>
+<li><a href="#%E5%B7%AE%E5%BC%82">差异</a></li>
+</ul>
+</li>
+<li><a href="#ibm-postgresql-vs-mysql-what-are-the-differences">IBM: PostgreSQL vs MySQL: What are the differences?</a>
+<ul>
+<li><a href="#%E8%B6%8B%E5%8A%BF">趋势</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B0%8F%E7%BB%93">小结</a></li>
+<li><a href="#%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C">基本操作</a></li>
+<li><a href="#%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8">简单使用</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/postgresql-jian-dan-shi-yong-ti-yan/"> PostgreSQL简单使用体验 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-03-15 13:01:10">2023-03-15</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/7Syg7ifp4/"> <span>postgresql</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/">
+        <span>mysql</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >11<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >2663<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <h2 id="前言">前言</h2>
+<figure data-type="image" tabindex="1"><img src="https://www.imaginarycloud.com/blog/content/images/2021/06/PostgreSQL-vs-MySQL-cover.png" alt="img" loading="lazy"></figure>
+<p>相比于<code>MySQL</code>, 同样作为开源的关系型数据库(RDBMS), <code>PostgreSQL(ORDBMS)</code>的知名度远低于前者(<em>至少在国内是如此</em>). 但是随着<code>MySQL</code>被甲骨文收购(引起开源社区和其他大型存在业务竞争公司的担忧), 以及大数据的兴起, 近年<code>PostgreSQL</code>颇有异军突起的迹象.</p>
+<!--more-->
+<h3 id="差异">差异</h3>
+<p>关于二者的一些特性, 或者优势什么之类的, 多是一家之言, 多带有特别强烈的商业利益, 特别是鼓吹<code>PostgreSQL</code>, 其背后的商业味道更浓(由于<code>PostgreSQL</code>的开源协议, 更适合作为二次开发的商品发布, 大量二次开发的商业数据库更倾向于使用<code>PostgreSQL</code>作为基础), 总之不管是<code>MySQL, PostgreSQL</code>的好与不好, 姑且听之, 适合自己的才是关键.</p>
+<blockquote>
+<h2 id="ibm-postgresql-vs-mysql-what-are-the-differences"><a href="https://www.ibm.com/cloud/blog/postgresql-vs-mysql-whats-the-difference">IBM: PostgreSQL vs MySQL: What are the differences?</a></h2>
+<p>There are many differences between PostgreSQL and MySQL. Some of the differences in features, functionality and benefits are as follows:</p>
+<ul>
+<li>Database type
+<ul>
+<li><strong>MySQL:</strong> Relational</li>
+<li><strong>PostgreSQL:</strong> Object-relational</li>
+</ul>
+</li>
+<li>Programming language
+<ul>
+<li><strong>MySQL:</strong> C/C++</li>
+<li><strong>PostgreSQL:</strong> C</li>
+</ul>
+</li>
+<li>Support for CASCADE
+<ul>
+<li><strong>MySQL:</strong> No</li>
+<li><strong>PostgreSQL:</strong> Yes</li>
+</ul>
+</li>
+<li>User interface
+<ul>
+<li><strong>MySQL:</strong> Workbench GUI</li>
+<li><strong>PostgreSQL:</strong> PgAdmin</li>
+</ul>
+</li>
+<li>Supported procedure complexity
+<ul>
+<li><strong>MySQL:</strong> SQL syntaxes and stored procedures</li>
+<li><strong>PostgreSQL:</strong> Advanced procedures and stored procedures</li>
+</ul>
+</li>
+<li>Supported index type
+<ul>
+<li><strong>MySQL:</strong> Binary Search Tree (B-Tree)</li>
+<li><strong>PostgreSQL:</strong> Many, including GIN and Hash</li>
+</ul>
+</li>
+<li>Encryption between client and server
+<ul>
+<li><strong>MySQL:</strong> Transport Layer Security (TLS) protocol</li>
+<li><strong>PostgreSQL:</strong> SSL</li>
+</ul>
+</li>
+<li>XML data type support
+<ul>
+<li><strong>MySQL:</strong> No</li>
+<li><strong>PostgreSQL:</strong> Yes</li>
+</ul>
+</li>
+<li>Support for materialized view and table inheritance
+<ul>
+<li><strong>MySQL:</strong> No</li>
+<li><strong>PostgreSQL:</strong> Yes</li>
+</ul>
+</li>
+<li>Support for advance data types
+<ul>
+<li><strong>MySQL:</strong> No</li>
+<li><strong>PostgreSQL:</strong> Yes – hstore and user-defined tdtaa</li>
+</ul>
+</li>
+<li>Support for multiversion concurrency control (MVCC)
+<ul>
+<li><strong>MySQL:</strong> No ?</li>
+<li><strong>PostgreSQL:</strong> Yes</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<figure data-type="image" tabindex="2"><a href="https://imgse.com/i/pp3Hzuj"><img src="https://s1.ax1x.com/2023/03/16/pp3Hzuj.jpg" alt="pp3Hzuj.jpg" loading="lazy"></a></figure>
+<p><a href="https://www.51cto.com/article/620924.html">图源</a></p>
+<blockquote>
+<p>PostgreSQL许可是一种自由的开源许可证, 与BSD或MIT许可证类似</p>
+<p>BSD许可证鼓励代码共享, 但需要尊重代码作者的著作权. BSD许可证由于允许使用者修改和重新发布代码, 也允许使用或在BSD代码上开发商业软件发布和销售, 因此是对商业集成很友好的许可证/协议. 很多的公司在选用开源产品的时候都首先考虑BSD许可证/协议的开源产品, 因为可以完全控制这些第三方的代码, 在必要的时候可以修改或者二次开发.</p>
+</blockquote>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000041918013?sort=newest">MySQL 开源许可研究 - 个人文章 - SegmentFault 思否</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/170155328">PostgreSQL开源界的“活雷锋” - 知乎 (zhihu.com)</a></li>
+</ul>
+<h3 id="趋势">趋势</h3>
+<figure data-type="image" tabindex="3"><a href="https://imgse.com/i/pp1sc9K"><img src="https://s1.ax1x.com/2023/03/15/pp1sc9K.png" alt="pp1sc9K.png" loading="lazy"></a></figure>
+<p><a href="https://db-engines.com/en/ranking_trend/system/MySQL%3BPostgreSQL">historical trend of MySQL vs. PostgreSQL popularity (db-engines.com)</a></p>
+<p>趋势, 只是相对形象的描述二者之间在某些方面上的差异, 并不能代表实际的产品在业内的使用情况, 只是一个参考指标, 但是也一定程度反映二者的一些真实变化情况.</p>
+<p>例如窗口函数(<code>window function</code>), 在很多数据库都支持下, <code>MySQL</code>才慢腾腾地支持这个特性(<code>8.0</code>版本引入大量新特性也让<code>MySQL</code>出现版本出现一定的断裂), 不得不说, 由于被甲骨文收购后, <code>MySQL</code>在某些方面的开发进度是相对放慢的, 毕竟不能和自家的付费产品直接竞争, 以及开源社区对<code>MySQL</code>警惕, 导致在外部开源生态环境的开发上, <code>MySQL</code>已经出现了不少的问题.</p>
+<h2 id="小结">小结</h2>
+<p>先放在前面, 只是简单说说个人的观感和使用体验.</p>
+<figure data-type="image" tabindex="4"><a href="https://imgse.com/i/pp1cKXD"><img src="https://s1.ax1x.com/2023/03/15/pp1cKXD.png" alt="pp1cKXD.png" loading="lazy"></a></figure>
+<p><em>(同样是启动服务, 但是<code>postgresql</code>的服务名称却是这个样子的, postgresql-x64-15, 不拼写多几次未必记得住, 还得注意空格输入位置)</em></p>
+<p>不得不说<code>PostgreSQL</code>这个单词真的有点阻碍这个产品的推广(滑稽), 相比于<code>MySQL</code>.</p>
+<p>总体上手体验, 不是很近人性, 在很多操作上, 没有<code>MySQL</code>这么容易上手.</p>
+<p>更为重要的一点, <code>MySQL</code>拥有庞大的现有经验和知识的积累, 大量的问题可以通过检索可以获取到(而且很多问题研究都非常深入), 但是<code>PostgreSQL</code>的相关知识的分享是偏少的, 这意味着新手不是那么容易掌握<code>PostgreSQL</code>(需要自己不断地去试错和踩雷, 而且缺乏资料, 这个过程是相对漫长的).</p>
+<p>但是<code>PostgreSQL</code>的鼓吹者常说的, <code>PostgreSQL</code>更为严谨相比于<code>MySQL</code>是有一定道理的, 以及<code>PostgreSQL</code>目前在开源生态上更具有优势也是相对明显的.</p>
+<p>简而言之, 对于纯纯的新手, 建议还是以<code>MySQL</code>作为练手(只是为了掌握基本的<code>SQL</code>命令, 没有必要挑一个资料缺乏的作为入门), 当深入到需要考虑大规模的数据复杂处理, 数据间的高度耦合等问题可以尝试<code>PostgreSQL</code>, 对于公司而言, 业务的展开速度应该更多时考虑的吧, 特别是对于非技术型导向的公司.</p>
+<h2 id="基本操作">基本操作</h2>
+<pre><code class="language-bash">psql --help
+
+psql是PostgreSQL 的交互式客户端工具。
+使用方法:
+  psql [选项]... [数据库名称 [用户名称]]
+通用选项:
+  -c, --command=命令       执行单一命令(SQL或内部指令)然后结束
+  -d, --dbname=DBNAME      指定要连接的数据库 (默认：&quot;Lian&quot;)
+  -f, --file=文件名        从文件中执行命令然后退出
+  -l, --list               列出所有可用的数据库,然后退出
+  -v, --set=, --variable=NAME=VALUE
+                           设置psql变量NAME为VALUE
+                           (例如，-v ON_ERROR_STOP=1)
+  -V, --version            输出版本信息, 然后退出
+  -X, --no-psqlrc          不读取启动文档(~/.psqlrc)
+  -1 (&quot;one&quot;), --single-transaction
+                           作为一个单一事务来执行命令文件(如果是非交互型的)
+  -?, --help[=options]     显示此帮助，然后退出
+      --help=commands      列出反斜线命令，然后退出
+      --help=variables     列出特殊变量，然后退出
+
+输入和输出选项：
+  -a, --echo-all           显示所有来自于脚本的输入
+  -b, --echo-errors        回显失败的命令
+  -e, --echo-queries       显示发送给服务器的命令
+  -E, --echo-hidden        显示内部命令产生的查询
+  -L, --log-file=文件名    将会话日志写入文件
+  -n, --no-readline        禁用增强命令行编辑功能(readline)
+  -o, --output=FILENAME    将查询结果写入文件(或 |管道)
+  -q, --quiet              以沉默模式运行(不显示消息，只有查询结果)
+  -s, --single-step        单步模式 (确认每个查询)
+  -S, --single-line        单行模式 (一行就是一条 SQL 命令)
+
+输出格式选项 :
+  -A, --no-align           使用非对齐表格输出模式
+      --csv                CSV（逗号分隔值）表输出模式
+  -F, --field-separator=STRING
+                           为字段设置分隔符,用于不整齐的输出(默认：&quot;|&quot;)
+  -H, --html               HTML 表格输出模式
+  -P, --pset=变量[=参数]   设置将变量打印到参数的选项(查阅 \pset 命令)
+  -R, --record-separator=STRING
+                           为不整齐的输出设置字录的分隔符(默认：换行符号)
+  -t, --tuples-only        只打印记录i
+  -T, --table-attr=文本    设定 HTML 表格标记属性（例如,宽度,边界)
+  -x, --expanded           打开扩展表格输出
+  -z, --field-separator-zero
+                           为不整齐的输出设置字段分隔符为字节0
+  -0, --record-separator-zero
+                           为不整齐的输出设置记录分隔符为字节0
+
+联接选项:
+  -h, --host=主机名        数据库服务器主机或socket目录(默认：&quot;本地接口&quot;)
+  -p, --port=端口          数据库服务器的端口(默认：&quot;5432&quot;)
+  -U, --username=用户名    指定数据库用户名(默认：&quot;Lian&quot;)
+  -w, --no-password        永远不提示输入口令
+  -W, --password           强制口令提示 (自动)
+
+更多信息，请在psql中输入&quot;\?&quot;(用于内部指令)或者 &quot;\help&quot;(用于SQL命令)，
+或者参考PostgreSQL文档中的psql章节.
+
+臭虫报告至&lt;pgsql-bugs@lists.postgresql.org&gt;.
+PostgreSQL 主页: &lt;https://www.postgresql.org/
+</code></pre>
+<pre><code class="language-bash"># 连接
+psql -U username -h hostname -p port -d dbname
+# 默认 postgres 用户
+# 没有MySQL的 root好记
+</code></pre>
+<pre><code class="language-bash"># 切换数据库
+\c db_name
+# use db_name
+# mysql
+
+# 查看数据库
+\l
+test_db=# \l
+# show databases;
+                                                               List of databases
+   Name    |  Owner   | Encoding |          Collate          |           Ctype           | ICU Locale | Locale Provider |   Access privileges
+-----------+----------+----------+---------------------------+---------------------------+------------+-----------------+-----------------------
+ postgres  | postgres | UTF8     | English_United States.936 | English_United States.936 |            | libc            |
+ template0 | postgres | UTF8     | English_United States.936 | English_United States.936 |            | libc            | =c/postgres          +
+           |          |          |                           |                           |            |                 | postgres=CTc/postgres
+ template1 | postgres | UTF8     | English_United States.936 | English_United States.936 |            | libc            | =c/postgres          +
+           |          |          |                           |                           |            |                 | postgres=CTc/postgres
+ test_db   | postgres | UTF8     | English_United States.936 | English_United States.936 |            | libc            |
+(4 rows)
+
+# 查看表
+\d
+test_db=# \d
+         List of relations
+ Schema |  Name  | Type  |  Owner
+--------+--------+-------+----------
+ public | test_a | table | postgres
+ public | test_b | table | postgres
+(2 rows)
+# mysql
+show tables;
+</code></pre>
+<pre><code class="language-bash">\q
+# 等价
+# 退出
+exit;
+# mysql
+</code></pre>
+<h2 id="简单使用">简单使用</h2>
+<p><code>MySQL</code>被嘲笑的最狠的一点应是<code>ACID</code>中的<code>A</code>, <code>Atomicity</code>, 原子性.</p>
+<blockquote>
+<p>原子性（Atomicity）：事务作为一个整体被执行，包含在其中的对数据库的操作要么全部被执行，要么都不执行。</p>
+</blockquote>
+<p>同样是在事务中执行, <code>MySQL</code>的事务中执行假如出现错误, 是不会自动执行回滚的(在提交事务时), 导致部分数据被执行操作.</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; create table test_c (id int primary key);
+Query OK, 0 rows affected
+Time: 0.016s
+MySQL root@localhost:test_db&gt; begin;
+Query OK, 0 rows affected
+Time: 0.001s
+MySQL root@localhost:test_db&gt; insert into test_c values (1);
+Query OK, 1 row affected
+Time: 0.003s
+MySQL root@localhost:test_db&gt; insert into test_c values (1);
+(1062, &quot;Duplicate entry '1' for key 'test_c.PRIMARY'&quot;)
+MySQL root@localhost:test_db&gt; commit;
+Query OK, 0 rows affected
+Time: 0.002s
+MySQL root@localhost:test_db&gt; select * from test_c;
++----+
+| id |
++----+
+| 1  |
++----+
+
+# 理论上, 是不希望这一行被插入
+# 但在不少场合, 这一点未必是对的, 插入部分的数据, 也是可以的, 例如爬虫, 将爬取的数据部分插入, 其他的插入失败的操作并不影响使用.
+# 但是从理论的角度来看, 这种操作显得不是那么让人放心, 假如犯错了呢, 意外没有手动执行回滚.
+# 相当于用不严谨换取了一定的自由
+# 至于代价嘛, 看怎么平衡
+
+
+1 row in set
+Time: 0.009s
+</code></pre>
+<p>而在<code>PostgreSQL</code>上是自动回滚的.</p>
+<pre><code class="language-bash">test_db=# create table test_c (id int primary key);
+CREATE TABLE
+test_db=# begin;
+BEGIN
+test_db=*# insert into test_c values (1);
+INSERT 0 1
+test_db=*# insert into test_c values(1);
+ERROR:  duplicate key value violates unique constraint &quot;test_c_pkey&quot;
+DETAIL:  Key (id)=(1) already exists.
+
+# 在执行提交时, pq是会自动判断事务中的行为是否全部执行成功, 假如不是, 那么自动执行回滚操作
+
+test_db=!# commit;
+ROLLBACK
+test_db=# select * from test_c;
+ id
+----
+(0 rows)
+</code></pre>
+<blockquote>
+<p>事务具有以下四个标准属性，通常根据首字母缩写为 <code>ACID</code>：</p>
+<ul>
+<li>原子性（Atomicity）：事务作为一个整体被执行，包含在其中的对数据库的操作要么全部被执行，要么都不执行。</li>
+<li>一致性（Consistency）：事务应确保数据库的状态从一个一致状态转变为另一个一致状态。一致状态的含义是数据库中的数据应满足完整性约束。</li>
+<li>隔离性（Isolation）：多个事务并发执行时，一个事务的执行不应影响其他事务的执行。</li>
+<li>持久性（Durability）：已被提交的事务对数据库的修改应该永久保存在数据库中。</li>
+</ul>
+</blockquote>
+<p>更多内容</p>
+<p>...updating...</p>
+<p>未完</p>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/postgresql-jian-dan-shi-yong-ti-yan/" title="PostgreSQL简单使用体验">https://Kyouichirou.github.io/post/postgresql-jian-dan-shi-yong-ti-yan/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/7Syg7ifp4/"># postgresql</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/"># mysql</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="Python数据可视化库概览" href="https://Kyouichirou.github.io/post/python-shu-ju-ke-shi-hua-ku-gai-lan/">Python数据可视化库概览</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="Python数据可视化库概览" href="https://Kyouichirou.github.io/post/python-shu-ju-ke-shi-hua-ku-gai-lan/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="MySQL-递归-日期" href="https://Kyouichirou.github.io/post/mysql-di-gui-ri-qi/">MySQL-递归-日期</a>
+        <a class="nav-mobile-next" title="MySQL-递归-日期" href="https://Kyouichirou.github.io/post/mysql-di-gui-ri-qi/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

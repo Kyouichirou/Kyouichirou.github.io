@@ -1,0 +1,5893 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>牛客网-SQL测试(困难) | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="牛客网-SQL测试(困难)" />
+  <meta name="keywords" content="priority,mysql" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#sql206-%E6%9C%80%E9%AB%98%E5%B7%A5%E8%B5%84">SQL206 最高工资</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w">解答W</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94t">解答T</a></li>
+</ul>
+</li>
+<li><a href="#sql215-%E5%85%A5%E8%81%8C%E8%96%AA%E6%B0%B4%E7%9A%84%E6%B6%A8%E5%B9%85">SQL215 入职薪水的涨幅</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-2">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-2">解答W</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94t-2">解答T</a></li>
+</ul>
+</li>
+<li><a href="#sql264-%E6%9C%80%E8%BF%91%E7%99%BB%E5%BD%95">SQL264 最近登录</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-3">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-3">解答W</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94t-3">解答T</a></li>
+<li><a href="#%E5%A4%A7%E7%A5%9E%E8%A7%A3%E7%AD%94">大神解答</a></li>
+</ul>
+</li>
+<li><a href="#sql270-%E8%80%83%E8%AF%95%E5%88%86%E6%95%B0">SQL270 考试分数</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-4">描述</a></li>
+<li><a href="#%E8%A7%A3%E9%87%8A">解释</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-4">解答W</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94t-4">解答T</a></li>
+</ul>
+</li>
+<li><a href="#sql285-%E7%A7%AF%E5%88%86%E6%9C%80%E5%A4%9A">SQL285 积分最多</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-5">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-5">解答W</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94t-5">解答T</a></li>
+</ul>
+</li>
+<li><a href="#sql280-%E7%AE%80%E5%8E%86%E6%8A%95%E9%80%92">SQL280  简历投递</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-6">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-6">解答W</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94t-6">解答T</a></li>
+</ul>
+</li>
+<li><a href="#sql220-%E9%83%A8%E9%97%A8%E8%81%8C%E8%A1%94">SQL220 部门职衔</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-7">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-7">解答W</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94t-7">解答T</a></li>
+</ul>
+</li>
+<li><a href="#sql219-%E5%91%98%E5%B7%A5%E8%96%AA%E6%B0%B4">SQL219 员工薪水</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-8">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-8">解答W</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94t-8">解答T</a></li>
+</ul>
+</li>
+<li><a href="#sql275-%E8%AF%BE%E7%A8%8B%E8%AE%A2%E5%8D%95">SQL275 课程订单</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-9">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-9">解答W</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94t-9">解答T</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B0%8F%E7%BB%93">小结</a></li>
+<li><a href="#%E5%A4%A7%E5%8E%82%E7%9C%9F%E9%A2%98">大厂真题</a>
+<ul>
+<li><a href="#sql161-%E8%A7%86%E9%A2%91%E7%83%AD%E5%BA%A6">SQL161 视频热度</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-10">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94">解答</a></li>
+</ul>
+</li>
+<li><a href="#sql167-%E8%BF%9E%E7%BB%AD%E7%AD%BE%E5%88%B0">SQL167 连续签到</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-11">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-10">解答W</a></li>
+</ul>
+</li>
+<li><a href="#sql173-%E5%95%86%E5%93%81%E5%8A%A8%E9%94%80%E7%8E%87">SQL173 商品动销率</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-12">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-11">解答W</a></li>
+</ul>
+</li>
+<li><a href="#sql194-%E8%BF%9E%E7%BB%AD%E9%97%AE%E7%AD%94">SQL194 连续问答</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-13">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-12">解答W</a></li>
+</ul>
+</li>
+<li><a href="#sql189-%E7%9B%B4%E6%92%AD%E5%9C%A8%E7%BA%BF">SQL189 直播在线</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-14">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94-2">解答</a></li>
+</ul>
+</li>
+<li><a href="#sql184-%E9%A1%BE%E5%AE%A2%E8%BF%9E%E7%BB%AD%E8%B4%AD%E4%B9%B0">SQL184 顾客连续购买</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-15">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-13">解答W</a></li>
+</ul>
+</li>
+<li><a href="#sql179-%E5%90%8C%E6%97%B6%E7%AD%89%E8%BD%A6">SQL179 同时等车</a>
+<ul>
+<li><a href="#%E6%8F%8F%E8%BF%B0-16">描述</a></li>
+<li><a href="#%E8%A7%A3%E7%AD%94w-14">解答W</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0">相关函数</a>
+<ul>
+<li><a href="#%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3">日期相关</a></li>
+<li><a href="#%E5%8F%96%E5%80%BC%E7%9B%B8%E5%85%B3">取值相关</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/niu-ke-wang-sql-ce-shi-kun-nan/"> 牛客网-SQL测试(困难) </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-02-06 17:43:14">2023-02-06</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"> <span>priority</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/">
+        <span>mysql</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >92<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >17638<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <table>
+<thead>
+<tr>
+<th>题号</th>
+<th>题目</th>
+<th>难度</th>
+<th>通过率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SQL206</td>
+<td>获取每个部门中当前员工薪水最高的相关信息</td>
+<td>困难</td>
+<td>20.23%</td>
+</tr>
+<tr>
+<td><strong>SQL264</strong></td>
+<td>牛客每个人最近的登录日期(五)</td>
+<td>困难</td>
+<td>20.64%</td>
+</tr>
+<tr>
+<td>SQL215</td>
+<td>查找在职员工自入职以来的薪水涨幅情况</td>
+<td>困难</td>
+<td>22.48%</td>
+</tr>
+<tr>
+<td>SQL280</td>
+<td>实习广场投递简历分析(三)</td>
+<td>困难</td>
+<td>26.82%</td>
+</tr>
+<tr>
+<td>SQL220</td>
+<td>汇总各个部门当前员工的title类型的分配数目</td>
+<td>困难</td>
+<td>27.95%</td>
+</tr>
+<tr>
+<td><strong>SQL270</strong></td>
+<td>考试分数(五)</td>
+<td>困难</td>
+<td>28.20%</td>
+</tr>
+<tr>
+<td>SQL275</td>
+<td>牛客的课程订单分析(五)</td>
+<td>困难</td>
+<td>28.98%</td>
+</tr>
+<tr>
+<td>SQL219</td>
+<td>获取员工其当前的薪水比其manager当前薪水还高的相关信息</td>
+<td>困难</td>
+<td>31.20%</td>
+</tr>
+<tr>
+<td>SQL285</td>
+<td>获得积分最多的人(三)</td>
+<td>困难</td>
+<td>33.74%</td>
+</tr>
+</tbody>
+</table>
+<p><a href="https://www.nowcoder.com/exam/oj?difficulty=5&amp;page=1&amp;pageSize=50&amp;search=&amp;tab=SQL%E7%AF%87&amp;topicId=82">牛客网SQL测试</a></p>
+<ul>
+<li>传统方法实现</li>
+<li>窗口函数实现</li>
+</ul>
+<p>不建议直接看相关的答案, 先手动过一遍, 然后再交叉对比.  特别是<code>264, 270, 179, 189</code>, 这几道题, 其解法非常巧妙.</p>
+<!--more-->
+<p><em>(注: 由于运行代码需要注册账号登录, 这里的代码并没有提交到平台上运行, 部分代码只解析出逻辑, 并未提取最后要求得结果)</em></p>
+<h2 id="sql206-最高工资">SQL206 最高工资</h2>
+<p>获取每个部门中当前员工薪水最高的相关信息.</p>
+<p><em>这里没有具体细节, 例如最高, 假如最高存在多个人, 是全部取出还是只要一个即可.</em></p>
+<pre><code class="language-mysql">drop table if exists  `dept_emp` ; 
+drop table if exists  `salaries` ; 
+CREATE TABLE `dept_emp` (
+`emp_no` int(11) NOT NULL,
+`dept_no` char(4) NOT NULL,
+`from_date` date NOT NULL,
+`to_date` date NOT NULL,
+PRIMARY KEY (`emp_no`,`dept_no`));
+CREATE TABLE `salaries` (
+`emp_no` int(11) NOT NULL,
+`salary` int(11) NOT NULL,
+`from_date` date NOT NULL,
+`to_date` date NOT NULL,
+PRIMARY KEY (`emp_no`,`from_date`));
+INSERT INTO dept_emp VALUES(10001,'d001','1986-06-26','9999-01-01');
+INSERT INTO dept_emp VALUES(10002,'d001','1996-08-03','9999-01-01');
+INSERT INTO dept_emp VALUES(10003,'d002','1996-08-03','9999-01-01');
+
+INSERT INTO salaries VALUES(10001,88958,'2002-06-22','9999-01-01');
+INSERT INTO salaries VALUES(10002,72527,'2001-08-02','9999-01-01');
+INSERT INTO salaries VALUES(10003,92527,'2001-08-02','9999-01-01');
+
+mysql&gt; select * from salaries;
++--------+--------+------------+------------+
+| emp_no | salary | from_date  | to_date    |
++--------+--------+------------+------------+
+|  10001 |  88958 | 2002-06-22 | 9999-01-01 |
+|  10002 |  72527 | 2001-08-02 | 9999-01-01 |
+|  10003 |  92527 | 2001-08-02 | 9999-01-01 |
++--------+--------+------------+------------+
+3 rows in set (0.00 sec)
+
+mysql&gt; select * from dept_emp;
++--------+---------+------------+------------+
+| emp_no | dept_no | from_date  | to_date    |
++--------+---------+------------+------------+
+|  10001 | d001    | 1986-06-26 | 9999-01-01 |
+|  10002 | d001    | 1996-08-03 | 9999-01-01 |
+|  10003 | d002    | 1996-08-03 | 9999-01-01 |
++--------+---------+------------+------------+
+3 rows in set (0.00 sec)
+</code></pre>
+<h3 id="描述">描述</h3>
+<p>有一个员工表<code>dept_emp</code>简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>emp_no</th>
+<th>dept_no</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10001</td>
+<td>d001</td>
+<td>1986-06-26</td>
+<td>9999-01-01</td>
+</tr>
+<tr>
+<td>10002</td>
+<td>d001</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+<tr>
+<td>10003</td>
+<td>d002</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>有一个薪水表<code>salaries</code>简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>emp_no</th>
+<th>salary</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10001</td>
+<td>88958</td>
+<td>2002-06-22</td>
+<td>9999-01-01</td>
+</tr>
+<tr>
+<td>10002</td>
+<td>72527</td>
+<td>2001-08-02</td>
+<td>9999-01-01</td>
+</tr>
+<tr>
+<td>10003</td>
+<td>92527</td>
+<td>2001-08-02</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>获取每个部门中当前员工薪水最高的相关信息，给出<code>dept_no, emp_no</code>以及其对应的salary，按照部门编号<code>dept_no</code>升序排列，以上例子输出如下:</p>
+<table>
+<thead>
+<tr>
+<th>dept_no</th>
+<th>emp_no</th>
+<th>maxSalary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d001</td>
+<td>10001</td>
+<td>88958</td>
+</tr>
+<tr>
+<td>d002</td>
+<td>10003</td>
+<td>92527</td>
+</tr>
+</tbody>
+</table>
+<h3 id="解答w">解答W</h3>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		s.emp_no,
+		s.salary,
+		d.dept_no 
+	FROM
+		salaries s
+		LEFT JOIN dept_emp d ON s.emp_no = d.emp_no 
+	) SELECT
+	*,
+	NTH_VALUE( salary, 1 ) over w AS top_salary,
+	rank() over w AS top_rank 
+FROM
+	a window w AS ( PARTITION BY dept_no ORDER BY salary DESC );
+	
++--------+--------+---------+------------+----------+
+| emp_no | salary | dept_no | top_salary | top_rank |
++--------+--------+---------+------------+----------+
+|  10001 |  88958 | d001    |      88958 |        1 |
+|  10002 |  72527 | d001    |      88958 |        2 |
+|  10003 |  92527 | d002    |      92527 |        1 |
++--------+--------+---------+------------+----------+
+</code></pre>
+<h3 id="解答t">解答T</h3>
+<p>不使用窗口函数</p>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		s.emp_no,
+		s.salary,
+		d.dept_no 
+	FROM
+		salaries s
+		LEFT JOIN dept_emp d ON s.emp_no = d.emp_no 
+	),
+	b AS ( SELECT dept_no, max( salary ) AS ms FROM a GROUP BY dept_no ) SELECT
+	a.emp_no,
+	a.salary,
+	a.dept_no,
+	b.ms 
+FROM
+	a,
+	b 
+WHERE
+	b.ms = a.salary;
+	
++--------+--------+---------+-------+
+| emp_no | salary | dept_no | ms    |
++--------+--------+---------+-------+
+|  10001 |  88958 | d001    | 88958 |
+|  10003 |  92527 | d002    | 92527 |
++--------+--------+---------+-------+
+2 rows in set (0.01 sec)
+</code></pre>
+<h2 id="sql215-入职薪水的涨幅">SQL215 入职薪水的涨幅</h2>
+<p>查找<strong>在职</strong>员工自入职以来的薪水涨幅情况</p>
+<pre><code class="language-mysql">drop table if exists  `employees` ; 
+drop table if exists  `salaries` ;
+CREATE TABLE `employees` (
+`emp_no` int(11) NOT NULL,
+`birth_date` date NOT NULL,
+`first_name` varchar(14) NOT NULL,
+`last_name` varchar(16) NOT NULL,
+`gender` char(1) NOT NULL,
+`hire_date` date NOT NULL,
+PRIMARY KEY (`emp_no`));
+CREATE TABLE `salaries` (
+`emp_no` int(11) NOT NULL,
+`salary` int(11) NOT NULL,
+`from_date` date NOT NULL,
+`to_date` date NOT NULL,
+PRIMARY KEY (`emp_no`,`from_date`));
+INSERT INTO employees VALUES(10001,'1953-09-02','Georgi','Facello','M','2001-06-22');
+INSERT INTO employees VALUES(10002,'1964-06-02','Bezalel','Simmel','F','1999-08-03');
+
+INSERT INTO salaries VALUES(10001,85097,'2001-06-22','2002-06-22');
+# 插入多一行的数据
+INSERT INTO salaries VALUES(10001,86097,'2002-06-22','2003-06-22');
+INSERT INTO salaries VALUES(10001,88958,'2003-06-22','9999-01-01');
+INSERT INTO salaries VALUES(10002,72527,'1999-08-03','2000-08-02');
+INSERT INTO salaries VALUES(10002,72527,'2000-08-02','2001-08-02');
+
+mysql&gt; select * from employees;
++--------+------------+------------+-----------+--------+------------+
+| emp_no | birth_date | first_name | last_name | gender | hire_date  |
++--------+------------+------------+-----------+--------+------------+
+|  10001 | 1953-09-02 | Georgi     | Facello   | M      | 2001-06-22 |
+|  10002 | 1964-06-02 | Bezalel    | Simmel    | F      | 1999-08-03 |
++--------+------------+------------+-----------+--------+------------+
+2 rows in set (0.00 sec)
+
+mysql&gt; select * from salaries;
++--------+--------+------------+------------+
+| emp_no | salary | from_date  | to_date    |
++--------+--------+------------+------------+
+|  10001 |  85097 | 2001-06-22 | 2002-06-22 |
+|  10001 |  88958 | 2002-06-22 | 9999-01-01 |
+|  10002 |  72527 | 1999-08-03 | 2000-08-02 |
+|  10002 |  72527 | 2000-08-02 | 2001-08-02 |
++--------+--------+------------+------------+
+4 rows in set (0.00 sec)
+</code></pre>
+<h3 id="描述-2">描述</h3>
+<p>请你查找在职员工自入职以来的薪水涨幅情况，给出在职员工编号<code>emp_no</code>以及其对应的薪水涨幅<code>growth</code>，并按照<code>growth</code>进行升序，以上例子输出为</p>
+<p>（注: to_date为薪资调整某个结束日期，或者为离职日期，to_date='9999-01-01'时，表示依然在职，无后续调整记录）</p>
+<table>
+<thead>
+<tr>
+<th><code>emp_no</code></th>
+<th>growth</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10001</td>
+<td>3861</td>
+</tr>
+</tbody>
+</table>
+<h3 id="解答w-2">解答W</h3>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		e.emp_no,
+		e.first_name,
+		e.hire_date,
+		s.salary,
+		s.to_date 
+	FROM
+		employees e
+		LEFT JOIN salaries s ON e.emp_no = s.emp_no 
+	) SELECT
+	emp_no,
+	hire_date,
+	salary,
+	lag( to_date ) over w AS td,
+	lag( salary ) over w AS ts 
+FROM
+	a window w AS ( PARTITION BY emp_no ORDER BY to_date DESC );
+	
++--------+------------+--------+------------+-------+
+| emp_no | hire_date  | salary | td         | ts    |
++--------+------------+--------+------------+-------+
+|  10001 | 2001-06-22 |  88958 | NULL       |  NULL |
+|  10001 | 2001-06-22 |  85097 | 9999-01-01 | 88958 |
+|  10002 | 1999-08-03 |  72527 | NULL       |  NULL |
+|  10002 | 1999-08-03 |  72527 | 2001-08-02 | 72527 |
++--------+------------+--------+------------+-------+
+
+# 这里没注意假如还有更多的中间数据, 而不是两行呢?
+
+# 对上面的数据进行修改
+INSERT INTO salaries VALUES(10001,85097,'2001-06-22','2002-06-22');
+INSERT INTO salaries VALUES(10001,86097,'2002-06-22','2003-06-22');
+INSERT INTO salaries VALUES(10001,88958,'2003-06-22','9999-01-01');
+
++--------+------------+--------+------------+-------+
+| emp_no | hire_date  | salary | td         | ts    |
++--------+------------+--------+------------+-------+
+|  10001 | 2001-06-22 |  88958 | NULL       |  NULL |
+|  10001 | 2001-06-22 |  86097 | 9999-01-01 | 88958 |
+|  10001 | 2001-06-22 |  85097 | 2003-06-22 | 86097 |
+|  10002 | 1999-08-03 |  72527 | NULL       |  NULL |
+|  10002 | 1999-08-03 |  72527 | 2001-08-02 | 72527 |
++--------+------------+--------+------------+-------+
+5 rows in set (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql"># 修正
+WITH a AS (
+	SELECT
+		e.emp_no,
+		e.first_name,
+		e.hire_date,
+		s.salary,
+		s.to_date 
+	FROM
+		employees e
+		LEFT JOIN salaries s ON e.emp_no = s.emp_no 
+		WHERE
+        # 筛选出两行的数据
+		s.to_date = '9999-01-01' 
+		OR s.from_date = e.hire_date 
+	),
+	b AS ( SELECT emp_no, salary, lag( salary ) over ( PARTITION BY emp_no ORDER BY to_date ) AS ls FROM a ) SELECT
+	emp_no,
+	salary - ls AS growth 
+FROM
+	b 
+WHERE
+	ls IS NOT NULL;
+	
++--------+--------+
+| emp_no | growth |
++--------+--------+
+|  10001 |   3861 |
++--------+--------+
+1 row in set (0.00 sec)
+</code></pre>
+<h3 id="解答t-2">解答T</h3>
+<p>不使用窗口函数</p>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		e.emp_no,
+		e.first_name,
+		e.hire_date,
+		s.salary,
+		s.to_date 
+	FROM
+		employees e
+		LEFT JOIN salaries s ON e.emp_no = s.emp_no 
+	WHERE
+		s.to_date = '9999-01-01' 
+		OR s.from_date = e.hire_date 
+	),
+	b AS (
+	SELECT
+		a1.emp_no,
+		a1.salary,
+		a2.salary AS ts,
+		a1.to_date 
+	FROM
+		a AS a1
+		LEFT JOIN a AS a2 ON a1.emp_no = a2.emp_no 
+	WHERE
+		a1.to_date != a2.to_date 
+		AND a1.to_date = '9999-01-01' 
+	) SELECT
+	emp_no,
+	salary - ts AS growth 
+FROM
+	b;
+
++--------+--------+
+| emp_no | growth |
++--------+--------+
+|  10001 |   3861 |
++--------+--------+
+1 row in set (0.00 sec)
+</code></pre>
+<h2 id="sql264-最近登录">SQL264 最近登录</h2>
+<p>牛客每个人最近的登录日期(五)</p>
+<pre><code class="language-mysql">drop table if exists login;
+CREATE TABLE `login` (
+`id` int(4) NOT NULL,
+`user_id` int(4) NOT NULL,
+`client_id` int(4) NOT NULL,
+`date` date NOT NULL,
+PRIMARY KEY (`id`));
+
+INSERT INTO login VALUES
+(1,2,1,'2020-10-12'),
+(2,3,2,'2020-10-12'),
+(3,1,2,'2020-10-12'),
+(4,2,2,'2020-10-13'),
+(5,1,2,'2020-10-13'),
+(6,3,1,'2020-10-14'),
+(7,4,1,'2020-10-14'),
+(8,4,1,'2020-10-15');
+
+</code></pre>
+<h3 id="描述-3">描述</h3>
+<p>牛客每天有很多人登录，请你统计一下牛客每个日期新用户的次日留存率。<br>
+有一个登录(login)记录表，简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>user_id</th>
+<th>client_id</th>
+<th>date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2</td>
+<td>1</td>
+<td>2020-10-12</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>2</td>
+<td>2020-10-12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>2</td>
+<td>2020-10-12</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2</td>
+<td>2</td>
+<td>2020-10-13</td>
+</tr>
+<tr>
+<td>5</td>
+<td>1</td>
+<td>2</td>
+<td>2020-10-13</td>
+</tr>
+<tr>
+<td>6</td>
+<td>3</td>
+<td>1</td>
+<td>2020-10-14</td>
+</tr>
+<tr>
+<td>7</td>
+<td>4</td>
+<td>1</td>
+<td>2020-10-14</td>
+</tr>
+<tr>
+<td>8</td>
+<td>4</td>
+<td>1</td>
+<td>2020-10-15</td>
+</tr>
+</tbody>
+</table>
+<p>第1行表示user_id为2的用户在2020-10-12使用了客户端id为1的设备登录了牛客网，因为是第1次登录，所以是新用户<br>
+......<br>
+第4行表示user_id为2的用户在2020-10-13使用了客户端id为2的设备登录了牛客网，因为是第2次登录，所以是老用户<br>
+......<br>
+最后1行表示user_id为4的用户在2020-10-15使用了客户端id为1的设备登录了牛客网，因为是第2次登录，所以是老用户</p>
+<p>请你写出一个sql语句查询每个日期新用户的次日留存率，结果保留小数点后面3位数(3位之后的四舍五入)，并且查询结果按照日期升序排序，上面的例子查询结果如下:</p>
+<table>
+<thead>
+<tr>
+<th>date</th>
+<th>p</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2020-10-12</td>
+<td>0.667</td>
+</tr>
+<tr>
+<td>2020-10-13</td>
+<td>0.000</td>
+</tr>
+<tr>
+<td>2020-10-14</td>
+<td>1.000</td>
+</tr>
+<tr>
+<td>2020-10-15</td>
+<td>0.000</td>
+</tr>
+</tbody>
+</table>
+<p>查询结果表明:<br>
+2020-10-12登录了3个(user_id为2，3，1)新用户，2020-10-13，只有2个(id为2,1)登录，故2020-10-12新用户次日留存率为2/3=0.667;<br>
+2020-10-13没有新用户登录，输出0.000;<br>
+2020-10-14登录了1个(user_id为4)新用户，2020-10-15，user_id为4的用户登录，故2020-10-14新用户次日留存率为1/1=1.000;2020-10-15没有新用户登录，输出0.000;</p>
+<h3 id="解答w-3">解答W</h3>
+<pre><code class="language-mysql"># 得到同一天所有的登录次数 ltimes
+# 得到每个用户的在活跃次数(注意是活跃) atimes
+# 然后偏移处理
+# 这个语句很粗糙有点的伪代码的感觉
+
+# 处理主要是需要执行 向前, 向后
+
+WITH a AS ( SELECT *, count( date ) over ( PARTITION BY date ) AS ltimes FROM login ),
+b AS ( SELECT *, lag( 1, 1, 0 ) over ( PARTITION BY user_id ORDER BY date ) AS atime FROM a ),
+c AS ( SELECT date, ltimes, sum( atime ) AS atimes FROM b GROUP BY date, ltimes ),
+d AS ( SELECT *, LEAD( atimes, 1, 0 ) over () AS ptimes FROM c ) SELECT
+date,
+(
+ptimes / ( ltimes - atimes )) AS r 
+FROM
+	d;
+# ptimes	
++------------+--------+
+| date       | r      |
++------------+--------+
+| 2020-10-12 | 0.6667 |
+| 2020-10-13 |   NULL |
+| 2020-10-14 | 1.0000 |
+| 2020-10-15 |   NULL |
++------------+--------+
+4 rows in set, 2 warnings (0.00 sec)(warning: / 0)
+</code></pre>
+<h3 id="解答t-3">解答T</h3>
+<pre><code class="language-mysql"># 计算出每天的登录总数
+# 计算出每个用户每天登录数
+# 计算出天登录的次数中有多少次是老用户登录
+# 汇总
+WITH a AS ( SELECT date, count(*) AS ltimes FROM login GROUP BY date ),
+b AS ( SELECT date, user_id, count(*) AS x FROM login GROUP BY date, user_id ),
+d AS (
+	SELECT
+		b1.date,
+		b1.user_id,
+		b2.x AS atimes 
+	FROM
+		b b1
+		LEFT JOIN b b2 ON b1.user_id = b2.user_id 
+		AND DATEDIFF( b1.date, b2.date ) &gt; 0 
+	),
+	c AS (
+	SELECT
+		b1.*,
+		b2.x AS t_x,
+		a.ltimes 
+	FROM
+		b AS b1
+		LEFT JOIN b AS b2 ON b1.user_id = b2.user_id 
+		AND date_add( b1.date, INTERVAL 1 DAY ) = b2.date
+		LEFT JOIN a ON a.date = b1.date 
+	),
+	e AS (
+	SELECT
+		c.date,
+		c.user_id,
+		c.t_x,
+		c.ltimes,
+		d.atimes 
+	FROM
+		c
+		LEFT JOIN d ON d.user_id = c.user_id 
+		AND d.date = c.date 
+	),
+	f AS ( SELECT date, sum( t_x ) AS txs, sum( atimes ) AS ats, ltimes FROM e GROUP BY date ) SELECT
+	date,
+	(
+		txs / (
+			ltimes -
+		IF
+		( ats IS NULL, 0, ats ))) AS r 
+FROM
+	f;
+	
++------------+--------+
+| date       | r      |
++------------+--------+
+| 2020-10-12 | 0.6667 |
+| 2020-10-13 |   NULL |
+| 2020-10-14 | 1.0000 |
+| 2020-10-15 |   NULL |
++------------+--------+
+4 rows in set (0.01 sec)
+</code></pre>
+<p>优化</p>
+<pre><code class="language-mysql">WITH a AS ( SELECT date, count(*) AS ltimes FROM login GROUP BY date ),
+b AS ( SELECT date, user_id, count(*) AS x FROM login GROUP BY date, user_id ),
+d AS (
+	SELECT
+		b1.date,
+		b1.user_id,
+		b2.x AS atimes 
+	FROM
+		b b1
+		LEFT JOIN b b2 ON b1.user_id = b2.user_id 
+		AND DATEDIFF( b1.date, b2.date ) &gt; 0 
+	),
+	m AS (
+	SELECT
+		d.date,
+		sum(
+		IF
+		( atimes IS NULL, 0, atimes )) AS atimes,
+		a.ltimes 
+	FROM
+		d
+		LEFT JOIN a ON a.date = d.date 
+	GROUP BY
+		date 
+	) SELECT
+	t1.*,
+	t2.atimes AS otimes,
+	t2.atimes / ( t1.ltimes - t1.atimes ) AS r 
+FROM
+	m t1
+	LEFT JOIN m t2 ON DATE_ADD( t1.date, INTERVAL 1 DAY ) = t2.date;
+	
+# atimes, 为当天登录的老用户
+# ltimes, 为当天登录的总次数
+# otimes, 为第二天的老用户登录次数
++------------+--------+--------+--------+--------+
+| date       | atimes | ltimes | otimes | r      |
++------------+--------+--------+--------+--------+
+| 2020-10-12 |      0 |      3 |      2 | 0.6667 |
+| 2020-10-13 |      2 |      2 |      1 |   NULL |
+| 2020-10-14 |      1 |      2 |      1 | 1.0000 |
+| 2020-10-15 |      1 |      1 |   NULL |   NULL |
++------------+--------+--------+--------+--------+
+4 rows in set, 1 warning (0.00 sec)
+</code></pre>
+<h3 id="大神解答">大神解答</h3>
+<p>注意代码的可阅读性.....</p>
+<pre><code class="language-bash">mysql&gt; SELECT IFNULL(&quot;a&quot;, &quot;b&quot;);
++----------------------------------+
+| IFNULL(&quot;a&quot;, &quot;b&quot;) |
++----------------------------------+
+| a                                |
++----------------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; SELECT IFNULL(NULL, 500);
++-------------------+
+| IFNULL(NULL, 500) |
++-------------------+
+|               500 |
++-------------------+
+1 row in set (0.01 sec)
+</code></pre>
+<pre><code class="language-mysql"># IFNULL(expression, alt_value)
+# 代码经过navicat美化, 但是可阅读性还是很差
+# 这种写法很酷炫, 类似于JavaScript, 使用三元表达式, 进行复杂的嵌套, 不将里面的内容, 拆出来, 难以阅读.
+SELECT
+	date,
+	ifnull(
+		round((
+				sum(
+				CASE
+						
+						WHEN ( user_id, date ) IN ( SELECT user_id, date_add( date, INTERVAL - 1 DAY ) FROM login GROUP BY user_id ) THEN
+						1 ELSE 0 
+					END 
+					))/ (
+					sum(
+					CASE
+							
+							WHEN ( user_id, date ) IN ( SELECT user_id, min( date ) FROM login GROUP BY user_id ) THEN
+							1 ELSE 0 
+						END 
+						)),
+					3 
+				),
+				0 
+				) AS p 
+		FROM
+			login 
+		GROUP BY
+			date 
+	ORDER BY
+	date;
+	
+# ----------------------------- 修改版本, 变更为with, if 取代 case when
+
+WITH a AS ( SELECT user_id, date_add( date, INTERVAL - 1 DAY ) FROM login GROUP BY user_id, date ),
+b AS ( SELECT user_id, min( date ) FROM login GROUP BY user_id ) SELECT
+date,
+ifnull(
+	round((
+			sum(
+				IF
+				(( user_id, date ) IN ( SELECT * FROM a ), 1, 0 ))) / (
+				sum(
+				IF
+				( ( user_id, date ) IN ( SELECT * FROM b ), 1, 0 ))),
+			3 
+		),
+		0 
+	) AS p 
+FROM
+	login 
+GROUP BY
+	date 
+ORDER BY
+	date;
+</code></pre>
+<pre><code class="language-mysql"># 注意部分代码是sqlite3的, 需要改成mysql
+SELECT
+	a.date,
+	ROUND( COUNT( b.user_id ) * 1.0 / COUNT( a.user_id ), 3 ) AS p 
+FROM
+	( SELECT user_id, MIN( date ) AS date FROM login GROUP BY user_id ) a
+	LEFT JOIN login b ON a.user_id = b.user_id 
+	AND b.date = DATE_ADD( a.date, INTERVAL 1 DAY ) 
+GROUP BY
+	a.date UNION
+SELECT
+	date,
+	0.000 AS p 
+FROM
+	login 
+WHERE
+	date NOT IN ( SELECT MIN( date ) FROM login GROUP BY user_id ) 
+ORDER BY
+	date;
+</code></pre>
+<p>关键在于这个语句: <code> SELECT user_id, MIN( date ) AS date FROM login GROUP BY user_id</code></p>
+<p>这个语句非常巧妙地将用户的登录记录分拆开来, 分开新用户部分, 和老用户登录的两个部分</p>
+<pre><code class="language-mysql">+---------+------------+
+| user_id | date       |
++---------+------------+
+|       2 | 2020-10-12 |
+|       3 | 2020-10-12 |
+|       1 | 2020-10-12 |
+|       4 | 2020-10-14 |
++---------+------------+
+4 rows in set (0.00 sec)
+# 1, 2, 3 是 10-12 新登录的用户
+# 4 为10-14的新用户
+</code></pre>
+<pre><code class="language-mysql"># 将上面的语句改成with
+# user_id + 
+WITH a AS ( SELECT user_id, MIN( date ) AS date FROM login GROUP BY user_id ),
+c AS (
+	SELECT
+		a.date,
+		ROUND( COUNT( b.user_id ) * 1.0 / COUNT( a.user_id ), 3 ) AS p 
+	FROM
+		a
+		LEFT JOIN login b ON a.user_id = b.user_id 
+		AND b.date = DATE_ADD( a.date, INTERVAL 1 DAY ) 
+	GROUP BY
+		a.date 
+	),
+	# 没有的数据表明当天没有新的用户登录
+	d AS ( SELECT date, 0.000 AS p FROM login WHERE date NOT IN ( SELECT date FROM a ) ORDER BY date )
+
+SELECT * FROM c UNION SELECT * FROM d;
+</code></pre>
+<h2 id="sql270-考试分数">SQL270 考试分数</h2>
+<p>考试分数(五)</p>
+<pre><code class="language-mysql">drop table if exists grade;
+CREATE TABLE  grade(
+`id` int(4) NOT NULL,
+`job` varchar(32) NOT NULL,
+`score` int(10) NOT NULL,
+PRIMARY KEY (`id`));
+
+INSERT INTO grade VALUES
+(1,'C++',11001),
+(2,'C++',10000),
+(3,'C++',9000),
+(4,'Java',12000),
+(5,'Java',13000),
+(6,'B',12000),
+(7,'B',11000),
+(8,'B',9999);
+
+# 增加数据测试
+insert into grade values(9, &quot;Java&quot;, 11000), (10, &quot;Java&quot;, 15000);
+
+# (11, &quot;B&quot;, 13000), (12, &quot;C&quot;, 14000)
+</code></pre>
+<h3 id="描述-4">描述</h3>
+<p>牛客每次考试完，都会有一个成绩表(grade)，如下:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>job</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>C++</td>
+<td>11001</td>
+</tr>
+<tr>
+<td>2</td>
+<td>C++</td>
+<td>11000</td>
+</tr>
+<tr>
+<td>3</td>
+<td>C++</td>
+<td>9000</td>
+</tr>
+<tr>
+<td>4</td>
+<td>JAVA</td>
+<td>12000</td>
+</tr>
+<tr>
+<td>5</td>
+<td>JAVA</td>
+<td>13000</td>
+</tr>
+<tr>
+<td>6</td>
+<td>B</td>
+<td>12000</td>
+</tr>
+<tr>
+<td>7</td>
+<td>B</td>
+<td>11000</td>
+</tr>
+<tr>
+<td>8</td>
+<td>B</td>
+<td>9999</td>
+</tr>
+</tbody>
+</table>
+<p>第1行表示用户id为1的用户选择了C++岗位并且考了11001分</p>
+<p>。。。</p>
+<p>第8行表示用户id为8的用户选择了B语言岗位并且考了9999分</p>
+<p>请你写一个sql语句查询各个岗位分数的<strong>中位数</strong>位置上的所有grade信息，并且按id升序排序，结果如下:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>job</th>
+<th>score</th>
+<th>t_rank</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>C++</td>
+<td>10000</td>
+<td>2</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Java</td>
+<td>12000</td>
+<td>2</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Java</td>
+<td>13000</td>
+<td>1</td>
+</tr>
+<tr>
+<td>7</td>
+<td>B</td>
+<td>11000</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h3 id="解释">解释</h3>
+<p>第1行表示C++岗位的中位数位置上的为用户id为2，分数为10000，在C++岗位里面排名是第2</p>
+<p>第2，3行表示Java岗位的中位数位置上的为用户id为4,5，分数为12000,13000，在Java岗位里面排名是第2,1</p>
+<p>第4行表示B语言岗位的中位数位置上的为用户id为7，分数为11000，在前端岗位里面排名是第2</p>
+<p>(注意: <code>sqlite</code> 1/2得到的不是0.5，得到的是0，只有1*1.0/2才会得到0.5，<code>sqlite</code>四舍五入的函数为round，<code>sqlite</code>不支持floor函数，支持cast(x as integer) 函数，不支持if函数，支持case when ...then ...else ..end函数，<code>sqlite</code><strong>不支持</strong>自定义变量)</p>
+<pre><code class="language-bash">@Lian ➜ ~ ( base 3.9.12) 153ms sqlite3
+SQLite version 3.38.2 2022-03-26 13:51:10
+Enter &quot;.help&quot; for usage hints.
+Connected to a transient in-memory database.
+Use &quot;.open FILENAME&quot; to reopen on a persistent database.
+sqlite&gt; select (1 / 2);
+0
+sqlite&gt; select (3 / 2);
+1
+sqlite&gt; select (1.0 / 2.0);
+0.5
+sqlite&gt; select (3.0 / 1.0);
+3.0
+sqlite&gt; select (3.0 / 2.0);
+1.5
+sqlite&gt; select ( 1/ 2.0);
+0.5
+</code></pre>
+<h3 id="解答w-4">解答W</h3>
+<pre><code class="language-mysql"># 对于奇数的中位很容易确定
+# 先得到每个job出现的次数
+# 假如是奇数的, 假如是偶数的
+WITH a AS (
+	SELECT
+		*,
+		ROW_NUMBER() over w AS rk 
+	FROM
+	grade window w AS ( PARTITION BY job ORDER BY score DESC )),
+	b AS ( SELECT *, FIRST_VALUE( rk ) over ( PARTITION BY job ORDER BY rk DESC ) AS mx FROM a ),
+	c AS (
+	SELECT
+		*,
+	IF
+		(
+			mx % 2 = 0,
+			ceil(( mx / 2 + rk ) / 2 ),
+		ceil( mx / 2 )) AS tc 
+	FROM
+		b 
+	) SELECT
+	id,
+	job,
+	score,
+	rk AS t_rank 
+FROM
+	c 
+WHERE
+	rk = tc 
+ORDER BY
+	id;
+
+# 原始数据
++----+------+-------+--------+
+| id | job  | score | t_rank |
++----+------+-------+--------+
+|  2 | C++  | 10000 |      2 |
+|  4 | Java | 12000 |      2 |
+|  5 | Java | 13000 |      1 |
+|  7 | B    | 11000 |      2 |
++----+------+-------+--------+
+4 rows in set (0.00 sec)
+
+# 增加测试数据
++----+------+-------+--------+
+| id | job  | score | t_rank |
++----+------+-------+--------+
+|  2 | C++  | 10000 |      2 |
+|  4 | Java | 12000 |      3 |
+|  5 | Java | 13000 |      2 |
+|  7 | B    | 11000 |      2 |
++----+------+-------+--------+
+4 rows in set (0.00 sec)
+</code></pre>
+<h3 id="解答t-4">解答T</h3>
+<p>不使用窗口函数, 暂未发现不引入变量的情况下, 完全使用使用传统的方式来解决这个问题.</p>
+<pre><code class="language-mysql">WITH a AS ( SELECT job, count( job ) AS ic FROM grade GROUP BY job ) SELECT
+g.job,
+g.score,
+a.ic 
+FROM
+	grade AS g
+	LEFT JOIN a ON g.job = a.job 
+ORDER BY
+	job,
+	score DESC;
++------+-------+------+
+| job  | score | ic   |
++------+-------+------+
+| B    | 12000 |    3 |
+| B    | 11000 |    3 |
+| B    |  9999 |    3 |
+| C++  | 11001 |    3 |
+| C++  | 10000 |    3 |
+| C++  |  9000 |    3 |
+| Java | 13000 |    2 |
+| Java | 12000 |    2 |
++------+-------+------+
+8 rows in set (0.00 sec)
+# 在不引入临时变量的情况下, 还有没有方法进一步处理下去?
+WITH a AS ( SELECT job, count( job ) AS ic FROM grade GROUP BY job ) SELECT
+@rw := @rw + 1 as rno,
+g.job,
+g.score,
+a.ic 
+FROM (select @rw := 0) as r, 
+	grade AS g
+	LEFT JOIN a ON g.job = a.job 
+ORDER BY
+	job,
+	score DESC;
++------+------+-------+------+
+| rno  | job  | score | ic   |
++------+------+-------+------+
+|    1 | B    | 12000 |    3 |
+|    2 | B    | 11000 |    3 |
+|    3 | B    |  9999 |    3 |
+|    4 | C++  | 11001 |    3 |
+|    5 | C++  | 10000 |    3 |
+|    6 | C++  |  9000 |    3 |
+|    7 | Java | 13000 |    2 |
+|    8 | Java | 12000 |    2 |
++------+------+-------+------+
+8 rows in set, 2 warnings (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql"># 最终结果
+# 这里引入了变量
+WITH a AS ( SELECT job, count( job ) AS ic FROM grade GROUP BY job ),
+b AS (
+	SELECT
+		g.id,
+		@rw := @rw + 1 AS rno,
+		g.job,
+		g.score,
+		a.ic 
+	FROM
+		( SELECT @rw := 0 ) AS r,
+		grade AS g
+		LEFT JOIN a ON g.job = a.job 
+	ORDER BY
+		job,
+		score DESC 
+	),
+	c AS (
+	SELECT
+		job,
+		@INDEX := @INDEX + 1 AS rx,
+		ic 
+	FROM
+		( SELECT @INDEX := 0 ) AS i,
+		b 
+	GROUP BY
+		job 
+	),
+	d AS (
+	SELECT
+		b.id,
+		b.rno,
+		b.job,
+		b.score,
+		c.rx,
+		c.ic 
+	FROM
+		b
+		LEFT JOIN c ON c.job = b.job 
+	) SELECT
+	id,
+	rno,
+	job,
+	score,
+	rx,
+	ic,
+IF
+	(
+		ic % 2 = 0,
+		floor(( ic / 2 + rno + rx ) / 2 ),
+		floor( ic / 2 ) + rx 
+	) AS rindex 
+FROM
+	d;
+
++----+------+------+-------+------+------+--------+
+| id | rno  | job  | score | rx   | ic   | rindex |
++----+------+------+-------+------+------+--------+
+| 11 |    1 | B    | 13000 |    1 |    4 |      2 |
+|  6 |    2 | B    | 12000 |    1 |    4 |      2 |
+|  7 |    3 | B    | 11000 |    1 |    4 |      3 |
+|  8 |    4 | B    |  9999 |    1 |    4 |      3 |
+| 12 |    5 | C    | 14000 |    5 |    1 |      5 |
+|  1 |    6 | C++  | 11001 |    6 |    3 |      7 |
+|  2 |    7 | C++  | 10000 |    6 |    3 |      7 |
+|  3 |    8 | C++  |  9000 |    6 |    3 |      7 |
+| 10 |    9 | Java | 15000 |    9 |    4 |     10 |
+|  5 |   10 | Java | 13000 |    9 |    4 |     10 |
+|  4 |   11 | Java | 12000 |    9 |    4 |     11 |
+|  9 |   12 | Java | 11000 |    9 |    4 |     11 |
++----+------+------+-------+------+------+--------+
+12 rows in set, 6 warnings (0.00 sec)
+</code></pre>
+<figure data-type="image" tabindex="1"><a href="https://imgse.com/i/pS2nJeI"><img src="https://s1.ax1x.com/2023/02/07/pS2nJeI.png" alt="pS2nJeI.png" loading="lazy"></a></figure>
+<h2 id="sql285-积分最多">SQL285 积分最多</h2>
+<p>获得积分最多的人(三)</p>
+<pre><code class="language-mysql">drop table if exists user;
+drop table if exists grade_info;
+
+CREATE TABLE user (
+id  int(4) NOT NULL,
+name varchar(32) NOT NULL
+);
+
+CREATE TABLE grade_info (
+user_id  int(4) NOT NULL,
+grade_num int(4) NOT NULL,
+type varchar(32) NOT NULL
+);
+
+INSERT INTO user VALUES
+(1,'tm'),
+(2,'wwy'),
+(3,'zk'),
+(4,'qq'),
+(5,'lm');
+
+INSERT INTO grade_info VALUES
+(1,3,'add'),
+(2,3,'add'),
+(1,1,'reduce'),
+(3,3,'add'),
+(4,3,'add'),
+(5,3,'add'),
+(3,1,'reduce');
+</code></pre>
+<h3 id="描述-5">描述</h3>
+<p>牛客每天有很多用户刷题，发帖，点赞，点踩等等，这些都会记录相应的积分。</p>
+<p>有一个用户表(user)，简况如下：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>tm</td>
+</tr>
+<tr>
+<td>2</td>
+<td>wwy</td>
+</tr>
+<tr>
+<td>3</td>
+<td>zk</td>
+</tr>
+<tr>
+<td>4</td>
+<td>qq</td>
+</tr>
+<tr>
+<td>5</td>
+<td>lm</td>
+</tr>
+</tbody>
+</table>
+<p>还有一个积分表(grade_info)，简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>grade_num</th>
+<th>type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>3</td>
+<td>add</td>
+</tr>
+<tr>
+<td>2</td>
+<td>3</td>
+<td>add</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+<td>reduce</td>
+</tr>
+<tr>
+<td>3</td>
+<td>3</td>
+<td>add</td>
+</tr>
+<tr>
+<td>4</td>
+<td>3</td>
+<td>add</td>
+</tr>
+<tr>
+<td>5</td>
+<td>3</td>
+<td>add</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1</td>
+<td>reduce</td>
+</tr>
+</tbody>
+</table>
+<p>第<code>1</code>行表示，<code>user_id</code>为1的用户积分增加了<code>3</code>分。</p>
+<p>第<code>2</code>行表示，<code>user_id</code>为2的用户积分增加了<code>3</code>分。</p>
+<p>第<code>3</code>行表示，<code>user_id</code>为1的用户积分减少了<code>1</code>分。</p>
+<p>.......</p>
+<p>最后1行表示，user_id为<code>3</code>的用户积分减少了<code>1</code>分。</p>
+<p>请你写一个<code>SQL</code>查找积分最高的用户的<code>id</code>，名字，以及他的总积分是多少(<strong>可能有多个</strong>)，查询结果按照id升序排序，以上例子查询结果如下:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>name</th>
+<th>grade_num</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2</td>
+<td>wwy</td>
+<td>3</td>
+</tr>
+<tr>
+<td>4</td>
+<td>qq</td>
+<td>3</td>
+</tr>
+<tr>
+<td>5</td>
+<td>lm</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>解释:</p>
+<p><code>user_id</code>为1和3的先加了3分，但是后面又减了1分，他们2个是2分，</p>
+<p>其他3个都是3分，所以输出其他三个的数据</p>
+<h3 id="解答w-5">解答W</h3>
+<pre><code class="language-mysql">WITH a AS ( SELECT *, IF ( type = 'add', 1, - 1 ) * grade_num AS rnum FROM grade_info ),
+b AS ( SELECT user_id, sum( rnum ) AS total FROM a GROUP BY user_id ),
+c AS ( SELECT *, rank() over ( ORDER BY total DESC ) AS rk FROM b ) SELECT
+c.*,
+user.NAME 
+FROM
+	c
+	LEFT JOIN user ON c.user_id = user.id 
+WHERE
+	rk = 1;
+	
++---------+-------+----+------+
+| user_id | total | rk | NAME |
++---------+-------+----+------+
+|       2 |     3 |  1 | wwy  |
+|       4 |     3 |  1 | qq   |
+|       5 |     3 |  1 | lm   |
++---------+-------+----+------+
+3 rows in set (0.00 sec)
+</code></pre>
+<h3 id="解答t-5">解答T</h3>
+<p>不使用窗口函数</p>
+<pre><code class="language-mysql">WITH a AS ( SELECT *, IF ( type = 'add', 1, - 1 ) * grade_num AS rnum FROM grade_info ),
+b AS ( SELECT user_id, sum( rnum ) AS total FROM a GROUP BY user_id ) SELECT
+* 
+FROM
+	b 
+ORDER BY
+	total DESC;
+
+# 这里得到了数值之后的最大值的处理?
++---------+-------+
+| user_id | total |
++---------+-------+
+|       2 |     3 |
+|       4 |     3 |
+|       5 |     3 |
+|       1 |     2 |
+|       3 |     2 |
++---------+-------+
+5 rows in set (0.00 sec)
+
+# 注意这里navicat会将user改成大写, 导致在linux下的MySQL存在问题
+
+WITH a AS ( SELECT *, IF ( type = 'add', 1, - 1 ) * grade_num AS rnum FROM grade_info ),
+b AS ( SELECT user_id, sum( rnum ) AS total FROM a GROUP BY user_id ) SELECT
+b.*,
+user.name
+FROM
+	b
+	LEFT JOIN user user.id = b.user_id 
+WHERE
+	b.total = ( SELECT max( total ) FROM b );
+
+# 这里执行两次的select from b, 对效率影响几何?
+
++---------+-------+------+
+| user_id | total | name |
++---------+-------+------+
+|       2 |     3 | wwy  |
+|       4 |     3 | qq   |
+|       5 |     3 | lm   |
++---------+-------+------
+</code></pre>
+<h2 id="sql280-简历投递">SQL280  简历投递</h2>
+<p>实习广场投递简历分析(三)</p>
+<pre><code class="language-mysql">drop table if exists resume_info;
+CREATE TABLE resume_info (
+id int(4) NOT NULL,
+job varchar(64) NOT NULL,
+date date NOT NULL,
+num int(11) NOT NULL,
+PRIMARY KEY (id));
+
+INSERT INTO resume_info VALUES
+(1,'C++','2025-01-02',53),
+(2,'Python','2025-01-02',23),
+(3,'Java','2025-01-02',12),
+(4,'C++','2025-01-03',54),
+(5,'Python','2025-01-03',43),
+(6,'Java','2025-01-03',41),
+(7,'Java','2025-02-03',24),
+(8,'C++','2025-02-03',23),
+(9,'Python','2025-02-03',34),
+(10,'Java','2025-02-04',42),
+(11,'C++','2025-02-04',45),
+(12,'Python','2025-02-04',59),
+(13,'C++','2026-01-04',230),
+(14,'Java','2026-01-04',764),
+(15,'Python','2026-01-04',644),
+(16,'C++','2026-01-06',240),
+(17,'Java','2026-01-06',714),
+(18,'Python','2026-01-06',624),
+(19,'C++','2026-02-14',260),
+(20,'Java','2026-02-14',721),
+(21,'Python','2026-02-14',321),
+(22,'C++','2026-02-24',134),
+(23,'Java','2026-02-24',928),
+(24,'Python','2026-02-24',525),
+(25,'C++','2027-02-06',231);
+</code></pre>
+<h3 id="描述-6">描述</h3>
+<p>在牛客实习广场有很多公司开放职位给同学们投递，同学投递完就会把简历信息存到数据库里。</p>
+<p>现在有简历信息表(resume_info)，部分信息简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>job</th>
+<th>date</th>
+<th>num</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>C++</td>
+<td>2025-01-02</td>
+<td>53</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Python</td>
+<td>2025-01-02</td>
+<td>23</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Java</td>
+<td>2025-01-02</td>
+<td>12</td>
+</tr>
+<tr>
+<td>4</td>
+<td>C++</td>
+<td>2025-01-03</td>
+<td>54</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Python</td>
+<td>2025-01-03</td>
+<td>43</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Java</td>
+<td>2025-01-03</td>
+<td>41</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Java</td>
+<td>2025-02-03</td>
+<td>24</td>
+</tr>
+<tr>
+<td>8</td>
+<td>C++</td>
+<td>2025-02-03</td>
+<td>23</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Python</td>
+<td>2025-02-03</td>
+<td>34</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Java</td>
+<td>2025-02-04</td>
+<td>42</td>
+</tr>
+<tr>
+<td>11</td>
+<td>C++</td>
+<td>2025-02-04</td>
+<td>45</td>
+</tr>
+<tr>
+<td>12</td>
+<td>Python</td>
+<td>2025-02-04</td>
+<td>59</td>
+</tr>
+<tr>
+<td>13</td>
+<td>C++</td>
+<td>2026-01-04</td>
+<td>230</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Java</td>
+<td>2026-01-04</td>
+<td>764</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Python</td>
+<td>2026-01-04</td>
+<td>644</td>
+</tr>
+<tr>
+<td>16</td>
+<td>C++</td>
+<td>2026-01-06</td>
+<td>240</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Java</td>
+<td>2026-01-06</td>
+<td>714</td>
+</tr>
+<tr>
+<td>18</td>
+<td>Python</td>
+<td>2026-01-06</td>
+<td>624</td>
+</tr>
+<tr>
+<td>19</td>
+<td>C++</td>
+<td>2026-01-04</td>
+<td>260</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Java</td>
+<td>2026-02-14</td>
+<td>721</td>
+</tr>
+<tr>
+<td>21</td>
+<td>Python</td>
+<td>2026-02-14</td>
+<td>321</td>
+</tr>
+<tr>
+<td>22</td>
+<td>C++</td>
+<td>2026-02-14</td>
+<td>134</td>
+</tr>
+<tr>
+<td>23</td>
+<td>Java</td>
+<td>2026-02-24</td>
+<td>928</td>
+</tr>
+<tr>
+<td>24</td>
+<td>Python</td>
+<td>2026-02-24</td>
+<td>525</td>
+</tr>
+<tr>
+<td>25</td>
+<td>C++</td>
+<td>2027-02-06</td>
+<td>231</td>
+</tr>
+</tbody>
+</table>
+<p>第1行表示，在2025年1月2号，C++岗位收到了53封简历</p>
+<p>......</p>
+<p>最后1行表示，在2027年2月6号，C++岗位收到了231封简历</p>
+<p>请你写出SQL语句查询在2025年投递简历的每个岗位，每一个月内收到简历的数目，和对应的2026年的同一个月同岗位，收到简历的数目，最后的结果先按first_year_mon月份降序，再按job降序排序显示，以上例子查询结果如下:</p>
+<table>
+<thead>
+<tr>
+<th>job</th>
+<th>first_year_mon</th>
+<th>first_year_cnt</th>
+<th>second_year_mon</th>
+<th>second_year_cnt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Python</td>
+<td>2025-02</td>
+<td>93</td>
+<td>2026-02</td>
+<td>846</td>
+</tr>
+<tr>
+<td>Java</td>
+<td>2025-02</td>
+<td>66</td>
+<td>2026-02</td>
+<td>1649</td>
+</tr>
+<tr>
+<td>C++</td>
+<td>2025-02</td>
+<td>68</td>
+<td>2026-02</td>
+<td>394</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>2025-01</td>
+<td>66</td>
+<td>2026-01</td>
+<td>1268</td>
+</tr>
+<tr>
+<td>Java</td>
+<td>2025-01</td>
+<td>53</td>
+<td>2026-01</td>
+<td>1478</td>
+</tr>
+<tr>
+<td>C++</td>
+<td>2025-01</td>
+<td>107</td>
+<td>2026-01</td>
+<td>470</td>
+</tr>
+</tbody>
+</table>
+<p>解析:</p>
+<p>第1行表示Python岗位在2025年2月收到了93份简历，在对应的2026年2月收到了846份简历</p>
+<p>......</p>
+<p>最后1行表示C++岗位在2025年1月收到了107份简历，在对应的2026年1月收到了470份简历</p>
+<h3 id="解答w-6">解答W</h3>
+<pre><code class="language-mysql"># a, 得到基础的数据
+WITH a AS (
+	SELECT
+		job,
+		CONVERT ( concat( substring( date, 1, 7 ), '-01' ), date ) AS m_month,
+		sum( num ) AS all_c 
+	FROM
+		resume_info 
+	WHERE
+		YEAR ( date ) != 2027 
+	GROUP BY
+		job,
+		m_month 
+	),
+	# 汇合数据, 注意这里只有两年的数据, 可以这样合并, 假如三年的数据呢?
+	b AS (
+	SELECT
+		job,
+		m_month AS fm,
+		all_c,
+		lag( m_month ) over w AS sm,
+		lag( all_c ) over w AS sc 
+	FROM
+	a window w AS ( PARTITION BY job, MONTH ( m_month ) ORDER BY m_month )) SELECT
+	job,
+	DATE_FORMAT( sm, '%Y-%m' ) AS first_year_mon,
+	sc AS first_year_cnt,
+	DATE_FORMAT( fm, '%Y-%m' ) AS second_year_mon,
+	all_c AS second_year_cnt 
+FROM
+	b 
+WHERE
+	sm IS NOT NULL 
+ORDER BY
+	month(sm) desc, job desc;
+	
++--------+----------------+----------------+-----------------+-----------------+
+| job    | first_year_mon | first_year_cnt | second_year_mon | second_year_cnt |
++--------+----------------+----------------+-----------------+-----------------+
+| Python | 2025-02        |             93 | 2026-02         |             846 |
+| Java   | 2025-02        |             66 | 2026-02         |            1649 |
+| C++    | 2025-02        |             68 | 2026-02         |             394 |
+| Python | 2025-01        |             66 | 2026-01         |            1268 |
+| Java   | 2025-01        |             53 | 2026-01         |            1478 |
+| C++    | 2025-01        |            107 | 2026-01         |             470 |
++--------+----------------+----------------+-----------------+-----------------+
+6 rows in set (0.01 sec)
+</code></pre>
+<h3 id="解答t-6">解答T</h3>
+<pre><code class="language-mysql"># 等到基础数据
+# 按照年份拆分开两组数据
+# 按照month, job合并数据
+WITH a AS (
+	SELECT
+		job,
+		CONVERT ( concat( substring( date, 1, 7 ), '-01' ), date ) AS m_month,
+		sum( num ) AS all_c 
+	FROM
+		resume_info 
+	WHERE
+		YEAR ( date ) != 2027 
+	GROUP BY
+		job,
+		m_month 
+	),
+	b AS ( SELECT * FROM a WHERE YEAR ( m_month ) = 2025 ),
+	c AS ( SELECT * FROM a WHERE YEAR ( m_month ) = 2026 ) SELECT
+	b.*,
+	c.* 
+FROM
+	b
+	JOIN c ON MONTH ( b.m_month ) = MONTH ( c.m_month ) 
+	AND b.job = c.job;
+	
++--------+------------+-------+--------+------------+-------+
+| job    | m_month    | all_c | job    | m_month    | all_c |
++--------+------------+-------+--------+------------+-------+
+| C++    | 2025-01-01 |   107 | C++    | 2026-01-01 |   470 |
+| Python | 2025-01-01 |    66 | Python | 2026-01-01 |  1268 |
+| Java   | 2025-01-01 |    53 | Java   | 2026-01-01 |  1478 |
+| Java   | 2025-02-01 |    66 | Java   | 2026-02-01 |  1649 |
+| C++    | 2025-02-01 |    68 | C++    | 2026-02-01 |   394 |
+| Python | 2025-02-01 |    93 | Python | 2026-02-01 |   846 |
++--------+------------+-------+--------+------------+-------+
+6 rows in set (0.00 sec)
+</code></pre>
+<h2 id="sql220-部门职衔">SQL220 部门职衔</h2>
+<p>汇总各个部门当前员工的title类型的分配数目</p>
+<pre><code class="language-mysql">drop table if exists  `departments` ; 
+drop table if exists  `dept_emp` ; 
+drop table if exists  titles ;
+CREATE TABLE `departments` (
+`dept_no` char(4) NOT NULL,
+`dept_name` varchar(40) NOT NULL,
+PRIMARY KEY (`dept_no`));
+CREATE TABLE `dept_emp` (
+`emp_no` int(11) NOT NULL,
+`dept_no` char(4) NOT NULL,
+`from_date` date NOT NULL,
+`to_date` date NOT NULL,
+PRIMARY KEY (`emp_no`,`dept_no`));
+CREATE TABLE titles (
+`emp_no` int(11) NOT NULL,
+`title` varchar(50) NOT NULL,
+`from_date` date NOT NULL,
+`to_date` date DEFAULT NULL);
+INSERT INTO departments VALUES('d001','Marketing');
+INSERT INTO departments VALUES('d002','Finance');
+INSERT INTO dept_emp VALUES(10001,'d001','1986-06-26','9999-01-01');
+INSERT INTO dept_emp VALUES(10002,'d001','1996-08-03','9999-01-01');
+INSERT INTO dept_emp VALUES(10003,'d002','1995-12-03','9999-01-01');
+INSERT INTO titles VALUES(10001,'Senior Engineer','1986-06-26','9999-01-01');
+INSERT INTO titles VALUES(10002,'Staff','1996-08-03','9999-01-01');
+INSERT INTO titles VALUES(10003,'Senior Engineer','1995-12-03','9999-01-01');
+</code></pre>
+<h3 id="描述-7">描述</h3>
+<p>有一个部门表<code>departments</code>简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>dept_no</th>
+<th>dept_name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d001</td>
+<td>Marketing</td>
+</tr>
+<tr>
+<td>d002</td>
+<td>Finance</td>
+</tr>
+</tbody>
+</table>
+<p>有一个，部门员工关系表<code>dept_emp</code>简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>emp_no</th>
+<th>dept_no</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10001</td>
+<td>d001</td>
+<td>1986-06-26</td>
+<td>9999-01-01</td>
+</tr>
+<tr>
+<td>10002</td>
+<td>d001</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+<tr>
+<td>10003</td>
+<td>d002</td>
+<td>1995-12-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>有一个职称表<code>titles</code>简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>emp_no</th>
+<th>title</th>
+<th>form_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10001</td>
+<td>Senior Engineer</td>
+<td>1986-06-26</td>
+<td>9999-01-01</td>
+</tr>
+<tr>
+<td>10002</td>
+<td>Staff</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+<tr>
+<td>10003</td>
+<td>Senior Engineer</td>
+<td>1995-12-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>汇总各个部门当前员工的<code>title</code>类型的分配数目，即结果给出部门编号<code>dept_no</code>、<code>dept_name</code>、其部门下所有的员工的title以及该类型title对应的数目<code>count</code>，结果按照<code>dept_no</code>升序排序，<code>dept_no</code>一样的再按<code>title</code>升序排序</p>
+<table>
+<thead>
+<tr>
+<th>dept_no</th>
+<th>dept_name</th>
+<th>title</th>
+<th>count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d001</td>
+<td>Marketing</td>
+<td>Senior Engineer</td>
+<td>1</td>
+</tr>
+<tr>
+<td>d001</td>
+<td>Marketing</td>
+<td>Staff</td>
+<td>1</td>
+</tr>
+<tr>
+<td>d002</td>
+<td>Finance</td>
+<td>Senior Engineer</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<h3 id="解答w-7">解答W</h3>
+<p>这种需求, 窗口函数的实现属于入门级.</p>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		de.emp_no,
+		de.dept_no,
+		dp.dept_name,
+		tl.title 
+	FROM
+		dept_emp AS de
+		LEFT JOIN departments AS dp ON de.dept_no = dp.dept_no
+		LEFT JOIN titles tl ON de.emp_no = tl.emp_no 
+	) SELECT
+	*,
+	# 根据部门 - title的使用 -&gt; 统计title的使用次数
+	count( title ) over ( PARTITION BY dept_no, title ) AS count 
+FROM
+	a;
+
++--------+---------+-----------+-----------------+-------+
+| emp_no | dept_no | dept_name | title           | count |
++--------+---------+-----------+-----------------+-------+
+|  10001 | d001    | Marketing | Senior Engineer |     1 |
+|  10002 | d001    | Marketing | Staff           |     1 |
+|  10003 | d002    | Finance   | Senior Engineer |     1 |
++--------+---------+-----------+-----------------+-------+
+3 rows in set (0.00 sec)
+</code></pre>
+<h3 id="解答t-7">解答T</h3>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		t.emp_no,
+		de.dept_no,
+		t.title 
+	FROM
+		titles AS t
+		LEFT JOIN dept_emp de ON de.emp_no = t.emp_no 
+	) SELECT
+	a.dept_no,
+	a.title,
+	dp.dept_name,
+	count(*) AS count 
+FROM
+	a
+	LEFT JOIN departments AS dp ON dp.dept_no = a.dept_no 
+GROUP BY
+	dept_no,
+	title;
+
++---------+-----------------+-----------+-------+
+| dept_no | title           | dept_name | count |
++---------+-----------------+-----------+-------+
+| d001    | Senior Engineer | Marketing |     1 |
+| d001    | Staff           | Marketing |     1 |
+| d002    | Senior Engineer | Finance   |     1 |
++---------+-----------------+-----------+-------+
+3 rows in set (0.00 sec)
+</code></pre>
+<h2 id="sql219-员工薪水">SQL219 员工薪水</h2>
+<p>获取员工其当前的薪水比其<code>manager</code>当前薪水还高的相关信息</p>
+<pre><code class="language-mysql">drop table if exists  `dept_emp` ; 
+drop table if exists  `dept_manager` ; 
+drop table if exists  `salaries` ; 
+CREATE TABLE `dept_emp` (
+`emp_no` int(11) NOT NULL,
+`dept_no` char(4) NOT NULL,
+`from_date` date NOT NULL,
+`to_date` date NOT NULL,
+PRIMARY KEY (`emp_no`,`dept_no`));
+CREATE TABLE `dept_manager` (
+`dept_no` char(4) NOT NULL,
+`emp_no` int(11) NOT NULL,
+`from_date` date NOT NULL,
+`to_date` date NOT NULL,
+PRIMARY KEY (`emp_no`,`dept_no`));
+CREATE TABLE `salaries` (
+`emp_no` int(11) NOT NULL,
+`salary` int(11) NOT NULL,
+`from_date` date NOT NULL,
+`to_date` date NOT NULL,
+PRIMARY KEY (`emp_no`,`from_date`));
+INSERT INTO dept_emp VALUES(10001,'d001','1986-06-26','9999-01-01');
+INSERT INTO dept_emp VALUES(10002,'d001','1996-08-03','9999-01-01');
+# 增加测试数据
+INSERT INTO dept_emp VALUES(10003,'d001','1997-08-03','9999-01-01');
+
+INSERT INTO dept_manager VALUES('d001',10002,'1996-08-03','9999-01-01');
+
+INSERT INTO salaries VALUES(10001,88958,'2002-06-22','9999-01-01');
+INSERT INTO salaries VALUES(10002,72527,'1996-08-03','9999-01-01');
+# 增加测试数据
+INSERT INTO salaries VALUES(10003,62527,'1996-08-03','9999-01-01');
+</code></pre>
+<h3 id="描述-8">描述</h3>
+<p>有一个，部门关系表<code>dept_emp</code>简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>emp_no</th>
+<th>dept_no</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10001</td>
+<td>d001</td>
+<td>1986-06-26</td>
+<td>9999-01-01</td>
+</tr>
+<tr>
+<td>10002</td>
+<td>d001</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>有一个部门经理表<code>dept_manager</code>简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>dept_no</th>
+<th>emp_no</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>d001</td>
+<td>10002</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>有一个薪水表<code>salaries</code>简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>emp_no</th>
+<th>salary</th>
+<th>from_date</th>
+<th>to_date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10001</td>
+<td>88958</td>
+<td>2002-06-22</td>
+<td>9999-01-01</td>
+</tr>
+<tr>
+<td>10002</td>
+<td>72527</td>
+<td>1996-08-03</td>
+<td>9999-01-01</td>
+</tr>
+</tbody>
+</table>
+<p>获取员工其当前的薪水比其<code>manager</code>当前薪水还高的相关信息，</p>
+<p>第一列给出员工的<code>emp_no</code>，<br>
+第二列给出其<code>manager</code>的<code>manager_no</code>，<br>
+第三列给出该员工当前的薪水<code>emp_salary</code>,<br>
+第四列给该员工对应的manager当前的薪水<code>manager_salary</code></p>
+<p>以上例子输出如下:</p>
+<table>
+<thead>
+<tr>
+<th><code>emp_no</code></th>
+<th><code>manager_no</code></th>
+<th><code>emp_salary</code></th>
+<th><code>manager_salary</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10001</td>
+<td>10002</td>
+<td>88958</td>
+<td>72527</td>
+</tr>
+</tbody>
+</table>
+<h3 id="解答w-8">解答W</h3>
+<pre><code class="language-mysql">WITH temp AS (
+	SELECT
+		a.emp_no,
+		b.emp_no AS m_n,
+		c.salary 
+	FROM
+		dept_emp a
+		LEFT JOIN dept_manager b ON a.dept_no = b.dept_no
+		LEFT JOIN salaries c ON a.emp_no = c.emp_no 
+	),
+	# 加入一个辅助列, 用于将manager抽离出来
+	m AS ( SELECT *, IF ( emp_no = m_n, 1, 0 ) AS is_m FROM temp ),
+	# 将manager的数据逐个添加到常规的emp_no之下(新增列)
+	n AS (
+	SELECT
+		*,
+		FIRST_VALUE( salary ) over w AS ms,
+		FIRST_VALUE( emp_no ) over w AS m_m 
+	FROM
+	m window w AS ( PARTITION BY m_n ORDER BY is_m DESC )) SELECT
+	emp_no,
+	m_m AS manager_no,
+	salary AS emp_salary,
+	ms AS manager_salary 
+FROM
+	n 
+WHERE
+	is_m = 0 
+	AND salary &gt; ms;
+	
++--------+------------+------------+----------------+
+| emp_no | manager_no | emp_salary | manager_salary |
++--------+------------+------------+----------------+
+|  10001 |      10002 |      88958 |          72527 |
++--------+------------+------------+----------------+
+1 row in set (0.00 sec)
+</code></pre>
+<h3 id="解答t-8">解答T</h3>
+<p>不使用窗口函数</p>
+<pre><code class="language-mysql">WITH temp AS (
+	SELECT
+		a.emp_no,
+		b.emp_no AS m_n,
+		c.salary 
+	FROM
+		dept_emp a
+		LEFT JOIN dept_manager b ON a.dept_no = b.dept_no
+		LEFT JOIN salaries c ON a.emp_no = c.emp_no 
+	),
+	# 将manger提取出来
+	m AS ( SELECT * FROM temp AS t1 WHERE t1.emp_no != t1.m_n ),
+	n AS ( SELECT * FROM temp AS t2 WHERE t2.emp_no = t2.m_n ) SELECT
+	m.emp_no,
+	n.emp_no AS manager_no,
+	m.salary AS emp_salary,
+	n.salary AS manager_salary 
+FROM
+	m
+	LEFT JOIN n ON m.m_n = n.m_n 
+WHERE
+	m.salary &gt; n.salary;
+	
++--------+------------+------------+----------------+
+| emp_no | manager_no | emp_salary | manager_salary |
++--------+------------+------------+----------------+
+|  10001 |      10002 |      88958 |          72527 |
++--------+------------+------------+----------------+
+1 row in set (0.00 sec)
+</code></pre>
+<h2 id="sql275-课程订单">SQL275 课程订单</h2>
+<p>牛客的课程订单分析(五)</p>
+<pre><code class="language-mysql">drop table if exists order_info;
+CREATE TABLE order_info (
+id int(4) NOT NULL,
+user_id int(11) NOT NULL,
+product_name varchar(256) NOT NULL,
+status varchar(32) NOT NULL,
+client_id int(4) NOT NULL,
+date date NOT NULL,
+PRIMARY KEY (id));
+
+INSERT INTO order_info VALUES
+(1,557336,'C++','no_completed',1,'2025-10-10'),
+(2,230173543,'Python','completed',2,'2025-10-12'),
+(3,57,'JS','completed',3,'2025-10-23'),
+(4,57,'C++','completed',3,'2025-10-23'),
+(5,557336,'Java','completed',1,'2025-10-23'),
+(6,57,'Java','completed',1,'2025-10-24'),
+(7,557336,'C++','completed',1,'2025-10-25'),
+(8,557336,'Python','completed',1,'2025-10-26');
+</code></pre>
+<h3 id="描述-9">描述</h3>
+<p>有很多同学在牛客购买课程来学习，购买会产生订单存到数据库里。</p>
+<p>有一个订单信息表(order_info)，简况如下:</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>user_id</th>
+<th>product_name</th>
+<th>status</th>
+<th>client_id</th>
+<th>date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>557336</td>
+<td>C++</td>
+<td>no_completed</td>
+<td>1</td>
+<td>2025-10-10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>230173543</td>
+<td>Python</td>
+<td>completed</td>
+<td>2</td>
+<td>2025-10-12</td>
+</tr>
+<tr>
+<td>3</td>
+<td>57</td>
+<td>JS</td>
+<td>completed</td>
+<td>3</td>
+<td>2025-10-23</td>
+</tr>
+<tr>
+<td>4</td>
+<td>57</td>
+<td>C++</td>
+<td>completed</td>
+<td>3</td>
+<td>2025-10-23</td>
+</tr>
+<tr>
+<td>5</td>
+<td>557336</td>
+<td>Java</td>
+<td>completed</td>
+<td>1</td>
+<td>2025-10-23</td>
+</tr>
+<tr>
+<td>6</td>
+<td>57</td>
+<td>Java</td>
+<td>completed</td>
+<td>1</td>
+<td>2025-10-24</td>
+</tr>
+<tr>
+<td>7</td>
+<td>557336</td>
+<td>C++</td>
+<td>completed</td>
+<td>1</td>
+<td>2025-10-25</td>
+</tr>
+<tr>
+<td>8</td>
+<td>557336</td>
+<td>Python</td>
+<td>completed</td>
+<td>1</td>
+<td>2025-10-26</td>
+</tr>
+</tbody>
+</table>
+<p>第1行表示user_id为557336的用户在2025-10-10的时候使用了client_id为1的客户端下了C++课程的订单，但是状态为没有购买成功。</p>
+<p>第2行表示user_id为230173543的用户在2025-10-12的时候使用了client_id为2的客户端下了Python课程的订单，状态为购买成功。</p>
+<p>......</p>
+<p>最后1行表示user_id为557336的用户在2025-10-26的时候使用了client_id为1的客户端下了Python课程的订单，状态为购买成功。</p>
+<p>请你写出一个sql语句查询在2025-10-15以后，如果有一个用户下单2个以及2个以上状态为购买成功的C++课程或Java课程或Python课程，那么输出这个用户的user_id，以及满足前面条件的第一次购买成功的C++课程或Java课程或Python课程的日期first_buy_date，以及满足前面条件的第二次购买成功的C++课程或Java课程或Python课程的日期second_buy_date，以及购买成功的C++课程或Java课程或Python课程的次数cnt，并且输出结果按照user_id升序排序，以上例子查询结果如下:</p>
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>first_buy_date</th>
+<th>second_buy_date</th>
+<th>cnt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>57</td>
+<td>2025-10-23</td>
+<td>2025-10-24</td>
+<td>2</td>
+</tr>
+<tr>
+<td>557336</td>
+<td>2025-10-23</td>
+<td>2025-10-25</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>解析:</p>
+<p>id为4，6的订单满足以上条件，输出57，id为4的订单为第一次购买成功，输出first_buy_date为2025-10-23，id为6的订单为第二次购买，输出second_buy_date为2025-10-24，总共成功购买了2次;</p>
+<p>id为5，7，8的订单满足以上条件，输出557336，id为5的订单为第一次购买成功，输出first_buy_date为2025-10-23，id为7的订单为第二次购买，输出second_buy_date为2025-10-25，总共成功购买了3次;</p>
+<h3 id="解答w-9">解答W</h3>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		user_id,
+		FIRST_VALUE( date ) over w AS first_buy_date,
+		NTH_VALUE( date, 2 ) over w AS second_buy_date,
+		count( user_id ) over w AS cnt 
+	FROM
+		order_info 
+	WHERE
+		STATUS = 'completed' 
+		AND date &gt; '2025-10-15' 
+		AND product_name IN ( 'C++', 'Python', 'Java' ) window w AS ( PARTITION BY user_id ) 
+	ORDER BY
+		user_id,
+		date 
+	) SELECT DISTINCT
+	* 
+FROM
+	a 
+WHERE
+	cnt &gt; 1;
+	
++---------+-----+----------------+-----------------+
+| user_id | cnt | first_buy_date | second_buy_date |
++---------+-----+----------------+-----------------+
+|      57 |   2 | 2025-10-23     | 2025-10-24      |
+|  557336 |   3 | 2025-10-23     | 2025-10-25      |
++---------+-----+----------------+-----------------+
+2 rows in set (0.00 sec)
+</code></pre>
+<h3 id="解答t-9">解答T</h3>
+<pre><code class="language-mysql">WITH a AS ( SELECT * FROM order_info WHERE STATUS = 'completed' AND date &gt; '2025-10-15' AND product_name IN ( 'C++', 'Python', 'Java' ) ORDER BY date ),
+b AS ( SELECT user_id, min( date ) AS first_buy_date, count( user_id ) AS cnt FROM a GROUP BY user_id ),
+c AS ( SELECT user_id, min( date ) AS second_buy_date FROM a WHERE date NOT IN ( SELECT first_buy_date FROM b ) GROUP BY user_id ) SELECT
+b.*,
+c.second_buy_date 
+FROM
+	b
+	LEFT JOIN c ON b.user_id = c.user_id 
+WHERE
+	b.cnt &gt; 1;
+	
++---------+----------------+-----+-----------------+
+| user_id | first_buy_date | cnt | second_buy_date |
++---------+----------------+-----+-----------------+
+|      57 | 2025-10-23     |   2 | 2025-10-24      |
+|  557336 | 2025-10-23     |   3 | 2025-10-25      |
++---------+----------------+-----+-----------------+
+2 rows in set (0.00 sec)
+</code></pre>
+<h2 id="小结">小结</h2>
+<p>在窗口函数下, 大部分问题的解决都会变得更容易, 且通常情况下, 窗口函数的<code>SQL</code>语句可阅读性(即第一眼阅读可以大概有一个轮廓, 这些语句的作用)更好.</p>
+<p>由于传统的处理方式, 如: 行之间的运算, 一般需要一些巧妙的方式来实现其计算, 如果不是仔细的解析代码, 其中的部分的代码并不易于理解.</p>
+<p>例如上面的<code>SQL</code>语句</p>
+<pre><code class="language-mysql"># window, 相当明确的表明取值的方式, 取值, 是date的第二个值
+NTH_VALUE( date, 2 ) over w AS second_buy_date,
+
+# 传统模式下
+# 显然乍看之下, 不容易理解这个语句为什么能取出第二的数值
+# 这是间接实现, 筛选出最小的, 然后再次筛选最小的,  即得到第二小的
+SELECT user_id, min( date ) AS second_buy_date FROM a WHERE date NOT IN ( SELECT first_buy_date FROM b)
+</code></pre>
+<h2 id="大厂真题">大厂真题</h2>
+<p><em>以下内容相对复杂, 将全部采用窗口函数来解决.</em></p>
+<p><em>部分内容描述得十分含糊, 仅作参考, 解法可能有所差异.</em></p>
+<h3 id="sql161-视频热度">SQL161 视频热度</h3>
+<p>近一个月发布的视频中热度最高的top3视频</p>
+<pre><code class="language-mysql">DROP TABLE IF EXISTS tb_user_video_log, tb_video_info;
+CREATE TABLE tb_user_video_log (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '自增ID',
+    uid INT NOT NULL COMMENT '用户ID',
+    video_id INT NOT NULL COMMENT '视频ID',
+    start_time datetime COMMENT '开始观看时间',
+    end_time datetime COMMENT '结束观看时间',
+    if_follow TINYINT COMMENT '是否关注',
+    if_like TINYINT COMMENT '是否点赞',
+    if_retweet TINYINT COMMENT '是否转发',
+    comment_id INT COMMENT '评论ID'
+) CHARACTER SET utf8 COLLATE utf8_bin;
+
+CREATE TABLE tb_video_info (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '自增ID',
+    video_id INT UNIQUE NOT NULL COMMENT '视频ID',
+    author INT NOT NULL COMMENT '创作者ID',
+    tag VARCHAR(16) NOT NULL COMMENT '类别标签',
+    duration INT NOT NULL COMMENT '视频时长(秒数)',
+    release_time datetime NOT NULL COMMENT '发布时间'
+)CHARACTER SET utf8 COLLATE utf8_bin;
+
+INSERT INTO tb_user_video_log(uid, video_id, start_time, end_time, if_follow, if_like, if_retweet, comment_id) VALUES
+   (101, 2001, '2021-09-24 10:00:00', '2021-09-24 10:00:30', 1, 1, 1, null)
+  ,(101, 2001, '2021-10-01 10:00:00', '2021-10-01 10:00:31', 1, 1, 0, null)
+  ,(102, 2001, '2021-10-01 10:00:00', '2021-10-01 10:00:35', 0, 0, 1, null)
+  ,(103, 2001, '2021-10-03 11:00:50', '2021-10-03 11:01:35', 1, 1, 0, 1732526)
+  ,(106, 2002, '2021-10-02 10:59:05', '2021-10-02 11:00:04', 2, 0, 1, null)
+  ,(107, 2002, '2021-10-02 10:59:05', '2021-10-02 11:00:06', 1, 0, 0, null)
+  ,(108, 2002, '2021-10-02 10:59:05', '2021-10-02 11:00:05', 1, 1, 1, null)
+  ,(109, 2002, '2021-10-03 10:59:05', '2021-10-03 11:00:01', 0, 1, 0, null)
+  ,(105, 2002, '2021-09-25 11:00:00', '2021-09-25 11:00:30', 1, 0, 1, null)
+  ,(101, 2003, '2021-09-26 11:00:00', '2021-09-26 11:00:30', 1, 0, 0, null)
+  ,(101, 2003, '2021-09-30 11:00:00', '2021-09-30 11:00:30', 1, 1, 0, null);
+
+INSERT INTO tb_video_info(video_id, author, tag, duration, release_time) VALUES
+   (2001, 901, '旅游', 30, '2021-09-05 7:00:00')
+  ,(2002, 901, '旅游', 60, '2021-09-05 7:00:00')
+  ,(2003, 902, '影视', 90, '2021-09-05 7:00:00')
+  ,(2004, 902, '影视', 90, '2021-09-05 8:00:00');
+</code></pre>
+<h4 id="描述-10">描述</h4>
+<p>现有用户-视频互动表tb_user_video_log</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>uid</th>
+<th>video_id</th>
+<th>start_time</th>
+<th>end_time</th>
+<th>if_follow</th>
+<th>if_like</th>
+<th>if_retweet</th>
+<th>comment_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>101</td>
+<td>2001</td>
+<td>2021-09-24 10:00:00</td>
+<td>2021-09-24 10:00:30</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>2</td>
+<td>101</td>
+<td>2001</td>
+<td>2021-10-01 10:00:00</td>
+<td>2021-10-01 10:00:31</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>3</td>
+<td>102</td>
+<td>2001</td>
+<td>2021-10-01 10:00:00</td>
+<td>2021-10-01 10:00:35</td>
+<td>0</td>
+<td>0</td>
+<td>1</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>4</td>
+<td>103</td>
+<td>2001</td>
+<td>2021-10-03 11:00:50</td>
+<td>2021-10-03 10:00:35</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1732526</td>
+</tr>
+<tr>
+<td>5</td>
+<td>106</td>
+<td>2002</td>
+<td>2021-10-02 11:00:05</td>
+<td>2021-10-02 11:01:04</td>
+<td>2</td>
+<td>0</td>
+<td>1</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>6</td>
+<td>107</td>
+<td>2002</td>
+<td>2021-10-02 10:59:05</td>
+<td>2021-10-02 11:00:06</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>7</td>
+<td>108</td>
+<td>2002</td>
+<td>2021-10-02 10:59:05</td>
+<td>2021-10-02 11:00:05</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>8</td>
+<td>109</td>
+<td>2002</td>
+<td>2021-10-03 10:59:05</td>
+<td>2021-10-03 11:00:01</td>
+<td>0</td>
+<td>1</td>
+<td>0</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>9</td>
+<td>105</td>
+<td>2002</td>
+<td>2021-09-25 11:00:00</td>
+<td>2021-09-25 11:00:30</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>10</td>
+<td>101</td>
+<td>2003</td>
+<td>2021-09-26 11:00:00</td>
+<td>2021-09-26 11:00:30</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>11</td>
+<td>101</td>
+<td>2003</td>
+<td>2021-09-30 11:00:00</td>
+<td>2021-09-30 11:00:30</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>NULL</td>
+</tr>
+</tbody>
+</table>
+<p>(uid-用户ID, video_id-视频ID, start_time-开始观看时间, end_time-结束观看时间, if_follow-是否关注, if_like-是否点赞, if_retweet-是否转发, comment_id-评论ID）</p>
+<p>短视频信息表tb_video_info</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>video_id</th>
+<th>author</th>
+<th>tag</th>
+<th>duration</th>
+<th>release_time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2001</td>
+<td>901</td>
+<td>旅游</td>
+<td>30</td>
+<td>2021-09-05 07:00:00</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2002</td>
+<td>901</td>
+<td>旅游</td>
+<td>60</td>
+<td>2021-09-05 07:00:00</td>
+</tr>
+<tr>
+<td>3</td>
+<td>2003</td>
+<td>902</td>
+<td>影视</td>
+<td>90</td>
+<td>2021-09-05 07:00:00</td>
+</tr>
+<tr>
+<td>4</td>
+<td>2004</td>
+<td>902</td>
+<td>影视</td>
+<td>90</td>
+<td>2021-09-05 08:00:00</td>
+</tr>
+</tbody>
+</table>
+<p>(video_id-视频ID, author-创作者ID, tag-类别标签, duration-视频时长, release_time-发布时间）</p>
+<p><strong>问题</strong>：找出<em>近一个月</em>发布的视频中<strong>热度</strong>最高的<em>top3</em>视频。</p>
+<p><strong>注</strong>：</p>
+<ul>
+<li>热度=(a<em>视频完播率+b</em>点赞数+c<em>评论数+d</em>转发数)*新鲜度；</li>
+<li>新鲜度=1/(最近无播放天数+1)；(关键在于此)</li>
+<li>当前配置的参数a,b,c,d分别为100、5、3、2。</li>
+<li>最近播放日期以<strong>end_time-结束观看时间</strong>为准，假设为T，则最近一个月按[T-29, T]闭区间统计。</li>
+<li>结果中热度保留为<strong>整数</strong>，并按热度<strong>降序</strong>排序。</li>
+</ul>
+<p><strong>输出示例</strong>：</p>
+<p>示例数据的输出结果如下</p>
+<table>
+<thead>
+<tr>
+<th>video_id</th>
+<th>hot_index</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2001</td>
+<td>122</td>
+</tr>
+<tr>
+<td>2002</td>
+<td>56</td>
+</tr>
+<tr>
+<td>2003</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>解释：</p>
+<pre><code class="language-bash">mysql&gt; select date_sub(&quot;2021-10-03&quot;, interval 1 month);
++------------------------------------------+
+| date_sub(&quot;2021-10-03&quot;, interval 1 month) |
++------------------------------------------+
+| 2021-09-03                               |
++------------------------------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<p>最近播放日期为<strong>2021-10-03</strong>，记作当天日期；近一个月（2021-09-04及之后）发布的视频有2001、2002、2003、2004，不过2004暂时还没有播放记录；</p>
+<p>视频2001完播率1.0（被播放次数4次，完成播放4次），被点赞3次，评论1次，转发2次，最近无播放天数为0，因此热度为：(100*1.0+5*3+3*1+2*2)/(0+1)=122</p>
+<p>同理，视频2003完播率0，被点赞数1，评论和转发均为0，最近无播放天数为3，因此热度为：(100*0+5*1+3*0+2*0)/(3+1)=1 (1.2保留为整数).</p>
+<h4 id="解答">解答</h4>
+<p><em>这道题并不复杂, 也不难, 但是这里写的说明不是很清楚, 让这个题看起来很复杂.</em></p>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		video_id,
+		if_like,
+		if_follow,
+		if_retweet,
+	IF
+		( comment_id IS NULL, 0, 1 ) AS comments,
+		TIMESTAMPDIFF( SECOND, start_time, end_time ) AS gap,
+		max( end_time ) over () AS md,
+		max( end_time ) over ( PARTITION BY video_id ) AS rd 
+	FROM
+		tb_user_video_log 
+	),
+	b AS (
+	SELECT
+		a.video_id,
+		a.if_like,
+		a.if_follow,
+		a.if_retweet,
+		a.comments,
+		DATEDIFF( a.md, a.rd ) AS gap,
+	IF
+		( a.gap &gt; ( tv.duration - 1 ), 1, 0 ) AS ftimes 
+	FROM
+		a
+		LEFT JOIN tb_video_info tv ON a.video_id = tv.video_id 
+	WHERE
+		DATEDIFF(a.md, tv.release_time) &lt;= 29
+	),
+	c AS (
+	SELECT
+		video_id,
+		count( video_id ) AS ptimes,
+		sum( if_like ) AS likes,
+		sum( if_follow ) AS follows,
+		sum( if_retweet ) AS retweets,
+		sum( comments ) AS comments,
+		avg( gap ) AS gap,
+		avg( ftimes ) AS finish_ratio 
+	FROM
+		b 
+	GROUP BY
+		video_id 
+	) SELECT
+	video_id,
+	round((
+			100 * finish_ratio + 5 * likes + 3 * comments + 2 * retweets 
+			) * (
+		1 / ( gap + 1 )), 0) AS hot_index 
+FROM
+	c order by hot_index desc limit 3;
+</code></pre>
+<h3 id="sql167-连续签到">SQL167 连续签到</h3>
+<p>连续签到领金币</p>
+<pre><code class="language-mysql">DROP TABLE IF EXISTS tb_user_log;
+CREATE TABLE tb_user_log (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '自增ID',
+    uid INT NOT NULL COMMENT '用户ID',
+    artical_id INT NOT NULL COMMENT '视频ID',
+    in_time datetime COMMENT '进入时间',
+    out_time datetime COMMENT '离开时间',
+    sign_in TINYINT DEFAULT 0 COMMENT '是否签到'
+) CHARACTER SET utf8 COLLATE utf8_bin;
+
+INSERT INTO tb_user_log(uid, artical_id, in_time, out_time, sign_in) VALUES
+  (101, 0, '2021-07-07 10:00:00', '2021-07-07 10:00:09', 1),
+  (101, 0, '2021-07-08 10:00:00', '2021-07-08 10:00:09', 1),
+  (101, 0, '2021-07-09 10:00:00', '2021-07-09 10:00:42', 1),
+  (101, 0, '2021-07-10 10:00:00', '2021-07-10 10:00:09', 1),
+  (101, 0, '2021-07-11 23:59:55', '2021-07-11 23:59:59', 1),
+  (101, 0, '2021-07-12 10:00:28', '2021-07-12 10:00:50', 1),
+  (101, 0, '2021-07-13 10:00:28', '2021-07-13 10:00:50', 1),
+  (102, 0, '2021-10-01 10:00:28', '2021-10-01 10:00:50', 1),
+  (102, 0, '2021-10-02 10:00:01', '2021-10-02 10:01:50', 1),
+  (102, 0, '2021-10-03 11:00:55', '2021-10-03 11:00:59', 1),
+  (102, 0, '2021-10-04 11:00:45', '2021-10-04 11:00:55', 0),
+  (102, 0, '2021-10-05 11:00:53', '2021-10-05 11:00:59', 1),
+  (102, 0, '2021-10-06 11:00:45', '2021-10-06 11:00:55', 1);
+</code></pre>
+<h4 id="描述-11">描述</h4>
+<p>用户行为日志表tb_user_log</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>uid</th>
+<th>artical_id</th>
+<th>in_time</th>
+<th>out_time</th>
+<th>sign_in</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>101</td>
+<td>0</td>
+<td>2021-07-07 10:00:00</td>
+<td>2021-07-07 10:00:09</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>101</td>
+<td>0</td>
+<td>2021-07-08 10:00:00</td>
+<td>2021-07-08 10:00:09</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>101</td>
+<td>0</td>
+<td>2021-07-09 10:00:00</td>
+<td>2021-07-09 10:00:42</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>101</td>
+<td>0</td>
+<td>2021-07-10 10:00:00</td>
+<td>2021-07-10 10:00:09</td>
+<td>1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>101</td>
+<td>0</td>
+<td>2021-07-11 23:59:55</td>
+<td>2021-07-11 23:59:59</td>
+<td>1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>101</td>
+<td>0</td>
+<td>2021-07-12 10:00:28</td>
+<td>2021-07-12 10:00:50</td>
+<td>1</td>
+</tr>
+<tr>
+<td>7</td>
+<td>101</td>
+<td>0</td>
+<td>2021-07-13 10:00:28</td>
+<td>2021-07-13 10:00:50</td>
+<td>1</td>
+</tr>
+<tr>
+<td>8</td>
+<td>102</td>
+<td>0</td>
+<td>2021-10-01 10:00:28</td>
+<td>2021-10-01 10:00:50</td>
+<td>1</td>
+</tr>
+<tr>
+<td>9</td>
+<td>102</td>
+<td>0</td>
+<td>2021-10-02 10:00:01</td>
+<td>2021-10-02 10:01:50</td>
+<td>1</td>
+</tr>
+<tr>
+<td>10</td>
+<td>102</td>
+<td>0</td>
+<td>2021-10-03 10:00:55</td>
+<td>2021-10-03 11:00:59</td>
+<td>1</td>
+</tr>
+<tr>
+<td>11</td>
+<td>102</td>
+<td>0</td>
+<td>2021-10-04 10:00:45</td>
+<td>2021-10-04 11:00:55</td>
+<td>0</td>
+</tr>
+<tr>
+<td>12</td>
+<td>102</td>
+<td>0</td>
+<td>2021-10-05 10:00:53</td>
+<td>2021-10-05 11:00:59</td>
+<td>1</td>
+</tr>
+<tr>
+<td>13</td>
+<td>102</td>
+<td>0</td>
+<td>2021-10-06 10:00:45</td>
+<td>2021-10-06 11:00:55</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>（uid-用户ID, artical_id-文章ID, in_time-进入时间, out_time-离开时间, sign_in-是否签到）</p>
+<p><strong>场景逻辑说明</strong>：</p>
+<ul>
+<li><strong>artical_id-文章ID</strong>代表用户浏览的文章的ID，特殊情况<strong>artical_id-文章ID</strong>为<strong>0</strong>表示用户在非文章内容页（比如App内的列表页、活动页等）。注意：只有artical_id为0时sign_in值才有效。</li>
+<li>从2021年7月7日0点开始，用户每天签到可以领1金币，并可以开始累积签到天数，连续签到的第3、7天分别可额外领2、6金币。</li>
+<li>每连续签到7天后重新累积签到天数（即重置签到天数：连续第8天签到时记为新的一轮签到的第一天，领1金币）</li>
+</ul>
+<p><strong>问题</strong>：计算每个用户2021年7月以来每月获得的金币数（该活动到10月底结束，11月1日开始的签到不再获得金币）。结果按月份、ID升序排序。</p>
+<p><strong>注</strong>：如果签到记录的in_time-进入时间和out_time-离开时间跨天了，也只记作in_time对应的日期签到了。</p>
+<p><strong>输出****示例：</strong></p>
+<p>示例数据的输出结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>uid</th>
+<th>month</th>
+<th>coin</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>101</td>
+<td>202107</td>
+<td>15</td>
+</tr>
+<tr>
+<td>102</td>
+<td>202110</td>
+<td>7</td>
+</tr>
+</tbody>
+</table>
+<p>解释：</p>
+<p>101在活动期内连续签到了7天，因此获得1*7+2+6=15金币；</p>
+<p>102在10.01~10.03连续签到3天获得5金币( 1* 3 + 2)</p>
+<p><strong>10.04断签(断签, 但是还是存在</strong>了，10.05~10.06连续签到2天获得2金币，共得到7金币。</p>
+<h4 id="解答w-10">解答W</h4>
+<pre><code class="language-mysql"># r - 1, 是因后续需要按照月份来归类数据
+# a, 遴选出满足要求的基本数据
+# b, 对每个uid组的日期进行排序, 来确定这个日期和最小日期的时间间隔, 来间接判断这个日期是否为间隔一天的日期
+# c, 将日期以排名的间隔进行详见, 假如之间的间隔为1天, 那么就会得到相同的日期
+# d, 按照uid, 日期将数据归档
+# 最终的数据获取
+WITH a AS ( SELECT uid, CONVERT ( in_time, date ) AS in_time, sign_in FROM tb_user_log WHERE in_time &gt;= '2021-07-01' AND in_time &lt; '2021-11-01' ),
+b AS ( SELECT *, dense_rank() over ( PARTITION BY uid ORDER BY in_time ) AS r FROM a WHERE sign_in &gt; 0 ),
+c AS ( SELECT *, date_sub( in_time, INTERVAL r - 1 DAY ) AS sub FROM b ),
+d AS ( SELECT uid, sum( sign_in ) AS sm, sub FROM c GROUP BY uid, sub ),
+e AS (
+	SELECT
+		uid,
+		sub,
+		(
+		sm + ( CASE WHEN sm &gt; 6 THEN 8 WHEN sm &gt; 2 THEN 2 ELSE 0 END )) AS total 
+	FROM
+		d 
+	) SELECT
+	uid,
+	substring( sub, 1, 7 ) AS MONTH,
+	sum( total ) AS coin 
+FROM
+	e 
+GROUP BY
+	uid,
+	MONTH;
+	
++-----+---------+------+
+| uid | MONTH   | coin |
++-----+---------+------+
+| 101 | 2021-07 |   15 |
+| 102 | 2021-10 |    7 |
++-----+---------+------+
+2 rows in set (0.00 sec)
+</code></pre>
+<h3 id="sql173-商品动销率">SQL173 商品动销率</h3>
+<p>店铺901国庆期间的7日动销率和滞销率</p>
+<pre><code class="language-mysql">DROP TABLE IF EXISTS tb_order_overall;
+CREATE TABLE tb_order_overall (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '自增ID',
+    order_id INT NOT NULL COMMENT '订单号',
+    uid INT NOT NULL COMMENT '用户ID',
+    event_time datetime COMMENT '下单时间',
+    total_amount DECIMAL NOT NULL COMMENT '订单总金额',
+    total_cnt INT NOT NULL COMMENT '订单商品总件数',
+    `status` TINYINT NOT NULL COMMENT '订单状态'
+) CHARACTER SET utf8 COLLATE utf8_bin;
+
+DROP TABLE IF EXISTS tb_product_info;
+CREATE TABLE tb_product_info (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '自增ID',
+    product_id INT NOT NULL COMMENT '商品ID',
+    shop_id INT NOT NULL COMMENT '店铺ID',
+    tag VARCHAR(12) COMMENT '商品类别标签',
+    in_price DECIMAL NOT NULL COMMENT '进货价格',
+    quantity INT NOT NULL COMMENT '进货数量',
+    release_time datetime COMMENT '上架时间'
+) CHARACTER SET utf8 COLLATE utf8_bin;
+
+DROP TABLE IF EXISTS tb_order_detail;
+CREATE TABLE tb_order_detail (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '自增ID',
+    order_id INT NOT NULL COMMENT '订单号',
+    product_id INT NOT NULL COMMENT '商品ID',
+    price DECIMAL NOT NULL COMMENT '商品单价',
+    cnt INT NOT NULL COMMENT '下单数量'
+) CHARACTER SET utf8 COLLATE utf8_bin;
+
+INSERT INTO tb_product_info(product_id, shop_id, tag, in_price, quantity, release_time) VALUES
+  (8001, 901, '日用', 60, 1000, '2020-01-01 10:00:00'),
+  (8002, 901, '零食', 140, 500, '2020-01-01 10:00:00'),
+  (8003, 901, '零食', 160, 500, '2020-01-01 10:00:00');
+
+INSERT INTO tb_order_overall(order_id, uid, event_time, total_amount, total_cnt, `status`) VALUES
+  (301004, 102, '2021-09-30 10:00:00', 170, 1, 1),
+  (301005, 104, '2021-10-01 10:00:00', 160, 1, 1),
+  (301003, 101, '2021-10-02 10:00:00', 300, 2, 1),
+  (301002, 102, '2021-10-03 11:00:00', 235, 2, 1);
+
+INSERT INTO tb_order_detail(order_id, product_id, price, cnt) VALUES
+  (301004, 8002, 180, 1),
+  (301005, 8002, 170, 1),
+  (301002, 8001, 85, 1),
+  (301002, 8003, 180, 1),
+  (301003, 8002, 150, 1),
+  (301003, 8003, 180, 1);
+</code></pre>
+<h4 id="描述-12">描述</h4>
+<p>商品信息表tb_product_info</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>product_id</th>
+<th>shop_id</th>
+<th>tag</th>
+<th>int_</th>
+<th>quantity</th>
+<th>release_time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>8001</td>
+<td>901</td>
+<td>日用</td>
+<td>60</td>
+<td>1000</td>
+<td>2020-01-01 10:00:00</td>
+</tr>
+<tr>
+<td>2</td>
+<td>8002</td>
+<td>901</td>
+<td>零食</td>
+<td>140</td>
+<td>500</td>
+<td>2020-01-01 10:00:00</td>
+</tr>
+<tr>
+<td>3</td>
+<td>8003</td>
+<td>901</td>
+<td>零食</td>
+<td>160</td>
+<td>500</td>
+<td>2020-01-01 10:00:00</td>
+</tr>
+</tbody>
+</table>
+<p>(product_id-商品ID, shop_id-店铺ID, tag-商品类别标签, in_price-进货价格, quantity-进货数量, release_time-上架时间）</p>
+<p>订单总表tb_order_overall</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>order_id</th>
+<th>uid</th>
+<th>event_time</th>
+<th>total_amount</th>
+<th>total_cnt</th>
+<th>status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>301004</td>
+<td>102</td>
+<td>2021-09-30 10:00:00</td>
+<td>170</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>301005</td>
+<td>104</td>
+<td>2021-10-01 10:00:00</td>
+<td>160</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>301003</td>
+<td>101</td>
+<td>2021-10-02 10:00:00</td>
+<td>300</td>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>301002</td>
+<td>102</td>
+<td>2021-10-03 11:00:00</td>
+<td>235</td>
+<td>2</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>(order_id-订单号, uid-用户ID, event_time-下单时间, total_amount-订单总金额, total_cnt-订单商品总件数, status-订单状态）</p>
+<p>订单明细表tb_order_detail</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>order_id</th>
+<th>product_id</th>
+<th>price</th>
+<th>cnt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>301004</td>
+<td>8002</td>
+<td>180</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>301005</td>
+<td>8002</td>
+<td>170</td>
+<td>1</td>
+</tr>
+<tr>
+<td>3</td>
+<td>301002</td>
+<td>8001</td>
+<td>85</td>
+<td>1</td>
+</tr>
+<tr>
+<td>4</td>
+<td>301002</td>
+<td>8003</td>
+<td>180</td>
+<td>1</td>
+</tr>
+<tr>
+<td>5</td>
+<td>301003</td>
+<td>8002</td>
+<td>150</td>
+<td>1</td>
+</tr>
+<tr>
+<td>6</td>
+<td>301003</td>
+<td>8003</td>
+<td>180</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>(order_id-订单号, product_id-商品ID, price-商品单价, cnt-下单数量）</p>
+<p><strong>问题</strong>：请计算店铺<strong>901</strong>在2021年国庆头<strong>3</strong>天的<strong>7</strong>日动销率和滞销率，结果保留3位小数，按日期升序排序。</p>
+<p><strong>注</strong>：</p>
+<ul>
+<li><strong>动销率</strong>定义为店铺中一段时间<strong>内有销量的商品</strong>占<strong>当前已上架总商品数</strong>的比例（有销量的商品/已上架总商品数)。</li>
+<li><strong>滞销率</strong>定义为店铺中一段时间内<strong>没有销量的商品</strong>占当前<strong>已上架总商品数</strong>的比例。（没有销量的商品/已上架总商品数)。</li>
+<li>只要当<strong>天任一店铺有任何商品的销量就输出该天的结果</strong>，即使店铺<strong>901</strong>当天的动销率为0。</li>
+</ul>
+<p><em>当天是指? 假如10.1当天没有销量, 前面有销量, 这怎么处理?, 直接为 0 ?</em></p>
+<p><strong>输出示例</strong>：</p>
+<p>示例数据的输出结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>dt</th>
+<th>sale_rate</th>
+<th>unsale_rate</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2021-10-01</td>
+<td>0.333</td>
+<td>0.667</td>
+</tr>
+<tr>
+<td>2021-10-02</td>
+<td>0.667</td>
+<td>0.333</td>
+</tr>
+<tr>
+<td>2021-10-03</td>
+<td>1.000</td>
+<td>0.000</td>
+</tr>
+</tbody>
+</table>
+<p>解释：</p>
+<p>10月1日的近7日（9月25日---10月1日）店铺901有销量的商品有8002，截止当天在售商品数为3，动销率为0.333，滞销率为0.667；</p>
+<p>10月2日的近7日（9月26日---10月2日）店铺901有销量的商品有8002、8003，截止当天在售商品数为3，动销率为0.667，滞销率为0.333；</p>
+<p>10月3日的近7日（9月27日---10月3日）店铺901有销量的商品有8002、8003、8001，截止当天店铺901在售商品数为3，动销率为1.000，滞销率为0.000；</p>
+<h4 id="解答w-11">解答W</h4>
+<p>这道题没有什么相对较好得解法, 暴力破解.</p>
+<pre><code class="language-mysql"># 取自大神的答案
+SELECT
+	dt1,
+	round(
+		count(
+		DISTINCT
+		IF
+			( timestampdiff( DAY, dt, dt1 ) BETWEEN 0 AND 6, tb1.product_id, NULL ))/ count(
+		DISTINCT
+		IF
+		( dt1 &gt;= DATE ( release_time ), tb3.product_id, NULL )),
+		3 
+	) sale_rate,
+	1-round (
+		count(
+		DISTINCT
+		IF
+			( timestampdiff( DAY, dt, dt1 ) BETWEEN 0 AND 6, tb1.product_id, NULL ))/ count(
+		DISTINCT
+		IF
+		( dt1 &gt;= DATE ( release_time ), tb3.product_id, NULL )),
+		3 
+	) unsale_rate 
+FROM
+	( SELECT DATE ( event_time ) dt1 FROM tb_order_overall HAVING dt1 BETWEEN '2021-10-01' AND '2021-10-03' ) tb2,
+	(
+	SELECT
+		b.product_id,
+		DATE ( event_time ) dt 
+	FROM
+		tb_order_overall a
+		LEFT JOIN tb_order_detail b ON a.order_id = b.order_id
+		LEFT JOIN tb_product_info c ON b.product_id = c.product_id 
+	WHERE
+		shop_id = 901 
+	) tb1
+	LEFT JOIN tb_product_info tb3 ON tb1.product_id = tb3.product_id 
+WHERE
+	shop_id = 901 
+GROUP BY
+	dt1;
+</code></pre>
+<h3 id="sql194-连续问答">SQL194 连续问答</h3>
+<p>某乎问答最大连续回答问题天数大于等于3天的用户及其对应等级.</p>
+<pre><code class="language-mysql">drop table if exists author_tb;
+CREATE TABLE author_tb(
+author_id int(10) NOT NULL, 
+author_level int(10) NOT NULL,
+sex char(10) NOT NULL);
+INSERT INTO author_tb VALUES(101 , 6, 'm');
+INSERT INTO author_tb VALUES(102 , 1, 'f');
+INSERT INTO author_tb VALUES(103 , 1, 'm');
+INSERT INTO author_tb VALUES(104 , 3, 'm');
+INSERT INTO author_tb VALUES(105 , 4, 'f');
+INSERT INTO author_tb VALUES(106 , 2, 'f');
+INSERT INTO author_tb VALUES(107 , 2, 'm');
+INSERT INTO author_tb VALUES(108 , 5, 'f');
+INSERT INTO author_tb VALUES(109 , 6, 'f');
+INSERT INTO author_tb VALUES(110 , 5, 'm');
+
+drop table if exists answer_tb;
+CREATE TABLE answer_tb(
+answer_date date NOT NULL, 
+author_id int(10) NOT NULL,
+issue_id char(10) NOT NULL,
+char_len int(10) NOT NULL);
+INSERT INTO answer_tb VALUES('2021-11-1', 101, 'E001' ,150);
+INSERT INTO answer_tb VALUES('2021-11-1', 101, 'E002', 200);
+INSERT INTO answer_tb VALUES('2021-11-1',102, 'C003' ,50);
+INSERT INTO answer_tb VALUES('2021-11-1' ,103, 'P001', 35);
+INSERT INTO answer_tb VALUES('2021-11-1', 104, 'C003', 120);
+INSERT INTO answer_tb VALUES('2021-11-1' ,105, 'P001', 125);
+INSERT INTO answer_tb VALUES('2021-11-1' , 102, 'P002', 105);
+INSERT INTO answer_tb VALUES('2021-11-2',  101, 'P001' ,201);
+INSERT INTO answer_tb VALUES('2021-11-2',  110, 'C002', 200);
+INSERT INTO answer_tb VALUES('2021-11-2',  110, 'C001', 225);
+INSERT INTO answer_tb VALUES('2021-11-2' , 110, 'C002', 220);
+INSERT INTO answer_tb VALUES('2021-11-3', 101, 'C002', 180);
+INSERT INTO answer_tb VALUES('2021-11-4' ,109, 'E003', 130);
+INSERT INTO answer_tb VALUES('2021-11-4', 109, 'E001',123);
+INSERT INTO answer_tb VALUES('2021-11-5', 108, 'C001',160);
+INSERT INTO answer_tb VALUES('2021-11-5', 108, 'C002', 120);
+INSERT INTO answer_tb VALUES('2021-11-5', 110, 'P001', 180);
+INSERT INTO answer_tb VALUES('2021-11-5' , 106, 'P002' , 45);
+INSERT INTO answer_tb VALUES('2021-11-5' , 107, 'E003', 56);
+</code></pre>
+<h4 id="描述-13">描述</h4>
+<p>现有某乎问答创作者信息表author_tb如下(其中author_id表示创作者编号、author_level表示创作者级别，共1-6六个级别、sex表示创作者性别)：</p>
+<table>
+<thead>
+<tr>
+<th>author_id</th>
+<th>author_level</th>
+<th>sex</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>101</td>
+<td>6</td>
+<td>m</td>
+</tr>
+<tr>
+<td>102</td>
+<td>1</td>
+<td>f</td>
+</tr>
+<tr>
+<td>103</td>
+<td>1</td>
+<td>m</td>
+</tr>
+<tr>
+<td>104</td>
+<td>3</td>
+<td>m</td>
+</tr>
+<tr>
+<td>105</td>
+<td>4</td>
+<td>f</td>
+</tr>
+<tr>
+<td>106</td>
+<td>2</td>
+<td>f</td>
+</tr>
+<tr>
+<td>107</td>
+<td>2</td>
+<td>m</td>
+</tr>
+<tr>
+<td>108</td>
+<td>5</td>
+<td>f</td>
+</tr>
+<tr>
+<td>109</td>
+<td>6</td>
+<td>f</td>
+</tr>
+<tr>
+<td>110</td>
+<td>5</td>
+<td>m</td>
+</tr>
+</tbody>
+</table>
+<p>创作者回答情况表answer_tb如下（其中answer_date表示创作日期、author_id指创作者编号、issue_id指回答问题编号、char_len表示回答字数）：</p>
+<table>
+<thead>
+<tr>
+<th>answer_date</th>
+<th>author_id</th>
+<th>issue_id</th>
+<th>char_len</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2021-11-01</td>
+<td>101</td>
+<td>E001</td>
+<td>150</td>
+</tr>
+<tr>
+<td>2021-11-01</td>
+<td>101</td>
+<td>E002</td>
+<td>200</td>
+</tr>
+<tr>
+<td>2021-11-01</td>
+<td>102</td>
+<td>C003</td>
+<td>50</td>
+</tr>
+<tr>
+<td>2021-11-01</td>
+<td>103</td>
+<td>P001</td>
+<td>35</td>
+</tr>
+<tr>
+<td>2021-11-01</td>
+<td>104</td>
+<td>C003</td>
+<td>120</td>
+</tr>
+<tr>
+<td>2021-11-01</td>
+<td>105</td>
+<td>P001</td>
+<td>125</td>
+</tr>
+<tr>
+<td>2021-11-01</td>
+<td>102</td>
+<td>P002</td>
+<td>105</td>
+</tr>
+<tr>
+<td>2021-11-02</td>
+<td>101</td>
+<td>P001</td>
+<td>201</td>
+</tr>
+<tr>
+<td>2021-11-02</td>
+<td>110</td>
+<td>C002</td>
+<td>200</td>
+</tr>
+<tr>
+<td>2021-11-02</td>
+<td>110</td>
+<td>C001</td>
+<td>225</td>
+</tr>
+<tr>
+<td>2021-11-02</td>
+<td>110</td>
+<td>C002</td>
+<td>220</td>
+</tr>
+<tr>
+<td>2021-11-03</td>
+<td>101</td>
+<td>C002</td>
+<td>180</td>
+</tr>
+<tr>
+<td>2021-11-04</td>
+<td>109</td>
+<td>E003</td>
+<td>130</td>
+</tr>
+<tr>
+<td>2021-11-04</td>
+<td>109</td>
+<td>E001</td>
+<td>123</td>
+</tr>
+<tr>
+<td>2021-11-05</td>
+<td>108</td>
+<td>C001</td>
+<td>160</td>
+</tr>
+<tr>
+<td>2021-11-05</td>
+<td>108</td>
+<td>C002</td>
+<td>120</td>
+</tr>
+<tr>
+<td>2021-11-05</td>
+<td>110</td>
+<td>P001</td>
+<td>180</td>
+</tr>
+<tr>
+<td>2021-11-05</td>
+<td>106</td>
+<td>P002</td>
+<td>45</td>
+</tr>
+<tr>
+<td>2021-11-05</td>
+<td>107</td>
+<td>E003</td>
+<td>56</td>
+</tr>
+</tbody>
+</table>
+<p>请你统计最大连续回答问题的天数大于等于3天的用户及其等级（若有多条符合条件的数据，按author_id升序排序），以上例子的输出结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>author_id</th>
+<th>author_level</th>
+<th>days_cnt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>101</td>
+<td>6</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h4 id="解答w-12">解答W</h4>
+<pre><code class="language-mysql"># dense_rank
++-----------+-------------+---+
+| author_id | answer_date | r |
++-----------+-------------+---+
+|       101 | 2021-11-01  | 1 |
+|       101 | 2021-11-02  | 2 |
+|       101 | 2021-11-03  | 3 |
+|       102 | 2021-11-01  | 1 |
+|       103 | 2021-11-01  | 1 |
+|       104 | 2021-11-01  | 1 |
+|       105 | 2021-11-01  | 1 |
+|       106 | 2021-11-05  | 1 |
+|       107 | 2021-11-05  | 1 |
+|       108 | 2021-11-05  | 1 |
+|       109 | 2021-11-04  | 1 |
+|       110 | 2021-11-02  | 1 |
+|       110 | 2021-11-05  | 2 |
++-----------+-------------+---+
+13 rows in set (0.00 sec)
+---
+
+WITH tmp AS ( SELECT DISTINCT author_id, answer_date FROM answer_tb ),
+tmp_a AS ( SELECT *, dense_rank() over ( PARTITION BY author_id ORDER BY answer_date ) AS r FROM tmp ),
+tmp_b AS ( SELECT *, DATE_SUB( answer_date, INTERVAL r DAY ) AS sub FROM tmp_a ),
+temp_c AS ( SELECT tmp_b.author_id, count(*) AS ic FROM tmp_b GROUP BY tmp_b.author_id, tmp_b.sub HAVING ic &gt; 2 ) SELECT
+tc.author_id,
+AT.author_level,
+tc.ic 
+FROM
+	temp_c AS tc
+	JOIN author_tb AS AT ON AT.author_id = tc.author_id;
+	
++-----------+--------------+----+
+| author_id | author_level | ic |
++-----------+--------------+----+
+|       101 |            6 |  3 |
++-----------+--------------+----+
+1 row in set (0.00 sec)
+</code></pre>
+<h3 id="sql189-直播在线">SQL189 直播在线</h3>
+<p>牛客直播各科目同时在线人数</p>
+<pre><code class="language-mysql">drop table if exists course_tb;
+CREATE TABLE course_tb(
+course_id int(10) NOT NULL, 
+course_name char(10) NOT NULL,
+course_datetime char(30) NOT NULL);
+INSERT INTO course_tb VALUES(1, 'Python', '2021-12-1 19:00-21:00');
+INSERT INTO course_tb VALUES(2, 'SQL', '2021-12-2 19:00-21:00');
+INSERT INTO course_tb VALUES(3, 'R', '2021-12-3 19:00-21:00');
+
+drop table if exists attend_tb;
+CREATE TABLE attend_tb(
+user_id int(10) NOT NULL, 
+course_id int(10) NOT NULL,
+in_datetime datetime NOT NULL,
+out_datetime datetime NOT NULL
+);
+INSERT INTO attend_tb VALUES(100, 1, '2021-12-1 19:00:00', '2021-12-1 19:28:00');
+INSERT INTO attend_tb VALUES(100, 1, '2021-12-1 19:30:00', '2021-12-1 19:53:00');
+INSERT INTO attend_tb VALUES(101, 1, '2021-12-1 19:00:00', '2021-12-1 20:55:00');
+INSERT INTO attend_tb VALUES(102, 1, '2021-12-1 19:00:00', '2021-12-1 19:05:00');
+INSERT INTO attend_tb VALUES(104, 1, '2021-12-1 19:00:00', '2021-12-1 20:59:00');
+INSERT INTO attend_tb VALUES(101, 2, '2021-12-2 19:05:00', '2021-12-2 20:58:00');
+INSERT INTO attend_tb VALUES(102, 2, '2021-12-2 18:55:00', '2021-12-2 21:00:00');
+INSERT INTO attend_tb VALUES(104, 2, '2021-12-2 18:57:00', '2021-12-2 20:56:00');
+INSERT INTO attend_tb VALUES(107, 2, '2021-12-2 19:10:00', '2021-12-2 19:18:00');
+INSERT INTO attend_tb VALUES(100, 3, '2021-12-3 19:01:00', '2021-12-3 21:00:00');
+INSERT INTO attend_tb VALUES(102, 3, '2021-12-3 18:58:00', '2021-12-3 19:05:00');
+INSERT INTO attend_tb VALUES(108, 3, '2021-12-3 19:01:00', '2021-12-3 19:56:00');
+</code></pre>
+<h4 id="描述-14">描述</h4>
+<p>牛客某页面推出了数据分析系列直播课程介绍。用户可以选择报名任意一场或多场直播课。</p>
+<p>已知课程表<code>course_tb</code>如下（其中<code>course_id</code>代表课程编号，course_name表示课程名称，course_datetime代表上课时间）：</p>
+<table>
+<thead>
+<tr>
+<th>course_id</th>
+<th>course_name</th>
+<th>course_datetime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Python</td>
+<td>2021-12-1 19:00-21:00</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SQL</td>
+<td>2021-12-2 19:00-21:00</td>
+</tr>
+<tr>
+<td>3</td>
+<td>R</td>
+<td>2021-12-3 19:00-21:00</td>
+</tr>
+</tbody>
+</table>
+<p>上课情况表attend_tb如下（其中user_id表示用户编号、course_id代表课程编号、in_datetime表示进入直播间的时间、out_datetime表示离开直播间的时间）：</p>
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>course_id</th>
+<th>in_datetime</th>
+<th>out_datetime</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100</td>
+<td>1</td>
+<td>2021-12-01 19:00:00</td>
+<td>2021-12-01 19:28:00</td>
+</tr>
+<tr>
+<td>100</td>
+<td>1</td>
+<td>2021-12-01 19:30:00</td>
+<td>2021-12-01 19:53:00</td>
+</tr>
+<tr>
+<td>101</td>
+<td>1</td>
+<td>2021-12-01 19:00:00</td>
+<td>2021-12-01 20:55:00</td>
+</tr>
+<tr>
+<td>102</td>
+<td>1</td>
+<td>2021-12-01 19:00:00</td>
+<td>2021-12-01 19:05:00</td>
+</tr>
+<tr>
+<td>104</td>
+<td>1</td>
+<td>2021-12-01 19:00:00</td>
+<td>2021-12-01 20:59:00</td>
+</tr>
+<tr>
+<td>101</td>
+<td>2</td>
+<td>2021-12-02 19:05:00</td>
+<td>2021-12-02 20:58:00</td>
+</tr>
+<tr>
+<td>102</td>
+<td>2</td>
+<td>2021-12-02 18:55:00</td>
+<td>2021-12-02 21:00:00</td>
+</tr>
+<tr>
+<td>104</td>
+<td>2</td>
+<td>2021-12-02 18:57:00</td>
+<td>2021-12-02 20:56:00</td>
+</tr>
+<tr>
+<td>107</td>
+<td>2</td>
+<td>2021-12-02 19:10:00</td>
+<td>2021-12-02 19:18:00</td>
+</tr>
+<tr>
+<td>100</td>
+<td>3</td>
+<td>2021-12-03 19:01:00</td>
+<td>2021-12-03 21:00:00</td>
+</tr>
+<tr>
+<td>102</td>
+<td>3</td>
+<td>2021-12-03 18:58:00</td>
+<td>2021-12-03 19:05:00</td>
+</tr>
+<tr>
+<td>108</td>
+<td>3</td>
+<td>2021-12-03 19:01:00</td>
+<td>2021-12-03 19:56:00</td>
+</tr>
+</tbody>
+</table>
+<p>请你统计每个科目最大同时在线人数（按course_id排序），以上数据的输出结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>course_id</th>
+<th>course_name</th>
+<th>max_num</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Python</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>SQL</td>
+<td>4</td>
+</tr>
+<tr>
+<td>3</td>
+<td>R</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<h4 id="解答-2">解答</h4>
+<p>课程的时间是一个误导项, 并不需要考虑这个时间(字符串类型的数据)</p>
+<ol>
+<li>
+<p>将<code>attend</code>中的数据, 进入和离开整合在一起, 形成了一个时间的序列, 通过判断这个时间序列的的人数的出和入来判断每个直播间的人数的变化. 因为通过窗口函数对时间序列按照课程编号进行了拆分, 也就是说这个<code>partition</code>中集合同一个<code>course_id</code>的进入和离开直播间数据.</p>
+</li>
+<li>
+<p>通过对时间序列中的进, 标记为1, 离开, 则标记为 -1, 对每个<code>partition</code>中的<code>flag</code>项进行求和操作, 进行二次排序(降序)(确保time_index相同的情况, 如何处理这个节点的数据问题, 是先加还是先减的问题, 这里采用降序, 是进行先加的操作).</p>
+<p><em>这里这道题没有具体指明如何处理相同节时间节点的先后.</em></p>
+</li>
+</ol>
+<pre><code class="language-mysql">WITH a AS (
+	SELECT
+		user_id,
+		course_id,
+		in_datetime AS time_index,
+		1 flag 
+	FROM
+		attend_tb UNION ALL
+	SELECT
+		user_id,
+		course_id,
+		out_datetime AS time_index,
+		- 1 flag 
+	FROM
+		attend_tb 
+	),
+	b AS ( SELECT a.*, c.course_name FROM a LEFT JOIN course_tb c ON a.course_id = c.course_id ) SELECT
+	*,
+	sum( flag ) over ( PARTITION BY course_name ORDER BY time_index, flag DESC ) AS on_lines 
+FROM
+	b;
++---------+-----------+---------------------+------+-------------+----------+
+| user_id | course_id | time_index          | flag | course_name | on_lines |
++---------+-----------+---------------------+------+-------------+----------+
+|     100 |         1 | 2021-12-01 19:00:00 |    1 | Python      |        4 | # 每个课程的id区间, 就可以计算出人数的变化情况
+|     101 |         1 | 2021-12-01 19:00:00 |    1 | Python      |        4 |
+|     102 |         1 | 2021-12-01 19:00:00 |    1 | Python      |        4 |
+|     104 |         1 | 2021-12-01 19:00:00 |    1 | Python      |        4 |
+|     102 |         1 | 2021-12-01 19:05:00 |   -1 | Python      |        3 |
+|     100 |         1 | 2021-12-01 19:28:00 |   -1 | Python      |        2 |
+|     100 |         1 | 2021-12-01 19:30:00 |    1 | Python      |        3 |
+|     100 |         1 | 2021-12-01 19:53:00 |   -1 | Python      |        2 |
+|     101 |         1 | 2021-12-01 20:55:00 |   -1 | Python      |        1 |
+|     104 |         1 | 2021-12-01 20:59:00 |   -1 | Python      |        0 | # 按照课程id 将数据聚合在一个区间
+|     102 |         3 | 2021-12-03 18:58:00 |    1 | R           |        1 |
+|     100 |         3 | 2021-12-03 19:01:00 |    1 | R           |        3 |
+|     108 |         3 | 2021-12-03 19:01:00 |    1 | R           |        3 |
+|     102 |         3 | 2021-12-03 19:05:00 |   -1 | R           |        2 |
+|     108 |         3 | 2021-12-03 19:56:00 |   -1 | R           |        1 |
+|     100 |         3 | 2021-12-03 21:00:00 |   -1 | R           |        0 |
+|     102 |         2 | 2021-12-02 18:55:00 |    1 | SQL         |        1 |
+|     104 |         2 | 2021-12-02 18:57:00 |    1 | SQL         |        2 |
+|     101 |         2 | 2021-12-02 19:05:00 |    1 | SQL         |        3 |
+|     107 |         2 | 2021-12-02 19:10:00 |    1 | SQL         |        4 |
+|     107 |         2 | 2021-12-02 19:18:00 |   -1 | SQL         |        3 |
+|     104 |         2 | 2021-12-02 20:56:00 |   -1 | SQL         |        2 |
+|     101 |         2 | 2021-12-02 20:58:00 |   -1 | SQL         |        1 |
+|     102 |         2 | 2021-12-02 21:00:00 |   -1 | SQL         |        0 |
++---------+-----------+---------------------+------+-------------+----------+
+24 rows in set (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql">WITH a AS ( SELECT course_id, in_datetime AS time_index, 1 flag FROM attend_tb UNION ALL SELECT course_id, out_datetime AS time_index, - 1 flag FROM attend_tb ),
+b AS ( SELECT a.*, c.course_name FROM a LEFT JOIN course_tb c ON a.course_id = c.course_id ),
+c AS ( SELECT course_id, course_name, sum( flag ) over ( PARTITION BY course_name ORDER BY time_index, flag DESC ) AS on_lines FROM b ) SELECT
+course_id,
+course_name,
+max( on_lines ) AS max_num 
+FROM
+	c 
+GROUP BY
+	course_id,
+	course_name 
+ORDER BY
+	course_id;
+
++-----------+-------------+---------+
+| course_id | course_name | max_num |
++-----------+-------------+---------+
+|         1 | Python      |       4 |
+|         2 | SQL         |       4 |
+|         3 | R           |       3 |
++-----------+-------------+---------+
+3 rows in set (0.00 sec)
+</code></pre>
+<h3 id="sql184-顾客连续购买">SQL184 顾客连续购买</h3>
+<p>某宝店铺连续2天及以上购物的用户及其对应的天数</p>
+<pre><code class="language-mysql">drop table if exists sales_tb;
+CREATE TABLE sales_tb(
+sales_date date NOT NULL,
+user_id int(10) NOT NULL,
+item_id char(10) NOT NULL,
+sales_num int(10) NOT NULL,
+sales_price int(10) NOT NULL
+);
+
+INSERT INTO sales_tb VALUES('2021-11-1', 1, 'A001',  1, 90);
+INSERT INTO sales_tb VALUES('2021-11-1', 2, 'A002',  2, 220);
+INSERT INTO sales_tb VALUES('2021-11-1', 2, 'B001',  1, 120);
+INSERT INTO sales_tb VALUES('2021-11-2', 3, 'C001',  2, 500);
+INSERT INTO sales_tb VALUES('2021-11-2', 4, 'B001',  1, 120);
+INSERT INTO sales_tb VALUES('2021-11-3', 5, 'C001',  1, 240);
+INSERT INTO sales_tb VALUES('2021-11-3', 6, 'C002',  1, 270);
+INSERT INTO sales_tb VALUES('2021-11-4', 7, 'A003',  1, 180);
+INSERT INTO sales_tb VALUES('2021-11-4', 8, 'B002',  1, 140);
+INSERT INTO sales_tb VALUES('2021-11-4', 9, 'B001',  1, 125);
+INSERT INTO sales_tb VALUES('2021-11-5', 10, 'B003',  1, 120);
+INSERT INTO sales_tb VALUES('2021-11-5', 10, 'B004',  1, 150);
+INSERT INTO sales_tb VALUES('2021-11-5', 10, 'A003',  1, 180);
+INSERT INTO sales_tb VALUES('2021-11-6', 11, 'B003',  1, 120);
+INSERT INTO sales_tb VALUES('2021-11-6', 10, 'B004',  1, 150);
+
+# 插入多一行测试数据
+INSERT INTO sales_tb VALUES('2021-11-8', 10, 'B004',  1, 150); # 8
+
+INSERT INTO sales_tb VALUES('2021-11-9', 10, 'B004',  1, 150);
+</code></pre>
+<h4 id="描述-15">描述</h4>
+<p>11月结束后，小牛同学需要对其在某宝的网店就11月份用户交易情况和产品情况进行分析以更好的经营小店。</p>
+<p>11月份销售数据表sales_tb如下（其中，sales_date表示销售日期，user_id指用户编号，item_id指货号，sales_num表示销售数量，sales_price表示结算金额）：</p>
+<table>
+<thead>
+<tr>
+<th>sales_date</th>
+<th>user_id</th>
+<th>item_id</th>
+<th>sales_num</th>
+<th>sales_price</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2021-11-01</td>
+<td>1</td>
+<td>A001</td>
+<td>1</td>
+<td>90</td>
+</tr>
+<tr>
+<td>2021-11-01</td>
+<td>2</td>
+<td>A002</td>
+<td>2</td>
+<td>220</td>
+</tr>
+<tr>
+<td>2021-11-01</td>
+<td>2</td>
+<td>B001</td>
+<td>1</td>
+<td>120</td>
+</tr>
+<tr>
+<td>2021-11-02</td>
+<td>3</td>
+<td>C001</td>
+<td>2</td>
+<td>500</td>
+</tr>
+<tr>
+<td>2021-11-02</td>
+<td>4</td>
+<td>B001</td>
+<td>1</td>
+<td>120</td>
+</tr>
+<tr>
+<td>2021-11-03</td>
+<td>5</td>
+<td>C001</td>
+<td>1</td>
+<td>240</td>
+</tr>
+<tr>
+<td>2021-11-03</td>
+<td>6</td>
+<td>C002</td>
+<td>1</td>
+<td>270</td>
+</tr>
+<tr>
+<td>2021-11-04</td>
+<td>7</td>
+<td>A003</td>
+<td>1</td>
+<td>180</td>
+</tr>
+<tr>
+<td>2021-11-04</td>
+<td>8</td>
+<td>B002</td>
+<td>1</td>
+<td>140</td>
+</tr>
+<tr>
+<td>2021-11-04</td>
+<td>9</td>
+<td>B001</td>
+<td>1</td>
+<td>125</td>
+</tr>
+<tr>
+<td>2021-11-05</td>
+<td>10</td>
+<td>B003</td>
+<td>1</td>
+<td>120</td>
+</tr>
+<tr>
+<td>2021-11-05</td>
+<td>10</td>
+<td>B004</td>
+<td>1</td>
+<td>150</td>
+</tr>
+<tr>
+<td>2021-11-05</td>
+<td>10</td>
+<td>A003</td>
+<td>1</td>
+<td>180</td>
+</tr>
+<tr>
+<td>2021-11-06</td>
+<td>11</td>
+<td>B003</td>
+<td>1</td>
+<td>120</td>
+</tr>
+<tr>
+<td>2021-11-06</td>
+<td>10</td>
+<td>B004</td>
+<td>1</td>
+<td>150</td>
+</tr>
+</tbody>
+</table>
+<p>请你统计连续<strong>2天</strong>及<strong>以上</strong>在该店铺购物的用户及其对应的次数（若有多个用户，按user_id升序排序），以上例子的输出结果如下：</p>
+<table>
+<thead>
+<tr>
+<th>user_id</th>
+<th>days_count</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<h4 id="解答w-13">解答W</h4>
+<pre><code class="language-mysql"># 用于处理这种非指定区间的跨行
+WITH tmp AS ( SELECT DISTINCT user_id, sales_date FROM sales_tb ),
+tmp_a AS ( SELECT *, dense_rank() over ( PARTITION BY user_id ORDER BY sales_date ) AS r FROM tmp ),
+tmp_b AS ( SELECT *, DATE_SUB( sales_date, INTERVAL r DAY ) AS sub FROM tmp_a ) SELECT
+tmp_b.user_id,
+count(*) AS c 
+FROM
+	tmp_b 
+GROUP BY
+	tmp_b.user_id,
+	tmp_b.sub;
+
+# 加入了上面两行作为测试
++---------+---+
+| user_id | c |
++---------+---+
+|       1 | 1 |
+|       2 | 1 |
+|       3 | 1 |
+|       4 | 1 |
+|       5 | 1 |
+|       6 | 1 |
+|       7 | 1 |
+|       8 | 1 |
+|       9 | 1 |
+|      10 | 2 |
+|      10 | 2 |
+|      11 | 1 |
++---------+---+
+12 rows in set (0.00 sec)
+</code></pre>
+<p><code>滑动窗口</code>在处理这道题所遇到的各种问题问题.</p>
+<pre><code class="language-mysql"># 这里只是简单列出发生过连续两天的数据
+# 假如希望取到最长连续数据的用户?(不中断, 而1,2,3..; 1,3,5不行)
+WITH a AS ( SELECT DISTINCT user_id, sales_date FROM sales_tb ),
+b AS (
+	SELECT
+		user_id,                                                                     # 受限于1 (N) 
+		count( user_id ) over ( PARTITION BY user_id ORDER BY sales_date RANGE BETWEEN INTERVAL 1 DAY preceding AND current ROW ) AS ic 
+	FROM
+		a 
+	) SELECT
+	user_id,
+	ic 
+FROM
+	b 
+WHERE
+	ic &gt; 1;
+# 
++---------+----+
+| user_id | ic |
++---------+----+
+|      10 |  2 |
++---------+----+
+2 rows in set (0.00 sec)
+
+# 插入多一行的测试数据
++---------+----+
+| user_id | ic |
++---------+----+
+|      10 |  2 |
+|      10 |  2 |
++---------+----+
+2 rows in set (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql">WITH a AS ( SELECT DISTINCT user_id, sales_date FROM sales_tb ),
+b AS (
+	SELECT
+		user_id,
+		count( user_id ) over ( PARTITION BY user_id ORDER BY sales_date RANGE BETWEEN unbounded preceding AND current ROW ) AS ic 
+	FROM
+		a 
+	) SELECT
+	user_id,
+	max( ic ) AS mic 
+FROM
+	b 
+GROUP BY
+	user_id 
+HAVING
+	mic &gt; 1;
+	
++---------+------+
+| user_id | mic  |
++---------+------+
+|      10 |    3 |
++---------+------+
+1 row in set (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql"># 就无法控制间隔为 1
+WITH a AS ( SELECT DISTINCT user_id, sales_date FROM sales_tb ),
+b AS (
+	SELECT
+		user_id,
+		sales_date,
+		count( user_id ) over ( PARTITION BY user_id ORDER BY sales_date RANGE BETWEEN unbounded preceding AND current ROW ) AS ic 
+	FROM
+		a 
+	) 
+	select * from b;
+	
++---------+------------+----+
+| user_id | sales_date | ic |
++---------+------------+----+
+|       1 | 2021-11-01 |  1 |
+|       1 | 2021-11-04 |  2 | # 不连续
+|       2 | 2021-11-01 |  1 |
+|       3 | 2021-11-02 |  1 |
+|       4 | 2021-11-02 |  1 |
+|       5 | 2021-11-03 |  1 |
+|       6 | 2021-11-03 |  1 |
+|       7 | 2021-11-04 |  1 |
+|       8 | 2021-11-04 |  1 |
+|       9 | 2021-11-04 |  1 |
+|      10 | 2021-11-05 |  1 |
+|      10 | 2021-11-06 |  2 |
+|      10 | 2021-11-07 |  3 |
+|      11 | 2021-11-06 |  1 |
++---------+------------+----+
+14 rows in set (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql"># 对间隔进行判断是否是隔天
+# 还是存在问题
+WITH a AS ( SELECT DISTINCT user_id, sales_date FROM sales_tb ),
+b AS ( SELECT user_id, sales_date, LEAD( sales_date ) over ( PARTITION BY user_id ORDER BY sales_date ) AS next_date FROM a ),
+c AS ( SELECT *, next_date - sales_date AS gap FROM b having next_date IS NOT NULL and gap = 1 ) SELECT
+user_id,
+sum( gap ) + 1 AS ic 
+FROM
+	c 
+GROUP BY
+	user_id;
++---------+------+
+| user_id | ic   |
++---------+------+
+|      10 |    3 |
++---------+------+
+1 row in set (0.00 sec)
+
+mysql&gt; select * from sales_tb;
++------------+---------+---------+-----------+-------------+
+| sales_date | user_id | item_id | sales_num | sales_price |
++------------+---------+---------+-----------+-------------+
+| 2021-11-01 |       1 | A001    |         1 |          90 |
+| 2021-11-01 |       2 | A002    |         2 |         220 |
+| 2021-11-01 |       2 | B001    |         1 |         120 |
+| 2021-11-02 |       3 | C001    |         2 |         500 |
+| 2021-11-02 |       4 | B001    |         1 |         120 |
+| 2021-11-03 |       5 | C001    |         1 |         240 |
+| 2021-11-03 |       6 | C002    |         1 |         270 |
+| 2021-11-04 |       7 | A003    |         1 |         180 |
+| 2021-11-04 |       8 | B002    |         1 |         140 |
+| 2021-11-04 |       9 | B001    |         1 |         125 |
+| 2021-11-05 |      10 | B003    |         1 |         120 |
+| 2021-11-05 |      10 | B004    |         1 |         150 | # 这里对数据进行修改 原来的 5 - 6
+| 2021-11-05 |      10 | A003    |         1 |         180 | # 第一次改成 5 - 6- 7
+| 2021-11-06 |      11 | B003    |         1 |         120 |
+| 2021-11-06 |      10 | B004    |         1 |         150 |
+| 2021-11-08 |      10 | B004    |         1 |         150 | # 5-6
+| 2021-11-09 |      10 | B004    |         1 |         150 | # 这里对数据进行修改 5 - 6, 8-9
++------------+---------+---------+-----------+-------------+
+</code></pre>
+<h3 id="sql179-同时等车">SQL179 同时等车</h3>
+<p>各城市最大同时等车人数</p>
+<pre><code class="language-mysql">DROP TABLE IF EXISTS tb_get_car_record,tb_get_car_order;
+CREATE TABLE tb_get_car_record (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '自增ID',
+    uid INT NOT NULL COMMENT '用户ID',
+    city VARCHAR(10) NOT NULL COMMENT '城市',
+    event_time datetime COMMENT '打车时间',
+    end_time datetime COMMENT '打车结束时间',
+    order_id INT COMMENT '订单号'
+) CHARACTER SET utf8 COLLATE utf8_bin;
+
+CREATE TABLE tb_get_car_order (
+    id INT PRIMARY KEY AUTO_INCREMENT COMMENT '自增ID',
+    order_id INT NOT NULL COMMENT '订单号',
+    uid INT NOT NULL COMMENT '用户ID',
+    driver_id INT NOT NULL COMMENT '司机ID',
+    order_time datetime COMMENT '接单时间',
+    start_time datetime COMMENT '开始计费的上车时间',
+    finish_time datetime COMMENT '订单结束时间',
+    mileage FLOAT COMMENT '行驶里程数',
+    fare FLOAT COMMENT '费用',
+    grade TINYINT COMMENT '评分'
+) CHARACTER SET utf8 COLLATE utf8_bin;
+
+INSERT INTO tb_get_car_record(uid, city, event_time, end_time, order_id) VALUES
+ (108, '北京', '2021-10-20 08:00:00', '2021-10-20 08:00:40', 9008),
+ (108, '北京', '2021-10-20 08:00:10', '2021-10-20 08:00:45', 9018),
+ (102, '北京', '2021-10-20 08:00:30', '2021-10-20 08:00:50', 9002),
+ (106, '北京', '2021-10-20 08:05:41', '2021-10-20 08:06:00', 9006),
+ (103, '北京', '2021-10-20 08:05:50', '2021-10-20 08:07:10', 9003),
+ (104, '北京', '2021-10-20 08:01:01', '2021-10-20 08:01:20', 9004),
+ (103, '北京', '2021-10-20 08:01:15', '2021-10-20 08:01:30', 9019),
+ (101, '北京', '2021-10-20 08:28:10', '2021-10-20 08:30:00', 9011);
+
+INSERT INTO tb_get_car_order(order_id, uid, driver_id, order_time, start_time, finish_time, mileage, fare, grade) VALUES
+ (9008, 108, 204, '2021-10-20 08:00:40', '2021-10-20 08:03:00', '2021-10-20 08:31:00', 13.2, 38, 4),
+ (9018, 108, 214, '2021-10-20 08:00:45', '2021-10-20 08:04:50', '2021-10-20 08:21:00', 14, 38, 5),
+ (9002, 102, 202, '2021-10-20 08:00:50', '2021-10-20 08:06:00', '2021-10-20 08:31:00', 10.0, 41.5, 5),
+ (9006, 106, 203, '2021-10-20 08:06:00', '2021-10-20 08:09:00', '2021-10-20 08:31:00', 8.0, 25.5, 4),
+ (9003, 103, 202, '2021-10-20 08:07:10', '2021-10-20 08:15:00', '2021-10-20 08:31:00', 11.0, 41.5, 4),
+ (9004, 104, 202, '2021-10-20 08:01:20', '2021-10-20 08:13:00', '2021-10-20 08:31:00', 7.5, 22, 4),
+ (9019, 103, 202, '2021-10-20 08:01:30', '2021-10-20 08:11:00', '2021-10-20 08:51:00', 10, 39, 4),
+ (9011, 101, 211, '2021-10-20 08:30:00', '2021-10-20 08:31:00', '2021-10-20 08:54:00', 10, 35, 5);
+</code></pre>
+<h4 id="描述-16">描述</h4>
+<p>用户打车记录表tb_get_car_record</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>uid</th>
+<th>city</th>
+<th>event_time</th>
+<th>end_time</th>
+<th>order_id</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>108</td>
+<td>北京</td>
+<td>2021-10-20 08:00:00</td>
+<td>2021-10-20 08:00:40</td>
+<td>9008</td>
+</tr>
+<tr>
+<td>2</td>
+<td>118</td>
+<td>北京</td>
+<td>2021-10-20 08:00:10</td>
+<td>2021-10-20 08:00:45</td>
+<td>9018</td>
+</tr>
+<tr>
+<td>3</td>
+<td>102</td>
+<td>北京</td>
+<td>2021-10-20 08:00:30</td>
+<td>2021-10-20 08:00:50</td>
+<td>9002</td>
+</tr>
+<tr>
+<td>4</td>
+<td>106</td>
+<td>北京</td>
+<td>2021-10-20 08:05:41</td>
+<td>2021-10-20 08:06:00</td>
+<td>9006</td>
+</tr>
+<tr>
+<td>5</td>
+<td>103</td>
+<td>北京</td>
+<td>2021-10-20 08:05:50</td>
+<td>2021-10-20 08:07:10</td>
+<td>9003</td>
+</tr>
+<tr>
+<td>6</td>
+<td>104</td>
+<td>北京</td>
+<td>2021-10-20 08:01:01</td>
+<td>2021-10-20 08:01:20</td>
+<td>9004</td>
+</tr>
+<tr>
+<td>7</td>
+<td>105</td>
+<td>北京</td>
+<td>2021-10-20 08:01:15</td>
+<td>2021-10-20 08:01:30</td>
+<td>9019</td>
+</tr>
+<tr>
+<td>8</td>
+<td>101</td>
+<td>北京</td>
+<td>2021-10-20 08:28:10</td>
+<td>2021-10-20 08:30:00</td>
+<td>9011</td>
+</tr>
+</tbody>
+</table>
+<p>(uid-用户ID, city-城市, event_time-打车时间, end_time-打车结束时间, order_id-订单号）</p>
+<p>打车订单表tb_get_car_order</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>order_id</th>
+<th>uid</th>
+<th>driver_id</th>
+<th>order_time</th>
+<th>start_time</th>
+<th>finish_time</th>
+<th>mileage</th>
+<th>fare</th>
+<th>grade</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>9008</td>
+<td>108</td>
+<td>204</td>
+<td>2021-10-20 08:00:40</td>
+<td>2021-10-20 08:03:00</td>
+<td>2021-10-20 08:31:00</td>
+<td>13.2</td>
+<td>38</td>
+<td>4</td>
+</tr>
+<tr>
+<td>2</td>
+<td>9018</td>
+<td>108</td>
+<td>214</td>
+<td>2021-10-20 08:00:45</td>
+<td>2021-10-20 08:04:50</td>
+<td>2021-10-20 08:21:00</td>
+<td>14</td>
+<td>38</td>
+<td>5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>9002</td>
+<td>102</td>
+<td>202</td>
+<td>2021-10-20 08:00:50</td>
+<td>2021-10-20 08:06:00</td>
+<td>2021-10-20 08:31:00</td>
+<td>10</td>
+<td>41.5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>9006</td>
+<td>106</td>
+<td>206</td>
+<td>2021-10-20 08:06:00</td>
+<td>2021-10-20 08:09:00</td>
+<td>2021-10-20 08:31:00</td>
+<td>8</td>
+<td>25.5</td>
+<td>4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>9003</td>
+<td>103</td>
+<td>203</td>
+<td>2021-10-20 08:07:10</td>
+<td>2021-10-20 08:15:00</td>
+<td>2021-10-20 08:31:00</td>
+<td>11</td>
+<td>41.5</td>
+<td>4</td>
+</tr>
+<tr>
+<td>6</td>
+<td>9004</td>
+<td>104</td>
+<td>204</td>
+<td>2021-10-20 08:01:20</td>
+<td>2021-10-20 08:13:00</td>
+<td>2021-10-20 08:31:00</td>
+<td>7.5</td>
+<td>22</td>
+<td>4</td>
+</tr>
+<tr>
+<td>7</td>
+<td>9019</td>
+<td>105</td>
+<td>205</td>
+<td>2021-10-20 08:01:30</td>
+<td>2021-10-20 08:11:00</td>
+<td>2021-10-20 08:51:00</td>
+<td>10</td>
+<td>39</td>
+<td>4</td>
+</tr>
+<tr>
+<td>8</td>
+<td>9011</td>
+<td>101</td>
+<td>211</td>
+<td>2021-10-20 08:30:00</td>
+<td>2021-10-20 08:31:00</td>
+<td>2021-10-20 08:54:00</td>
+<td>10</td>
+<td>35</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p>(order_id-订单号, uid-用户ID, driver_id-司机ID, order_time-接单时间, start_time-开始计费的上车时间, finish_time-订单完成时间, mileage-行驶里程数, fare-费用, grade-评分）</p>
+<p><strong>场景逻辑说明</strong>：</p>
+<ul>
+<li><strong>用户提交打车请求后</strong>，在用户打车记录表生成一条打车记录，<strong>订单号-order_id</strong>设为<strong>null</strong>；</li>
+<li>当有司机接单时，在打车订单表生成一条订单，<strong>填充接单时间-order_time及其左边的字段</strong>，上车时间及其右边的字段全部为<strong>null</strong>，并把订单号和接单时间（打车结束时间）写入打车记录表；若一直无司机接单、超时或中途用户主动取消打车，则记录打车结束时间。</li>
+<li>若乘客上车前，乘客或司机点击取消订单，会将打车订单表对应订单的<strong>订单完成时间</strong>-<strong>finish_time填充为取消时间</strong>，其余字段设为<strong>null</strong>。</li>
+<li>当司机接上乘客时，填充打车订单表中该订单的<strong>上车时间start_time</strong>。</li>
+<li>当订单完成时填充订单完成时间、里程数、费用；评分设为<strong>null</strong>，在用户给司机打1~5星评价后填充。</li>
+</ul>
+<p><strong>问题：请统计各个城市在2021年10月期间，单日中最大的同时等车人数。</strong></p>
+<p><strong>注</strong>:  等车指从开始<strong>打车起</strong>，直到取消打车、取消等待或上车前的这段时间里用户的状态。</p>
+<p>如果同一时刻有人停止等车，有人开始等车，等车人数记作先增加后减少。</p>
+<p>结果按各城市最大等车人数升序排序，相同时按城市升序排序。</p>
+<p><strong>输出示例</strong>：</p>
+<p>示例结果如下</p>
+<table>
+<thead>
+<tr>
+<th>city</th>
+<th>max_wait_uv</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>北京</td>
+<td>5</td>
+</tr>
+</tbody>
+</table>
+<p>解释：由打车订单表可以得知北京2021年10月20日有8条打车记录，108号乘客从08:00:00等到08:03:00，118号乘客从08:00:10等到08:04:50....,由此得知08:02:00秒时刻，共有5人在等车。</p>
+<h4 id="解答w-14">解答W</h4>
+<pre><code class="language-mysql"># 将打车开始的时间和订单执行时间合并在一起
+# 分别标记 1, -1
+# 按照时间进行排列
+# 显然当所有的时间都聚集在一起, 利用sum() (order by) 可以得到各个阶段的累积情况
+WITH a AS (
+	SELECT
+		city,
+		event_time as time_index,
+		1 as status
+	FROM
+		tb_get_car_record UNION ALL
+	SELECT
+		city,
+    	# 这一步的目的在于保证数据存在, 订单表中的finish_time 优先于 记录表中的end_time
+		IFNULL( start_time, finish_time ) as time_index,
+		- 1 as status
+	FROM
+		tb_get_car_order
+		JOIN tb_get_car_record USING ( order_id ) 
+	),
+	b AS (
+	SELECT
+		city,
+		time_index,
+		SUM( status ) OVER ( PARTITION BY city, day(time_index) ORDER BY time_index, status DESC ) as sum_wait_num 
+	FROM
+		a 
+	) SELECT
+	city,
+	MAX( sum_wait_num ) AS max_wait_uv 
+FROM
+	b 
+WHERE
+	date_format( time_index, '%Y-%m' ) = '2021-10'
+GROUP BY
+	city 
+ORDER BY
+	max_wait_uv,
+	city;
++--------+-------------+
+| city   | max_wait_uv |
++--------+-------------+
+| 北京   |           5 |
++--------+-------------+
+1 row in set (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql"># 错误的思路, 错误进行最小值的比较, 这个只能得到区间的数据而不是全局(当天的最大值)
+WITH a AS (
+	SELECT
+		t2.event_time,
+		date ( event_time ) AS s_day,
+	IF
+		( t2.end_time = t1.order_time, t1.start_time, t2.end_time ) AS start_time,
+		t2.city 
+	FROM
+		tb_get_car_order AS t1
+		LEFT JOIN tb_get_car_record t2 ON t2.order_id = t1.order_id 
+	WHERE
+		date_format( t2.event_time, '%Y-%m' ) = '2021-10' 
+	),
+	b AS ( SELECT *, min( start_time ) over ( PARTITION BY city, s_day ) AS ms FROM a ),
+	e AS ( SELECT city, sum( IF ( event_time &gt; ms, 0, 1 ) ) AS ic FROM b GROUP BY city, s_day ) SELECT
+	city,
+	max( ic ) AS max_wait_uv 
+FROM
+	e 
+GROUP BY
+	city 
+ORDER BY
+	max_wait_uv,
+	city;
+</code></pre>
+<h2 id="相关函数">相关函数</h2>
+<p>上述内容常用的函数.</p>
+<h3 id="日期相关">日期相关</h3>
+<pre><code class="language-mysql"># 增加
+mysql&gt; select date_add(&quot;2021-01-01&quot;, interval 1 day);
++----------------------------------------+
+| date_add(&quot;2021-01-01&quot;, interval 1 day) |
++----------------------------------------+
+| 2021-01-02                             |
++----------------------------------------+
+1 row in set (0.00 sec)
+
+# 减少
+mysql&gt; select date_sub(&quot;2021-01-01&quot;, interval 1 day);
++----------------------------------------+
+| date_sub(&quot;2021-01-01&quot;, interval 1 day) |
++----------------------------------------+
+| 2020-12-31                             |
++----------------------------------------+
+1 row in set (0.00 sec)
+
+# 时间间隔的具体数值(单位, 年月日时分秒等)
+mysql&gt; select TIMESTAMPDIFF(second, '2022-01-01 19:00:52', '2022-01-01 19:00:57');
++---------------------------------------------------------------------+
+| TIMESTAMPDIFF(second, '2022-01-01 19:00:52', '2022-01-01 19:00:57') |
++---------------------------------------------------------------------+
+|                                                                   5 |
++---------------------------------------------------------------------+
+
+# 间隔的天数(只限于day, 天数)
+mysql&gt; select datediff('2022-01-01 19:00:52', '2022-01-01 19:00:57');
++--------------------------------------------------------+
+| datediff('2022-01-01 19:00:52', '2022-01-01 19:00:57') |
++--------------------------------------------------------+
+|                                                      0 |
++--------------------------------------------------------+
+1 row in set (0.00 sec)
+1 row in set (0.00 sec)
+
+# 只保留日期, 去掉时间
+mysql&gt; select date(&quot;2021-01-01 12:01:01&quot;);
++-----------------------------+
+| date(&quot;2021-01-01 12:01:01&quot;) |
++-----------------------------+
+| 2021-01-01                  |
++-----------------------------+
+1 row in set (0.00 sec)
+
+# 日期格式化
+mysql&gt; select date_format(&quot;2021-01-01 12:01:01&quot;, '%Y%m');
++--------------------------------------------+
+| date_format(&quot;2021-01-01 12:01:01&quot;, '%Y%m') |
++--------------------------------------------+
+| 202101                                     |
++--------------------------------------------+
+1 row in set (0.00 sec)
+
+# 字符串转日期/时间
+mysql&gt; SELECT STR_TO_DATE(&quot;August 10 2017&quot;, &quot;%M %d %Y&quot;);
++-------------------------------------------+
+| STR_TO_DATE(&quot;August 10 2017&quot;, &quot;%M %d %Y&quot;) |
++-------------------------------------------+
+| 2017-08-10                                |
++-------------------------------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<ul>
+<li><a href="https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html">Date and Time Functions</a></li>
+</ul>
+<h3 id="取值相关">取值相关</h3>
+<pre><code class="language-bash"># 处理null值, ifnull()的强化版本
+# coalesce, 返回第一个不是null的值
+mysql&gt; select coalesce(null, 2, 1);
++----------------------+
+| coalesce(null, 2, 1) |
++----------------------+
+|                    2 |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select coalesce(null, null, 1);
++-------------------------+
+| coalesce(null, null, 1) |
++-------------------------+
+|                       1 |
++-------------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select coalesce(1, 1, null);
++----------------------+
+| coalesce(1, 1, null) |
++----------------------+
+|                    1 |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select coalesce(1, 2, null);
++----------------------+
+| coalesce(1, 2, null) |
++----------------------+
+|                    1 |
++----------------------+
+1 row in set (0.00 sec)
+</code></pre>
+<pre><code class="language-mysql">mysql&gt; select ifnull(null, 1);
++-----------------+
+| ifnull(null, 1) |
++-----------------+
+|               1 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql&gt; select ifnull(1, 2);
++--------------+
+| ifnull(1, 2) |
++--------------+
+|            1 |
++--------------+
+1 row in set (0.00 sec)
+</code></pre>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/niu-ke-wang-sql-ce-shi-kun-nan/" title="牛客网-SQL测试(困难)">https://Kyouichirou.github.io/post/niu-ke-wang-sql-ce-shi-kun-nan/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"># priority</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/"># mysql</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="MySQL生成测试数据" href="https://Kyouichirou.github.io/post/mysql-sheng-cheng-ce-shi-shu-ju/">MySQL生成测试数据</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="MySQL生成测试数据" href="https://Kyouichirou.github.io/post/mysql-sheng-cheng-ce-shi-shu-ju/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Python 正则表达式的差异" href="https://Kyouichirou.github.io/post/python-zheng-ze-biao-da-de-chai-yi/">Python 正则表达式的差异</a>
+        <a class="nav-mobile-next" title="Python 正则表达式的差异" href="https://Kyouichirou.github.io/post/python-zheng-ze-biao-da-de-chai-yi/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

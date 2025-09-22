@@ -1,0 +1,3061 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>LINGO简单使用 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="LINGO简单使用" />
+  <meta name="keywords" content="operational research,lingo,scipy" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一. 前言</a>
+<ul>
+<li><a href="#11-%E7%AE%80%E4%BB%8B">1.1 简介</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8">二. 基本使用</a>
+<ul>
+<li><a href="#21-%E6%93%8D%E4%BD%9C%E7%95%8C%E9%9D%A2">2.1 操作界面</a></li>
+<li><a href="#22-%E5%9F%BA%E6%9C%AC%E8%A7%84%E8%8C%83">2.2 基本规范</a>
+<ul>
+<li><a href="#221-%E6%AE%B5">2.2.1 段</a></li>
+</ul>
+</li>
+<li><a href="#23-%E9%9B%86%E5%90%88">2.3 集合</a></li>
+<li><a href="#24-%E6%95%B0%E6%8D%AE">2.4 数据</a></li>
+<li><a href="#25-%E5%8F%98%E9%87%8F%E7%95%8C%E5%AE%9A%E5%87%BD%E6%95%B0">2.5 变量界定函数</a></li>
+<li><a href="#26-%E5%BE%AA%E7%8E%AF%E5%87%BD%E6%95%B0">2.6 循环函数</a></li>
+<li><a href="#27-%E5%85%B6%E4%BB%96%E5%87%BD%E6%95%B0">2.7 其他函数</a></li>
+<li><a href="#28-%E6%95%B0%E5%AD%A6%E8%BF%90%E7%AE%97%E7%AC%A6">2.8 数学运算符</a></li>
+<li><a href="#29-%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6">2.9 逻辑运算符</a></li>
+<li><a href="#210-%E6%95%B0%E5%AD%A6%E5%87%BD%E6%95%B0">2.10 数学函数</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E7%A4%BA%E4%BE%8B">三. 示例</a>
+<ul>
+<li><a href="#31-%E5%9F%BA%E6%9C%AC">3.1 基本</a>
+<ul>
+<li><a href="#311-%E7%A4%BA%E4%BE%8B1">3.1.1 示例1</a></li>
+<li><a href="#312-%E7%A4%BA%E4%BE%8B2">3.1.2 示例2</a></li>
+</ul>
+</li>
+<li><a href="#32-%E6%A8%A1%E5%9E%8B">3.2 模型</a>
+<ul>
+<li><a href="#321-%E7%A4%BA%E4%BE%8B1">3.2.1 示例1</a></li>
+<li><a href="#322-%E7%A4%BA%E4%BE%8B2">3.2.2 示例2</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E9%94%99%E8%AF%AF%E5%AF%B9%E7%85%A7%E8%A1%A8">四. 错误对照表</a></li>
+<li><a href="#%E4%BA%94-%E5%9C%A8%E7%BA%BF%E6%96%87%E6%A1%A3">五. 在线文档</a></li>
+<li><a href="#%E5%85%AD-%E5%8F%82%E8%80%83">六. 参考</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/lingo-jian-dan-shi-yong/"> LINGO简单使用 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-04-17 17:29:26">2023-04-17</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/nVhK8pEaF/"> <span>operational research</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/nCxaxC3v9/"> <span>lingo</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/89XKfdJfIJ/">
+        <span>scipy</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >35<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >8395<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <h2 id="一-前言">一. 前言</h2>
+<h3 id="11-简介">1.1 简介</h3>
+<figure data-type="image" tabindex="1"><img src="https://www.lindo.com/images/lindo/LingoScreen_small.png" alt="img" loading="lazy"></figure>
+<blockquote>
+<p>LINGO is a comprehensive tool designed to make building and solving <strong>Linear</strong>, <strong>Nonlinear</strong> (convex &amp; nonconvex/Global), <strong>Quadratic</strong>, <strong>Quadratically Constrained</strong>, <strong>Second Order Cone</strong>, <strong>Semi-Definite</strong>, <strong>Stochastic</strong>, and <strong>Integer optimization</strong> models faster, easier and more efficient. LINGO provides a completely integrated package that includes a powerful language for expressing optimization models, a full featured environment for building and editing problems, and a set of fast built-in solvers.</p>
+</blockquote>
+<p>在当下各种近乎于浮夸的(&quot;大&quot;)数据处理工具面前, <code>lingo</code>可谓是一个另类的存在, 其官网上也没有各种高大上的宣传概念(动辄大数据, 神经网络..机器学习...), 是个相当相当低调的数学处理工具, 甚至其操作界面至今还维持上古时代<code>vb</code>的极简风格.</p>
+<p><font size=2>(但是, 需要注意, 这并不意味着这个软件的开发的停止..这个软件还持续更新, 当下版本20)</font></p>
+<p><a href="https://www.lindo.com/doc/online_help/lingo20_0/index.html?title_page2.htm">官方文档</a></p>
+<!--more-->
+<figure data-type="image" tabindex="2"><a href="https://imgse.com/i/p99HHTs"><img src="https://s1.ax1x.com/2023/04/16/p99HHTs.png" alt="p99HHTs.png" loading="lazy"></a></figure>
+<p><em>(图: 操作界面对于使用vba的用户可谓是相当亲切.)</em></p>
+<p>专注解决以下数学问题:</p>
+<ul>
+<li>线性</li>
+<li>非线性(凹/凸/全局)</li>
+<li>二次</li>
+<li>二次约束</li>
+<li>二阶锥规划</li>
+<li>半确定</li>
+<li>随机</li>
+</ul>
+<p><a href="https://zhuanlan.zhihu.com/p/110250728">知乎-二阶锥规划</a></p>
+<p><a href="https://www.zhihu.com/question/20675303">知乎-「Stochastic」与「Random」有何区别? </a></p>
+<h2 id="二-基本使用">二. 基本使用</h2>
+<h3 id="21-操作界面">2.1 操作界面</h3>
+<figure data-type="image" tabindex="3"><a href="https://imgse.com/i/p99Ljpt"><img src="https://s1.ax1x.com/2023/04/16/p99Ljpt.png" alt="p99Ljpt.png" loading="lazy"></a></figure>
+<p>除了求解器的设置之外, 没有任何其他的乱七八糟的设置...nice!</p>
+<figure data-type="image" tabindex="4"><a href="https://imgse.com/i/p99OV10"><img src="https://s1.ax1x.com/2023/04/16/p99OV10.png" alt="p99OV10.png" loading="lazy"></a></figure>
+<blockquote>
+<p><strong>至繁归于至简</strong></p>
+</blockquote>
+<h3 id="22-基本规范">2.2 基本规范</h3>
+<ul>
+<li>LINGO数学规划模型, 通常包含包含三个基本部分: 目标函数, 决策变量, 约束条件.</li>
+<li>每个语句都必须要用一个英文状态下的<strong>分号结束</strong> 一个语句可以分几行输入.</li>
+<li><strong>注释</strong>以英文状态的<code>! </code>开始 必须以英文状态下的分号结束.</li>
+<li>变量<strong>不区分字母的大小写</strong> 必须以字母开头 可以包含数字和下划线 不超过32 个字符.</li>
+<li>程序只要定义好集合后, 其他语句的顺序是任意的.</li>
+<li>函数以<code>@</code>开头.</li>
+<li>默认所有的变量都是非负的.</li>
+</ul>
+<h4 id="221-段">2.2.1 段</h4>
+<ul>
+<li>集合段: 用于定义数组型性变量<code>SETS: …… ENDSETS</code>.</li>
+<li>数据段: 用于变量赋值与数据传递<code>DATA: ……ENDDATA.</code></li>
+<li>目标与约束段: 用于列出目标与约束唯一一个没有段的开始和结束标记.</li>
+<li>计算段: 用于数据初始整理计算<code>CALC: …… ENDCALC</code>.</li>
+<li>初始段: 用于变量赋初值迭代寻优<code>INIT: ……ENDINIT.</code></li>
+<li>子模型段: 用于表达子模型进行调用<code>@SUBMODEL mymodel:可执行语句( 约束+目标) ENDSUBMODEL</code>.</li>
+</ul>
+<h3 id="23-集合">2.3 集合</h3>
+<p>语法结构<br>
+sets:<br>
+集合名称1/成员列表1/: 属性1_1 属性1_2 … 属性1_n1;<br>
+集合名称2/成员列表2/: 属性2_1 属性2_2 … 属性2_n2;<br>
+派生集合名称( 集合名称1 集合名称2) : 属性3_1 … 属性3_n3;<br>
+endsets</p>
+<pre><code class="language-lingo">sets:
+    product/A B/;
+    machine/M N/;
+    week/1…2/;
+    allowed(product,machine,week):x;
+endsets
+</code></pre>
+<p>集合 name/n1…n4/:a;</p>
+<ul>
+<li>
+<p>name是集合名 n1…n4表示集合内到四个成员</p>
+</li>
+<li>
+<p>a是集合属性</p>
+</li>
+<li>
+<p>集合定义以语句&quot; sets:&quot; 开始 &quot; endsets&quot; 结束 &quot; endsets&quot; 单独成一行 后面不加标点符号</p>
+</li>
+<li>
+<pre><code>!举例;
+sets:!集合段; 
+s/1..100/: x;
+endsets
+!目标与约束段
+@sum(s(i):x(i))&lt;90;!循环求和函数
+</code></pre>
+</li>
+<li>
+<p>缺省属性的集合: work/w1w2w3/;</p>
+</li>
+<li>
+<p>初始集合: name work</p>
+</li>
+<li>
+<p>派生集合: links(name,work):b;</p>
+<ul>
+<li>links成员取name和work的所有可能组合 是一个由12个成员构成的矩阵</li>
+<li>该矩阵的行数与name中的成员个数相等</li>
+<li>该矩阵的列数与work中的成员个数相等</li>
+</ul>
+</li>
+</ul>
+<p><strong>@in(set_name,primitive_index_1[,primitive_index_2,...])</strong></p>
+<p>如果元素在指定集内则返回1 否则返回0;</p>
+<pre><code class="language-cobol">sets:                          全集为I,C为B的补集
+  I/x1..x4/;
+  B(I)/x2/;
+  C(I)|#not#@in(B&amp;1):;
+endsets
+</code></pre>
+<p><strong>@index([set_name,]primitive_set_element)</strong></p>
+<p>该函数返回在集set_name中原是集成员primitive_set_element的索引. 如果set_name被忽略 那么它将返回第一个原是集成员的索引.</p>
+<pre><code class="language-cobol">sets:                 如何确定集成员( B,Y)属于派生集S3
+  S1/A B C/;
+  S2/X Y Z/;
+  S3(S1,S2)/A X,A Z,B,Y,C X/;
+endsets
+X= @in(S3,@index(S1,B),@index(S2,Y));
+</code></pre>
+<h3 id="24-数据">2.4 数据</h3>
+<p>语法结构</p>
+<p>data: data:<br>
+属性 1= 数据列表;  数据列表;  数据列表;<br>
+属性 2= 数据列表;  数据列表;  数据列表;<br>
+enddata nddata</p>
+<h3 id="25-变量界定函数">2.5 变量界定函数</h3>
+<pre><code class="language-cobol">@for(items(i):@bin(x(i)));
+
+! 对x进行约束 0, 1;
+</code></pre>
+<p>变量界定函数实现对变量取值范围进行限制</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@bin(x)</td>
+<td>限制x为0或1</td>
+</tr>
+<tr>
+<td>@bnd(L, x, R)</td>
+<td>限制L&lt;=x&lt;=R</td>
+</tr>
+<tr>
+<td>@free(x)</td>
+<td>x可以取任意实数</td>
+</tr>
+<tr>
+<td>@gin(x)</td>
+<td>限制x为整数</td>
+</tr>
+</tbody>
+</table>
+<h3 id="26-循环函数">2.6 循环函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数名</th>
+<th>返回值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@FOR(s:e)</td>
+<td>对集合s中的每一个元素都生成一个约束条件表达式 具体约束由e描述</td>
+</tr>
+<tr>
+<td>@SUM(s:e)</td>
+<td>对集合s中的每一个元素,计算表达式e的值 然后返回这些值的和</td>
+</tr>
+<tr>
+<td>@MAX(s:e)</td>
+<td>对集合s中的每一个元素,计算表达式e的值 然后返回这些值的最大值</td>
+</tr>
+<tr>
+<td>@MIN(s:e)</td>
+<td>对集合s中的每一个元素,计算表达式e的值 然后返回这些值的最小值</td>
+</tr>
+<tr>
+<td>@PROD(s:e)</td>
+<td>对集合s中的每一个元素,计算表达式e的值 然后返回这些值的乘积</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>
+<p><code>@for</code>: 该函数用来产生对成员的约束(类似C/C++中的for循环用法)</p>
+<pre><code class="language-bash">@for(集合( 下标) [|逻辑表达式] :  集合表达式);
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>表达方式</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数学表达式</td>
+<td><img src="https://private.codecogs.com/gif.latex?x%28i%29%20%3C%2010%3B%20i%20%5Cin%20%5C%7B1%2C2%2C3%5C%7D?" alt="x(i) &lt; 10; i n 1,2,3" loading="lazy"></td>
+</tr>
+<tr>
+<td>Lingo编码</td>
+<td>@for(node(i) : x(i) &lt; 10);</td>
+</tr>
+<tr>
+<td>Latex编码</td>
+<td>x(i) &lt; 10; i \in {1,2,3}</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-cobol">model:
+sets:
+  number/1..5/:x;
+endsets
+  @for(number(I):x(I)=I^2);
+end
+</code></pre>
+</li>
+<li>
+<p><code>@sum</code>: 返回遍历指定成员的一个表达式的和</p>
+<pre><code class="language-bash">@sum(集合( 下标) : 集合表达式)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>表达方式</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数学表达式</td>
+<td><img src="https://private.codecogs.com/gif.latex?min%20%3D%20%5Csum_%7Bi%20%3D%201%7D%5E%7B3%7D%5Csum_%7Bj%3D1%7D%5E%7B3%7Dx%28i%29*d%28i%2Cj%29?" alt="min = um_{i = 1}{3}\sum_{j=1}{3}x(i)*d(i,j)" loading="lazy"></td>
+</tr>
+<tr>
+<td>Lingo编码</td>
+<td>min = @sum(arc(i,j) : x(i) * d(i,j));</td>
+</tr>
+<tr>
+<td>Latex编码</td>
+<td>min = \sum_{i = 1}<sup>{3}\sum_{j=1}</sup>{3}x(i)*d(i,j)</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-cobol"># 计算前五位数的和
+
+model:
+data:
+	N=6;
+enddata
+sets:
+	number/1..N/:x;
+endsets
+data:
+	x = 5 1 3 4 6 10;
+enddata
+	s = @sum(number(I)| I #le#5 :x);
+end
+</code></pre>
+<pre><code class="language-cobol"># 计算元素中小于或等于5数的和
+
+model:
+data:
+	N=6;
+enddata
+sets:
+	number/1..N/:x;
+endsets
+data:
+	x = 5 1 3 4 6 10;
+enddata
+	s = @sum(number(I) | x(i) #le# 5: x(i));
+end
+</code></pre>
+</li>
+<li>
+<p><code>@min</code>: 返回指定成员的一个表达式的最小值</p>
+<pre><code class="language-cobol">model:
+data:
+  N=6;
+enddata
+sets:
+  number/1  N/:x;
+endsets
+data:
+  x=5 1 3 4 6 10;
+enddata
+  minv=@min(number(I)|I #le# 5:x;
+</code></pre>
+</li>
+<li>
+<p><code>@max</code>: 返回指定成员的一个表达式的最大值</p>
+</li>
+</ul>
+<h3 id="27-其他函数">2.7 其他函数</h3>
+<ul>
+<li><code>@if(logical_condition,true_result,false_result)</code>: 一个逻辑表达式<code>logical_condition</code> 如果为真返回<code>true_ result</code> 否则返回<code>false_result</code>.</li>
+</ul>
+<h3 id="28-数学运算符">2.8 数学运算符</h3>
+<pre><code class="language-bash">＾  次幂
+*   乘
+／  除
+﹢  加
+﹣  减
+</code></pre>
+<h3 id="29-逻辑运算符">2.9 逻辑运算符</h3>
+<p>在 <code>LINGO</code> 中逻辑运算符主要用于集循环函数的条件表达式中, 用来控制在函数中哪些集成员被包含, 哪些被排斥. 在创建稀疏集时用在成员资格过滤器中. <code>LINGO</code>具有９种逻辑运算符</p>
+<table>
+<thead>
+<tr>
+<th>运算符</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>#EQ#</td>
+<td>若两个运算对象相等则为真 否则为假</td>
+</tr>
+<tr>
+<td>#NE#</td>
+<td>若两个运算对象不等则为真 否则为假</td>
+</tr>
+<tr>
+<td>#GT#</td>
+<td>若两个运算对象左边大于右边则为真 否则为假</td>
+</tr>
+<tr>
+<td>#GE#</td>
+<td>若两个运算对象左边大于或等于右边则为真 否则为假</td>
+</tr>
+<tr>
+<td>#LT#</td>
+<td>若两个运算对象左边小于右边则为真 否则为假</td>
+</tr>
+<tr>
+<td>#LE#</td>
+<td>若两个运算对象左边小于或等于右边则为真 否则为假</td>
+</tr>
+<tr>
+<td>#NOT#</td>
+<td>取反运算 使真为假 假为真</td>
+</tr>
+<tr>
+<td>#AND#</td>
+<td>当且仅当两个运算对象都为真时为真 否则为假</td>
+</tr>
+<tr>
+<td>#OR#</td>
+<td>当且仅当两个运算对象都为假时为假 否则为假</td>
+</tr>
+</tbody>
+</table>
+<p>优先级由高到低</p>
+<pre><code class="language-bash">高 #not#
+
+\#eq# #ne# #gt# #ge# #lt# #le#
+
+低 #and# #or#
+</code></pre>
+<h3 id="210-数学函数">2.10 数学函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>@abs(x)</td>
+<td>返回x的绝对值</td>
+</tr>
+<tr>
+<td>@sqrt(x)</td>
+<td>返回x的平方根</td>
+</tr>
+<tr>
+<td>@sin(x)</td>
+<td>返回x的正弦值</td>
+</tr>
+<tr>
+<td>@cos(x)</td>
+<td>返回x的余弦值</td>
+</tr>
+<tr>
+<td>@tan(x)</td>
+<td>返回x的正切值</td>
+</tr>
+<tr>
+<td>@exp(x)</td>
+<td>返回常数e的x次方</td>
+</tr>
+<tr>
+<td>@log(x)</td>
+<td>返回x的自然对数</td>
+</tr>
+<tr>
+<td>@lgm(x)</td>
+<td>返回x的gamma函数的自然对数</td>
+</tr>
+<tr>
+<td>@sign(x)</td>
+<td>如果x&lt;0返回-1; 否则返回1</td>
+</tr>
+<tr>
+<td>@floor(x)</td>
+<td>返回x的整数部分</td>
+</tr>
+<tr>
+<td>@smax(x1,x2,…,xn)</td>
+<td>返回x1,x2,…,xn中的最大值</td>
+</tr>
+<tr>
+<td>@smin(x1,x2,…,xn)</td>
+<td>返回x1,x2,…,xn中的最小值</td>
+</tr>
+</tbody>
+</table>
+<h2 id="三-示例">三. 示例</h2>
+<h3 id="31-基本">3.1 基本</h3>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>100</mn></munderover><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mn>200</mn></munderover><mo>=</mo><mn>280</mn></mrow><annotation encoding="application/x-tex">\sum_{i=1}^{100}\sum_{j=1}^{200} = 280
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.2148900000000005em;vertical-align:-1.4137769999999998em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8011130000000004em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8011130000000004em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">2</span><span class="mord mtight">0</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">8</span><span class="mord">0</span></span></span></span></span></p>
+<pre><code class="language-cobol">model:
+	sets:
+		a/1..100/:;
+		b/1..200/:;
+		c(a, b):x;
+	endsets
+
+	@sum(c(i, j):x(i, j)) = 280;
+end
+</code></pre>
+<h4 id="311-示例1">3.1.1 示例1</h4>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">最</mi><mi mathvariant="normal">为</mi><mi mathvariant="normal">常</mi><mi mathvariant="normal">见</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">模</mi><mi mathvariant="normal">型</mi><mi mathvariant="normal">求</mi><mi mathvariant="normal">解</mi><mo>:</mo><mspace linebreak="newline"></mspace><mi>m</mi><mi>a</mi><mi>x</mi><mtext>  </mtext><mi>z</mi><mo>=</mo><mn>2</mn><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mn>3</mn><msub><mi>x</mi><mn>2</mn></msub><mo>−</mo><mn>5</mn><msub><mi>x</mi><mn>3</mn></msub><mspace linebreak="newline"></mspace><mi>s</mi><mi mathvariant="normal">.</mi><mi>t</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>x</mi><mn>2</mn></msub><mo>+</mo><msub><mi>x</mi><mn>3</mn></msub><mo>=</mo><mn>7</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mn>2</mn><msub><mi>x</mi><mn>1</mn></msub><mo>−</mo><mn>5</mn><msub><mi>x</mi><mn>2</mn></msub><mo>+</mo><msub><mi>x</mi><mn>3</mn></msub><mo>≥</mo><mn>10</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mn>3</mn><msub><mi>x</mi><mn>2</mn></msub><mo>+</mo><msub><mi>x</mi><mn>3</mn></msub><mo>≤</mo><mn>12</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>x</mi><mn>2</mn></msub><mn>0</mn><mo separator="true">,</mo><msub><mi>x</mi><mn>3</mn></msub><mo>≥</mo><mn>0</mn></mrow></mstyle></mtd></mtr></mtable></mrow><mspace linebreak="newline"></mspace></mrow><annotation encoding="application/x-tex">最为常见的模型求解:\\
+max\;z = 2x_1 + 3x_2 - 5x_3\\
+s.t = \begin{cases}
+x_1 + x_2 + x_3 = 7\\
+2x_1 - 5x_2 + x_3 \geq 10\\
+x_1 + 3x_2 + x_3 \leq 12\\
+x_1, x_20, x_3 \geq 0
+\end{cases}\\
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord cjk_fallback">最</span><span class="mord cjk_fallback">为</span><span class="mord cjk_fallback">常</span><span class="mord cjk_fallback">见</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">模</span><span class="mord cjk_fallback">型</span><span class="mord cjk_fallback">求</span><span class="mord cjk_fallback">解</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.79444em;vertical-align:-0.15em;"></span><span class="mord">2</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.79444em;vertical-align:-0.15em;"></span><span class="mord">3</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.79444em;vertical-align:-0.15em;"></span><span class="mord">5</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord">.</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:5.76em;vertical-align:-2.63em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.9500200000000003em;"><span style="top:-1.59999em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎩</span></span></span><span style="top:-1.59999em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-1.89999em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-2.19999em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-3.1500100000000004em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎨</span></span></span><span style="top:-4.30001em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-4.60001em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-4.90001em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎪</span></span></span><span style="top:-5.20002em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎧</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.45002em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:3.1300000000000003em;"><span style="top:-5.130000000000001em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">7</span></span></span><span style="top:-3.6900000000000004em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord">2</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">5</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mord">0</span></span></span><span style="top:-2.2500000000000004em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">3</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mord">2</span></span></span><span style="top:-0.8100000000000002em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≥</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.63em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mspace newline"></span></span></span></span></p>
+<pre><code class="language-cobol"># 这也是lingo的一大优势
+# 代码即模型
+
+model:
+	max = 2 * x1 + 3 * x2 - 5 * x3;
+	x1 + x2 + x3 = 7;
+	2 * x1 - 5 * x2 + x3 &gt;= 10;
+	x1 + 3 * x2 + x3 &lt;= 12;
+	x1 &gt;= 0;
+	x2 &gt;= 0;
+	x3 &gt;= 0;
+end
+</code></pre>
+<figure data-type="image" tabindex="5"><a href="https://imgse.com/i/p9CWrBq"><img src="https://s1.ax1x.com/2023/04/17/p9CWrBq.png" alt="p9CWrBq.png" loading="lazy"></a></figure>
+<pre><code class="language-python"># python下的实现
+
+from scipy import optimize
+
+# * -1, 转换为min
+z = [-2, -3, 5]
+
+a = [
+    [1, 1, 1],
+    # * -1, 转换为小于等于
+    [-2, 5, -1],
+    [1, 3, 1]
+]
+
+b = [
+    7, -10, 12
+]
+x1b = (0, None)
+x2b = (0, None)
+x3b = (0, None)
+
+optimize.linprog(
+    z,
+    A_ub=a, b_ub=b,
+    bounds=[x1b, x2b, x3b],
+    method='revised simplex'
+)
+</code></pre>
+<pre><code class="language-cobol">model:
+max = 2 * x1 + 3 * x2 - 5 * x3;
+x1 + x2 + x3 = 7;
+2 * x1 - 5 * x2 + x3 &gt;= 10;
+x1 + 3 * x2 + x3 &lt;= 12;
+x1 &gt;= 0;
+x2 &gt;= 0;
+x3 &gt;= 0;
+@gin(x1);
+@gin(x2);
+@gin(x3); !增加一个整数的约束;
+end
+</code></pre>
+<h4 id="312-示例2">3.1.2 示例2</h4>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>i</mi><mi>n</mi><mo>=</mo><msqrt><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup><mo>+</mo><msup><mi>z</mi><mn>2</mn></msup></mrow></msqrt><mspace linebreak="newline"></mspace><mi>s</mi><mi mathvariant="normal">.</mi><mi>t</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>x</mi><mo>+</mo><mi>y</mi><mo>+</mo><mi>z</mi><mo>=</mo><mn>1</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>z</mi><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">min = \sqrt{x^2 + y^ 2 + z^ 2}\\
+s.t =\begin{cases}
+x + y + z = 1\\
+z = x^ 2 + y ^ 2
+\end{cases}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.24em;vertical-align:-0.23329099999999992em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.006709em;"><span class="svg-align" style="top:-3.2em;"><span class="pstrut" style="height:3.2em;"></span><span class="mord" style="padding-left:1em;"><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.740108em;"><span style="top:-2.9890000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.740108em;"><span style="top:-2.9890000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.740108em;"><span style="top:-2.9890000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-2.9667090000000003em;"><span class="pstrut" style="height:3.2em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.28em;"><svg width='400em' height='1.28em' viewBox='0 0 400000 1296' preserveAspectRatio='xMinYMin slice'><path d='M263,681c0.7,0,18,39.7,52,119c34,79.3,68.167,
+158.7,102.5,238c34.3,79.3,51.8,119.3,52.5,120c340,-704.7,510.7,-1060.3,512,-1067
+c4.7,-7.3,11,-11,19,-11H40000v40H1012.3s-271.3,567,-271.3,567c-38.7,80.7,-84,
+175,-136,283c-52,108,-89.167,185.3,-111.5,232c-22.3,46.7,-33.8,70.3,-34.5,71
+c-4.7,4.7,-12.3,7,-23,7s-12,-1,-12,-1s-109,-253,-109,-253c-72.7,-168,-109.3,
+-252,-110,-252c-10.7,8,-22,16.7,-34,26c-22,17.3,-33.3,26,-34,26s-26,-26,-26,-26
+s76,-59,76,-59s76,-60,76,-60z M1001 80H40000v40H1012z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.23329099999999992em;"><span></span></span></span></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord">.</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<pre><code class="language-cobol">model:
+min=(x^2+y^2+z^2)^(1/2);
+x+y+z=1;
+z=x^2+y^2;
+@free(x); @free(y);
+end
+</code></pre>
+<pre><code class="language-python">from scipy import optimize
+import math
+
+# 目标函数
+f = lambda args : math.sqrt(sum(arg ** 2 for arg in args))
+
+# 约束条件
+cons = (
+    {'type': 'eq', 'fun': lambda args: sum(args) - 1},
+    {'type': 'eq', 'fun': lambda args: args[0] ** 2 + args[1] ** 2 - args[2]}
+)
+
+optimize.minimize(f, (0, 0, 0), constraints=cons)
+
+     fun: 0.5828773135364937
+     jac: array([0.62796304, 0.62796304, 0.45970085])
+ message: 'Optimization terminated successfully'
+    nfev: 20
+     nit: 5
+    njev: 5
+  status: 0
+ success: True
+       x: array([0.36602541, 0.3660254 , 0.26794919])
+</code></pre>
+<h3 id="32-模型">3.2 模型</h3>
+<h4 id="321-示例1">3.2.1 示例1</h4>
+<p><strong>背包问题</strong></p>
+<p>假设存在背包, 最大的载重量为30, 10种不同的商品, 各种商品只存在1, 0两种选择, 即装1件, 或者不装</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>商品1</th>
+<th>商品2</th>
+<th>商品3</th>
+<th>商品4</th>
+<th>商品5</th>
+<th>商品6</th>
+<th>商品7</th>
+<th>商品8</th>
+<th>商品9</th>
+<th>商品10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>利润</td>
+<td>540</td>
+<td>200</td>
+<td>180</td>
+<td>350</td>
+<td>60</td>
+<td>150</td>
+<td>280</td>
+<td>450</td>
+<td>320</td>
+<td>120</td>
+</tr>
+<tr>
+<td>重量</td>
+<td>6</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>5</td>
+<td>4</td>
+<td>2</td>
+</tr>
+<tr>
+<td>背负状态</td>
+<td>x1</td>
+<td>x2</td>
+<td>x3</td>
+<td>x4</td>
+<td>x5</td>
+<td>x6</td>
+<td>x7</td>
+<td>x8</td>
+<td>x9</td>
+<td>x10</td>
+</tr>
+</tbody>
+</table>
+<p>如何装载商品实现收益最大化</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">数</mi><mi mathvariant="normal">学</mi><mi mathvariant="normal">模</mi><mi mathvariant="normal">型</mi><mi mathvariant="normal">简</mi><mi mathvariant="normal">化</mi><mi mathvariant="normal">如</mi><mi mathvariant="normal">下</mi><mo>:</mo><mspace linebreak="newline"></mspace><mi>m</mi><mi>a</mi><mi>x</mi><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>10</mn></munderover><msub><mi>p</mi><mi>i</mi></msub><mo>∗</mo><msub><mi>x</mi><mi>i</mi></msub><mspace linebreak="newline"></mspace><mi>s</mi><mi mathvariant="normal">.</mi><mi>t</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>10</mn></msubsup><msub><mi>w</mi><mi>i</mi></msub><mo>∗</mo><msub><mi>x</mi><mi>i</mi></msub><mo>≤</mo><mn>30</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msub><mi>x</mi><mi>i</mi></msub><mo>∈</mo><mrow><mo>{</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo>}</mo></mrow><mo separator="true">,</mo><mtext>  </mtext><mi>i</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>3...10</mn></mrow></mstyle></mtd></mtr></mtable></mrow><mspace linebreak="newline"></mspace><msub><mi>p</mi><mi>i</mi></msub><mo separator="true">,</mo><mi mathvariant="normal">为</mi><mi mathvariant="normal">利</mi><mi mathvariant="normal">润</mi><mspace linebreak="newline"></mspace><msub><mi>w</mi><mi>i</mi></msub><mo separator="true">,</mo><mi mathvariant="normal">为</mi><mi mathvariant="normal">重</mi><mi mathvariant="normal">量</mi><mspace linebreak="newline"></mspace><msub><mi>x</mi><mi>i</mi></msub><mo separator="true">,</mo><mi mathvariant="normal">装</mi><mi mathvariant="normal">载</mi><mi mathvariant="normal">与</mi><mi mathvariant="normal">否</mi><mspace linebreak="newline"></mspace></mrow><annotation encoding="application/x-tex">数学模型简化如下:\\
+max = \sum_{i=1}^{10}p_i * x_i\\
+s.t = \begin{cases}
+\sum_{i=1}^{10} w_i* x_i \leq 30\\
+x_i \in{\{0, 1\}}, \;i = 1, 2, 3...10
+\end{cases}\\
+p_i, 为利润\\
+w_i, 为重量\\
+x_i, 装载与否\\
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">学</span><span class="mord cjk_fallback">模</span><span class="mord cjk_fallback">型</span><span class="mord cjk_fallback">简</span><span class="mord cjk_fallback">化</span><span class="mord cjk_fallback">如</span><span class="mord cjk_fallback">下</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.0787820000000004em;vertical-align:-1.277669em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8011130000000004em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord">.</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.69em;"><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.954008em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">3</span><span class="mord">0</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mopen">{</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">}</span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">3</span><span class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span class="mord">1</span><span class="mord">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.19em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">为</span><span class="mord cjk_fallback">利</span><span class="mord cjk_fallback">润</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">为</span><span class="mord cjk_fallback">重</span><span class="mord cjk_fallback">量</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">装</span><span class="mord cjk_fallback">载</span><span class="mord cjk_fallback">与</span><span class="mord cjk_fallback">否</span></span><span class="mspace newline"></span></span></span></span></p>
+<pre><code class="language-cobol">model:
+
+	sets:
+		items/1 2 3 4 5 6 7 8 9 10/: weight, profit, x;
+	endsets
+
+	data:
+		weight = 6 3 4 5 1 2 3 5 4 2;
+		profit = 540 200 180 350 60 150 280 450 320 120;
+	enddata
+
+	max = @sum(items(i): profit(i) * x(i));
+	@sum(items(i): weight(i) * x(i)) &lt;=30;
+	@for(items(i):@bin(x(i)));
+end
+</code></pre>
+<h4 id="322-示例2">3.2.2 示例2</h4>
+<p>某公司有<code>6</code>个建筑工地 位置坐标为(ai, bi), 水泥日用量di</p>
+<pre><code class="language-bash">i 1 2 3 4 5 6
+a 1.25 8.75 0.5 5.75 3 7.25
+b 1.25 0.75 4.75 5 6.5 7.75
+d 3 5 4 7 6 11
+</code></pre>
+<ul>
+<li>
+<p>现有2料场, 位于A (5, 1), B (2, 7),记(x_j, y_j), j=1,2, 日储量e_j各有20吨.<br>
+假设料场和工地之间有直线道路, 制定每天的供应计划, 即从A, B两个料场分别向各工地运送多少吨水泥使总距离最小.<br>
+取决策变量c_ij表示 i 工地从 j 料场运来的水泥量, 模型(线性模型) 如下:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>i</mi><mi>n</mi><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mn>2</mn></munderover><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>6</mn></munderover><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msqrt><mrow><mo>(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><msub><mi>a</mi><mi>i</mi></msub><msup><mo>)</mo><mn>2</mn></msup><mo>+</mo><mo>(</mo><msub><mi>y</mi><mi>j</mi></msub><mo>−</mo><msub><mi>b</mi><mi>i</mi></msub><msup><mo>)</mo><mn>2</mn></msup></mrow></msqrt><mspace linebreak="newline"></mspace><mi>s</mi><mi mathvariant="normal">.</mi><mi>t</mi><mo>=</mo><mrow><mo fence="true">{</mo><mtable><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mo>=</mo><msub><mi>d</mi><mi>i</mi></msub><mo separator="true">,</mo><mi>i</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mn>6</mn></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mn>6</mn></msubsup><msub><mi>c</mi><mi>i</mi></msub><mi>j</mi><mo>≤</mo><mi>e</mi><mi>J</mi><mo separator="true">,</mo><mi>j</mi><mo>=</mo><mn>1</mn><mo separator="true">,</mo><mn>2</mn></mrow></mstyle></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">min \sum_{j=1}^2\sum_{i=1}^6 c_{ij}\sqrt{(x_j-a_i) ^ 2 + (y_j - b_i) ^ 2}\\
+s.t = \begin{cases}
+\sum_{j=1}^ 2 = d_i, i = 1, 2,...6\\
+\sum_{i = 1} ^ 6 c_ij \leq eJ, j = 1, 2
+\end{cases}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:3.2148900000000005em;vertical-align:-1.4137769999999998em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8011130000000004em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.4137769999999998em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mop op-limits"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.8011130000000004em;"><span style="top:-1.872331em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.050005em;"><span class="pstrut" style="height:3.05em;"></span><span><span class="mop op-symbol large-op">∑</span></span></span><span style="top:-4.3000050000000005em;margin-left:0em;"><span class="pstrut" style="height:3.05em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">6</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.277669em;"><span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.265821em;"><span class="svg-align" style="top:-3.8em;"><span class="pstrut" style="height:3.8em;"></span><span class="mord" style="padding-left:1em;"><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.740108em;"><span style="top:-2.9890000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathdefault">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.740108em;"><span style="top:-2.9890000000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span><span style="top:-3.225821em;"><span class="pstrut" style="height:3.8em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.8800000000000001em;"><svg width='400em' height='1.8800000000000001em' viewBox='0 0 400000 1944' preserveAspectRatio='xMinYMin slice'><path d='M1001,80H400000v40H1013.1s-83.4,268,-264.1,840c-180.7,
+572,-277,876.3,-289,913c-4.7,4.7,-12.7,7,-24,7s-12,0,-12,0c-1.3,-3.3,-3.7,-11.7,
+-7,-25c-35.3,-125.3,-106.7,-373.3,-214,-744c-10,12,-21,25,-33,39s-32,39,-32,39
+c-6,-5.3,-15,-14,-27,-26s25,-30,25,-30c26.7,-32.7,52,-63,76,-91s52,-60,52,-60
+s208,722,208,722c56,-175.3,126.3,-397.3,211,-666c84.7,-268.7,153.8,-488.2,207.5,
+-658.5c53.7,-170.3,84.5,-266.8,92.5,-289.5c4,-6.7,10,-10,18,-10z
+M1001 80H400000v40H1013z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.574179em;"><span></span></span></span></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord">.</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:3.0000299999999998em;vertical-align:-1.25003em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size4">{</span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.691909em;"><span style="top:-3.691909em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.954008em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.43581800000000004em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">.</span><span class="mord">.</span><span class="mord">.</span><span class="mord">6</span></span></span><span style="top:-2.2480909999999996em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.954008em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">i</span><span class="mrel mtight">=</span><span class="mord mtight">1</span></span></span></span><span style="top:-3.2029em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">6</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathdefault">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.09618em;">J</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.1919090000000006em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<pre><code class="language-cobol">model:
+	sets:
+		demand/1..6/:a,b,d;
+		supply/1..2/:x,y,e;
+		link(demand,supply):c;
+	endsets
+	
+	data:
+		a=1.25 8.75 0.5 5.75 3 7.25;
+		b=1.25 0.75 4.75 5 6.5 7.75;
+		d=3 5 4 7 6 11;
+		x=5 2;
+		y=1 7;
+		e=20 20;
+	enddata
+	
+	[obj]min=@sum(link(i,j):c(i,j)*@sqrt((a(i)-x(j))^2+(b(i)-y(j))^2));!目标函数;
+	
+	@for(demand(i):@sum(supply(j):c(i,j))=d(i));
+	@for(supply(j):@sum(demand(i):c(i,j))&lt;=e(j));
+end
+</code></pre>
+</li>
+<li>
+<p>改建两个新料场 需要确定新料场位置(xj, yj)和运量c_ij  在其它条件不变下使总距离数最小.<br>
+模型还是一样, 未知量变为料场位置(xj, yj) 和运量 c_ij  变为非线性优化问题.</p>
+<pre><code class="language-cobol">model:
+	sets:
+		demand/1..6/:a,b,d;
+		supply/1..2/:x,y,e;
+		link(demand,supply):c;
+	endsets
+	
+	data:
+		a=1.25 8.75 0.5 5.75 3 7.25;
+		b=1.25 0.75 4.75 5 6.5 7.75;
+		d=3 5 4 7 6 11;
+		e=20 20;
+	enddata
+	
+	init:
+		x=5 2;
+		y=1 7;
+	endinit
+	
+	[obj]min=@sum(link(i,j):c(i,j)*@sqrt((a(i)-x(j))^2+(b(i)-y(j))^2));!目标函数;
+	
+	@for(demand(i):@sum(supply(j):c(i,j))=d(i));
+	@for(supply(j):@sum(demand(i):c(i,j))&lt;=e(j));
+	@for(supply:@free(x);@free(y));
+end
+</code></pre>
+</li>
+</ul>
+<h2 id="四-错误对照表">四. 错误对照表</h2>
+<table>
+<thead>
+<tr>
+<th>错误代码</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>LINGO模型生成器的内存已经用尽(可用&quot; LINGO|Options&quot;命令对General Solver选项卡中的&quot; Generator Memory Limit&quot;选项进行内存大小的修改)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>模型中的行数太多(对于有实际意义的模型 这个错误很少出现)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>模型中的字符数太多(对于有实际意义的模型 这个错误很少出现)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>模型中某行的字符数太多(每行不应该超过200个字符 否则应换行)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>指定的行号超出了模型中实际具有的最大行号(这个错误通常在LOOK命令中指定了非法的行号时出现)</td>
+</tr>
+<tr>
+<td>5</td>
+<td>当前内存中没有模型</td>
+</tr>
+<tr>
+<td>6</td>
+<td>脚本文件中TAKE命令的嵌套重数太多(LINGO中限定TAKE命令最多嵌套10次)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>无法打开指定的文件(通常是指定的文件名拼写错误)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>脚本文件中的错误太多 因此直接返回到命令模式(不再继续处理这个脚本文件)</td>
+</tr>
+<tr>
+<td>9</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>11</td>
+<td>模型中的语句出现了语法错误(不符合LINGO语法)</td>
+</tr>
+<tr>
+<td>12</td>
+<td>模型中的括号不匹配</td>
+</tr>
+<tr>
+<td>13</td>
+<td>在电子表格文件中找不到指定的单元范围名称</td>
+</tr>
+<tr>
+<td>14</td>
+<td>运算所需的 临时堆栈空间不够(这通常意味着模型中的表达式太长了)</td>
+</tr>
+<tr>
+<td>15</td>
+<td>找不到关系运算符(通常是丢了&quot; &lt;&quot;  &quot; ＝&quot; 或&quot; &gt;&quot; )</td>
+</tr>
+<tr>
+<td>16</td>
+<td>输入输出时不同对象的大小不一样(使用集合循环方式输入输出时 集合大小应相同)</td>
+</tr>
+<tr>
+<td>17</td>
+<td>集合元素的索引的内存堆栈空间不够</td>
+</tr>
+<tr>
+<td>18</td>
+<td>集合的内存堆栈空间不够</td>
+</tr>
+<tr>
+<td>19</td>
+<td>索引函数@INDEX使用不当</td>
+</tr>
+<tr>
+<td>20</td>
+<td>集合名使用不当</td>
+</tr>
+<tr>
+<td>21</td>
+<td>属性名使用不当</td>
+</tr>
+<tr>
+<td>22</td>
+<td>不等式或等式关系太多(例如 约束2&lt;x&lt;4是不允许出现在同一个语句中的)</td>
+</tr>
+<tr>
+<td>23</td>
+<td>参数个数不符</td>
+</tr>
+<tr>
+<td>24</td>
+<td>集合名不合法</td>
+</tr>
+<tr>
+<td>25</td>
+<td>函数@WKX()的参数非法(注: 在LING09.0中已经没有函数@WKX())</td>
+</tr>
+<tr>
+<td>26</td>
+<td>集合的索引变量的个数不符</td>
+</tr>
+<tr>
+<td>27</td>
+<td>在电子表格文件中指定的单元范围不连续</td>
+</tr>
+<tr>
+<td>28</td>
+<td>行名不合法</td>
+</tr>
+<tr>
+<td>29</td>
+<td>数据段或初始段的数据个数不符</td>
+</tr>
+<tr>
+<td>30</td>
+<td>链接到Excel时出现错误</td>
+</tr>
+<tr>
+<td>31</td>
+<td>使用@TEXT函数时参数不合法</td>
+</tr>
+<tr>
+<td>32</td>
+<td>使用了空的集合成员名</td>
+</tr>
+<tr>
+<td>33</td>
+<td>使用@OLET函数时参数不合法</td>
+</tr>
+<tr>
+<td>34</td>
+<td>用电子表格文件中指定的多个单元范围生成派生集合时 单元范围的大小应该一致</td>
+</tr>
+<tr>
+<td>35</td>
+<td>输出时用到了不可识别的变量名</td>
+</tr>
+<tr>
+<td>36</td>
+<td>基本集合的元素名不合法</td>
+</tr>
+<tr>
+<td>37</td>
+<td>集合名已经被使用过</td>
+</tr>
+<tr>
+<td>38</td>
+<td>ODBC服务返回了错误信息</td>
+</tr>
+<tr>
+<td>39</td>
+<td>派生集合的分量元素(下标)不再原来的父集合中</td>
+</tr>
+<tr>
+<td>40</td>
+<td>派生集合的索引元素的个数不符</td>
+</tr>
+<tr>
+<td>41</td>
+<td>定义派生集合时所使用的基本集合的个数太多(一般不会出现这个错误)</td>
+</tr>
+<tr>
+<td>42</td>
+<td>集合过滤条件的表达式中出现了取值不固定的变量</td>
+</tr>
+<tr>
+<td>43</td>
+<td>集合过滤条件的表达式运算出错</td>
+</tr>
+<tr>
+<td>44</td>
+<td>过滤条件的表达式没有结束(即没有&quot; :&quot; 标志)</td>
+</tr>
+<tr>
+<td>45</td>
+<td>@ODBC函数的参数列表错误</td>
+</tr>
+<tr>
+<td>46</td>
+<td>文件名不合法</td>
+</tr>
+<tr>
+<td>47</td>
+<td>打开的文件太多</td>
+</tr>
+<tr>
+<td>48</td>
+<td>不能打开文件</td>
+</tr>
+<tr>
+<td>49</td>
+<td>读文件时发生错误</td>
+</tr>
+<tr>
+<td>50</td>
+<td>@FOR函数使用不合法</td>
+</tr>
+<tr>
+<td>51</td>
+<td>编译时LINGO模型生成器的内存不足</td>
+</tr>
+<tr>
+<td>52</td>
+<td>@IN函数使用不当</td>
+</tr>
+<tr>
+<td>53</td>
+<td>在电子表格文件中找不到指定的单元范围名称(似乎与出错代码&quot; 13&quot; 含义类似)</td>
+</tr>
+<tr>
+<td>54</td>
+<td>读取电子表格文件时出现错误</td>
+</tr>
+<tr>
+<td>55</td>
+<td>@TEXT函数不能打开文件</td>
+</tr>
+<tr>
+<td>56</td>
+<td>@TEXT函数读文件时发生错误</td>
+</tr>
+<tr>
+<td>57</td>
+<td>@TEXT函数读文件时出现了非法输入数据</td>
+</tr>
+<tr>
+<td>58</td>
+<td>@TEXT函数读文件时出现发现输入数据比实际所需要的少</td>
+</tr>
+<tr>
+<td>59</td>
+<td>@TEXT函数读文件时出现发现输入数据比实际所需要的多</td>
+</tr>
+<tr>
+<td>60</td>
+<td>用@TEXT函数输入数据时 没有指定文件名</td>
+</tr>
+<tr>
+<td>61</td>
+<td>行命令拼写错误</td>
+</tr>
+<tr>
+<td>62</td>
+<td>LINGO生成模型时工作内存不足</td>
+</tr>
+<tr>
+<td>63</td>
+<td>模型的定义不正确</td>
+</tr>
+<tr>
+<td>64</td>
+<td>@FOR函数嵌套太多</td>
+</tr>
+<tr>
+<td>65</td>
+<td>@WARN函数使用不当</td>
+</tr>
+<tr>
+<td>66</td>
+<td>警告: 固定变量取值不唯一(例如: 任意正数都是约束@SIGN(X)＝l的解)</td>
+</tr>
+<tr>
+<td>67</td>
+<td>模型中非零系数过多导致内存耗尽</td>
+</tr>
+<tr>
+<td>68</td>
+<td>对字符串进行非法的算术运算</td>
+</tr>
+<tr>
+<td>69</td>
+<td>约束中的运算符非法</td>
+</tr>
+<tr>
+<td>70</td>
+<td>属性的下标越界</td>
+</tr>
+<tr>
+<td>71</td>
+<td>变量定界函数(@GIN @BIN @FREE @BND)使用错误</td>
+</tr>
+<tr>
+<td>72</td>
+<td>不能从固定约束(只含有固定变量的约束)中求出固定变量的值(相当于方程无解 或者LINGO的算法解不出来 如迭代求解算法不收敛)</td>
+</tr>
+<tr>
+<td>73</td>
+<td>在LINGO生成模型(对模型进行结构分析)时 用户中断了模型生成过程</td>
+</tr>
+<tr>
+<td>74</td>
+<td>变量越界 超出了1032</td>
+</tr>
+<tr>
+<td>75</td>
+<td>对变量的定界相互冲突(例如: 一个模型中同时指定@BND(-6 X 6)和@BND(-5,X 5)是允许的 但同时指定@BND(-6 X 6)和@BND(7 X 9)则是冲突的.)</td>
+</tr>
+<tr>
+<td>76</td>
+<td>LINGO生成模型时出现错误 不能将模型转交给优化求解程序</td>
+</tr>
+<tr>
+<td>77</td>
+<td>无定义的算术运算(例如除数为0)</td>
+</tr>
+<tr>
+<td>78</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>79</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>80</td>
+<td>生成LINGO模型时系统内存已经用尽</td>
+</tr>
+<tr>
+<td>81</td>
+<td>找不到可行解</td>
+</tr>
+<tr>
+<td>82</td>
+<td>最优值无界</td>
+</tr>
+<tr>
+<td>83</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>84</td>
+<td>模型中非零系数过多</td>
+</tr>
+<tr>
+<td>85</td>
+<td>表达式过于复杂导致堆栈溢出</td>
+</tr>
+<tr>
+<td>86</td>
+<td>算术运算错误(如1／0或@LOG(-1)等)</td>
+</tr>
+<tr>
+<td>87</td>
+<td>@IN函数使用不当(似乎与错误代码&quot; 52&quot; 相同)</td>
+</tr>
+<tr>
+<td>88</td>
+<td>当前内存中没有存放任何解</td>
+</tr>
+<tr>
+<td>89</td>
+<td>LINGO运行时出现了意想不到的错误(请与LINGO公司联系解决问题)</td>
+</tr>
+<tr>
+<td>90</td>
+<td>在LINGO生成模型时 用户中断了模型生成过程</td>
+</tr>
+<tr>
+<td>91</td>
+<td>当在数据段有&quot; 变量＝</td>
+</tr>
+<tr>
+<td>92</td>
+<td>警告: 当前解可能不是可行的／最优的</td>
+</tr>
+<tr>
+<td>93</td>
+<td>命令行中的转换修饰词错误</td>
+</tr>
+<tr>
+<td>94</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>95</td>
+<td>模型求解完成前 用户中断了求解过程</td>
+</tr>
+<tr>
+<td>96</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>97</td>
+<td>用TAKE命令输入模型时 出现了不可识别的语法</td>
+</tr>
+<tr>
+<td>98</td>
+<td>用TAKE命令输入模型时 出现了语法错误</td>
+</tr>
+<tr>
+<td>99</td>
+<td>语法错误 缺少变量</td>
+</tr>
+<tr>
+<td>100</td>
+<td>语法错误 缺少常量</td>
+</tr>
+<tr>
+<td>101</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>102</td>
+<td>指定的输出变量名不存在</td>
+</tr>
+<tr>
+<td>103</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>104</td>
+<td>模型还没有被求解 或者模型是空的</td>
+</tr>
+<tr>
+<td>105</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>106</td>
+<td>行宽的最小最大值分别为68和200</td>
+</tr>
+<tr>
+<td>107</td>
+<td>函数@POINTER指定的索引值无效</td>
+</tr>
+<tr>
+<td>108</td>
+<td>模型的规模超出了当前LINGO版本的限制</td>
+</tr>
+<tr>
+<td>109</td>
+<td>达到了迭代上限 所以LINGO停止继续求解模型(迭代上限可以通过&quot; LING0|0ptions&quot; 命令对General Solver选项卡中的&quot; Iteration&quot; 选项进行修改)</td>
+</tr>
+<tr>
+<td>110</td>
+<td>HIDE(隐藏)命令指定的密码超出了8个字符的限制</td>
+</tr>
+<tr>
+<td>111</td>
+<td>模型是隐藏的 所以当前命令不能使用</td>
+</tr>
+<tr>
+<td>112</td>
+<td>恢复隐藏模型时输入的密码错误</td>
+</tr>
+<tr>
+<td>113</td>
+<td>因为一行内容太长 导致LOOK或SAVE命令失败</td>
+</tr>
+<tr>
+<td>114</td>
+<td>HIDE(隐藏)命令指定的两次密码不一致 命令失败</td>
+</tr>
+<tr>
+<td>115</td>
+<td>参数列表过长</td>
+</tr>
+<tr>
+<td>116</td>
+<td>文件名(包括路径名)太长</td>
+</tr>
+<tr>
+<td>117</td>
+<td>无效的命令</td>
+</tr>
+<tr>
+<td>118</td>
+<td>命令不明确(例如 可能输入的是命令的缩写名 而这一缩写可有多个命令与之对应)</td>
+</tr>
+<tr>
+<td>119</td>
+<td>命令脚本文件中的错误太多 LINGO放弃对它继续处翠</td>
+</tr>
+<tr>
+<td>120</td>
+<td>LINGO无法将配置文件(LINGO．CNF)写入启动目录或工作目录(可能是权限问题)</td>
+</tr>
+<tr>
+<td>121</td>
+<td>整数规划没有敏感性分析</td>
+</tr>
+<tr>
+<td>122</td>
+<td>敏感性分析选项没有激活 敏感性分析不能进行(可通过&quot; LINGO|Options&quot; 命令对General Solver选项卡中的&quot; Dual Computation&quot; 选项进行修改)</td>
+</tr>
+<tr>
+<td>123</td>
+<td>调试(Debug)命令只对线性模型 且模型不可行或无界时才能使用</td>
+</tr>
+<tr>
+<td>124</td>
+<td>对一个空集合的属性进行初始化</td>
+</tr>
+<tr>
+<td>125</td>
+<td>集合中没有元素</td>
+</tr>
+<tr>
+<td>126</td>
+<td>使用ODBC连接输出时 发现制定的输出变量名不存在</td>
+</tr>
+<tr>
+<td>127</td>
+<td>使用ODBC连接输出时 同时输出的变量的维数必须相同</td>
+</tr>
+<tr>
+<td>128</td>
+<td>使用SET命令时指定的参数索弓I无效</td>
+</tr>
+<tr>
+<td>129</td>
+<td>使用SET命令时指定的参数的取值无效</td>
+</tr>
+<tr>
+<td>130</td>
+<td>使用SET命令时指定的参数名无效</td>
+</tr>
+<tr>
+<td>131</td>
+<td>FREEZE命令无法保存配置文件LINGO．CNF(可能是权限问题)</td>
+</tr>
+<tr>
+<td>132</td>
+<td>LINGO读配置文件(LINGO．CNF)时发生错误</td>
+</tr>
+<tr>
+<td>133</td>
+<td>LINGO无法通过OLE连接电子表格文件(如: 当其他人正在编辑这个文件时)</td>
+</tr>
+<tr>
+<td>134</td>
+<td>输出时出现错误 不能完成所有输出操作</td>
+</tr>
+<tr>
+<td>135</td>
+<td>求解时间超出了限制(可通过&quot; LING0|0ptions&quot; 命令对General Solver选项卡中的&quot; Time&quot; 选项进行修改)</td>
+</tr>
+<tr>
+<td>136</td>
+<td>使用@TEXT函数输出时出现错误操作</td>
+</tr>
+<tr>
+<td>137</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>138</td>
+<td>DIVERT(输出重新定向)命令的嵌套次数太多(最多不能超过10次嵌套)</td>
+</tr>
+<tr>
+<td>139</td>
+<td>DIVERT(输出重新定向)命令不能打开指定文件</td>
+</tr>
+<tr>
+<td>140</td>
+<td>只求原始最优解时无法给出敏感性分析信息(可通过&quot; LING0|0ptions&quot; 命令对General Solver选项卡中的&quot; Dual Computation&quot; 选项进行修改)</td>
+</tr>
+<tr>
+<td>141</td>
+<td>对某行约束的敏感性分析无法进行 因为这一行已经是固定约束(即该约束中所有变量都已经在直接求解程序进行预处理时被固定下来了)</td>
+</tr>
+<tr>
+<td>142</td>
+<td>出现了意想不到的错误(请与LINDO公司联系解决这个问题)</td>
+</tr>
+<tr>
+<td>143</td>
+<td>使用接口函数输出时 同时输出的对象的维数必须相同</td>
+</tr>
+<tr>
+<td>144</td>
+<td>@POINTER函数的参数列表无效</td>
+</tr>
+<tr>
+<td>145</td>
+<td>@POINTER函数出错: 2-输出变量无效; 3-内存耗尽; 4-只求原始最优解时无法给出敏感性分析信息; 5-对固定行无法给出敏感性分析信息; 6-意想不到的错误．</td>
+</tr>
+<tr>
+<td>146</td>
+<td>基本集合的元素名与模型中的变量名重名(当前版本的LINGO中这本来是允许的 但如果通过&quot; LING0|0ptions&quot; 命令在&quot; General Solver&quot; 选项卡选择&quot; Check forduplicates names in data and model&quot;  则会检查重名 这主要是为了与以前的LINGO版本兼容)</td>
+</tr>
+<tr>
+<td>147</td>
+<td>@WARN函数中的条件表达式中只能包含固定变量</td>
+</tr>
+<tr>
+<td>148</td>
+<td>@OLE函数在当前操作系统下不能使用(只在Windows操作系统下可以使用)</td>
+</tr>
+<tr>
+<td>149</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>150</td>
+<td>@ODBC函数在当前操作系统下不能使用(只在Windows操作系统下可以使用)</td>
+</tr>
+<tr>
+<td>151</td>
+<td>@POINTER函数在当前系统下不能使用(只在Windows操作系统下可以使用)</td>
+</tr>
+<tr>
+<td>152</td>
+<td>输入的命令在当前操作系统下不能使用</td>
+</tr>
+<tr>
+<td>153</td>
+<td>集合的初始化(定义元素)不能在初始段中进行 只能在集合段或数据段进行</td>
+</tr>
+<tr>
+<td>154</td>
+<td>集合名只能被定义一次</td>
+</tr>
+<tr>
+<td>155</td>
+<td>在数据段对集合进行初始化(定义元素)时 必须显示地列出所有元素 不能省略元素</td>
+</tr>
+<tr>
+<td>156</td>
+<td>在数据段对集合和(或)变量进行初始化时 给出的参数个数不符</td>
+</tr>
+<tr>
+<td>157</td>
+<td>@INDEX函数引用的集合名不存在</td>
+</tr>
+<tr>
+<td>158</td>
+<td>当前函数需要集合的成员名作为参数</td>
+</tr>
+<tr>
+<td>159</td>
+<td>派生集合中的一个成员(分量)不是对应的父集合的成员</td>
+</tr>
+<tr>
+<td>160</td>
+<td>数据段中的一个语句不能对两个(或更多)的集合进行初始化(定义元素)</td>
+</tr>
+<tr>
+<td>161</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>162</td>
+<td>电子表格文件中指定的单元范围内存在不同类型的数据(即有字符 又有数值) LINGO无法通过这些单元同时输入(或输出)不同类型的数据</td>
+</tr>
+<tr>
+<td>163</td>
+<td>在初始段对变量进行初始化时 给出的参数个数不符</td>
+</tr>
+<tr>
+<td>164</td>
+<td>模型中输入的符号名不符合LINGO的命名规则</td>
+</tr>
+<tr>
+<td>165</td>
+<td>当前的输出函数不能按集合进行输出</td>
+</tr>
+<tr>
+<td>166</td>
+<td>不同长度的输出对象无法同时输出到表格型的文件(如数据库和文本文件)</td>
+</tr>
+<tr>
+<td>167</td>
+<td>在通过Excel进行输入输出时 一次指定了多个单元范围</td>
+</tr>
+<tr>
+<td>168</td>
+<td>@DUAL @RANGEU @RANGED函数不能对文本数据(如集合的成员名)使用 而只能对变量和约束行使用</td>
+</tr>
+<tr>
+<td>169</td>
+<td>运行模型时才输入集合成员是不允许的</td>
+</tr>
+<tr>
+<td>170</td>
+<td>LINGO系统的密码输入错误 请重新输入</td>
+</tr>
+<tr>
+<td>171</td>
+<td>LINGO系统的密码输入错误 系统将以演示版方式运行</td>
+</tr>
+<tr>
+<td>172</td>
+<td>LINGO的内部求解程序发生了意想不到的错误(请与LINDO公司联系解决这个问题)</td>
+</tr>
+<tr>
+<td>173</td>
+<td>内部求解程序发生了数值计算方面的错误</td>
+</tr>
+<tr>
+<td>174</td>
+<td>LINGO预处理阶段(preprocessing)内存不足</td>
+</tr>
+<tr>
+<td>175</td>
+<td>系统的虚拟内存不足</td>
+</tr>
+<tr>
+<td>176</td>
+<td>LINGO后处理阶段(postprocessing)内存不足</td>
+</tr>
+<tr>
+<td>177</td>
+<td>为集合分配内存时出错(如内存不足等)</td>
+</tr>
+<tr>
+<td>178</td>
+<td>为集合分配内存时堆栈溢出</td>
+</tr>
+<tr>
+<td>179</td>
+<td>将MPS格式的模型文件转化成LINGO模型文件时出现错误(如变量名冲突等)</td>
+</tr>
+<tr>
+<td>180</td>
+<td>将MPS格式的模型文件转化成LINGO模型文件时 不能分配内存(通常是内存不足)</td>
+</tr>
+<tr>
+<td>181</td>
+<td>将MPS格式的模型文件转化成LINGO模型文件时 不能生成模型(通常是内存不足)</td>
+</tr>
+<tr>
+<td>182</td>
+<td>将MPS格式的模型文件转化成LINGO模型文件时出现错误(会给出出错的行号)</td>
+</tr>
+<tr>
+<td>183</td>
+<td>LINGO目前不支持MPS格式的二次规划模型文件</td>
+</tr>
+<tr>
+<td>184</td>
+<td>敏感性分析选项没有激活 敏感性分析不能进行(可通过&quot; LINGO|Options&quot; 命令对General Solver选项卡中的&quot; Dual Computation&quot; 选项进行修改)</td>
+</tr>
+<tr>
+<td>185</td>
+<td>没有使用内点法的权限(LINGO中的内点法是选件 需要额外购买)</td>
+</tr>
+<tr>
+<td>186</td>
+<td>不能用@QRAND函数对集合进行初始化(定义元素)</td>
+</tr>
+<tr>
+<td>187</td>
+<td>用@QRAND函数对属性进行初始化时 一次只能对一个属性进行处理</td>
+</tr>
+<tr>
+<td>188</td>
+<td>用@QRAND函数对属性进行初始化时 只能对稠密集合对应的属性进行处理</td>
+</tr>
+<tr>
+<td>189</td>
+<td>随机函数中指定的种子(SEED)无效</td>
+</tr>
+<tr>
+<td>190</td>
+<td>用隐式方法定义集合时 定义方式不正确</td>
+</tr>
+<tr>
+<td>191</td>
+<td>LINDOAPI返回了错误(请与LINDO公司联系解决这个问题)</td>
+</tr>
+<tr>
+<td>192</td>
+<td>LINGO不再支持@WKX函数 请改用@OLE函数</td>
+</tr>
+<tr>
+<td>193</td>
+<td>内存中没有当前模型的解(模型可能还没有求解 或者求解错误)</td>
+</tr>
+<tr>
+<td>194</td>
+<td>无法生成LINGO的内部环境变量(通常是因为内存不足)</td>
+</tr>
+<tr>
+<td>195</td>
+<td>写文件时出现错误(如磁盘空间不足)</td>
+</tr>
+<tr>
+<td>196</td>
+<td>无法为当前模型计算对偶解(这个错误非同寻常 欢迎你将这个模型提供给LINDO公司进行进一步分析)</td>
+</tr>
+<tr>
+<td>197</td>
+<td>调试程序目前不能处理整数规划模型</td>
+</tr>
+<tr>
+<td>198</td>
+<td>当前二次规划模型不是凸的 不能使用内点法 请通过&quot; LINGO[Options ’命令取消对二次规划的判别</td>
+</tr>
+<tr>
+<td>199</td>
+<td>求解二次规划需要使用内点法 但您使用的LINGO版本没有这个权限(请通过&quot; LINGO|Options&quot; 命令取消对二次规划的判别)</td>
+</tr>
+<tr>
+<td>200</td>
+<td>无法为当前模型计算对偶解 请通过&quot; LINGO|Options&quot; 命令取消对对偶计算的要求</td>
+</tr>
+<tr>
+<td>201</td>
+<td>模型是局部不可行的</td>
+</tr>
+<tr>
+<td>202</td>
+<td>全局优化时 模型中非线性变量的个数超出了全局优化求解程序的上限</td>
+</tr>
+<tr>
+<td>203</td>
+<td>无权使用全局优化求解程序</td>
+</tr>
+<tr>
+<td>204</td>
+<td>无权使用多初始点求解程序</td>
+</tr>
+<tr>
+<td>205</td>
+<td>模型中的数据不平衡(数量级差异太大)</td>
+</tr>
+<tr>
+<td>206</td>
+<td>&quot; 线性化&quot; 和&quot; 全局优化&quot; 两个选项不能同时存在</td>
+</tr>
+<tr>
+<td>207</td>
+<td>缺少左括号</td>
+</tr>
+<tr>
+<td>208</td>
+<td>@WRITEFOR函数只能在数据段出现</td>
+</tr>
+<tr>
+<td>209</td>
+<td>@WRITEFOR函数中不允许出现关系运算符</td>
+</tr>
+<tr>
+<td>210</td>
+<td>@WRITEFOR函数使用不当</td>
+</tr>
+<tr>
+<td>211</td>
+<td>输出操作中出现了算术运算错误</td>
+</tr>
+<tr>
+<td>212</td>
+<td>集合的下标越界</td>
+</tr>
+<tr>
+<td>213</td>
+<td>当前操作参数不应该是文本 但模型中指定的是文本</td>
+</tr>
+<tr>
+<td>214</td>
+<td>多次对同一个变量初始化</td>
+</tr>
+<tr>
+<td>215</td>
+<td>@DUAL @RANGEU @RANGED函数不能在此使用(参阅错误代码&quot; 168&quot; )</td>
+</tr>
+<tr>
+<td>216</td>
+<td>这个函数应该需要输入文本作为参数</td>
+</tr>
+<tr>
+<td>217</td>
+<td>这个函数应该需要输入数值作为参数</td>
+</tr>
+<tr>
+<td>218</td>
+<td>这个函数应该需要输入行名或变量名作为参数</td>
+</tr>
+<tr>
+<td>219</td>
+<td>无法找到指定的行</td>
+</tr>
+<tr>
+<td>220</td>
+<td>没有定义的文本操作</td>
+</tr>
+<tr>
+<td>221</td>
+<td>@WRITE或@WRITEFOR函数的参数溢出</td>
+</tr>
+<tr>
+<td>222</td>
+<td>需要指定行名或变量名</td>
+</tr>
+<tr>
+<td>223</td>
+<td>向Excel文件中写数据时 动态接收单元超出了限制</td>
+</tr>
+<tr>
+<td>224</td>
+<td>向Excel文件中写数据时 需要写的数据的个数多于指定的接收单元的个数</td>
+</tr>
+<tr>
+<td>225</td>
+<td>计算段(CALC)的表达式不正确</td>
+</tr>
+<tr>
+<td>226</td>
+<td>不存在默认的电子表格文件 请为@OLE函数指定一个电子表格文件</td>
+</tr>
+<tr>
+<td>227</td>
+<td>为APISET命令指定的参数索引不正确</td>
+</tr>
+<tr>
+<td>228</td>
+<td>通过Excel输入输出数据时 如果LINGO中的多个对象对应于Excel中的名 则列数应该一致</td>
+</tr>
+<tr>
+<td>229</td>
+<td>为APISET命令指定的参数类型不正确</td>
+</tr>
+<tr>
+<td>230</td>
+<td>为APISET命令指定的参数值不正确</td>
+</tr>
+<tr>
+<td>231</td>
+<td>APISET命令无法完成</td>
+</tr>
+<tr>
+<td>232</td>
+<td>(该错误编号目前没有使用)</td>
+</tr>
+<tr>
+<td>1000</td>
+<td>(错误编号为1000以上的信息 只对Windows系统有效)</td>
+</tr>
+<tr>
+<td>1001</td>
+<td>LINGO找不到与指定括号匹配的括号</td>
+</tr>
+<tr>
+<td>1002</td>
+<td>当前内存中没有模型 不能求解</td>
+</tr>
+<tr>
+<td>1003</td>
+<td>LINGO现在正忙 不能马上响应您的请求</td>
+</tr>
+<tr>
+<td>1004</td>
+<td>LINGO不能写LOG(日志)文件 也许磁盘已满</td>
+</tr>
+<tr>
+<td>1005</td>
+<td>LINGO不能打开指定的LOG(日志)文件</td>
+</tr>
+<tr>
+<td>1006</td>
+<td>不能打开文件</td>
+</tr>
+<tr>
+<td>1007</td>
+<td>没有足够内存完成命令</td>
+</tr>
+<tr>
+<td>1008</td>
+<td>不能打开新窗口(可能内存不够)</td>
+</tr>
+<tr>
+<td>1009</td>
+<td>没有足够内存空间生成解答报告</td>
+</tr>
+<tr>
+<td>1010</td>
+<td>不能打开Excel文件的链接(通常是由于系统资源不足)</td>
+</tr>
+<tr>
+<td>1011</td>
+<td>LINGO不能完成对图形的请求</td>
+</tr>
+<tr>
+<td>1012</td>
+<td>LINGO与ODBC连接时出现错误</td>
+</tr>
+<tr>
+<td>1013</td>
+<td>通过OBDC传递数据时不能完成初始化</td>
+</tr>
+<tr>
+<td>1014</td>
+<td>向Excel文件传递数据时 指定的参数不够</td>
+</tr>
+<tr>
+<td>1015</td>
+<td>不能保存文件</td>
+</tr>
+<tr>
+<td>1016</td>
+<td>Windows环境下不支持Edit命令 请使用File|Open菜单命令</td>
+</tr>
+<tr>
+<td>9999</td>
+<td>由于出现严重错误 优化求解程序运行失败( 最可能的原因是数学函数出错 如函数@LOG(X-1)当X&lt;=1时就会出现这类错误)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="五-在线文档">五. 在线文档</h2>
+<embed id="pdfPlayer" src="http://www.columbia.edu/~cs2035/courses/ieor3608.F06/lingo-tutorial.pdf" type="application/pdf" width="100%" height="600" >
+<h2 id="六-参考">六. 参考</h2>
+<ul>
+<li><a href="https://blog.csdn.net/m1m2m3mmm/article/details/90946097">运筹优化学习01: Lingo入门与错误列表分析</a></li>
+<li><a href="https://blog.csdn.net/m0_53641110/article/details/123361343?spm=1001.2101.3001.6650.5&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-123361343-blog-38415153.235%5Ev29%5Epc_relevant_default_base3&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7ERate-5-123361343-blog-38415153.235%5Ev29%5Epc_relevant_default_base3&amp;utm_relevant_index=6">【数学建模】Lingo软件介绍+常用函数总结+样例</a></li>
+<li><a href="https://blog.csdn.net/weixin_45591044/article/details/107604379?ydreferer=aHR0cHM6Ly9jbi5iaW5nLmNvbS8%3D?ydreferer=aHR0cHM6Ly9jbi5iaW5nLmNvbS8%3D?ydreferer=aHR0cHM6Ly9jbi5iaW5nLmNvbS8%3D">LINGO语法及软件操作</a></li>
+</ul>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/lingo-jian-dan-shi-yong/" title="LINGO简单使用">https://Kyouichirou.github.io/post/lingo-jian-dan-shi-yong/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/nVhK8pEaF/"># operational research</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/nCxaxC3v9/"># lingo</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/89XKfdJfIJ/"># scipy</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="样本的合理大小" href="https://Kyouichirou.github.io/post/yang-ben-de-he-li-da-xiao/">样本的合理大小</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="样本的合理大小" href="https://Kyouichirou.github.io/post/yang-ben-de-he-li-da-xiao/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="一元线性回归详解" href="https://Kyouichirou.github.io/post/yi-yuan-xian-xing-hui-gui-xiang-jie/">一元线性回归详解</a>
+        <a class="nav-mobile-next" title="一元线性回归详解" href="https://Kyouichirou.github.io/post/yi-yuan-xian-xing-hui-gui-xiang-jie/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

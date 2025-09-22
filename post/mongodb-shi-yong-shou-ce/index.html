@@ -1,0 +1,3485 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>MongoDB使用手册 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="MongoDB使用手册" />
+  <meta name="keywords" content="priority,nosql,mongodb,database" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一. 前言</a>
+<ul>
+<li><a href="#11-%E4%BD%BF%E7%94%A8%E7%8E%AF%E5%A2%83">1.1 使用环境</a></li>
+<li><a href="#12-%E5%AE%89%E8%A3%85%E7%AE%80%E4%BB%8B">1.2 安装简介</a></li>
+<li><a href="#13-%E5%9B%BE%E5%BD%A2%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7">1.3 图形管理工具</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C-%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%A6%81">二. 基本概要</a>
+<ul>
+<li><a href="#31-bson">3.1 BSON</a></li>
+<li><a href="#22-%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B">2.2 数据类型</a></li>
+<li><a href="#23-objectid">2.3 ObjectID</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%86%B5">三. 基本概况</a>
+<ul>
+<li><a href="#31-shell">3.1 Shell</a></li>
+<li><a href="#32-%E9%A2%84%E7%BD%AE%E6%95%B0%E6%8D%AE%E5%BA%93">3.2 预置数据库</a></li>
+<li><a href="#33-%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7%E5%AE%89%E5%85%A8%E7%AE%A1%E7%90%86">3.3 创建用户/安全管理</a></li>
+<li><a href="#34-mysql%E7%9A%84%E5%AF%B9%E6%AF%94">3.4 MySQL的对比</a></li>
+<li><a href="#35-%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4">3.5 基本命令</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E5%85%B6%E4%BB%96%E4%BA%8B%E9%A1%B9">四. 其他事项</a>
+<ul>
+<li><a href="#41-%E6%B8%B8%E6%A0%87">4.1 游标</a></li>
+<li><a href="#42-%E7%B4%A2%E5%BC%95">4.2 索引</a>
+<ul>
+<li><a href="#421-%E7%B4%A2%E5%BC%95%E7%9A%84%E8%A7%A3%E6%9E%90">4.2.1 索引的解析</a></li>
+<li><a href="#422-%E5%85%A8%E6%96%87%E7%B4%A2%E5%BC%95">4.2.2 全文索引</a></li>
+<li><a href="#423-%E7%B4%A2%E5%BC%95%E9%99%90%E5%88%B6">4.2.3 索引限制</a></li>
+</ul>
+</li>
+<li><a href="#43-%E6%97%B6%E9%97%B4">4.3 时间</a></li>
+<li><a href="#44-%E6%93%8D%E4%BD%9C%E7%AC%A6">4.4 <code>$</code>操作符</a></li>
+<li><a href="#45-%E9%AB%98%E9%98%B6%E6%93%8D%E4%BD%9C">4.5 高阶操作</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C">五. 基本操作</a>
+<ul>
+<li><a href="#51-%E5%A2%9E">5.1 增</a></li>
+<li><a href="#52-%E5%88%A0">5.2 删</a></li>
+<li><a href="#53-%E6%94%B9">5.3 改</a></li>
+<li><a href="#54-%E6%9F%A5">5.4 查</a>
+<ul>
+<li><a href="#541-%E7%AE%80%E5%8D%95%E6%9F%A5%E8%AF%A2">5.4.1 简单查询</a></li>
+<li><a href="#542-type">5.4.2 type</a></li>
+<li><a href="#543-%E6%9D%A1%E4%BB%B6%E6%95%B0%E5%AD%A6%E6%93%8D%E4%BD%9C%E7%AC%A6">5.4.3 条件(数学)操作符</a></li>
+<li><a href="#544-%E5%A4%8D%E6%9D%82%E6%9F%A5%E8%AF%A2">5.4.4 复杂查询</a></li>
+</ul>
+</li>
+<li><a href="#55-%E8%81%9A%E5%90%88">5.5 聚合</a>
+<ul>
+<li><a href="#551-%E6%9D%A1%E4%BB%B6%E8%A1%A8%E8%BE%BE%E8%BF%90%E7%AE%97%E7%AC%A6">5.5.1 条件表达运算符</a></li>
+<li><a href="#552-%E9%98%B6%E6%AE%B5%E6%93%8D%E4%BD%9C%E7%AC%A6">5.5.2 阶段操作符</a></li>
+<li><a href="#553-project">5.5.3 $project</a></li>
+<li><a href="#554-%E5%85%B6%E4%BB%96%E6%93%8D%E4%BD%9C%E7%A4%BA%E4%BE%8B">5.5.4 其他操作示例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%85%AD-%E5%A4%87%E4%BB%BD%E5%92%8C%E6%81%A2%E5%A4%8D">六. 备份和恢复</a></li>
+<li><a href="#%E4%B8%83-pymongo">七. pymongo</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/mongodb-shi-yong-shou-ce/"> MongoDB使用手册 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-01-29 18:48:20">2023-01-29</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"> <span>priority</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/1l_ee2Uol/"> <span>nosql</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/2A1ALQpb07/"> <span>mongodb</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/sOZV2rCDf/">
+        <span>database</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >57<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >12306<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <h2 id="一-前言">一. 前言</h2>
+<h3 id="11-使用环境">1.1 使用环境</h3>
+<blockquote>
+<p><code>os: win10, 64bit pro</code></p>
+<p><code>database version: 6.x</code></p>
+<p><code>compass version: 1.34.2</code></p>
+<p><code>shell version: 1.6.0</code></p>
+<p><code>mongodump version: 100.6.1</code></p>
+<p><code>mongorestore version: 100.6.1</code></p>
+<p><code>Terminal: Fluent Terminal(Powershell, 5.1.19041.2364)</code></p>
+</blockquote>
+<!--more-->
+<h3 id="12-安装简介">1.2 安装简介</h3>
+<p><code>mongodb</code>的主程序安装包除了<code>server</code>之外, 其他组件均不集成在一起, 需要单独下载, 包括<code>shell</code>在内.</p>
+<p><a href="https://www.mongodb.com/try/download/shell">mongodb assistance tools download url</a></p>
+<p>解压后, 添加到环境变量即可.</p>
+<h3 id="13-图形管理工具">1.3 图形管理工具</h3>
+<ul>
+<li>
+<p><code>compass</code>, 这是<code>mongodb</code>官方版本的GUI管理工具, 免费.</p>
+<figure data-type="image" tabindex="1"><a href="https://imgse.com/i/pSTjCo8"><img src="https://s1.ax1x.com/2023/02/15/pSTjCo8.png" alt="pSTjCo8.png" loading="lazy"></a></figure>
+</li>
+<li>
+<p><code>navicat premium</code>, 一款极其强大的综合性数据库管理工具, 付费.</p>
+<figure data-type="image" tabindex="2"><a href="https://imgse.com/i/pSTjiFS"><img src="https://s1.ax1x.com/2023/02/15/pSTjiFS.png" alt="pSTjiFS.png" loading="lazy"></a></figure>
+<p><em>相比于<code>compass</code>, navicat对于嵌套文档的显示效果更为直观.</em></p>
+</li>
+</ul>
+<h2 id="二-基本概要">二. 基本概要</h2>
+<h3 id="31-bson">3.1 BSON</h3>
+<blockquote>
+<p><code>BSON</code>是一种计算机数据交换格式, 主要被用作<code>MongoDB</code>数据库中的数据存储和网络传输格式。它是一种二进制表示形式，能用来表示简单数.<br>
+据结构、关联数组（<code>MongoDB</code>中称为“对象”或“文档”）以及<code>MongoDB</code>中的各种数据类型。BSON之名缘于<code>JSON</code>，含义为<code>Binary JSON</code>（二进制<code>JSON</code>）</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>JSON</th>
+<th>BSON</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>JSON</code> 是 <code>javascript</code> 对象表示法</td>
+<td><code>BSON</code> 是二进制 <code>JSON</code></td>
+</tr>
+<tr>
+<td>是一种轻量级的、基于文本的、开放的数据交换格式</td>
+<td>是一种二进制序列化文档格式</td>
+</tr>
+<tr>
+<td><code>JSON</code> 包含一些基本数据类型，如字符串、数字、布尔值、空值</td>
+<td>除了支持 <code>JSON</code> 中的类型外，<code>BSON</code> 还包含一些额外的数据类型，例如日期（<code>Date</code>）、二进制（<code>BinData</code>）等</td>
+</tr>
+<tr>
+<td><code>AnyDB</code>、<code>redis</code> 等数据库将数据存储为 <code>JSON</code> 格式</td>
+<td><code>MongoDB</code> 中将数据存储为<code>BSON</code> 格式</td>
+</tr>
+<tr>
+<td>主要用于传输数据</td>
+<td>主要用于存储数据</td>
+</tr>
+<tr>
+<td>没有响应的编码和解码技术</td>
+<td>有专用的编码和解码技术</td>
+</tr>
+<tr>
+<td>如果想从 <code>JSON</code> 文件中读取指定信息，需要遍历整个数据</td>
+<td>在 <code>BSON</code> 中，可以使用索引跳过到指定内容</td>
+</tr>
+<tr>
+<td><code>JSON</code> 格式不需要解析，因为它是人类可读的</td>
+<td><code>BSON</code> 需要解析，因为它是二进制的</td>
+</tr>
+<tr>
+<td><code>JSON</code> 是对象和数组的组合，其中对象是键值对的集合，而数组是元素的有序列表</td>
+<td><code>BSON</code> 是二进制数据，在其中可以存储一些附加信息，例如字符串长度、对象类型等</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Bson 单文档的大小及嵌套限制</p>
+<ul>
+<li>单文档不超过16 MB</li>
+<li>嵌套不能超过100 层</li>
+</ul>
+<p>如果单条记录超过 16 M 怎么办？</p>
+<p>第一种办法：先处理后存储。可以先做压缩，或者也可以对字符进行先哈希，然后再存储，这样大概率就不会超过 16 MB。</p>
+<p>第二种方法：通常来说 16 MB 的记录都可以直接写到文本文件里面，然后再将文件存到 <code>MongoDB GridFS </code>里面或者先业务层处理后存储。</p>
+</blockquote>
+<h3 id="22-数据类型">2.2 数据类型</h3>
+<table>
+<thead>
+<tr>
+<th>据类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>String</td>
+<td>字符串。存储数据常用的数据类型。在 <code>MongoDB</code> 中，<code>UTF-8</code> 编码的字符串才是合法的。</td>
+</tr>
+<tr>
+<td>Integer</td>
+<td>整型数值。用于存储数值。根据你所采用的服务器，可分为 <code>32</code> 位或 <code>64</code> 位。</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td>布尔值。用于存储布尔值（真/假）。</td>
+</tr>
+<tr>
+<td>Double</td>
+<td>双精度浮点值。用于存储浮点值。</td>
+</tr>
+<tr>
+<td>Min/Max keys</td>
+<td>将一个值与 <code>BSON</code>（二进制的 <code>JSON</code>）元素的最低值和最高值相对比。</td>
+</tr>
+<tr>
+<td>Array</td>
+<td>用于将数组或列表或多个值存储为一个键。</td>
+</tr>
+<tr>
+<td>Timestamp</td>
+<td>时间戳。记录文档修改或添加的具体时间。</td>
+</tr>
+<tr>
+<td>Object</td>
+<td>用于内嵌文档。</td>
+</tr>
+<tr>
+<td>Null</td>
+<td>用于创建空值。</td>
+</tr>
+<tr>
+<td>Symbol</td>
+<td>符号, 该数据类型基本上等同于字符串类型，但不同的是，它一般用于采用特殊符号类型的语言.</td>
+</tr>
+<tr>
+<td>Date</td>
+<td>日期时间。用 <code>UNIX</code> 时间格式来存储当前日期或时间。你可以指定自己的日期时间：创建 Date 对象，传入年月日信息。</td>
+</tr>
+<tr>
+<td>Object ID</td>
+<td>对象 <code>ID</code>, 用于创建文档的 ID(每个文档都有)</td>
+</tr>
+<tr>
+<td>Binary Data</td>
+<td>二进制数据, 用于存储二进制数据</td>
+</tr>
+<tr>
+<td>Code</td>
+<td>代码类型, 用于在文档中存储 JavaScript 代码</td>
+</tr>
+<tr>
+<td>Regular expression</td>
+<td>正则表达式</td>
+</tr>
+</tbody>
+</table>
+<h3 id="23-objectid">2.3 ObjectID</h3>
+<blockquote>
+<p>ObjectId<a href="https://www.mongodb.com/docs/v6.0/reference/bson-types/#objectid"><img src="https://www.mongodb.com/docs/v6.0/assets/link.svg" alt="img" loading="lazy"></a></p>
+<p>ObjectIds are small, likely unique, fast to generate, and ordered. ObjectId values are 12 bytes in length, consisting of:</p>
+<ul>
+<li>A 4-byte timestamp, representing the ObjectId's creation, measured in seconds since the Unix epoch.</li>
+<li>A 5-byte random value generated once per process. This random value is unique to the machine and process.</li>
+<li>A 3-byte incrementing counter, initialized to a random value.</li>
+</ul>
+</blockquote>
+<p>ObjectID是在插入数据到<code>mongodb</code>时默认生成的ID.</p>
+<p>其的组成:</p>
+<ul>
+<li>4-byte, 时间戳</li>
+<li>5-byte, 随机生成数</li>
+<li>3-byte, 递增数(在一个随机初始化的数开始递增)</li>
+</ul>
+<pre><code class="language-javascript">'63ae59def83e2624ec87bb3c'.length;
+// 24
+</code></pre>
+<h2 id="三-基本概况">三. 基本概况</h2>
+<h3 id="31-shell">3.1 Shell</h3>
+<blockquote>
+<p>We’ve decided to switch from v8 and java to Spider Monkey for JavaScript. - 官方blog</p>
+</blockquote>
+<p><code>mongodb</code>的<code>shell</code>整合了一个浏览器引擎(<em>firefox, Spider Monkey</em>).</p>
+<p>这意味着可以直接在<code>shell</code>环境下执行<code>JavaScript</code>代码, 如同和在<code>chrome console</code>上.</p>
+<pre><code class="language-bash"># console.log()
+'test'.length;
+</code></pre>
+<figure data-type="image" tabindex="3"><img src="https://p1.meituan.net/dpplatform/f217ef87c951971acd1fccdef8e5f01e6140.png" alt="js" loading="lazy"></figure>
+<p><em>注: 注意执行后js代码将从控制台中移除.</em></p>
+<pre><code class="language-javascript">// 直接在控制台执行复杂的js代码, 支持ES6+
+const datas = [];
+for (let i = 0; i &lt; 10; i++) {
+	const info = {
+		'id': i,
+		'name': 'abc'
+	}
+	datas.push(info);
+}
+// 批量插入条数据
+// db.student.insertMany(datas);
+</code></pre>
+<p>实际上, <code>mongodb</code>和<code>JavaScript</code>的关系, 可以一定程度认为<code>JavaScript</code>是<code>mongodb</code>的脚本语言</p>
+<pre><code class="language-javascript">// nodejs
+const cursor = collection.find({});
+await cursor.forEach(doc =&gt; console.log(doc));
+
+
+// shell
+// 创建一个游标
+const mycursor = db.shop.find()
+// 对游标获取的对象(obj)进行遍历(forEach)打印(printjson)
+mycursor.forEach(function(obj){printjson(obj)})
+</code></pre>
+<p><em>注意: <code>mongodb</code>默认状态下, 是开放状态的, 连接是不需要密码和用户名的.</em></p>
+<h3 id="32-预置数据库">3.2 预置数据库</h3>
+<ul>
+<li><code>admin</code>: <code>admin</code>数据库主要是保存 <code>root</code>用户和角色。例如，<code>system.users</code> 表存储用户，<code>system.roles</code> 表存储角色。一般不建议用户直接操作这个数据库。将一个用户添加到这个数据库，且使它拥有 <code>admin</code> 库上的名为 <code>dbAdminAnyDatabase</code> 的角色权限，这个用户自动继承所有数据库的权限。一些特定的服务器端命令也只能从这个数据库运行，比如关闭服务器。</li>
+<li><code>local</code>: <code>local </code>数据库是不会被复制到其他分片的，因此可以用来存储本地单台服务器的任意 <code>collection</code>。一般不建议用户直接使用 <code>local</code> 库存储任何数据，也不建议进行 <code>CRUD</code> 操作，因为数据无法被正常备份与恢复。</li>
+<li><code>config</code>: 当 <code>MongoDB</code> 使用分片设置时，<code>config</code> 数据库可用来保存分片的相关信息。</li>
+</ul>
+<h3 id="33-创建用户安全管理">3.3 创建用户/安全管理</h3>
+<figure data-type="image" tabindex="4"><a href="https://imgse.com/i/pSTjrSH"><img src="https://s1.ax1x.com/2023/02/15/pSTjrSH.png" alt="pSTjrSH.png" loading="lazy"></a></figure>
+<p>默认状态下, 使用的是已经内置创建的<code>test</code>数据库</p>
+<pre><code class="language-bash"># 管理员账户
+use admin
+db.createUser(
+  {
+    user: &quot;myUserAdmin&quot;,
+    pwd: passwordPrompt(), // or cleartext password
+    roles: [
+      { role: &quot;userAdminAnyDatabase&quot;, db: &quot;admin&quot; },
+      { role: &quot;readWriteAnyDatabase&quot;, db: &quot;admin&quot; }
+    ]
+  }
+)
+
+# 普通账户
+use test
+db.createUser(
+  {
+    user: &quot;myTester&quot;,
+    pwd:  passwordPrompt(),   // or cleartext password
+    roles: [ { role: &quot;readWrite&quot;, db: &quot;test&quot; },
+             { role: &quot;read&quot;, db: &quot;reporting&quot; } ]
+  }
+)
+</code></pre>
+<ul>
+<li><a href="https://www.mongodb.com/docs/manual/tutorial/configure-scram-client-authentication/#std-label-create-user-admin">参考连接</a></li>
+<li><a href="https://www.mongodb.com/docs/manual/tutorial/manage-users-and-roles/">users &amp; roles</a></li>
+</ul>
+<h3 id="34-mysql的对比">3.4 MySQL的对比</h3>
+<ul>
+<li>数据库, 依然还是数据库, <code>database</code></li>
+<li>表(<code>Table</code>), 则可以认为是转换成<code>collection</code></li>
+<li>行(row), 则可以认为转换成<code>document</code></li>
+<li>index还是index</li>
+<li>字段(column)勉强和field相对应</li>
+</ul>
+<p><code>mongodb</code>对于使用数据库/集合(表)的处理方式是, 当对应的数据存在时就访问, 当数据不存在时, 就临时创建, 假如不插入数据, 则临时文件会自动删除掉.</p>
+<p>相比于<code>MySQL</code>需要在建库, 建表时需要各种考虑细节, <code>mongodb</code>可以开盖直接使用, 但是需要注意这种自由带来的数据混乱和不标准的问题.(<em>特别是多人同时使用同一数据库时</em>)</p>
+<p>如果在具体执行中, 假如输入的内容错误(常见的拼写错误), 也不会报错.</p>
+<p>例如:</p>
+<p>这种问题也可以看到<code>mongodb</code>&quot;自由&quot;的代价.</p>
+<pre><code class="language-bash">db.students.insertMany()
+# 而你的数据输入出现拼写错误或者是漏写/多写的错误, 也不会报错
+db.student.insertMany()
+# 将会直接创建对应名称的集合, 插入数据到这个集合
+</code></pre>
+<p>这需要在权限管理上进行限制, 以避免这种错误导致的数据混乱.</p>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/tHQBg_z6UYf66YKZPSAgVg">最佳实践| 一文读懂《MongoDB 使用规范及最佳实践》原理</a></li>
+</ul>
+<h3 id="35-基本命令">3.5 基本命令</h3>
+<pre><code class="language-bash">show dbs;
+# 等价于mysql语句, 但同时也支持show databases;
+# mysql
+show databases;
+# 查看集合
+show collections;
+# 删除数据库, 在当前数据库, 即可删除掉数据库
+db.dropDatabase()
+# 删除集合
+db.collection.drop()
+# 清空集合, 对应的集合将会自动回收(删除)
+use db_name;
+# 切换使用的数据库, 和mysql一样.
+</code></pre>
+<p>由于<code>mongodb</code>的字段(<code>field</code>)是不固定结构的, 所以并没有和<code>MySQL</code>与之对应的概念.</p>
+<pre><code class="language-bash">show full columns from table_name;
+# 查看表的字段的情况
+</code></pre>
+<p>一些常用的管理命令</p>
+<pre><code class="language-bash"># 查看数据库的情况
+db.stats();
+# query, 返回具体的检索文档的数量
+db.collection.countDocuments({?query});
+# 查看数据库连接状态
+db.serverStatus().connections
+# 类似于netstat命令, 查看连接的状态
+
+# 执行语句的解析
+db.student.find({'id': 1}).explain();
+</code></pre>
+<p>其他命令</p>
+<pre><code class="language-bash"># command generates a list of all database commands implemented for the current mongod or mongos instance.
+# 查看所有的命令
+db.listCommands();
+# 运行命令
+# 查找student(collection_name), 过滤掉没有name的项, 返回两个结果
+db.runCommand({&quot;find&quot;:&quot;student&quot;,&quot;filter&quot;:{&quot;name&quot;:{$exists:true}},&quot;limit&quot; : 2});
+</code></pre>
+<h2 id="四-其他事项">四. 其他事项</h2>
+<h3 id="41-游标">4.1 游标</h3>
+<blockquote>
+<p>The following functions directly return cursors:</p>
+<p>返回的是游标的函数</p>
+<ul>
+<li><code>Collection.find()</code></li>
+<li><code>Collection.aggregate()</code></li>
+<li><code>Collection.listIndexes()</code></li>
+<li><code>Db.aggregate()</code></li>
+<li><code>Db.listCollections()</code></li>
+</ul>
+<p>Other methods such as <a href="https://www.mongodb.com/docs/drivers/node/current/usage-examples/findOne/">Collection.findOne()</a> and <a href="https://www.mongodb.com/docs/drivers/node/current/usage-examples/changeStream/">Collection.watch()</a> use cursors internally, and return the results of the operations instead of a cursor.</p>
+</blockquote>
+<pre><code class="language-python">c = collection.find()
+print(c)
+# &lt;pymongo.cursor.Cursor at 0x217493afb80&gt;
+# find_one() 返回的是dict or None
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cursor.addOption()</td>
+<td>添加特殊的线程协议标志，用于修改查询的行为。</td>
+</tr>
+<tr>
+<td>cursor.batchSize()</td>
+<td>控制 <code>MongoDB</code> 在单个网络消息中返回客户端的文档数。</td>
+</tr>
+<tr>
+<td>cursor.close()</td>
+<td>关闭游标并释放相关的服务器资源。</td>
+</tr>
+<tr>
+<td>cursor.isClosed()</td>
+<td>true 如果光标关闭则返回。</td>
+</tr>
+<tr>
+<td>cursor.collation()</td>
+<td>指定由返回的游标的排序规则。</td>
+</tr>
+<tr>
+<td>cursor.comment()</td>
+<td>在查询中附加注释，以便在日志和 system.profile 集合中实现可跟踪性。</td>
+</tr>
+<tr>
+<td>cursor.count()</td>
+<td>返回结果集中的文档数。</td>
+</tr>
+<tr>
+<td>cursor.explain()</td>
+<td>报告游标的查询执行计划。</td>
+</tr>
+<tr>
+<td>cursor.forEach()</td>
+<td>为游标中的每个文档应用 <code>JavaScript</code> 函数。</td>
+</tr>
+<tr>
+<td>cursor.hasNext()</td>
+<td>如果游标包含文档并且可以迭代，则返回 true。</td>
+</tr>
+<tr>
+<td>cursor.hint()</td>
+<td>强制 <code>MongoDB</code> 为查询使用特定索引。</td>
+</tr>
+<tr>
+<td>cursor.isExhausted()</td>
+<td>检查游标是否处于关闭状态，为 true 代表关闭。</td>
+</tr>
+<tr>
+<td>cursor.itcount()</td>
+<td>通过获取和迭代结果集来计算游标客户端中的文档总数。</td>
+</tr>
+<tr>
+<td>cursor.limit()</td>
+<td>约束游标结果集的大小。</td>
+</tr>
+<tr>
+<td>cursor.map()</td>
+<td>将函数应用于游标中的每个文档，并收集数组中的返回值。</td>
+</tr>
+<tr>
+<td>cursor.max()</td>
+<td>指定游标的独占上限索引。</td>
+</tr>
+<tr>
+<td>cursor.maxScan()</td>
+<td>指定要扫描的最大项目数; 收集扫描的文档，索引扫描的键。已过时</td>
+</tr>
+<tr>
+<td>cursor.maxTimeMS()</td>
+<td>指定处理游标操作的累积时间限制（以毫秒为单位）。</td>
+</tr>
+<tr>
+<td>cursor.min()</td>
+<td>指定游标的包含性较低索引范围。用于 cursor.hint()</td>
+</tr>
+<tr>
+<td>cursor.next()</td>
+<td>返回游标中的下一个文档。</td>
+</tr>
+<tr>
+<td>cursor.noCursorTimeout()</td>
+<td>指示服务器在一段时间不活动后自动关闭光标。</td>
+</tr>
+<tr>
+<td>cursor.objsLeftInBatch()</td>
+<td>返回当前游标批处理中剩余的文档数。</td>
+</tr>
+<tr>
+<td>cursor.pretty()</td>
+<td>配置光标以易于阅读的格式显示结果。</td>
+</tr>
+<tr>
+<td>cursor.readConcern()</td>
+<td>指定读取关注的find()</td>
+</tr>
+<tr>
+<td>cursor.readPref()</td>
+<td>指定对游标的读取首选项，以控制客户端如何将查询定向到复制集。</td>
+</tr>
+<tr>
+<td>cursor.returnKey()</td>
+<td>修改游标以返回索引键而不是文档。</td>
+</tr>
+<tr>
+<td>cursor.showRecordId()</td>
+<td>向光标返回的每个文档添加内部存储引擎ID字段。</td>
+</tr>
+<tr>
+<td>cursor.size()</td>
+<td>返回应用 skip()</td>
+</tr>
+<tr>
+<td>cursor.skip()</td>
+<td>返回仅在传递或跳过多个文档后才开始返回结果的游标。</td>
+</tr>
+<tr>
+<td>cursor.sort()</td>
+<td>返回根据排序规范排序的结果。</td>
+</tr>
+<tr>
+<td>cursor.tailable()</td>
+<td>将光标标记为 tailable，仅适用于超过上限集合的游标。</td>
+</tr>
+<tr>
+<td>cursor.toArray()</td>
+<td>返回一个数组，其中包含游标返回的所有文档。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42-索引">4.2 <a href="https://www.mongodb.com/docs/manual/indexes/">索引</a></h3>
+<figure data-type="image" tabindex="5"><a href="https://imgse.com/i/pSTxRJS"><img src="https://s1.ax1x.com/2023/02/15/pSTxRJS.png" alt="pSTxRJS.png" loading="lazy"></a></figure>
+<figure data-type="image" tabindex="6"><a href="https://imgse.com/i/pSTxtIK"><img src="https://s1.ax1x.com/2023/02/15/pSTxtIK.png" alt="pSTxtIK.png" loading="lazy"></a></figure>
+<ul>
+<li>db.collection.createIndex(keys, options, commitQuorum)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Parameter</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">background</td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left">建索引过程会阻塞其它数据库操作，background可指定以后台方式创建索引，即增加 &quot;background&quot; 可选参数。 &quot;background&quot; 默认值为<strong>false</strong>。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>unique</code></td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left">建立的索引是否唯一。指定为true创建唯一索引。默认值为<strong>false</strong>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>name</code></td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">索引的名称。如果未指定，MongoDB的通过连接索引的字段名和排序顺序生成一个索引名称。</td>
+</tr>
+<tr>
+<td style="text-align:left">dropDups</td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left">**3.0+版本已废弃。**在建立唯一索引时是否删除重复记录,指定 true 创建唯一索引。默认值为 <strong>false</strong>.</td>
+</tr>
+<tr>
+<td style="text-align:left">sparse</td>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left">对文档中不存在的字段数据不启用索引；这个参数需要特别注意，如果设置为true的话，在索引字段中不会查询出不包含对应字段的文档.。默认值为 <strong>false</strong>.</td>
+</tr>
+<tr>
+<td style="text-align:left">expireAfterSeconds</td>
+<td style="text-align:left">integer</td>
+<td style="text-align:left">指定一个以秒为单位的数值，完成 TTL设定，设定集合的生存时间。</td>
+</tr>
+<tr>
+<td style="text-align:left">v</td>
+<td style="text-align:left">index version</td>
+<td style="text-align:left">索引的版本号。默认的索引版本取决于mongod创建索引时运行的版本。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>weights</code></td>
+<td style="text-align:left">document</td>
+<td style="text-align:left">索引权重值，数值在 1 到 99,999 之间，表示该索引相对于其他索引字段的得分权重。</td>
+</tr>
+<tr>
+<td style="text-align:left">default_language</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">对于文本索引，该参数决定了停用词及词干和词器的规则的列表。 默认为英语</td>
+</tr>
+<tr>
+<td style="text-align:left">language_override</td>
+<td style="text-align:left">string</td>
+<td style="text-align:left">对于文本索引，该参数指定了包含在文档中的字段名，语言覆盖默认的language，默认值为 language.</td>
+</tr>
+</tbody>
+</table>
+<p>支持的<a href="https://mp.weixin.qq.com/s/5EW0FZBM3SMmHPC00xFjJg">索引类型</a></p>
+<ul>
+<li>单个索引</li>
+<li>复合索引</li>
+<li>多键索引(基于数组来创建索引, 但是对于一个复合多键索引,「每个索引最多可以包含一个数组」)</li>
+<li>地理空间索引(专门针对LBS信息检索的)</li>
+<li>文本索引(全文检索, 不支持中文)</li>
+<li>Hashed索引</li>
+</ul>
+<p>索引的特性</p>
+<ul>
+<li>
+<p>唯一索引(_id, 默认状态下的唯一索引)</p>
+</li>
+<li>
+<p>部分索引(部分索引仅索引集合中符合指定过滤器表达式的文档, 如仅当某些数据大于某值时)</p>
+<pre><code class="language-bash"># children 表中，将 age 大于 5 数据创建一个升序索引
+db.children.createIndex(
+{age:1},
+{partialFilterExpression: {age: {$gt:5}}})
+</code></pre>
+</li>
+<li>
+<p>稀疏索引</p>
+<blockquote>
+<p>索引的稀疏属性可确保索引仅包含具有索引字段的文档的条目。索引会跳过没有索引字段的文档。创建方式就是加上 sparse: true</p>
+</blockquote>
+<pre><code class="language-bash">db.children.createIndex( { &quot;age&quot;: 1 }, { sparse: true } )
+</code></pre>
+</li>
+<li>
+<p>TTL索引(时效)</p>
+<blockquote>
+<p>TTL 索引是 MongoDB 可以使用的特殊索引，它可以在一定时间后自动从集合中删除文档.</p>
+</blockquote>
+<pre><code class="language-bash">db.children.createIndex( { &quot;lastModifiedDate&quot;: 1 }, { expireAfterSeconds: 5 } )
+</code></pre>
+</li>
+<li>
+<p>覆盖索引</p>
+<blockquote>
+<p>所有需要查询的数据都在索引当中，不需要从数据页中再去寻找数据</p>
+</blockquote>
+<pre><code class="language-bash"># 简单理解, 就是索引即内容
+# 比如我此时为 children 表的时间创建了一个索引
+db.children.createIndex({ age : 1 })
+# 在此时我查找年龄为两岁的孩子时，就不需要从数据页中去寻找数据了
+db.children.find({ age : 2 })
+</code></pre>
+</li>
+<li>
+<p>前缀索引</p>
+<blockquote>
+<p>所有的前缀索引都可以被这条索引所覆盖，不需要再去针对这些前缀建立额外的索引，避免额外的开销<br>
+比如我此时为 children 表的时间创建了「一个复合索引(多字段索引)」</p>
+</blockquote>
+<pre><code class="language-bash">db.children.createIndex({ age : 1，name : 1，address : 1})
+# 等价于
+db.children.createIndex({ age : 1 })
+db.children.createIndex({ age : 1，name : 1 })
+db.children.createIndex({ age : 1，name : 1，address : 1})
+</code></pre>
+</li>
+</ul>
+<p>常用索引命令/示例</p>
+<figure data-type="image" tabindex="7"><a href="https://imgse.com/i/pSTjbmq"><img src="https://s1.ax1x.com/2023/02/15/pSTjbmq.png" alt="pSTjbmq.png" loading="lazy"></a></figure>
+<p><em>图示: <code>compass</code>索引的创建</em></p>
+<pre><code class="language-bash"># 查看索引
+db.student.getIndexes();
+# 默认带有的索引是 &quot;_id&quot;, 即数据库自带的
+# 查看索引的大小
+db.student.totalIndexSize();
+# 删除所有的index
+db.col.dropIndexes();
+# 删除指定的索引
+db.col.dropIndex(&quot;index_name&quot;)
+
+# 创建单个索引
+db.collection.createIndex({ id : 1 })
+# 复合索引
+db.collection.createIndex({ id : 1，name : 1 })
+# 多键索引
+db.collection.createIndex({&quot;grades:math&quot;:1})
+
+# -------------------------------------------------------   #
+db.testindex2.insertMany([
+{ id: 5, type: &quot;food&quot;, item: &quot;aaa&quot;, ratings: [ 5, 8, 9 ] },
+{ id: 6, type: &quot;food&quot;, item: &quot;bbb&quot;, ratings: [ 5, 9 ] },
+{ id: 7, type: &quot;food&quot;, item: &quot;ccc&quot;, ratings: [ 9, 5, 8 ] },
+{ id: 8, type: &quot;food&quot;, item: &quot;ddd&quot;, ratings: [ 9, 5 ] },
+{ id: 9, type: &quot;food&quot;, item: &quot;eee&quot;, ratings: [ 5, 9, 5 ] }
+]);
+
+下面基于ratings列创建一个多键索引:
+db.testindex2.createIndex( { ratings: 1 } );
+
+查询数组上为5, 9的文档
+db.testindex2.find( { ratings: [ 5, 9 ] } );
+
+下面查看其执行计划
+db.testindex2.find( { ratings: [ 5, 9 ] } ).explain();
+# 注意关键字: 「stage 为 IXSCAN」
+{
+  explainVersion: '1',
+  queryPlanner: {
+    namespace: 'test_db.testindex2',
+    indexFilterSet: false,
+    parsedQuery: { ratings: { '$eq': [ 5, 9 ] } },
+    queryHash: 'E0BF65C3',
+    planCacheKey: '2FB9799A',
+    maxIndexedOrSolutionsReached: false,
+    maxIndexedAndSolutionsReached: false,
+    maxScansToExplodeReached: false,
+    winningPlan: {
+      stage: 'FETCH',
+      filter: { ratings: { '$eq': [ 5, 9 ] } },
+      inputStage: {
+        stage: 'IXSCAN',
+        keyPattern: { ratings: 1 },
+        indexName: 'ratings_1',
+        isMultiKey: true,
+        multiKeyPaths: { ratings: [ 'ratings' ] },
+        isUnique: false,
+        isSparse: false,
+        isPartial: false,
+        indexVersion: 2,
+        direction: 'forward',
+        indexBounds: { ratings: [ '[5, 5]', '[[ 5, 9 ], [ 5, 9 ]]' ] }
+      }
+    },
+    rejectedPlans: []
+  },
+  command: {
+    find: 'testindex2',
+    filter: { ratings: [ 5, 9 ] },
+    '$db': 'test_db'
+  },
+  serverInfo: {
+    host: 'DESKTOP-F6VO5U4',
+    port: 27017,
+    version: '6.0.2',
+    gitVersion: '94fb7dfc8b974f1f5343e7ea394d0d9deedba50e'
+  },
+  serverParameters: {
+    internalQueryFacetBufferSizeBytes: 104857600,
+    internalQueryFacetMaxOutputDocSizeBytes: 104857600,
+    internalLookupStageIntermediateDocumentMaxSizeBytes: 104857600,
+    internalDocumentSourceGroupMaxMemoryBytes: 104857600,
+    internalQueryMaxBlockingSortMemoryUsageBytes: 104857600,
+    internalQueryProhibitBlockingMergeOnMongoS: 0,
+    internalQueryMaxAddToSetBytes: 104857600,
+    internalDocumentSourceSetWindowFieldsMaxMemoryBytes: 104857600
+  },
+  ok: 1
+}
+</code></pre>
+<h4 id="421-索引的解析">4.2.1 索引的解析</h4>
+<figure data-type="image" tabindex="8"><a href="https://imgse.com/i/pSTjgmt"><img src="https://s1.ax1x.com/2023/02/15/pSTjgmt.png" alt="pSTjgmt.png" loading="lazy"></a></figure>
+<p><em>图示: <code>compass</code>中的<code>explain</code>执行</em></p>
+<p>常见的<code>explain</code>的<a href="https://segmentfault.com/a/1190000041111851?sort=votes">内容解析</a></p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>COLLSCAN</code></td>
+<td>全表扫描</td>
+</tr>
+<tr>
+<td><code>IXSCAN</code></td>
+<td>索引扫描</td>
+</tr>
+<tr>
+<td><code>FETCH</code></td>
+<td>根据索引检索指定文档</td>
+</tr>
+<tr>
+<td><code>SHARD_MERGE</code></td>
+<td>将各个分片返回数据进行合并</td>
+</tr>
+<tr>
+<td><code>SORT</code></td>
+<td>在内存中进行了排序</td>
+</tr>
+<tr>
+<td><code>LIMIT</code></td>
+<td>使用limit限制返回数</td>
+</tr>
+<tr>
+<td><code>SKIP</code></td>
+<td>使用skip进行跳过</td>
+</tr>
+<tr>
+<td><code>IDHACK</code></td>
+<td>对_id进行查询</td>
+</tr>
+<tr>
+<td><code>SHARDING_FILTER</code></td>
+<td>通过mongos对分片数据进行查询</td>
+</tr>
+<tr>
+<td><code>COUNTSCAN</code></td>
+<td>count不使用Index进行count时的stage返回</td>
+</tr>
+<tr>
+<td><code>COUNT_SCAN</code></td>
+<td>count使用了Index进行count时的stage返回</td>
+</tr>
+<tr>
+<td><code>SUBPLA</code></td>
+<td>未使用到索引的$or查询的stage返回</td>
+</tr>
+<tr>
+<td><code>TEXT</code></td>
+<td>使用全文索引进行查询时候的stage返回</td>
+</tr>
+<tr>
+<td><code>PROJECTION</code></td>
+<td>限定返回字段时候stage的返回</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><a href="https://www.cnblogs.com/wyy1234/p/11032163.html">参考链接-A</a></li>
+<li><a href="https://www.mongodb.com/docs/v6.0/reference/method/db.collection.createIndex/#mongodb-method-db.collection.createIndex">参考链接_B</a></li>
+</ul>
+<h4 id="422-全文索引">4.2.2 全文索引</h4>
+<p>需要注意的是全文索引, 并<a href="https://www.mongodb.com/docs/manual/reference/text-search-languages/">不支持中文</a></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Language Name</th>
+<th style="text-align:left">ISO 639-1 (Two letter codes)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>danish</code></td>
+<td style="text-align:left"><code>da</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>dutch</code></td>
+<td style="text-align:left"><code>nl</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>english</code></td>
+<td style="text-align:left"><code>en</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>finnish</code></td>
+<td style="text-align:left"><code>fi</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>french</code></td>
+<td style="text-align:left"><code>fr</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>german</code></td>
+<td style="text-align:left"><code>de</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>hungarian</code></td>
+<td style="text-align:left"><code>hu</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>italian</code></td>
+<td style="text-align:left"><code>it</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>norwegian</code></td>
+<td style="text-align:left"><code>nb</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>portuguese</code></td>
+<td style="text-align:left"><code>pt</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>romanian</code></td>
+<td style="text-align:left"><code>ro</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>russian</code></td>
+<td style="text-align:left"><code>ru</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>spanish</code></td>
+<td style="text-align:left"><code>es</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>swedish</code></td>
+<td style="text-align:left"><code>sv</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>turkish</code></td>
+<td style="text-align:left"><code>tr</code></td>
+</tr>
+</tbody>
+</table>
+<p>指定语言为全文索引</p>
+<pre><code class="language-bash">db.quotes.createIndex(
+   { content : &quot;text&quot; },
+   { default_language: &quot;spanish&quot; }
+)
+</code></pre>
+<p>对于中文全文检索有较高要求的, 备用选择, <a href="https://blog.csdn.net/kongliand/article/details/108691847">MongoDB和Elasticsearch的各使用场景对比</a></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">MongoDB</th>
+<th style="text-align:left">ElasticSearch</th>
+<th style="text-align:left">备注</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">定位</td>
+<td style="text-align:left">(文档型)数据库</td>
+<td style="text-align:left">(文档型)搜索引擎</td>
+<td>一个管理数据,一个检索数据</td>
+</tr>
+<tr>
+<td style="text-align:left">资源占用</td>
+<td style="text-align:left">一般</td>
+<td style="text-align:left">高</td>
+<td>mongo使用c++, es使用Java开发</td>
+</tr>
+<tr>
+<td style="text-align:left">写入延迟</td>
+<td style="text-align:left">低</td>
+<td style="text-align:left">高</td>
+<td>es的写入延迟默认1s, 可配置, 但是要牺牲一些东西</td>
+</tr>
+<tr>
+<td style="text-align:left">全文索引支持度</td>
+<td style="text-align:left">一般</td>
+<td style="text-align:left">非常好</td>
+<td>es本来就是搜索引擎, 这个没啥可比性</td>
+</tr>
+<tr>
+<td style="text-align:left">有无Schema</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">无</td>
+<td>两者都是无Schema</td>
+</tr>
+<tr>
+<td style="text-align:left">支持的数据量</td>
+<td style="text-align:left">PB+</td>
+<td style="text-align:left">TB+ ~ PB</td>
+<td>两者支持的量并不好说的太死, 都支持分片和横向扩展, 但是相对来说MongoDB的数据量支持要更大一点</td>
+</tr>
+<tr>
+<td style="text-align:left">性能</td>
+<td style="text-align:left">非常好</td>
+<td style="text-align:left">好</td>
+<td>MongoDB在大部分场景性能比es强的多得多</td>
+</tr>
+<tr>
+<td style="text-align:left">索引结构</td>
+<td style="text-align:left">B树</td>
+<td style="text-align:left">LSM树</td>
+<td>es追求写入吞吐量, MongoDB读写比较均衡</td>
+</tr>
+<tr>
+<td style="text-align:left">操作接口</td>
+<td style="text-align:left">TCP</td>
+<td style="text-align:left">Restful(Http)</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">是否支持分片</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">是</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">是否支持副本</td>
+<td style="text-align:left">是</td>
+<td style="text-align:left">是</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">选主算法</td>
+<td style="text-align:left">Bully(霸凌)</td>
+<td style="text-align:left">Bully(霸凌)</td>
+<td>相比于Paxos和Raft算法实现更简单并有一定可靠性上的妥协，但是选举速度比较快</td>
+</tr>
+<tr>
+<td style="text-align:left">扩展难度</td>
+<td style="text-align:left">容易</td>
+<td style="text-align:left">非常容易</td>
+<td>es真的是我用过的扩展最方便的存储系统之一</td>
+</tr>
+<tr>
+<td style="text-align:left">配置难度</td>
+<td style="text-align:left">难</td>
+<td style="text-align:left">非常容易</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">地理位置</td>
+<td style="text-align:left">支持</td>
+<td style="text-align:left">支持</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">运维工具</td>
+<td style="text-align:left">丰富</td>
+<td style="text-align:left">一般</td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left">插件和引擎</td>
+<td style="text-align:left">有多个存储引擎供选择</td>
+<td style="text-align:left">有大量插件可以使用</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<h4 id="423-索引限制">4.2.3 索引限制</h4>
+<ul>
+<li>
+<p>单个集合最多包含 64 个索引</p>
+</li>
+<li>
+<p>单个索引记录不超过 1024 字节, <code>failIndexKeyTooLong</code> 默认 <code>true</code> 控制是否报错</p>
+</li>
+<li>
+<p>多列索引列个数最多不超过 31</p>
+</li>
+<li>
+<p>前台模式 createIndexes内存限制500 MB,（<code>maxIndexBuildMemoryUsageMegabytes</code> 可调整）</p>
+</li>
+<li>
+<p>不允许创建多列数组的组合索引</p>
+</li>
+</ul>
+<blockquote>
+<p>实际上为什么有这个限制呢？</p>
+<p>MongoDB 如果索引字段是数组，那我们可以理解为对每个数组元素创建索引。如果要是多个数组字段建组合索引，就意味着它可能会产生笛卡尔级数据量的索引。所以为了避免这种索引的爆炸性增长，需要对此做了相应的一个限制。</p>
+</blockquote>
+<ul>
+<li>TTL 索引如果是复合索引则过期将会失效</li>
+</ul>
+<blockquote>
+<p>通常你想创建一个 TTL 索引，但创建的时候构建了多个字段的组合索引，那么 TTL 就会失效。</p>
+</blockquote>
+<ul>
+<li>Hash 索引只支持单列 [version &lt;= 4.4]</li>
+</ul>
+<blockquote>
+<p>另外需要记住的就是哈希索引只支持单例，这个是在 <code>4.4</code> 之前的一个限制，到后面是做了调整，所以在这里也需要给大家提一下。我们本次分享为大部分内容的前提是小于等于 <code>4.2</code> 版本，主要原因在于 <code>4.4</code> 及其以上的 <code>MongoDB</code> 版本其实有很多企业里面都没有使用。</p>
+</blockquote>
+<h3 id="43-时间">4.3 时间</h3>
+<blockquote>
+<p>ISODate(&quot;2019-07-26T16:55:36.000Z&quot;)</p>
+</blockquote>
+<figure data-type="image" tabindex="9"><a href="https://imgse.com/i/pSTjfk8"><img src="https://s1.ax1x.com/2023/02/15/pSTjfk8.png" alt="pSTjfk8.png" loading="lazy"></a></figure>
+<p>时间在插入数据库后, 相应的时区会被修改为<code>UTC00:00(Z)</code></p>
+<pre><code class="language-python"># 在python中直接将字符串转为datetime
+student = {
+    'id': '2017010x',
+    'name': 'Jordap',
+    'age': 21,
+    'gender': 'male',
+    'data': datetime.strptime('2022-12-27 14:29:26', '%Y-%m-%d %H:%M:%S')
+}
+</code></pre>
+<pre><code class="language-bash"># 插入后检索数据
+test_db&gt; db.students.findOne({'id': '2017010x'});
+{
+  _id: ObjectId(&quot;63aaae7b995a3a30dffe2a7d&quot;),
+  id: '2017010x',
+  name: 'Jordap',
+  age: 21,
+  gender: 'male',
+  data: ISODate(&quot;2022-12-27T14:29:26.000Z&quot;)
+}
+</code></pre>
+<pre><code class="language-python"># 注意日期
+# 在pymongo中将数据导出
+{'_id': ObjectId('63aaae7b995a3a30dffe2a7d'), 'id': '2017010x', 'name': 'Jordap', 'age': 21, 'gender': 'male', 'data': datetime.datetime(2022, 12, 27, 14, 29, 26)}
+
+# 返回的date对象是不带有时区信息的
+</code></pre>
+<h3 id="44-操作符">4.4 <code>$</code>操作符</h3>
+<blockquote>
+<p>$ (projection)<a href="https://www.mongodb.com/docs/v6.0/reference/operator/projection/positional/#---projection-"><img src="https://www.mongodb.com/docs/v6.0/assets/link.svg" alt="img" loading="lazy"></a></p>
+<p>Definition<a href="https://www.mongodb.com/docs/v6.0/reference/operator/projection/positional/#definition"><img src="https://www.mongodb.com/docs/v6.0/assets/link.svg" alt="img" loading="lazy"></a></p>
+<ul>
+<li>
+<p><code>$</code><a href="https://www.mongodb.com/docs/v6.0/reference/operator/projection/positional/#mongodb-projection-proj.-"><img src="https://www.mongodb.com/docs/v6.0/assets/link.svg" alt="img" loading="lazy"></a></p>
+<p>The positional <a href="https://www.mongodb.com/docs/v6.0/reference/operator/projection/positional/#mongodb-projection-proj.-"><code>$</code></a> operator limits the contents of an <code>&lt;array&gt;</code> to return the first element that matches the query condition on the array.Use <a href="https://www.mongodb.com/docs/v6.0/reference/operator/projection/positional/#mongodb-projection-proj.-"><code>$</code></a> in the <a href="https://www.mongodb.com/docs/v6.0/reference/glossary/#std-term-projection">projection</a> document of the <a href="https://www.mongodb.com/docs/v6.0/reference/method/db.collection.find/#mongodb-method-db.collection.find"><code>find()</code></a> method or the <a href="https://www.mongodb.com/docs/v6.0/reference/method/db.collection.findOne/#mongodb-method-db.collection.findOne"><code>findOne()</code></a> method when you only need one particular array element in selected documents.See the aggregation operator <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/filter/#mongodb-expression-exp.-filter"><code>$filter</code></a> to return an array with only those elements that match the specified condition.</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="45-高阶操作">4.5 高阶操作</h3>
+<ul>
+<li>
+<p>事务</p>
+<blockquote>
+<p>For transactions:</p>
+<ul>
+<li>
+<p>You can specify read/write (CRUD) operations on <strong>existing</strong> collections. For a list of CRUD operations, see <a href="https://www.mongodb.com/docs/manual/core/transactions-operations/#std-label-transactions-operations-crud">CRUD Operations.</a></p>
+</li>
+<li>
+<p>Starting in MongoDB 4.4, you can create collections and indexes in transactions. For details, see <a href="https://www.mongodb.com/docs/manual/core/transactions/#std-label-transactions-create-collections-indexes">Create Collections and Indexes In a Transaction</a></p>
+</li>
+<li>
+<p>The collections used in a transaction can be in different databases.</p>
+<p><strong>NOTE</strong></p>
+<p>You cannot create new collections in cross-shard write transactions. For example, if you write to an existing collection in one shard and implicitly create a collection in a different shard, MongoDB cannot perform both operations in the same transaction.</p>
+</li>
+<li>
+<p>You cannot write to <a href="https://www.mongodb.com/docs/manual/core/capped-collections/">capped</a> collections. (Starting in MongoDB 4.2)</p>
+</li>
+<li>
+<p>You cannot use read concern <a href="https://www.mongodb.com/docs/manual/reference/read-concern-snapshot/#mongodb-readconcern-readconcern.-snapshot-"><code>&quot;snapshot&quot;</code></a> when reading from a <a href="https://www.mongodb.com/docs/manual/core/capped-collections/">capped</a> collection. (Starting in MongoDB 5.0)</p>
+</li>
+<li>
+<p>You cannot read/write to collections in the <code>config</code>, <code>admin</code>, or <code>local</code> databases.</p>
+</li>
+<li>
+<p>You cannot write to <code>system.*</code> collections.</p>
+</li>
+<li>
+<p>You cannot return the supported operation's query plan (i.e. <code>explain</code>).</p>
+</li>
+<li>
+<p>For cursors created outside of a transaction, you cannot call <a href="https://www.mongodb.com/docs/manual/reference/command/getMore/#mongodb-dbcommand-dbcmd.getMore"><code>getMore</code></a> inside the transaction.</p>
+</li>
+<li>
+<p>For cursors created in a transaction, you cannot call <a href="https://www.mongodb.com/docs/manual/reference/command/getMore/#mongodb-dbcommand-dbcmd.getMore"><code>getMore</code></a> outside the transaction.</p>
+</li>
+<li>
+<p>Starting in MongoDB 4.2, you cannot specify <a href="https://www.mongodb.com/docs/manual/reference/command/killCursors/#mongodb-dbcommand-dbcmd.killCursors"><code>killCursors</code></a> as the first operation in a <a href="https://www.mongodb.com/docs/manual/core/transactions/">transaction.</a></p>
+</li>
+</ul>
+<p>Operations that affect the database catalog, such as creating or dropping a collection or an index, are not allowed in multi-document transactions. For example, a multi-document transaction cannot include an insert operati</p>
+</blockquote>
+</li>
+<li>
+<p>连表查询</p>
+<p>和MySQL不同的是, <code>mongodb</code>并无联表查询的概念(提供有<code>$lookup</code>操作符来实现类似功能), 多是采用内嵌文档的方式实现.</p>
+</li>
+<li>
+<p>分片</p>
+<blockquote>
+<p>在Mongodb里面存在另一种集群，就是分片技术,可以满足MongoDB数据量大量增长的需求。</p>
+<p>当MongoDB存储海量的数据时，一台机器可能不足以存储数据，也可能不足以提供可接受的读写吞吐量。这时，我们就可以通过在多台机器上分割数据，使得数据库系统能存储和处理更多的数据。</p>
+</blockquote>
+<figure data-type="image" tabindex="10"><a href="https://imgse.com/i/pSTjolj"><img src="https://s1.ax1x.com/2023/02/15/pSTjolj.png" alt="pSTjolj.png" loading="lazy"></a></figure>
+<ul>
+<li>
+<p>Shard:</p>
+<p>用于存储实际的数据块，实际生产环境中一个shard server角色可由几台机器组个一个replica set承担，防止主机单点故障</p>
+</li>
+<li>
+<p>Config Server:</p>
+<p>mongod实例，存储了整个 ClusterMetadata，其中包括 chunk信息。</p>
+</li>
+<li>
+<p>Query Routers:</p>
+<p>前端路由，客户端由此接入，且让整个集群看上去像单一数据库，前端应用可以透明使用。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><a href="https://mp.weixin.qq.com/s/DWdZ86wdoamlB1nwej5fBA">技术干货| MongoDB 全方位知识图谱</a></p>
+</li>
+</ul>
+<h2 id="五-基本操作">五. 基本操作</h2>
+<p><code>mongodb</code>在<code>API</code>接口上一般提供: 操作单个(<code>One</code>)文档;  操作多个(<code>Many</code>)文档. 在操作上直接做了区分, 更为方便易用.</p>
+<h3 id="51-增">5.1 增</h3>
+<ul>
+<li>insertOne</li>
+<li>insertMany</li>
+</ul>
+<pre><code class="language-bash"># 单一内容插入
+db.collection.insertOne({'id': 1, 'name': 'alex'}) 
+# 批量插入内容
+db.collection.insertMany([{'id': 1, 'name': 'alex'}, {'id': 2, 'name': 'tom'}])
+</code></pre>
+<h3 id="52-删">5.2 删</h3>
+<ul>
+<li>deleteOne</li>
+<li>deleteMany</li>
+</ul>
+<pre><code class="language-bash"># 批量删除id小于5的内容
+db.student.deleteMany({&quot;id&quot;:{$lt:5}});
+</code></pre>
+<h3 id="53-改">5.3 改</h3>
+<p><code>db.collection.updateOne（filter，update，options）</code></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">类型</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#update-one-filter">filter</a></td>
+<td style="text-align:left">文献</td>
+<td style="text-align:left">更新的选择标准。提供与方法中相同的<a href="https://mongodb.net.cn/manual/reference/operator/query/#query-selectors">查询选择器</a><a href="https://mongodb.net.cn/manual/reference/method/db.collection.find/#db.collection.find"><code>find()</code></a>。指定一个空文档以更新集合中返回的第一个文档。<code>{ }</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#update-one-update">update</a></td>
+<td style="text-align:left">文件或管道</td>
+<td style="text-align:left">要应用的修改。可以是以下之一：<a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#update-one-method-update-document">更新文件</a>仅包含<a href="https://mongodb.net.cn/manual/reference/operator/update/#id1">更新运算符表达式</a>。有关更多信息，请参见 <a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#updateone-behavior-update-expressions">使用更新运算符表达式文档进行更新。</a><a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#update-one-method-agg-pipeline">聚合管道</a> （<em>从MongoDB 4.2开始</em>）仅包含以下聚合阶段：<a href="https://mongodb.net.cn/manual/reference/operator/aggregation/addFields/#pipe._S_addFields"><code>$addFields</code></a> 及其别名 <a href="https://mongodb.net.cn/manual/reference/operator/aggregation/set/#pipe._S_set"><code>$set</code></a><a href="https://mongodb.net.cn/manual/reference/operator/aggregation/project/#pipe._S_project"><code>$project</code></a> 及其别名 <a href="https://mongodb.net.cn/manual/reference/operator/aggregation/unset/#pipe._S_unset"><code>$unset</code></a><a href="https://mongodb.net.cn/manual/reference/operator/aggregation/replaceRoot/#pipe._S_replaceRoot"><code>$replaceRoot</code></a>及其别名<a href="https://mongodb.net.cn/manual/reference/operator/aggregation/replaceWith/#pipe._S_replaceWith"><code>$replaceWith</code></a>。有关更多信息，请参见 <a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#updateone-behavior-aggregation-pipeline">使用聚合管道更新</a>。要使用替换文档进行更新，请参阅 <a href="https://mongodb.net.cn/manual/reference/method/db.collection.replaceOne/#db.collection.replaceOne"><code>db.collection.replaceOne()</code></a>。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>upsert</code></td>
+<td style="text-align:left">布尔值</td>
+<td style="text-align:left">可选的。当<code>true</code>，<a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#db.collection.updateOne"><code>updateOne()</code></a>要么：如果没有文档与匹配，则创建一个新文档<code>filter</code>。有关更多详细信息，请参见<a href="https://mongodb.net.cn/manual/reference/method/db.collection.update/#upsert-behavior">upsert行为</a>。更新与匹配的单个文档<code>filter</code>。为避免多次更新，请确保<code>filter</code>字段被<a href="https://mongodb.net.cn/manual/core/index-unique/#index-type-unique">唯一索引</a>。默认为<code>false</code>。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>writeConcern</code></td>
+<td style="text-align:left">文献</td>
+<td style="text-align:left">可选的。表达<a href="https://mongodb.net.cn/manual/reference/write-concern/">书面关切的</a>文件。省略使用默认的写关注。如果在事务中运行，则不要为操作明确设置写关注点。要对事务使用写关注，请参见 <a href="https://mongodb.net.cn/manual/core/transactions/#transactions-write-concern">事务和写关注</a>。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>collation</code></td>
+<td style="text-align:left">文献</td>
+<td style="text-align:left">可选的。指定 用于操作的<a href="https://mongodb.net.cn/manual/reference/bson-type-comparison-order/#collation">排序规则</a>。<a href="https://mongodb.net.cn/manual/reference/collation/">归类</a>允许用户为字符串比较指定特定于语言的规则，例如字母大写和重音符号的规则。排序规则选项具有以下语法：<code>collation: {   locale: &lt;string&gt;,   caseLevel: &lt;boolean&gt;,   caseFirst: &lt;string&gt;,   strength: &lt;int&gt;,   numericOrdering: &lt;boolean&gt;,   alternate: &lt;string&gt;,   maxVariable: &lt;string&gt;,   backwards: &lt;boolean&gt; } </code>指定排序规则时，该<code>locale</code>字段为必填字段；所有其他排序规则字段都是可选的。有关字段的说明，请参见<a href="https://mongodb.net.cn/manual/reference/collation/#collation-document-fields">整理文档</a>。如果未指定排序规则，但是集合具有默认排序规则（请参阅参考资料<a href="https://mongodb.net.cn/manual/reference/method/db.createCollection/#db.createCollection"><code>db.createCollection()</code></a>），则该操作将使用为集合指定的排序规则。如果没有为集合或操作指定排序规则，则MongoDB使用先前版本中使用的简单二进制比较进行字符串比较。您不能为一个操作指定多个排序规则。例如，您不能为每个字段指定不同的排序规则，或者如果对排序执行查找，则不能对查找使用一种排序规则，而对排序使用另一种排序规则。3.4版的新功能。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>arrayFilters</code></td>
+<td style="text-align:left">数组</td>
+<td style="text-align:left">可选的。筛选器文档数组，用于确定要对数组字段进行更新操作要修改的数组元素。在更新文档中，使用<a href="https://mongodb.net.cn/manual/reference/operator/update/positional-filtered/#up._S_%5B%5D"><code>$[\]</code></a>过滤后的位置运算符定义一个标识符，然后在数组过滤器文档中引用该标识符。如果该标识符未包含在更新文档中，则不能具有标识符的数组过滤器文档。注意在<code>&lt;identifier&gt;</code>必须以小写字母开头，并且只包含字母数字字符。您可以在更新文档中多次包含相同的标识符；但是，对于<code>$[identifier]</code>更新文档中的每个不同的标识符（），必须<strong>精确地</strong>指定<strong>一个</strong> 对应的数组过滤器文档。也就是说，您不能为同一标识符指定多个数组过滤器文档。例如，如果update语句包含标识符<code>x</code> （可能多次），则不能为以下内容指定以下内容 <code>arrayFilters</code>：包括2个单独的过滤器文档<code>x</code>：<code>// INVALID [  { &quot;x.a&quot;: { $gt: 85 } },  { &quot;x.b&quot;: { $gt: 80 } } ] </code>但是，您可以在单个过滤器文档中的相同标识符上指定复合条件，例如以下示例：<code>// Example 1 [  { $or: [{&quot;x.a&quot;: {$gt: 85}}, {&quot;x.b&quot;: {$gt: 80}}] } ] // Example 2 [  { $and: [{&quot;x.a&quot;: {$gt: 85}}, {&quot;x.b&quot;: {$gt: 80}}] } ] // Example 3 [  { &quot;x.a&quot;: { $gt: 85 }, &quot;x.b&quot;: { $gt: 80 } } ] </code>有关示例，请参阅<a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#updateone-arrayfilters">为数组更新操作指定arrayFilters</a>。3.6版的新功能。</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#update-one-hint">hint</a></td>
+<td style="text-align:left">文件或字串</td>
+<td style="text-align:left">可选的。指定用于支持<a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#update-one-filter">查询谓词</a>的<a href="https://mongodb.net.cn/manual/indexes/">索引的</a>文档或字符串。该选项可以采用索引规范文档或索引名称字符串。如果指定的索引不存在，则操作错误。有关示例，请参阅<a href="https://mongodb.net.cn/manual/reference/method/db.collection.updateOne/#ex-update-one-hint">为更新操作指定提示</a>。4.2.1版中的新功能。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>update</li>
+<li>updateOne</li>
+<li>replacceOne</li>
+</ul>
+<pre><code class="language-bash">db.student.updateOne({&quot;id&quot;: 11}, {&quot;gender&quot; : &quot;female&quot;});
+# MongoInvalidArgumentError: Update document requires atomic operators
+</code></pre>
+<p><code>mongodb</code>为了防止意外的修改, 不允许直接覆盖式更新(上述内容可能只是想更新其中某个字段, 但是却会导致这个部分的文档被覆盖新的内容).</p>
+<p>假如需要真的执行对文档的覆盖更新, 使用的式<code>replaceOne</code></p>
+<ul>
+<li>操作符, <code>$set</code></li>
+</ul>
+<pre><code class="language-bash"># 整个文档覆盖更新
+db.student.replaceOne({&quot;id&quot;: 11}, {&quot;gender&quot; : &quot;female&quot;});
+# 只更更新其中的项
+db.student.updateOne({'id': 6}, {$set: {'name': 'alex'}});
+</code></pre>
+<ul>
+<li>操作符, <a href="https://www.mongodb.com/docs/manual/reference/operator/update/setOnInsert/#-setoninsert">$setOnInsert</a></li>
+</ul>
+<p><code>$setOnInsert</code>当数据不存在则写入, 当数据存在则不操作.</p>
+<pre><code class="language-bash"># 数据存在则更新, 不存在则写入
+db.student.updateOne({'id': 7}, {$set: {'name': 'alex'}}, { upsert: true });
+
+db.student.updateOne(
+  { id: 31 },
+  {
+     $set: { item: &quot;apple&quot; },
+     $setOnInsert: { defaultQty: 100 }
+  },
+  { upsert: true }
+);
+
+db.student.updateOne(
+  { id: 31 },
+  {
+     $set: { item: &quot;meta&quot; },
+     $setOnInsert: { defaultQty: 120 }
+  },
+  { upsert: true }
+);
+</code></pre>
+<h3 id="54-查">5.4 查</h3>
+<h4 id="541-简单查询">5.4.1 简单查询</h4>
+<ul>
+<li>find</li>
+<li>findOne</li>
+<li>limit</li>
+<li>skip</li>
+</ul>
+<pre><code class="language-bash"># 返回id对应的所有项
+db.collection_name.find({'id': 12345});
+# 返回一条结果
+db.collection_name.findOne({'id': 12345});
+# 等价于
+db.collection_name.find({'id': 12345}).limit(1);
+</code></pre>
+<pre><code class="language-bash"># 只展示部分的字段, url_id
+db.group.find({}, {'url_id': true});
+# 展示除了url_id之外的其他的所有字段
+db.group.find({}, {'url_id': false});
+</code></pre>
+<pre><code class="language-bash"># 排序
+# 查找具体项的最大值
+# 不限于数字, 日期也可以
+db.group.find().sort({'commentCount': -1}).limit(1)
+# -1, 逆序
+#  1, 正序
+
+
+# 返回author_id的独一无二值
+# db.collection.distinct(field, query, options)
+db.group.distinct('author_id');
+# 注意错误
+# Error: distinct too big, 16mb cap
+db.group.distinct('comments.author_id', {'url_id': '280793330'});
+</code></pre>
+<h4 id="542-type">5.4.2 type</h4>
+<blockquote>
+<p>$type操作符是基于BSON类型来检索集合中匹配的数据类型，并返回结果。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><strong>类型</strong></th>
+<th style="text-align:left"><strong>数字</strong></th>
+<th style="text-align:left"><strong>备注</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">Double</td>
+<td style="text-align:left">1</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">String</td>
+<td style="text-align:left">2</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Object</td>
+<td style="text-align:left">3</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Array</td>
+<td style="text-align:left">4</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Binary data</td>
+<td style="text-align:left">5</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Undefined</td>
+<td style="text-align:left">6</td>
+<td style="text-align:left">已废弃</td>
+</tr>
+<tr>
+<td style="text-align:left">Object id</td>
+<td style="text-align:left">7</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Boolean</td>
+<td style="text-align:left">8</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Date</td>
+<td style="text-align:left">9</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Null</td>
+<td style="text-align:left">10</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Regular Expression</td>
+<td style="text-align:left">11</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">JavaScript</td>
+<td style="text-align:left">13</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Symbol</td>
+<td style="text-align:left">14</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">JavaScript (with scope)</td>
+<td style="text-align:left">15</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">32-bit integer</td>
+<td style="text-align:left">16</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Timestamp</td>
+<td style="text-align:left">17</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">64-bit integer</td>
+<td style="text-align:left">18</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left">Min key</td>
+<td style="text-align:left">255</td>
+<td style="text-align:left">Query with <code>-1</code>.</td>
+</tr>
+<tr>
+<td style="text-align:left">Max key</td>
+<td style="text-align:left">127</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash"># 返回gender中数据类型为string的项
+db.student.find({'gender': {$type: 2}})
+</code></pre>
+<h4 id="543-条件数学操作符">5.4.3 条件(数学)操作符</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">操作</th>
+<th style="text-align:left">格式</th>
+<th style="text-align:left">范例</th>
+<th style="text-align:left">RDBMS中的类似语句</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">等于</td>
+<td style="text-align:left"><code>{&lt;key&gt;:&lt;value&gt;</code>}</td>
+<td style="text-align:left"><code>db.col.find({&quot;by&quot;:&quot;google&quot;}).pretty()</code></td>
+<td style="text-align:left"><code>where by = 'google'</code></td>
+</tr>
+<tr>
+<td style="text-align:left">小于</td>
+<td style="text-align:left"><code>{&lt;key&gt;:{$lt:&lt;value&gt;}}</code></td>
+<td style="text-align:left"><code>db.col.find({&quot;likes&quot;:{$lt:50}}).pretty()</code></td>
+<td style="text-align:left"><code>where likes &lt; 50</code></td>
+</tr>
+<tr>
+<td style="text-align:left">小于或等于</td>
+<td style="text-align:left"><code>{&lt;key&gt;:{$lte:&lt;value&gt;}}</code></td>
+<td style="text-align:left"><code>db.col.find({&quot;likes&quot;:{$lte:50}}).pretty()</code></td>
+<td style="text-align:left"><code>where likes &lt;= 50</code></td>
+</tr>
+<tr>
+<td style="text-align:left">大于</td>
+<td style="text-align:left"><code>{&lt;key&gt;:{$gt:&lt;value&gt;}}</code></td>
+<td style="text-align:left"><code>db.col.find({&quot;likes&quot;:{$gt:50}}).pretty()</code></td>
+<td style="text-align:left"><code>where likes &gt; 50</code></td>
+</tr>
+<tr>
+<td style="text-align:left">大于或等于</td>
+<td style="text-align:left"><code>{&lt;key&gt;:{$gte:&lt;value&gt;}}</code></td>
+<td style="text-align:left"><code>db.col.find({&quot;likes&quot;:{$gte:50}}).pretty()</code></td>
+<td style="text-align:left"><code>where likes &gt;= 50</code></td>
+</tr>
+<tr>
+<td style="text-align:left">不等于</td>
+<td style="text-align:left"><code>{&lt;key&gt;:{$ne:&lt;value&gt;}}</code></td>
+<td style="text-align:left"><code>db.col.find({&quot;likes&quot;:{$ne:50}}).pretty()</code></td>
+<td style="text-align:left"><code>where likes != 50</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">{
+    _id: ObjectId(&quot;63ac018e8ec05aca7ba5c922&quot;),
+    id: 10,
+    name: 'tony',
+    grades: { math: 12, english: 10 }
+}
+# 嵌套了一个字典层级
+# 查找math下等于12的项目
+db.student.findOne({'grades.math': 12});
+# 查找math小于20的项目
+db.student.find({'grades.math': {$lt: 20}});
+</code></pre>
+<h4 id="544-复杂查询">5.4.4 复杂查询</h4>
+<p>常见操作符</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$all</td>
+<td>{&quot;name&quot;:{$all: [&quot;piexl&quot;, &quot;tom&quot;]}}, 满足[&quot;piexl&quot;, &quot;tom&quot;]内全部内容的</td>
+</tr>
+<tr>
+<td>$or</td>
+<td>{$or: [{'url_id':'102117210'}, {'url_id': '280826584'}]}, 下面的in语句的or版本, 二者是等价的</td>
+</tr>
+<tr>
+<td>$in</td>
+<td>{'url_id': {$in: ['102117210', '280826584']}}, url_id等于包含的项的</td>
+</tr>
+<tr>
+<td>$inc</td>
+<td>db.student.updateOne({&quot;id&quot;: 1}, {$inc: {&quot;id&quot;: 10}});, 对id这个数值 + 10</td>
+</tr>
+<tr>
+<td>$set</td>
+<td>设置值, db.student.updateOne({'id': 6}, {$set: {'name': 'alex'}});</td>
+</tr>
+<tr>
+<td>$unset</td>
+<td>db.student.updateOne({&quot;id&quot;: 11}, {$unset: {&quot;name&quot;: &quot;&quot;}}); 删除掉id为11下的name项</td>
+</tr>
+<tr>
+<td>$push</td>
+<td>db.student.updateOne({&quot;id&quot;: 1}, {<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;}&#039; at position 24: …name&quot;: &quot;james&quot;}}̲);, 在id为1的项下的na…'>push: {&quot;name&quot;: &quot;james&quot;}});, 在id为1的项下的name数组中, 增加一项, 需要区分重复值, 可以使用</span>addToSet</td>
+</tr>
+<tr>
+<td>$pull</td>
+<td>db.student.updateOne({&quot;id&quot;: 2}, {<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;}&#039; at position 33: …om&quot;, &quot;year&quot;:45}}̲); 删除掉对应的项, 不支持…'>pull: {&quot;name&quot;: &quot;tom&quot;, &quot;year&quot;:45}}); 删除掉对应的项, 不支持直接使用数组[45, 23]这种模式, 需要加上</span>in: [45, 23]</td>
+</tr>
+<tr>
+<td>$pop</td>
+<td>db.student.updateOne({&quot;id&quot;: 3}, {$pop: {&quot;name&quot;: 1, &quot;year&quot;:-1}});, 删除掉对应数组的第一项(-1)或者最后一项(1)</td>
+</tr>
+<tr>
+<td>$max</td>
+<td>db.student.updateOne({&quot;id&quot;: 6}, {$max: {&quot;id&quot;: 11}}); 假如11大于对应的项, 则设置该值为11</td>
+</tr>
+<tr>
+<td>$min</td>
+<td>db.student.updateOne({&quot;id&quot;: 6}, {$min: {&quot;id&quot;: 0}});假如0小于对应的项, 则设置该值为0</td>
+</tr>
+<tr>
+<td>$nin</td>
+<td>{id: {$nin: [3, 4]}}, id不在[3, 4]这两项的项</td>
+</tr>
+<tr>
+<td>$not</td>
+<td>{id: {<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: not: {'>not: {</span>lt: 4}}}, 返回id大于等于4的项</td>
+</tr>
+<tr>
+<td>$nor</td>
+<td>{<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …ale&#039;}, {&quot;id&quot;: {'>nor: [{&#039;gender&#039;: &#039;male&#039;}, {&quot;id&quot;: {</span>lt: 2}}]}, 返回gender不是male and 大于或等于2的项</td>
+</tr>
+<tr>
+<td>$exists</td>
+<td>{city: {$exists: true}}, 返回存在的字段的项</td>
+</tr>
+<tr>
+<td>$size</td>
+<td>{'name': {$size: 2}}, 返回name项下, 数组大小为2的项</td>
+</tr>
+<tr>
+<td>$eleMatch</td>
+<td>{&quot;year&quot;: {<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: elemMatch: {'>elemMatch: {</span>gt: 20, $lt: 80}}}, 返回数组满足要求的数据</td>
+</tr>
+<tr>
+<td>$where</td>
+<td>支持传入函数(function)的方式来执行复杂的检索. {$where: &quot;this.id &gt; 3&quot;}, 筛选id编号大于3的项目; 注意执行的<strong>效率</strong>问题</td>
+</tr>
+<tr>
+<td>$mod</td>
+<td>{'id': {$mod: [3, 1]}}, 取模操作, 取 id mode 3 === 1的项</td>
+</tr>
+<tr>
+<td>$text</td>
+<td>db.textIndexTest.find({<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: text:{'>text:{</span>search:&quot;李&quot;}}) , 注意索引不支持中文</td>
+</tr>
+<tr>
+<td>$regex</td>
+<td>{gender: {$regex: /.+male/}}, 正则表达式</td>
+</tr>
+<tr>
+<td>$slice</td>
+<td>对返回的数组内容进行切片, db.student.find({&quot;id&quot;:2}, {'name': {$slice: 1}});只返回name下的第一个元素</td>
+</tr>
+<tr>
+<td>$rename</td>
+<td>db.student.updateOne({&quot;id&quot;: 11}, {$rename: {'grades': 'scores'}}); 对字段进行重命名</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash"># 查找多个项目
+db.group.find({'url_id': {$in: ['102117210', '280826584']}})
+# where
+# 执行复杂的语句判断, 速度可能会受到影响
+# 先判断name是否存在, 存在, 则返回name数组长度大于1的项
+# 但是需要注意的是, 由于js中, 存在length属性的项并不止于数组, 字符串同样也有length, 
+# 所以这种判断会同时返回满足要求的数据, 需要判断是否为数组isArray()
+db.student.find({'name': {'$exists':true}, '$where':'this.name.length&gt;=1'});
+</code></pre>
+<h3 id="55-聚合">5.5 聚合</h3>
+<blockquote>
+<p><code>db.collection.aggregate(pipeline, options)</code><a href="https://www.mongodb.com/docs/manual/reference/method/db.collection.aggregate/#mongodb-method-db.collection.aggregate"><img src="https://www.mongodb.com/docs/manual/assets/link.svg" alt="img" loading="lazy"></a></p>
+</blockquote>
+<p><code>pipeline</code>, 顾名思义, 管道, 数据通过在管道中逐级传递, 层层对数据进行处理, 用于返回需要经过复杂处理的数据.</p>
+<p><em>注: <code>pipeline</code>的概念使用非常广泛, 如powerhell.</em></p>
+<pre><code class="language-bash"># 跳过前面2个文档
+db.sales.aggregate({ $skip: 2 });
+# 等价于
+db.sales.find().skip(2);
+
+# 相类似的
+db.sales.find().limit(2);
+# 等价于
+db.sales.aggregate({ $limit: 2});
+</code></pre>
+<h4 id="551-条件表达运算符">5.5.1 条件表达运算符</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">名称</th>
+<th style="text-align:left">描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://docs.mongoing.com/can-kao/yun-suan-fu/aggregation-pipeline-operators/cond-aggregation">$cond</a></td>
+<td style="text-align:left">对一个表达式求值的三元运算符，并根据结果返回另外两个表达式之一的值。接受有序列表中的三个表达式或三个命名参数。</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://github.com/mongodb-china/MongoDB-CN-Manual/tree/8490376c81d56eff95abbaddc6ee414b1e1c9705/docs/Reference/Operators/Aggregation-Pipeline-Operators/ifNull-aggregation.md">$ifNull</a></td>
+<td style="text-align:left">返回第一个表达式的非空结果，如果第一个表达式的结果为空，则返回第二个表达式的结果。Null结果包含未定义值或缺少字段的实例。接受两个表达式作为参数。第二个表达式的结果可以为null.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://github.com/mongodb-china/MongoDB-CN-Manual/tree/8490376c81d56eff95abbaddc6ee414b1e1c9705/docs/Reference/Operators/Aggregation-Pipeline-Operators/switch-aggregation.md">$switch</a></td>
+<td style="text-align:left">计算一系列用例表达。当它找到一个计算结果为<code>true</code>的表达式时，<code>$switch</code>执行一个指定的表达式并跳出控制流。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="552-阶段操作符">5.5.2 阶段操作符</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Stage</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/addFields/#mongodb-pipeline-pipe.-addFields"><code>$addFields</code></a></td>
+<td style="text-align:left">Adds new fields to documents. Similar to <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/project/#mongodb-pipeline-pipe.-project"><code>$project</code></a>, <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/addFields/#mongodb-pipeline-pipe.-addFields"><code>$addFields</code></a> reshapes each document in the stream; specifically, by adding new fields to output documents that contain both the existing fields from the input documents and the newly added fields.<a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/set/#mongodb-pipeline-pipe.-set"><code>$set</code></a> is an alias for <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/addFields/#mongodb-pipeline-pipe.-addFields"><code>$addFields</code>.</a></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/bucket/#mongodb-pipeline-pipe.-bucket"><code>$bucket</code></a></td>
+<td style="text-align:left">Categorizes incoming documents into groups, called buckets, based on a specified expression and bucket boundaries.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/bucketAuto/#mongodb-pipeline-pipe.-bucketAuto"><code>$bucketAuto</code></a></td>
+<td style="text-align:left">Categorizes incoming documents into a specific number of groups, called buckets, based on a specified expression. Bucket boundaries are automatically determined in an attempt to evenly distribute the documents into the specified number of buckets.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/changeStream/#mongodb-pipeline-pipe.-changeStream"><code>$changeStream</code></a></td>
+<td style="text-align:left">Returns a <a href="https://www.mongodb.com/docs/v6.0/changeStreams/#std-label-changeStreams">Change Stream</a> cursor for the collection. This stage can only occur once in an aggregation pipeline and it must occur as the first stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/collStats/#mongodb-pipeline-pipe.-collStats"><code>$collStats</code></a></td>
+<td style="text-align:left">Returns statistics regarding a collection or view.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/count/#mongodb-pipeline-pipe.-count"><code>$count</code></a></td>
+<td style="text-align:left">Returns a count of the number of documents at this stage of the aggregation pipeline.Distinct from the <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/count-accumulator/#mongodb-group-grp.-count"><code>$count</code></a> aggregation accumulator.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/densify/#mongodb-pipeline-pipe.-densify"><code>$densify</code></a></td>
+<td style="text-align:left">Creates new documents in a sequence of documents where certain values in a field are missing.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/documents/#mongodb-pipeline-pipe.-documents"><code>$documents</code></a></td>
+<td style="text-align:left">Returns literal documents from input expressions.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/facet/#mongodb-pipeline-pipe.-facet"><code>$facet</code></a></td>
+<td style="text-align:left">Processes multiple <a href="https://www.mongodb.com/docs/v6.0/core/aggregation-pipeline/#std-label-aggregation-pipeline">aggregation pipelines</a> within a single stage on the same set of input documents. Enables the creation of multi-faceted aggregations capable of characterizing data across multiple dimensions, or facets, in a single stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/fill/#mongodb-pipeline-pipe.-fill"><code>$fill</code></a></td>
+<td style="text-align:left">Populates <code>null</code> and missing field values within documents.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/geoNear/#mongodb-pipeline-pipe.-geoNear"><code>$geoNear</code></a></td>
+<td style="text-align:left">Returns an ordered stream of documents based on the proximity to a geospatial point. Incorporates the functionality of <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/match/#mongodb-pipeline-pipe.-match"><code>$match</code></a>, <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/sort/#mongodb-pipeline-pipe.-sort"><code>$sort</code></a>, and <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/limit/#mongodb-pipeline-pipe.-limit"><code>$limit</code></a> for geospatial data. The output documents include an additional distance field and can include a location identifier field.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/graphLookup/#mongodb-pipeline-pipe.-graphLookup"><code>$graphLookup</code></a></td>
+<td style="text-align:left">Performs a recursive search on a collection. To each output document, adds a new array field that contains the traversal results of the recursive search for that document.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group"><code>$group</code></a></td>
+<td style="text-align:left">Groups input documents by a specified identifier expression and applies the accumulator expression(s), if specified, to each group. Consumes all input documents and outputs one document per each distinct group. The output documents only contain the identifier field and, if specified, accumulated fields.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/indexStats/#mongodb-pipeline-pipe.-indexStats"><code>$indexStats</code></a></td>
+<td style="text-align:left">Returns statistics regarding the use of each index for the collection.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/limit/#mongodb-pipeline-pipe.-limit"><code>$limit</code></a></td>
+<td style="text-align:left">Passes the first <em>n</em> documents unmodified to the pipeline where <em>n</em> is the specified limit. For each input document, outputs either one document (for the first <em>n</em> documents) or zero documents (after the first <em>n</em> documents).</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/listSessions/#mongodb-pipeline-pipe.-listSessions"><code>$listSessions</code></a></td>
+<td style="text-align:left">Lists all sessions that have been active long enough to propagate to the <code>system.sessions</code> collection.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/lookup/#mongodb-pipeline-pipe.-lookup"><code>$lookup</code></a></td>
+<td style="text-align:left">Performs a left outer join to another collection in the <em>same</em> database to filter in documents from the &quot;joined&quot; collection for processing.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/match/#mongodb-pipeline-pipe.-match"><code>$match</code></a></td>
+<td style="text-align:left">Filters the document stream to allow only matching documents to pass unmodified into the next pipeline stage. <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/match/#mongodb-pipeline-pipe.-match"><code>$match</code></a> uses standard MongoDB queries. For each input document, outputs either one document (a match) or zero documents (no match).</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/merge/#mongodb-pipeline-pipe.-merge"><code>$merge</code></a></td>
+<td style="text-align:left">Writes the resulting documents of the aggregation pipeline to a collection. The stage can incorporate (insert new documents, merge documents, replace documents, keep existing documents, fail the operation, process documents with a custom update pipeline) the results into an output collection. To use the <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/merge/#mongodb-pipeline-pipe.-merge"><code>$merge</code></a> stage, it must be the last stage in the pipeline.<em>New in version 4.2</em>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/out/#mongodb-pipeline-pipe.-out"><code>$out</code></a></td>
+<td style="text-align:left">Writes the resulting documents of the aggregation pipeline to a collection. To use the <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/out/#mongodb-pipeline-pipe.-out"><code>$out</code></a> stage, it must be the last stage in the pipeline.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/planCacheStats/#mongodb-pipeline-pipe.-planCacheStats"><code>$planCacheStats</code></a></td>
+<td style="text-align:left">Returns <a href="https://www.mongodb.com/docs/v6.0/core/query-plans/">plan cache</a> information for a collection.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/project/#mongodb-pipeline-pipe.-project"><code>$project</code></a></td>
+<td style="text-align:left">Reshapes each document in the stream, such as by adding new fields or removing existing fields. For each input document, outputs one document.See also <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/unset/#mongodb-pipeline-pipe.-unset"><code>$unset</code></a> for removing existing fields.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/redact/#mongodb-pipeline-pipe.-redact"><code>$redact</code></a></td>
+<td style="text-align:left">Reshapes each document in the stream by restricting the content for each document based on information stored in the documents themselves. Incorporates the functionality of <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/project/#mongodb-pipeline-pipe.-project"><code>$project</code></a> and <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/match/#mongodb-pipeline-pipe.-match"><code>$match</code></a>. Can be used to implement field level redaction. For each input document, outputs either one or zero documents.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/replaceRoot/#mongodb-pipeline-pipe.-replaceRoot"><code>$replaceRoot</code></a></td>
+<td style="text-align:left">Replaces a document with the specified embedded document. The operation replaces all existing fields in the input document, including the <code>_id</code> field. Specify a document embedded in the input document to promote the embedded document to the top level.<a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/replaceWith/#mongodb-pipeline-pipe.-replaceWith"><code>$replaceWith</code></a> is an alias for <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/replaceRoot/#mongodb-pipeline-pipe.-replaceRoot"><code>$replaceRoot</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/replaceWith/#mongodb-pipeline-pipe.-replaceWith"><code>$replaceWith</code></a></td>
+<td style="text-align:left">Replaces a document with the specified embedded document. The operation replaces all existing fields in the input document, including the <code>_id</code> field. Specify a document embedded in the input document to promote the embedded document to the top level.<a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/replaceWith/#mongodb-pipeline-pipe.-replaceWith"><code>$replaceWith</code></a> is an alias for <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/replaceRoot/#mongodb-pipeline-pipe.-replaceRoot"><code>$replaceRoot</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/sample/#mongodb-pipeline-pipe.-sample"><code>$sample</code></a></td>
+<td style="text-align:left">Randomly selects the specified number of documents from its input.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#mongodb-pipeline-pipe.-search"><code>$search</code></a></td>
+<td style="text-align:left">Performs a full-text search of the field or fields in an <a href="https://www.mongodb.com/docs/atlas/reference/atlas-search/query-syntax/">Atlas</a> collection.NOTE<code>$search</code> is only available for MongoDB Atlas clusters, and is not available for self-managed deployments. To learn more, see <a href="https://www.mongodb.com/docs/atlas/reference/atlas-search/query-syntax/">Atlas Search Aggregation Pipeline Stages.</a></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/atlas/atlas-search/query-syntax/#mongodb-pipeline-pipe.-searchMeta"><code>$searchMeta</code></a></td>
+<td style="text-align:left">Returns different types of metadata result documents for the <a href="https://www.mongodb.com/docs/atlas/atlas-search/">Atlas Search</a> query against an <a href="https://www.mongodb.com/docs/atlas/reference/atlas-search/query-syntax/">Atlas</a> collection.NOTE<code>$searchMeta</code> is only available for MongoDB Atlas clusters running MongoDB v4.4.9 or higher, and is not available for self-managed deployments. To learn more, see <a href="https://www.mongodb.com/docs/atlas/reference/atlas-search/query-syntax/">Atlas Search Aggregation Pipeline Stages.</a></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/set/#mongodb-pipeline-pipe.-set"><code>$set</code></a></td>
+<td style="text-align:left">Adds new fields to documents. Similar to <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/project/#mongodb-pipeline-pipe.-project"><code>$project</code></a>, <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/set/#mongodb-pipeline-pipe.-set"><code>$set</code></a> reshapes each document in the stream; specifically, by adding new fields to output documents that contain both the existing fields from the input documents and the newly added fields.<a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/set/#mongodb-pipeline-pipe.-set"><code>$set</code></a> is an alias for <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/addFields/#mongodb-pipeline-pipe.-addFields"><code>$addFields</code></a> stage.(<em>注意这里, 二者等价</em>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a></td>
+<td style="text-align:left">Groups documents into windows and applies one or more operators to the documents in each window.<em>New in version 5.0</em>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/skip/#mongodb-pipeline-pipe.-skip"><code>$skip</code></a></td>
+<td style="text-align:left">Skips the first <em>n</em> documents where <em>n</em> is the specified skip number and passes the remaining documents unmodified to the pipeline. For each input document, outputs either zero documents (for the first <em>n</em> documents) or one document (if after the first <em>n</em> documents).</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/sort/#mongodb-pipeline-pipe.-sort"><code>$sort</code></a></td>
+<td style="text-align:left">Reorders the document stream by a specified sort key. Only the order changes; the documents remain unmodified. For each input document, outputs one document.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/sortByCount/#mongodb-pipeline-pipe.-sortByCount"><code>$sortByCount</code></a></td>
+<td style="text-align:left">Groups incoming documents based on the value of a specified expression, then computes the count of documents in each distinct group.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/unionWith/#mongodb-pipeline-pipe.-unionWith"><code>$unionWith</code></a></td>
+<td style="text-align:left">Performs a union of two collections; i.e. combines pipeline results from two collections into a single result set.<em>New in version 4.4</em>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/unset/#mongodb-pipeline-pipe.-unset"><code>$unset</code></a></td>
+<td style="text-align:left">Removes/excludes fields from documents.<a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/unset/#mongodb-pipeline-pipe.-unset"><code>$unset</code></a> is an alias for <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/project/#mongodb-pipeline-pipe.-project"><code>$project</code></a> stage that removes fields.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/unwind/#mongodb-pipeline-pipe.-unwind"><code>$unwind</code></a></td>
+<td style="text-align:left">Deconstructs an array field from the input documents to output a document for <em>each</em> element. Each output document replaces the array with an element value. For each input document, outputs <em>n</em> documents where <em>n</em> is the number of array elements and can be zero for an empty array.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="553-project">5.5.3 $project</h4>
+<blockquote>
+<p>Passes along the documents with the requested fields to the next stage in the pipeline. The specified fields can be existing fields from the input documents or newly computed fields.</p>
+<p>管道操作符, 用于传递字段的数据到下一环节</p>
+</blockquote>
+<pre><code class="language-bash"># 对返回结果的字段名称进行修改
+db.students.aggregate([{ &quot;$project&quot;: { &quot;学生名称&quot;: &quot;$name&quot;, &quot;age&quot;: 1 }}]);
+# $name, 在数据库中的字段的名称, name =&gt; 学生名称
+[
+  {
+    _id: ObjectId(&quot;63a9585765f3c97e328cc915&quot;),
+    age: 20,
+    '学生名称': 'Jordan'
+  },
+  {
+    _id: ObjectId(&quot;63aaae7b995a3a30dffe2a7d&quot;),
+    age: 21,
+    '学生名称': 'Jordap'
+  }
+]
+# 控制返回的结果内容
+db.students.aggregate([{ &quot;$project&quot;: {  &quot;age&quot;: 1 }}]);
+# 将默认的_id字段也清除掉
+db.students.aggregate([{ &quot;$project&quot;: {  &quot;age&quot;: 1, '_id': 0 }}]);
+# 等价于
+db.students.find({}, { &quot;age&quot;: 1, '_id': 0 });
+
+# ------------------------------------------------------------------------------- #
+
+
+test_db&gt; db.sales.insertMany([
+... { &quot;id&quot; : 1, &quot;item&quot; : &quot;abc&quot;, &quot;price&quot; : 10, &quot;quantity&quot; : 2, &quot;date&quot; : ISODate(&quot;2014-03-01T08:00:00Z&quot;) },
+... { &quot;id&quot; : 2, &quot;item&quot; : &quot;jkl&quot;, &quot;price&quot; : 20, &quot;quantity&quot; : 1, &quot;date&quot; : ISODate(&quot;2014-03-01T09:00:00Z&quot;) },
+... { &quot;id&quot; : 3, &quot;item&quot; : &quot;xyz&quot;, &quot;price&quot; : 5, &quot;quantity&quot; : 10, &quot;date&quot; : ISODate(&quot;2014-03-15T09:00:00Z&quot;) },
+... { &quot;id&quot; : 4, &quot;item&quot; : &quot;xyz&quot;, &quot;price&quot; : 5, &quot;quantity&quot; : 20, &quot;date&quot; : ISODate(&quot;2014-04-04T11:21:39.736Z&quot;) },
+... { &quot;id&quot; : 5, &quot;item&quot; : &quot;abc&quot;, &quot;price&quot; : 10, &quot;quantity&quot; : 10, &quot;date&quot; : ISODate(&quot;2014-04-04T21:23:13.331Z&quot;) }
+... ]);
+
+# $multiply, 乘积
+db.sales.aggregate([{ $project : { &quot;id&quot;: 0, &quot;item&quot; : 1 , &quot;price&quot; : 1, &quot;quantity&quot;: {&quot;qty&quot; : { &quot;$multiply&quot; :
+[&quot;$quantity&quot;, 2] }} } }]);
+# 注意这里出现的错误
+# Invalid $project :: caused by :: Cannot do inclusion on field item in exclusion projection
+# 没有开启_id:false，默认会生成ObjectId格式的_id，把0赋值给它会出错
+
+# 没问题
+db.sales.aggregate([{ $project : { &quot;id&quot;: 1, &quot;item&quot; : 1 , &quot;price&quot; : 1, &quot;quantity&quot;: {&quot;qty&quot; : { &quot;$multiply&quot; :
+[&quot;$quantity&quot;, 2] }} } }]);
+# 没问题
+# qyt只是嵌套了别名
+db.sales.aggregate([{ $project : { &quot;_id&quot;: 0, &quot;item&quot; : 1 , &quot;price&quot; : 1, &quot;quantity&quot;: {&quot;qty&quot; : { &quot;$multiply&quot; : [&quot;$quantity&quot;, 2] }} } }]);
+
+[
+  { item: 'abc', price: 10, quantity: { qty: 4 } },
+  { item: 'jkl', price: 20, quantity: { qty: 2 } },
+  { item: 'xyz', price: 5, quantity: { qty: 20 } },
+  { item: 'xyz', price: 5, quantity: { qty: 40 } },
+  { item: 'abc', price: 10, quantity: { qty: 20 } }
+]
+
+db.sales.aggregate([{ $project : { &quot;_id&quot;: 0, &quot;item&quot; : 1 , &quot;price&quot; : 1, &quot;quantity&quot;: {&quot;$multiply&quot; : [&quot;$quantity&quot;, 2] } } }]);
+[
+  { item: 'abc', price: 10, quantity: 4 },
+  { item: 'jkl', price: 20, quantity: 2 },
+  { item: 'xyz', price: 5, quantity: 20 },
+  { item: 'xyz', price: 5, quantity: 40 },
+  { item: 'abc', price: 10, quantity: 20 }
+]
+# total, 对返回字段重命名
+db.sales.aggregate([{ $project : { &quot;_id&quot;: 0, &quot;item&quot; : 1 , &quot;price&quot; : 1, &quot;total&quot;: {&quot;$multiply&quot; : [&quot;$quantity&quot;, 2] } } }]);
+
+# 对 [&quot;$quantity&quot;, &quot;$price&quot;] 两个字段进行运算
+db.sales.aggregate([{ $project : { &quot;_id&quot;: 0, &quot;item&quot; : 1 , &quot;price&quot; : 1, &quot;total&quot;: {&quot;$multiply&quot; : [&quot;$quantity&quot;, &quot;$price&quot;] } } }]);
+</code></pre>
+<h4 id="554-其他操作示例">5.5.4 其他操作示例</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">表达式</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">实例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">$sum</td>
+<td style="text-align:left">计算总和。</td>
+<td style="text-align:left">db.mycol.aggregate([{<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …roup : {_id : &quot;'>group : {_id : &quot;</span>by_user&quot;, num_tutorial : {<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>u</mi><mi>m</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">sum : &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">u</span><span class="mord mathdefault">m</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>likes&quot;}}}])</td>
+</tr>
+<tr>
+<td style="text-align:left">$avg</td>
+<td style="text-align:left">计算平均值</td>
+<td style="text-align:left">db.mycol.aggregate([{<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …roup : {_id : &quot;'>group : {_id : &quot;</span>by_user&quot;, num_tutorial : {<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>v</mi><mi>g</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">avg : &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>likes&quot;}}}])</td>
+</tr>
+<tr>
+<td style="text-align:left">$min</td>
+<td style="text-align:left">获取集合中所有文档对应值得最小值。aggre</td>
+<td style="text-align:left">db.mycol.aggregate([{<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …roup : {_id : &quot;'>group : {_id : &quot;</span>by_user&quot;, num_tutorial : {<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>i</mi><mi>n</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">min : &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>likes&quot;}}}])</td>
+</tr>
+<tr>
+<td style="text-align:left">$max</td>
+<td style="text-align:left">获取集合中所有文档对应值得最大值。</td>
+<td style="text-align:left">db.mycol.aggregate([{<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …roup : {_id : &quot;'>group : {_id : &quot;</span>by_user&quot;, num_tutorial : {<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">max : &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>likes&quot;}}}])</td>
+</tr>
+<tr>
+<td style="text-align:left">$push</td>
+<td style="text-align:left">将值加入一个数组中，不会判断是否有重复的值。</td>
+<td style="text-align:left">db.mycol.aggregate([{<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …roup : {_id : &quot;'>group : {_id : &quot;</span>by_user&quot;, url : {<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mi>u</mi><mi>s</mi><mi>h</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">push: &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mord mathdefault">u</span><span class="mord mathdefault">s</span><span class="mord mathdefault">h</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>url&quot;}}}])</td>
+</tr>
+<tr>
+<td style="text-align:left">$addToSet</td>
+<td style="text-align:left">将值加入一个数组中，会判断是否有重复的值，若相同的值在数组中已经存在了，则不加入。</td>
+<td style="text-align:left">db.mycol.aggregate([{<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …roup : {_id : &quot;'>group : {_id : &quot;</span>by_user&quot;, url : {<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>d</mi><mi>d</mi><mi>T</mi><mi>o</mi><mi>S</mi><mi>e</mi><mi>t</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">addToSet : &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault">d</span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>url&quot;}}}])</td>
+</tr>
+<tr>
+<td style="text-align:left">$first</td>
+<td style="text-align:left">根据资源文档的排序获取第一个文档数据。</td>
+<td style="text-align:left">db.mycol.aggregate([{<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …roup : {_id : &quot;'>group : {_id : &quot;</span>by_user&quot;, first_url : {<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mi>i</mi><mi>r</mi><mi>s</mi><mi>t</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">first : &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>url&quot;}}}])</td>
+</tr>
+<tr>
+<td style="text-align:left">$last</td>
+<td style="text-align:left">根据资源文档的排序获取最后一个文档数据</td>
+<td style="text-align:left">db.mycol.aggregate([{<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …roup : {_id : &quot;'>group : {_id : &quot;</span>by_user&quot;, last_url : {<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>a</mi><mi>s</mi><mi>t</mi><mo>:</mo><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">last : &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">a</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span></span></span></span>url&quot;}}}])</td>
+</tr>
+<tr>
+<td style="text-align:left">$project</td>
+<td style="text-align:left">管道操作符</td>
+<td style="text-align:left">db.students.aggregate([{ &quot;<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;}&#039;, got &#039;EOF&#039; at end of input: …t&quot;: { &quot;学生名称&quot;: &quot;'>project&quot;: { &quot;学生名称&quot;: &quot;</span>name&quot;, &quot;age&quot;: 1 }}]);</td>
+</tr>
+<tr>
+<td style="text-align:left">$lookup</td>
+<td style="text-align:left">关联查询(多张表)</td>
+<td style="text-align:left">db.customer.aggregate([  {$lookup: {  	from: &quot;order&quot;,  	localField: &quot;customerCode&quot;,  	foreignField: &quot;customerCode&quot;,  	as: &quot;customerOrder&quot;  	} }  ]).pretty()</td>
+</tr>
+<tr>
+<td style="text-align:left">$unwind</td>
+<td style="text-align:left">拆开数组到每一条数据上</td>
+<td style="text-align:left">db.group.aggregate([{<span class='katex-error' title='ParseError: KaTeX parse error: Expected &#039;EOF&#039;, got &#039;}&#039; at position 31: …&#039;: &#039;280793330&#039;}}̲, {&quot;'>match: {&#039;url_id&#039;: &#039;280793330&#039;}}, {&quot;</span>unwind&quot;: &quot;$comments&quot;}]);</td>
+</tr>
+<tr>
+<td style="text-align:left">$addFields</td>
+<td style="text-align:left">添加字段</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash"># 返回数组最长的两项
+# Adds new fields to documents. 
+# $addFields outputs documents that contain all existing fields from the input documents and newly added fields.
+db.group.aggregate([
+  { $addFields: { comments: { &quot;$size&quot;: { &quot;$ifNull&quot;: [ &quot;$comments&quot;, [] ] } } } },
+  { $sort: { comments: -1 } },
+  { $limit: 2}
+]);
+# 等价于, 这两个添加字段的操作符是等价的
+db.group.aggregate([
+  { $set: { comments: { &quot;$size&quot;: { &quot;$ifNull&quot;: [ &quot;$comments&quot;, [] ] } } } },
+  { $sort: { comments: -1 } },
+  { $limit: 2}
+]);
+# 验证结果的准确
+db.group.aggregate([ { &quot;$project&quot; : { &quot;count&quot;: { &quot;$size&quot;: { &quot;$ifNull&quot;: [ &quot;$comments&quot;, [] ] } } } } ]).sort({'count': -1});
+# 等价于
+db.group.aggregate([
+  { &quot;$project&quot; : { &quot;count&quot;: { &quot;$size&quot;: { &quot;$ifNull&quot;: [ &quot;$comments&quot;, [] ] } } } },
+  { $sort: { &quot;count&quot;: -1 } },
+  { $limit: 2}
+]);
+</code></pre>
+<pre><code class="language-bash">db.test_a.insertMany([
+{ &quot;_id&quot; : ObjectId(&quot;512bc95fe835e68f199c8686&quot;), &quot;author&quot; : &quot;dave&quot;, &quot;score&quot; : 80, &quot;views&quot; : 100 },
+{ &quot;_id&quot; : ObjectId(&quot;512bc962e835e68f199c8687&quot;), &quot;author&quot; : &quot;dave&quot;, &quot;score&quot; : 85, &quot;views&quot; : 521 },
+{ &quot;_id&quot; : ObjectId(&quot;55f5a192d4bede9ac365b257&quot;), &quot;author&quot; : &quot;ahn&quot;, &quot;score&quot; : 60, &quot;views&quot; : 1000 },
+{ &quot;_id&quot; : ObjectId(&quot;55f5a192d4bede9ac365b258&quot;), &quot;author&quot; : &quot;li&quot;, &quot;score&quot; : 55, &quot;views&quot; : 5000 },
+{ &quot;_id&quot; : ObjectId(&quot;55f5a1d3d4bede9ac365b259&quot;), &quot;author&quot; : &quot;annT&quot;, &quot;score&quot; : 60, &quot;views&quot; : 50 },
+{ &quot;_id&quot; : ObjectId(&quot;55f5a1d3d4bede9ac365b25a&quot;), &quot;author&quot; : &quot;li&quot;, &quot;score&quot; : 94, &quot;views&quot; : 999 },
+{ &quot;_id&quot; : ObjectId(&quot;55f5a1d3d4bede9ac365b25b&quot;), &quot;author&quot; : &quot;ty&quot;, &quot;score&quot; : 95, &quot;views&quot; : 1000 }  
+]);
+# 先匹配score在70-90之间的, 亦或者views大于等于1000的
+# group分组
+db.test_a.aggregate( [
+  { $match: { $or: [ { score: { $gt: 70, $lt: 90 } }, { views: { $gte: 1000 } } ] } },
+  { $group: { _id: null, count: { $sum: 1 } } }
+] );
+</code></pre>
+<p>group搭配的操作符</p>
+<blockquote>
+<p>The <code>&lt;accumulator&gt;</code> operator must be one of the following accumulator operators:</p>
+</blockquote>
+<blockquote>
+<p>group和distinct一个限制不能返回超过16M的数据</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/accumulator/#mongodb-group-grp.-accumulator"><code>$accumulator</code></a></td>
+<td style="text-align:left">Returns the result of a user-defined accumulator function.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/addToSet/#mongodb-group-grp.-addToSet"><code>$addToSet</code></a></td>
+<td style="text-align:left">Returns an array of <em>unique</em> expression values for each group. Order of the array elements is undefined.<em>Changed in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/avg/#mongodb-group-grp.-avg"><code>$avg</code></a></td>
+<td style="text-align:left">Returns an average of numerical values. Ignores non-numeric values.<em>Changed in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/bottom/#mongodb-group-grp.-bottom"><code>$bottom</code></a></td>
+<td style="text-align:left">Returns the bottom element within a group according to the specified sort order.<em>New in version 5.2</em>.Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group"><code>$group</code></a> and <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stages.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/bottomN/#mongodb-group-grp.-bottomN"><code>$bottomN</code></a></td>
+<td style="text-align:left">Returns an aggregation of the bottom <code>n</code> fields within a group, according to the specified sort order.<em>New in version 5.2</em>.Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group"><code>$group</code></a> and <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stages.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/count-accumulator/#mongodb-group-grp.-count"><code>$count</code></a></td>
+<td style="text-align:left">Returns the number of documents in a group.Distinct from the <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/count/#mongodb-pipeline-pipe.-count"><code>$count</code></a> pipeline stage.<em>New in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group"><code>$group</code></a> and <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stages.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/first/#mongodb-group-grp.-first"><code>$first</code></a></td>
+<td style="text-align:left">Returns a value from the first document for each group. Order is only defined if the documents are sorted.Distinct from the <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/first-array-element/#mongodb-expression-exp.-first"><code>$first</code></a> array operator.<em>Changed in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/firstN/#mongodb-group-grp.-firstN"><code>$firstN</code></a></td>
+<td style="text-align:left">Returns an aggregation of the first <code>n</code> elements within a group. Only meaningful when documents are in a defined order. Distinct from the <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/firstN-array-element/#mongodb-expression-exp.-firstN"><code>$firstN</code></a> array operator.<em>New in version 5.2</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group"><code>$group</code></a>, <a href="https://www.mongodb.com/docs/v6.0/meta/aggregation-quick-reference/#std-label-aggregation-expressions">expression</a> and <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stages.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/last/#mongodb-group-grp.-last"><code>$last</code></a></td>
+<td style="text-align:left">Returns a value from the last document for each group. Order is only defined if the documents are sorted.Distinct from the <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/last-array-element/#mongodb-expression-exp.-last"><code>$last</code></a> array operator.<em>Changed in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/lastN/#mongodb-group-grp.-lastN"><code>$lastN</code></a></td>
+<td style="text-align:left">Returns an aggregation of the last <code>n</code> elements within a group. Only meaningful when documents are in a defined order. Distinct from the <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/lastN-array-element/#mongodb-expression-exp.-lastN"><code>$lastN</code></a> array operator.<em>New in version 5.2</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group"><code>$group</code></a>, <a href="https://www.mongodb.com/docs/v6.0/meta/aggregation-quick-reference/#std-label-aggregation-expressions">expression</a> and <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stages.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/max/#mongodb-group-grp.-max"><code>$max</code></a></td>
+<td style="text-align:left">Returns the highest expression value for each group.<em>Changed in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/maxN/#mongodb-group-grp.-maxN"><code>$maxN</code></a></td>
+<td style="text-align:left">Returns an aggregation of the <code>n</code> maximum valued elements in a group. Distinct from the <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/maxN-array-element/#mongodb-expression-exp.-maxN"><code>$maxN</code></a> array operator.<em>New in version 5.2</em>.Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group"><code>$group</code></a>, <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> and as an <a href="https://www.mongodb.com/docs/v6.0/meta/aggregation-quick-reference/#std-label-aggregation-expressions">expression.</a></td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/mergeObjects/#mongodb-expression-exp.-mergeObjects"><code>$mergeObjects</code></a></td>
+<td style="text-align:left">Returns a document created by combining the input documents for each group.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/min/#mongodb-group-grp.-min"><code>$min</code></a></td>
+<td style="text-align:left">Returns the lowest expression value for each group.<em>Changed in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/push/#mongodb-group-grp.-push"><code>$push</code></a></td>
+<td style="text-align:left">Returns an array of expression values for documents in each group.<em>Changed in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/stdDevPop/#mongodb-group-grp.-stdDevPop"><code>$stdDevPop</code></a></td>
+<td style="text-align:left">Returns the population standard deviation of the input values.<em>Changed in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/stdDevSamp/#mongodb-group-grp.-stdDevSamp"><code>$stdDevSamp</code></a></td>
+<td style="text-align:left">Returns the sample standard deviation of the input values.<em>Changed in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/sum/#mongodb-group-grp.-sum"><code>$sum</code></a></td>
+<td style="text-align:left">Returns a sum of numerical values. Ignores non-numeric values.<em>Changed in version 5.0</em>: Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stage.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/top/#mongodb-group-grp.-top"><code>$top</code></a></td>
+<td style="text-align:left">Returns the top element within a group according to the specified sort order.<em>New in version 5.2</em>.Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group"><code>$group</code></a> and <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stages.</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/topN/#mongodb-group-grp.-topN"><code>$topN</code></a></td>
+<td style="text-align:left">Returns an aggregation of the top <code>n</code> fields within a group, according to the specified sort order.<em>New in version 5.2</em>.Available in <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group"><code>$group</code></a> and <a href="https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/setWindowFields/#mongodb-pipeline-pipe.-setWindowFields"><code>$setWindowFields</code></a> stages.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash"># 统计某个id出现的次数
+db.group.aggregate({
+	$group: {
+		_id: &quot;$author_id&quot;, 
+		count: {$sum: 1}
+	}
+});
+
+# 出现次数最多的项
+db.group.aggregate([
+	{$group: {_id: &quot;$author_id&quot;, count: {$sum: 1}}},
+	{$sort: {count: -1}},
+	{$limit: 2}
+]);
+
+# 统计嵌套内容中某个项出现的次数
+
+db.group.aggregate([
+   {$unwind : &quot;$comments&quot;},
+   {$group : { _id: &quot;$comments.author_id&quot;, count: {$sum : 1}}},
+   {$sort : {count: -1}},
+   {$limit: 1}
+]);
+
+# 取出嵌套内容中的某个项对应的全部内容
+db.group.aggregate([
+	{$unwind : &quot;$comments&quot;},
+	{$match: {'comments.author_id': '160661798'}},
+	{$project: {'comments.comment': 1, _id: 0, title: 1}}
+]);
+</code></pre>
+<h2 id="六-备份和恢复">六. 备份和恢复</h2>
+<blockquote>
+<p>mongorestore版本要和mongodump版本一致</p>
+</blockquote>
+<pre><code class="language-bash">mongodump --version
+mongorestore --version
+</code></pre>
+<p>不管是文件的备份还是恢复, 均支持压缩的形式.</p>
+<pre><code class="language-bash"># 备份数据, 数据以bson文件存储
+mongodump -h dbhost -d dbname -o dbdirectory  
+
+mongodump -h localhost -d test_db -o 'C:\Users\Lian\Desktop\test_dump'
+
+# 对文件进行压缩备份
+mongodump -h localhost -d test_db -o &quot;C:\Users\Lian\Desktop\test_dump&quot; --gzip
+
+# 恢复数据
+mongorestore -h localhost &quot;C:\Users\Lian\Desktop\test_dump&quot;
+</code></pre>
+<p><a href="https://www.mongodb.com/docs/database-tools/mongorestore/">参考连接</a></p>
+<h2 id="七-pymongo">七. pymongo</h2>
+<p><em>注意: <code>client = pymongo.MongoClient(&quot;mongodb://localhost:27017/&quot;)</code>, 假如<code>MongoDB service</code>没有启动, 这一步并没有触发<code>Exception</code>.</em></p>
+<pre><code class="language-python">import pymongo
+
+client = pymongo.MongoClient(&quot;mongodb://localhost:27017/&quot;)
+# 等价于
+client = pymongo.MongoClient(host=&quot;localhost&quot;,port=27017)
+# client类似于mysql, connection
+
+# 获取需要使用的database
+db = client['db_name']
+# client.database
+# 访问集合
+collection = db['collection_name']
+# db.colllection
+# 具体的操作
+# 类似于mysql, cursor
+
+cursor = collection.find(query_string)
+
+# 聚合操作
+'''
+cl.aggregate(
+
+    pipeline: Sequence[Mapping[str, Any]],
+    session: Optional[ForwardRef('ClientSession')] = None,
+    let: Optional[Mapping[str, Any]] = None,
+    comment: Optional[Any] = None,
+    **kwargs: Any,
+) -&gt; pymongo.command_cursor.CommandCursor[~_DocumentType]
+'''
+data = cl.aggregate([{ &quot;$skip&quot;: 2 }]);
+data
+# &lt;pymongo.command_cursor.CommandCursor at 0x1cd7e2d43d0&gt;
+
+pipe = [
+   {'$unwind' : &quot;$comments&quot;},
+   {'$group' : { '_id': &quot;$comments.author_id&quot;, 'count': {'$sum' : 1}}},
+   {'$sort' : {'count': -1}},
+   {'$limit': 1}
+]
+data = cl.aggregate(pipeline=pipe)
+
+cl.estimated_document_count()
+# 返回文档的数量
+
+# 注意排序的参数, 并不是{}
+# 顺序参数
+# 两个常量
+# pymongo.DESCENDING, -1
+# pymongo.ASCENDING, 1
+data = cl.find().sort('price', -1)
+
+# 关闭退出
+client.close()
+</code></pre>
+<ul>
+<li><a href="https://pymongo.readthedocs.io/en/stable/api/index.html">API Documentation — PyMongo 4.3.3 documentation</a></li>
+</ul>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/mongodb-shi-yong-shou-ce/" title="MongoDB使用手册">https://Kyouichirou.github.io/post/mongodb-shi-yong-shou-ce/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"># priority</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/1l_ee2Uol/"># nosql</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/2A1ALQpb07/"># mongodb</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/sOZV2rCDf/"># database</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="Python关于路径 &amp; 文本读取" href="https://Kyouichirou.github.io/post/python-guan-yu-lu-jing-and-wen-ben-du-qu/">Python关于路径 &amp; 文本读取</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="Python关于路径 &amp; 文本读取" href="https://Kyouichirou.github.io/post/python-guan-yu-lu-jing-and-wen-ben-du-qu/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Powershell坑-MySQL数据备份" href="https://Kyouichirou.github.io/post/powershell-keng-mysql-shu-ju-bei-fen/">Powershell坑-MySQL数据备份</a>
+        <a class="nav-mobile-next" title="Powershell坑-MySQL数据备份" href="https://Kyouichirou.github.io/post/powershell-keng-mysql-shu-ju-bei-fen/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

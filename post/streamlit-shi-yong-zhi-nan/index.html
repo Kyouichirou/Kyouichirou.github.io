@@ -1,0 +1,3340 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>Streamlit使用指南 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="Streamlit使用指南" />
+  <meta name="keywords" content="web,streamlit,plotly,data visualization" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一. 前言</a>
+<ul>
+<li><a href="#11-%E4%BD%8E%E4%BB%A3%E7%A0%81%E8%B6%8B%E5%8A%BF">1.1 低代码趋势</a></li>
+<li><a href="#12-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%98%AFstreamlit">1.2 为什么是Streamlit?</a>
+<ul>
+<li><a href="#121-%E7%AE%80%E4%BB%8B">1.2.1 简介</a></li>
+<li><a href="#122-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96%E5%89%8D%E7%AB%AF%E5%BA%93%E5%AF%B9%E6%AF%94">1.2.2 数据可视化前端库对比</a></li>
+<li><a href="#123-dash-streamlit">1.2.3 Dash &amp; Streamlit</a></li>
+<li><a href="#124-%E9%A1%B9%E7%9B%AE%E5%89%8D%E6%99%AF">1.2.4 项目前景</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8">二. 基本使用</a>
+<ul>
+<li><a href="#21-%E4%BD%BF%E7%94%A8%E5%89%8D%E7%9A%84%E5%87%86%E5%A4%87">2.1 使用前的准备</a></li>
+<li><a href="#22-%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4%E8%A1%8C">2.2 基本命令行</a></li>
+<li><a href="#23-%E5%86%85%E5%AE%B9%E8%BE%93%E5%87%BA%E6%96%B9%E5%BC%8F">2.3 内容输出方式</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E5%AE%B9%E5%99%A8">三. 容器</a></li>
+<li><a href="#%E5%9B%9B-%E6%96%87%E6%9C%AC">四. 文本</a>
+<ul>
+<li><a href="#41-%E8%BE%93%E5%85%A5">4.1 输入</a></li>
+<li><a href="#42-%E5%B1%95%E7%A4%BA">4.2 展示</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-%E6%95%B0%E6%8D%AE%E5%B1%95%E7%A4%BA">五. 数据展示</a></li>
+<li><a href="#%E5%85%AD-%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96">六. 数据可视化</a></li>
+<li><a href="#%E4%B8%83-%E6%96%87%E4%BB%B6">七. 文件</a>
+<ul>
+<li><a href="#71-%E4%B8%8A%E4%BC%A0">7.1 上传</a></li>
+<li><a href="#72-%E4%B8%8B%E8%BD%BD">7.2 下载</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%AB-%E5%A4%9A%E5%AA%92%E4%BD%93">八. 多媒体</a></li>
+<li><a href="#%E4%B9%9D-%E7%8A%B6%E6%80%81%E6%8F%90%E7%A4%BA">九. 状态提示</a></li>
+<li><a href="#%E5%8D%81-%E6%B5%81%E6%8E%A7%E5%88%B6">十. 流控制</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80-%E5%B7%A5%E5%85%B7">十一. 工具</a></li>
+<li><a href="#%E5%8D%81%E4%BA%8C-%E7%BC%93%E5%AD%98">十二. 缓存</a>
+<ul>
+<li><a href="#121-stcache_data">12.1 st.cache_data</a></li>
+<li><a href="#122-stcache_resurce">12.2 st.cache_resurce</a></li>
+<li><a href="#1014-mysqlconnectorthreadsafety-property">10.1.4 mysql.connector.threadsafety Property</a></li>
+<li><a href="#123-%E4%BA%8C%E8%80%85%E5%BA%94%E7%94%A8%E5%9C%BA%E6%99%AF">12.3 二者应用场景</a></li>
+<li><a href="#124-%E4%BC%9A%E8%AF%9D%E7%BC%93%E5%AD%98">12.4 会话缓存</a></li>
+<li><a href="#125-%E6%B8%85%E9%99%A4%E7%BC%93%E5%AD%98">12.5 清除缓存</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E4%B8%89-%E5%85%B6%E4%BB%96%E7%BB%84%E4%BB%B6">十三. 其他组件</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B-%E5%9B%9E%E8%B0%83%E5%87%BD%E6%95%B0">十四. 回调函数</a></li>
+<li><a href="#%E5%8D%81%E4%BA%94-%E5%A4%9A%E9%A1%B5%E9%9D%A2">十五. 多页面</a></li>
+<li><a href="#%E5%8D%81%E5%85%AD-%E5%A5%97%E4%BB%B6">十六. 套件</a>
+<ul>
+<li><a href="#render-an-html-string">Render an HTML string</a></li>
+<li><a href="#render-an-iframe-url">Render an iframe URL</a></li>
+<li><a href="#161-stcomponentsv1html">16.1 st.components.v1.html</a></li>
+<li><a href="#162-stcomponentsv1iframe">16.2 st.components.v1.iframe</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E4%B8%83-%E4%BD%BF%E7%94%A8">十七. 使用</a></li>
+<li><a href="#%E5%8D%81%E5%85%AB-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">十八. 配置文件</a></li>
+<li><a href="#%E5%8D%81%E4%B9%9D-%E9%83%A8%E7%BD%B2">十九. 部署</a></li>
+<li><a href="#sharing-private-apps">Sharing private apps</a></li>
+<li><a href="#add-your-app-to-github">Add your app to GitHub</a>
+<ul>
+<li><a href="#optionally-add-a-configuration-file">Optionally, add a configuration file</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%8C%E5%8D%81-%E8%B5%84%E6%BA%90">二十. 资源</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/streamlit-shi-yong-zhi-nan/"> Streamlit使用指南 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-05-16 11:05:09">2023-05-16</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/0yrIeY7PQ/"> <span>web</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/vWZdeXfxh/"> <span>streamlit</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/OfTosZNoo/"> <span>plotly</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/bfZBf6yTI/">
+        <span>data visualization</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >53<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >10567<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <h2 id="一-前言">一. 前言</h2>
+<figure data-type="image" tabindex="1"><img src="https://blog.streamlit.io/content/images/size/w2000/2023/05/llm-chatbot-app.svg" alt="How to build an LLM-powered ChatBot with Streamlit" loading="lazy"></figure>
+<!--more-->
+<h3 id="11-低代码趋势">1.1 低代码趋势</h3>
+<p><em>低代码不是无代码.</em></p>
+<blockquote>
+<p>Low-code is a visual approach to software development that enables faster delivery of applications through minimal hand-coding.</p>
+<p>from IBM</p>
+</blockquote>
+<blockquote>
+<p>A low-code development platform (LCDP) provides a development environment used to create application software through a graphical user interface.</p>
+<p>from wiki</p>
+</blockquote>
+<p><strong>低代码的目的:</strong></p>
+<ul>
+<li>减少代码量.</li>
+<li>部分甚至全部实现图形化开发(俗称的傻瓜式拖拽开发).</li>
+<li>加快项目开发速度.</li>
+<li>降低技术复杂程度.</li>
+<li>降低跨语言的入门门槛.</li>
+</ul>
+<p>所谓的低代码并不是什么新的概念, 简单而言, 本质上和高级语言的出现没什么区别. 设想一下, 假如所有的项目都是从底层语言逐步开始搭建, 那么这种工作量是不可想象的.</p>
+<p>一定程度上也可以形象地认为高级语言是低级语言的封装, 以人类相对容易理解的逻辑表达出来, 假如在这基础上, 进一步将需要的工作进行整合, 如将相应的工作进一步封装, 形成相对独立的库/框架库, 如<code>python</code>的<code>pip</code>, <code>nodejs</code>的<code>npm</code>, 这样就进一步降低代码的工作量.</p>
+<p>假如在上述的基础上再进一步将一些特定的大型任务整合在一起, 那么就形成所谓低代码的基础.</p>
+<pre><code class="language-python">import requests
+
+res = resquests.get(url, headers = {}...)
+</code></pre>
+<p>正如接触<code>python</code>爬虫的新手会看到的经典代码片段, 这段仅仅以两行的代码就将神秘的爬虫程序以一种极简的方式展现出来.</p>
+<p><em>(当然爬虫的核心并在与此, 多在于逆向JavaScript的能力, 规避反爬(伪装), 分布式, 线程池/进程池, 代理池....)</em></p>
+<p>简单的理解, 就是利用现成解决(<em>模板</em>)方案去解决特定的问题, 但是这个过程变得简单, 甚至图形化的方式操作.</p>
+<p>所谓的低代码, 常见的如, 各种大型工业软件中常带有自动化辅助的宏类似, 例如在<code>excel</code>上可以用录制宏(即记录(鼠标)操作的过程, 直接后台生成可以实现这个过程的代码, 以这种方式来实现代码的自动生成, 其局限性很明显的.</p>
+<ul>
+<li>模板化, 即灵活程度非常低, 执行效率底下(在excel上, 录制的宏可以看到大量激活特定对象的操作, 而实际上这些操作是多余的, 而且这些激活操作会导致程序运行变得非常慢).</li>
+<li>需要适应模板的特定逻辑思维(即相对固定的方式来展开), 对于复杂功能的实现, 也许并不是好的选择.</li>
+</ul>
+<p><em>这种局限性在各类第三方通用<code>ERP</code>系统(这些系统多功能庞杂, 操作极度的繁琐)上也是可以看到的, 这些ERP系统的实施多需要企业改造自身业务的流程来适应这种相对固定的<code>ERP</code>系统流程框架, 这个过程并不是容易的事情(这不仅涉及到一些技术的问题, 也涉及到企业对于整体的数字化管理的认知程度, 以及执行力度等基本问题).</em></p>
+<p>对于低代码相对认可的<a href="https://www.zhihu.com/question/512701525/answer/2320431423">评论</a>:</p>
+<blockquote>
+<p>低代码平台肯定是有用的, 在特定领域内它能大大地提升<strong>软件开发效率, 降低开发门槛</strong>, 但要说它是&quot;职业新风口&quot;, 对, 吹牛不犯法的……</p>
+<p>from zhihu, @金旭亮, 北理工</p>
+</blockquote>
+<h3 id="12-为什么是streamlit">1.2 为什么是Streamlit?</h3>
+<h4 id="121-简介">1.2.1 简介</h4>
+<blockquote>
+<p><a href="https://www.streamlit.io/">Streamlit</a> is an open-source Python library that makes it <strong>easy</strong> to create and share <strong>beautiful</strong>, <strong>custom</strong> <strong>web</strong> apps for <strong>machine learning</strong> and <strong>data science</strong>. In just a few minutes you can build and deploy powerful data apps. So let's get started!</p>
+<ul>
+<li>开源</li>
+<li>易用</li>
+<li>分享</li>
+<li>前端(跨平台, 部署极为简单)</li>
+<li>针对机器学习等数据科学相关的领域</li>
+<li>让数据更强大</li>
+</ul>
+</blockquote>
+<p><video src="https://s3-us-west-2.amazonaws.com/assets.streamlit.io/videos/hero-video.mp4"></video></p>
+<p><a href="https://roadmap.streamlit.app/">Roadmap -  Streamlit</a></p>
+<p>示例: <a href="https://30days.streamlit.app/">Streamlit (30days.streamlit.app)</a>, 这是一个<code>streamlit</code>实现的<code>web</code>站点.</p>
+<figure data-type="image" tabindex="2"><a href="https://imgse.com/i/pp9BGVO"><img src="https://s1.ax1x.com/2023/02/27/pp9BGVO.png" alt="pp9BGVO.png" loading="lazy"></a></figure>
+<p>以<code>VBA</code>开发图形界面程序为例, 只需要使用鼠标简单拖拽对应功能组件, 即可完成从布局到基本功能函数的设置, 所有的工作都集成在<code>IDE</code>完成, 用户可以节省大量时间, 将大部分的时间集中在主要的事务上来.</p>
+<p>反面, 以<code>python</code>的<code>GUI</code>开发为例, 其预置的<code>tkinter</code>库, 并无提供类似的拖拽式的开发工具, 所有的东西都需要从最底层开始, 例如需要窗体的大小, 每个组件的相对位置等等一堆琐事(<em>对于只是希望开发个简单易用的小工具而言, 某种意义上来看, 这些操作可视作毫无价值的行为, 不断重复</em>).</p>
+<p><code>streamlit</code>就是为了解决这种基础问题的前端库, 其目的在于降低非前端用户群体对于使用前端产品的门槛, 例如, 快速搭建一个中小型企业局域网范围内使用的数据查询终端, 复杂(数据)产品<code>demo</code>, 或者其他需要复杂交互数据看板演示等等. 显然不希望从底层的<code>JavaScript, css, html</code>一步步地构建起来, 通常这些项目也不需要太过复杂的功能的实现(<code>JavaScript</code>), 也不需要追求极致绚丽的特效(<code>css</code>), 也不希望浪费时间在写基础文档(<code>html</code>), 只是需要实现特定的功能即可, 快速上线, 易于维护(只需要少量的技术人员即可完成全栈开发和维护).</p>
+<h4 id="122-数据可视化前端库对比">1.2.2 数据可视化前端库对比</h4>
+<p>由于<code>python</code>数据可视化前端库数量相当多, 其质量参差不齐, 这里只挑出几个已经相对成熟, 已经有一定规模用户群的库, <a href="https://stackshare.io/streamlit/alternatives">What are some alternatives to Streamlit? - StackShare</a>.</p>
+<p>挑选出下面三个库作为对比, 这里来看看三者的宣传标语:</p>
+<ul>
+<li>
+<p><strong>Streamlit</strong></p>
+<blockquote>
+<p>A faster way to build and share data apps</p>
+<p>更快的方式创建和分享数据<code>app</code></p>
+</blockquote>
+</li>
+<li>
+<p><strong>Gradio</strong></p>
+<blockquote>
+<p>Build Machine Learning Web Apps -  in Python</p>
+<p>创建机器学习的<code>web app</code></p>
+</blockquote>
+</li>
+<li>
+<p><strong>Dash</strong></p>
+<blockquote>
+<p>Dash is the most downloaded, trusted Python framework for building ML &amp; data science web apps.</p>
+<p>下载最多的机器学习, 数据科学的<code>web app</code>框架</p>
+<p>需要额外注意的是dash之外还有个极其强大的数据可视化库<code>Plotly</code>.</p>
+</blockquote>
+</li>
+</ul>
+<p>引用篇<a href="https://laptrinhx.com/gradio-vs-streamlit-vs-dash-vs-flask-4118760429/">文章-Gradio vs Streamlit vs Dash vs Flask</a>的小结:</p>
+<blockquote>
+<p><strong>Gradio</strong>: Gradio is specifically built with machine learning models in mind. So if you want to create a web UI specifically for a machine learning model that you built, Gradio’s simple syntax and setup is the way to go.</p>
+<p>为机器学习准备的.</p>
+<p><strong>Streamlit</strong>: Streamlit is useful if you want to get a dashboard up and running quickly, and have the flexibility to add lots of components and controls. As well, Streamlit allows you to build a web UI or a dashboard much faster than Dash or Flask.</p>
+<p>为开发速度准备的(也可以理解为为中小型公司/组织而生, 可以为全栈开发的工程师提供前端的能力).</p>
+<p><strong>Dash</strong>: Choose Dash if you want to be a production-ready dashboard for a larger company, since it’s mainly tailored for enterprise companies.</p>
+<p>为大型公司准备的(有足够的开发人员去雕刻这些生成的图表, 或者说产品已经高度成熟可以纳入到生产力阶段).</p>
+<p><strong>Flask</strong>: Choose Flask if you have knowledge of Python/HTML/CSS programming and you want to build your own solution completely from scratch.</p>
+<p>为<code>python</code>前端准备的(轻量化前端框架)</p>
+</blockquote>
+<p>由于<code>flask</code>和其他三者的目的完全不一样(其更接近于传统的<code>web</code>开发框架), 用途也有相对大的差异, 这里不纳入讨论的范围.</p>
+<p>这三者均以数据科学(机器学习/深度学习)作为发起的支点, 相比于以<code>Excel</code>, <code>PowerBI</code>等为代表的传统数据可视化方式, 以机器学习, 大数据为代表的新数据可视化要求更为复杂, 条件更为苛刻.</p>
+<ul>
+<li>
+<p>更复杂的数据处理的需要.</p>
+<p>如数据的来源, 可能是数据库(各种数据库), 各种文件格式(不再限于csv, excel, txt等), 爬虫等.</p>
+</li>
+<li>
+<p>满足更庞大的数据处理需求(传统的数据处理方式很容易撞上数据量的墙)</p>
+<figure data-type="image" tabindex="3"><a href="https://imgse.com/i/pp96xaV"><img src="https://s1.ax1x.com/2023/02/27/pp96xaV.png" alt="pp96xaV.png" loading="lazy"></a></figure>
+<p><em>(PowerBI在载入了一个13.2Mcsv文件, 数据量约为12万行后的内存占用, 闲置状态下占用约为1G左右, 载入文件后占用增长近400M)</em></p>
+</li>
+<li>
+<p>更复杂的数据可视化/交互</p>
+<p>指标体系可能出现成百上千个, 相对单一的数据可视化方式很难展示其中某些数据的细节.</p>
+</li>
+<li>
+<p>跨平台</p>
+<p>由于远程会议, 居家办公等情形, 数据不再是局限在特定的系统和平台上.</p>
+</li>
+</ul>
+<figure data-type="image" tabindex="4"><img src="https://pic4.zhimg.com/v2-2ecec89583e1bac6f25c3a56b5fed99f_b.webp" alt="map" loading="lazy"></figure>
+<p><code>web</code>方式, 很好的解决<code>跨平台</code>这个问题, 同时对于复杂亦或者绚丽的图表视觉效果, 例如百度地图的春节人口迁移数据看板, 使用到百度开源的<code>Echarts</code>(<code>Python</code>版本对应的是<code>pyecharts</code>), <code>web</code>端的实现也是非常好的选择(而且自由度更高).</p>
+<p>对于数据分析/挖掘, 多应以于数据价值的挖掘为主, 显然不应该浪费过多的时间在华丽图表的制作以及为实现这种华丽所消耗的时间上, 虽然数据可视化是数据处理中不可或缺的一环, 但是不是核心的一环.</p>
+<p><em>对于图表在生产力上使用应当遵循简洁明了, 适当美化的原则, 生产力中的图表主要目的在于将相对复杂的事情以相对简单而易懂的方式阐明, 而和媒体使用的图表需要绚烂的视觉效果追求的给人震撼力不同.</em></p>
+<h4 id="123-dash-streamlit">1.2.3 Dash &amp; Streamlit</h4>
+<p>作为<code>streamlit</code>最主要的竞争对手 <code>Dash</code>, 相比这二者, <code>streamlit</code>进一步简化使用, 部署速度更快, 这一点在某种程度更容易获得用户的认可.</p>
+<figure data-type="image" tabindex="5"><img src="C:%5CUsers%5CLian%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230227101604398.png" alt="image-20230227101604398" loading="lazy"></figure>
+<p>从二者在<code>Github</code>上的受欢迎程度(需要注意<code>streamlit</code>要晚于<code>dash</code>, 其<strong>star</strong>的速度远快于后者), 可见一斑.</p>
+<figure data-type="image" tabindex="6"><img src="https://img-blog.csdnimg.cn/20210227221616794.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg5NDI2Ng==,size_16,color_FFFFFF,t_70" alt="引用原文一张图片展示二者star趋势" loading="lazy"></figure>
+<p><em>但是需要注意的是, 这种模块化的前端库, 并不意味着完全不需要前端的知识, 而是降低了使用的门槛, 大幅度降低代码的量, 而是减少<strong>非必要</strong>代码的工作量, 让作业者专注于主要的工作, 减少非主业的时间消耗.</em></p>
+<h4 id="124-项目前景">1.2.4 项目前景</h4>
+<p><code>2021</code>年, <code>streamlit</code>完成<code>3500w$</code><a href="https://blog.streamlit.io/our-35-million-series-b/">B轮融资</a></p>
+<blockquote>
+<p>Today, we're excited to announce a $35 million Series B investment led by Sequoia and backed by our existing investors <strong>Gradient Ventures</strong> and <strong>GGV Capital.</strong></p>
+</blockquote>
+<p>两家风投的背景介绍:</p>
+<ul>
+<li>
+<p><a href="https://www.ggvchina.com/">GGV纪源资本 (ggvchina.com)</a></p>
+</li>
+<li>
+<p><a href="https://t.qianzhan.com/caijing/detail/170712-0c642625.html">Gradient Ventures</a></p>
+</li>
+</ul>
+<h2 id="二-基本使用">二. 基本使用</h2>
+<figure data-type="image" tabindex="7"><img src="https://docs.streamlit.io/30days.png" alt="main" loading="lazy"></figure>
+<h3 id="21-使用前的准备">2.1 使用前的准备</h3>
+<ul>
+<li>对于<code>markdown</code>有较深入的使用(例如一些html标签的插入, 图表, 多媒体信息标签等), 这对于使用<code>streamlit</code>, 亦或者其他的快速部署前端工具都会有帮助.</li>
+<li>对于前端有一定的了解, 如简单的<code>css</code>.</li>
+<li>对浏览器的基本机制有一定的了解, 例如<code>session(会话)</code>, <code>storage</code>等(相对应的是<code>sessionStorage</code>, <code>LocalStorage</code>), 这个部分非常关键对于需要操作需要对数据进行演算并保留结果.</li>
+</ul>
+<h3 id="22-基本命令行">2.2 基本命令行</h3>
+<p>相关的运行参数和配置见文章底部的<code>配置文件部分</code>.</p>
+<pre><code class="language-bash"># 查看帮助
+streamlit --help
+
+# 运行脚本
+python -m streamlit run your_script.py
+# 等价于
+streamlit run your_script.py
+
+# 查看版本
+streamlit version
+
+# 查看文档
+streamlit docs
+
+# 查看配置
+streamlit config show
+</code></pre>
+<h3 id="23-内容输出方式">2.3 内容输出方式</h3>
+<p><code>streamlit</code>的内容输出, 也许是借鉴了<code>jupyter notebook</code>的特性, 不一定需要<code>st.write</code>(<code>js</code>中同名函数<code>document.write</code>, 但该特性已经被浏览器废弃)来实现, 可以使用&quot;魔术&quot;方式直接输出内容.</p>
+<pre><code class="language-python">def main():
+    '''
+    # This is the document title
+    This is some _markdown_.
+    '''
+
+    df = pd.DataFrame({'col1': [1,2,3]})
+    df  # 等价于st.write / st.dataframe
+
+    x = 10
+    'x', x  #
+
+    arr = np.random.normal(1, 1, size=100)
+    fig, ax = plt.subplots()
+    ax.hist(arr, bins=20)
+
+    fig
+</code></pre>
+<figure data-type="image" tabindex="8"><a href="https://imgse.com/i/pp97pid"><img src="https://s1.ax1x.com/2023/02/27/pp97pid.png" alt="pp97pid.png" loading="lazy"></a></figure>
+<p>但是不建议这种方式, 虽然很方便, 但是在<code>IDE</code>上不利于故障的排查, 除非是在<code>jupyter notebook</code>上的使用.</p>
+<h2 id="三-容器">三. 容器</h2>
+<p>简单的理解, 就是将相关内容进行分区/分块, 让页面更为整洁, 管理更方便.</p>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.sidebar</td>
+<td>侧边栏</td>
+</tr>
+<tr>
+<td>st.columns</td>
+<td>列</td>
+</tr>
+<tr>
+<td>st.tabs</td>
+<td>标签</td>
+</tr>
+<tr>
+<td>st.expander</td>
+<td>可收起容器</td>
+</tr>
+<tr>
+<td>st.container</td>
+<td>(大)容器</td>
+</tr>
+<tr>
+<td>st.empty</td>
+<td>空的容器</td>
+</tr>
+</tbody>
+</table>
+<figure data-type="image" tabindex="9"><a href="https://imgse.com/i/pp97RfA"><img src="https://s1.ax1x.com/2023/02/27/pp97RfA.png" alt="pp97RfA.png" loading="lazy"></a></figure>
+<p><code>VBA</code>窗体中的容器<code>multi_page</code>, <code>frame</code>, 实现相对复杂的页面布局.</p>
+<p>在容器内可以放置其他的组件, 如按钮, 下拉框, 文本框等, 同时将相应的功能模块以视觉的方式分离开来, 更好管理和使用.</p>
+<p>以<code>st.columns</code>为例:</p>
+<pre><code class="language-python">import streamlit as st
+
+# 展示散列图片(在同一行中)
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    st.header(&quot;A cat&quot;)
+    st.image(&quot;https://static.streamlit.io/examples/cat.jpg&quot;)
+
+with col2:
+    st.header(&quot;A dog&quot;)
+    st.image(&quot;https://static.streamlit.io/examples/dog.jpg&quot;)
+
+with col3:
+    st.header(&quot;An owl&quot;)
+    st.image(&quot;https://static.streamlit.io/examples/owl.jpg&quot;)
+</code></pre>
+<h2 id="四-文本">四. 文本</h2>
+<h3 id="41-输入">4.1 输入</h3>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.text_input</td>
+<td>单行文本输入</td>
+</tr>
+<tr>
+<td>st.text_area</td>
+<td>多行文本输入</td>
+</tr>
+<tr>
+<td>st.number_input</td>
+<td>数字输入</td>
+</tr>
+<tr>
+<td>st.time_input</td>
+<td>时间输入</td>
+</tr>
+</tbody>
+</table>
+<p>这部分相对简单, 没什么好说的.</p>
+<h3 id="42-展示">4.2 展示</h3>
+<p><em>对于这部分不了解的, 可以先用markdown文档用来练手, 这个部分基本上就是markdown的翻版.</em></p>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>作用</th>
+<th>适用范围</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.markdown</td>
+<td>以markdown的格式展示内容</td>
+<td>全局</td>
+</tr>
+<tr>
+<td>st.title</td>
+<td>全局标题</td>
+<td>全局</td>
+</tr>
+<tr>
+<td>st.header</td>
+<td>标题</td>
+<td>大的区块</td>
+</tr>
+<tr>
+<td>st.subheader</td>
+<td>次级标题</td>
+<td>大的区块</td>
+</tr>
+<tr>
+<td>st.caption</td>
+<td>组件的名称</td>
+<td>小组件</td>
+</tr>
+<tr>
+<td>st.code</td>
+<td>代码块</td>
+<td>-</td>
+</tr>
+<tr>
+<td>st.text</td>
+<td>常规文本</td>
+<td>-</td>
+</tr>
+<tr>
+<td>st.latex</td>
+<td>latex, 文献(数学公式)排版相关</td>
+<td>-</td>
+</tr>
+</tbody>
+</table>
+<p>这里需要注意的是<code>st.markdown</code></p>
+<pre><code class="language-bash">st.markdown(body, unsafe_allow_html=False)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>body</strong> <em>(str)</em></td>
+<td>The string to display as Github-flavored Markdown. Syntax information can be found at: https://github.github.com/gfm.This also supports:Emoji shortcodes, such as <code>:+1:</code> and <code>:sunglasses:</code>. For a list of all supported codes, see https://share.streamlit.io/streamlit/emoji-shortcodes.LaTeX expressions, by wrapping them in &quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">&quot;</mi><mi>o</mi><mi>r</mi><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">&quot; or &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord">&quot;</span></span></span></span><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">&quot;</mi><mo>(</mo><mi>t</mi><mi>h</mi><mi>e</mi><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">&quot; (the &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">&quot;</span><span class="mopen">(</span><span class="mord mathdefault">t</span><span class="mord mathdefault">h</span><span class="mord mathdefault">e</span><span class="mord">&quot;</span></span></span></span>$&quot; must be on their own lines). Supported LaTeX functions are listed at https://katex.org/docs/supported.html.Colored text, using the syntax <code>:color[text to be colored]</code>, where <code>color</code> needs to be replaced with any of the following supported colors: blue, green, orange, red, violet.</td>
+</tr>
+<tr>
+<td><strong>unsafe_allow_html</strong> <em>(bool)</em></td>
+<td><strong>By default, any HTML tags found in the body will be escaped and therefore treated as pure text</strong>. This behavior may be turned off by setting this argument to True.That said, we <em>strongly advise against it</em>. It is hard to write secure HTML, so by using this argument you may be compromising your users' security. For more information, see:https://github.com/streamlit/streamlit/issues/152</td>
+</tr>
+</tbody>
+</table>
+<p><code>unsafe_allow_html</code>参数可以让更复杂的自定义页面成为可能.</p>
+<p>默认模式下, 相关的内容先经过转义, 当作普通的<strong>纯文本</strong>内容来处理.</p>
+<pre><code class="language-python">@staticmethod
+def _inject_css():
+    css = '''
+                    h1{text-align: center;}
+                    .css-1kyxreq{justify-content: center;}
+                    .css-ffhzg2{background: gray !important}
+                    .row-widget.stTextInput{margin-left: 25% !important;}
+                    .st-bt{width: 50% !important;}
+                '''
+    st.markdown(f'&lt;style&gt;{css}&lt;/style&gt;', unsafe_allow_html=True)
+</code></pre>
+<p>如: 注入<code>css</code>改变页面的布局, 但是这里并不支持直接注入<code>js</code>脚本.</p>
+<blockquote>
+<p>Unfortunately, right now JavaScript integration is not supported in Streamlit, but we already have a feature request based on our users’ issues: <a href="https://github.com/streamlit/streamlit/issues/969">https://github.com/streamlit/streamlit/issues/969</a></p>
+<p>Please, feel free to follow that issue for up-to-date information and write any additional details to that request. And thanks for using Streamlit!</p>
+</blockquote>
+<p>由于考虑到安全问题, 这种方式注入脚本已经完全被禁止.</p>
+<p>需要在页面中注入脚本, 相关内容见<code>套件</code>部分的内容, 禁止直接在页面诸如脚本, 一定程度降低了streamlit的使用灵活性.</p>
+<ul>
+<li><a href="https://github.com/streamlit/streamlit/issues/152">Allow HTML (again!) in st.write/st.markdown -  but with kwarg toggle -  Issue #152 -  streamlit/streamlit -  GitHub</a></li>
+</ul>
+<p><strong>数学公式:</strong></p>
+<pre><code class="language-python">import streamlit as st
+
+st.latex(r'''
+\text{单位矩阵:(一般使用I, E来表示)}\\
+I= \begin{bmatrix}
+1 &amp; 0 &amp; \cdots &amp; 0\\
+0 &amp; 1 &amp; \cdots &amp; 0\\
+\vdots&amp;\vdots &amp; \ddots &amp; \vdots\\
+0 &amp; 0 &amp; \cdots  &amp; 1
+\end{bmatrix}\\\\
+正交矩阵:
+A^TA = I, 则称A为正交矩阵\\\\
+矩阵的转置:(A^T)^T = A\\
+(A_1A_2..A_n)^T = A_n^T..A_2^TA_1^T\\\\
+对角矩阵:\\
+A = \begin{bmatrix}
+	 a_{11} &amp;   &amp; &amp;  \\
+	  &amp; a_{22} &amp;  &amp; \\
+	  &amp;   &amp; a_{33}&amp;\\
+	  &amp;   &amp;  &amp;a_{44}
+	 \end{bmatrix}\\
+对角矩阵的转置等于自身: A^T = A\\\\
+逆矩阵: AB = BA = I\\
+A = B ^{-1}\\
+B = A ^{-1}\\
+(AB) ^{-1} = B^{-1}A^{-1}, A, B同阶, 可逆\\
+单位矩阵的逆矩阵是其本身.\\
+正交矩阵A的逆矩阵A^{-1} = A^T
+''')
+</code></pre>
+<figure data-type="image" tabindex="10"><a href="https://imgse.com/i/p926RMV"><img src="https://s1.ax1x.com/2023/05/16/p926RMV.png" alt="p926RMV.png" loading="lazy"></a></figure>
+<p>使用的渲染引擎是: <code>/vendor/bokeh/bokeh-mathjax-2.4.3.min.js</code>, <code>mathjax</code>.</p>
+<h2 id="五-数据展示">五. 数据展示</h2>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.dataframe</td>
+<td>输出可交互的表</td>
+</tr>
+<tr>
+<td>st.json</td>
+<td>输出json结构的内容(json数据的可视化)</td>
+</tr>
+<tr>
+<td>st.table</td>
+<td>输出静态的表</td>
+</tr>
+<tr>
+<td>st.metric</td>
+<td>粗体的公制单位内容展示</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">st.dataframe(data=None, width=None, height=None, *, use_container_width=False)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>data</strong> <em>(pandas.DataFrame, pandas.Styler, pyarrow.Table, numpy.ndarray, pyspark.sql.DataFrame, snowflake.snowpark.dataframe.DataFrame, snowflake.snowpark.table.Table, Iterable, dict, or None)</em></td>
+<td>The data to display.If 'data' is a pandas.Styler, it will be used to style its underlying DataFrame. Streamlit supports custom cell values and colors. (It does not support some of the more exotic pandas styling features, like bar charts, hovering, and captions.) Styler support is experimental! Pyarrow tables are not supported by Streamlit's legacy DataFrame serialization (i.e. with config.dataFrameSerialization = &quot;legacy&quot;). To use pyarrow tables, please enable pyarrow by changing the config setting, config.dataFrameSerialization = &quot;arrow&quot;.</td>
+</tr>
+<tr>
+<td><strong>width</strong> <em>(int or None)</em></td>
+<td>Desired width of the dataframe expressed in pixels. If None, the width will be automatically calculated based on the column content.</td>
+</tr>
+<tr>
+<td><strong>height</strong> <em>(int or None)</em></td>
+<td>Desired height of the dataframe expressed in pixels. If None, a default height is used.</td>
+</tr>
+<tr>
+<td><strong>use_container_width</strong> <em>(bool)</em></td>
+<td>If True, set the dataframe width to the width of the parent container. This takes precedence over the width argument. This argument can only be supplied by keyword.</td>
+</tr>
+</tbody>
+</table>
+<p><code>pandas</code>的<code>dataframe</code>可以直接使用<code>magic</code>方式输出.</p>
+<h2 id="六-数据可视化">六. 数据可视化</h2>
+<p>自带部分简单的绘图, 同时支持多种数据可视化库.</p>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>含义</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.line_chart</td>
+<td>折线图</td>
+<td></td>
+</tr>
+<tr>
+<td>st.area_chart</td>
+<td>面积图</td>
+<td></td>
+</tr>
+<tr>
+<td>st.bar_chart</td>
+<td>柱状图</td>
+<td></td>
+</tr>
+<tr>
+<td>st.pyplot</td>
+<td>和matplotlib联动</td>
+<td></td>
+</tr>
+<tr>
+<td>st.altair_chart</td>
+<td>和Altair联动</td>
+<td></td>
+</tr>
+<tr>
+<td>st.vega_lite_chart</td>
+<td>和Vega-Lite联动</td>
+<td></td>
+</tr>
+<tr>
+<td>st.plotly_chart</td>
+<td>和plotly联动</td>
+<td>图形具有交互能力</td>
+</tr>
+<tr>
+<td>st.bokeh_chart</td>
+<td>和Bokeh联动</td>
+<td></td>
+</tr>
+<tr>
+<td>st.pydeck_chart</td>
+<td>和PyDeck联动</td>
+<td></td>
+</tr>
+<tr>
+<td>st.graphviz_chart</td>
+<td>图论</td>
+<td></td>
+</tr>
+<tr>
+<td>st.map</td>
+<td>绘制地图相关</td>
+<td>需要外部api的数据支持</td>
+</tr>
+</tbody>
+</table>
+<p>以<code>st.plotly_chart</code>和<code>st.pyplot</code>为例</p>
+<pre><code class="language-bash">st.plotly_chart(figure_or_data, use_container_width=False, sharing=&quot;streamlit&quot;, theme=&quot;streamlit&quot;, **kwargs)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>figure_or_data</strong> <em>(plotly.graph_objs.Figure, plotly.graph_objs.Data,)</em></td>
+<td>dict/list of plotly.graph_objs.Figure/DataSee https://plot.ly/python/ for examples of graph descriptions.</td>
+</tr>
+<tr>
+<td><strong>use_container_width</strong> <em>(bool)</em></td>
+<td>If True, set the chart width to the column width. This takes precedence over the figure's native width value.</td>
+</tr>
+<tr>
+<td><strong>sharing</strong> <em>({'streamlit', 'private', 'secret', 'public'})</em></td>
+<td>Use 'streamlit' to insert the plot and all its dependencies directly in the Streamlit app using plotly's offline mode (default). Use any other sharing mode to send the chart to Plotly chart studio, which requires an account. See https://plot.ly/python/chart-studio/ for more information.</td>
+</tr>
+<tr>
+<td><strong>theme</strong> <em>(&quot;streamlit&quot; or None)</em></td>
+<td>The theme of the chart. Currently, we only support &quot;streamlit&quot; for the Streamlit defined design or None to fallback to the default behavior of the library.</td>
+</tr>
+<tr>
+<td>*<strong>*kwargs</strong> <em>(null)</em></td>
+<td>Any argument accepted by Plotly's plot() function.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>fig对象或者是数据</li>
+<li>容器的宽度, 布尔值, 假如是True, 这将覆盖原生的fig的width</li>
+<li>分享模式</li>
+<li>主题</li>
+<li>其他绘图的参数</li>
+</ul>
+<pre><code class="language-python">import streamlit as st
+import plotly.express as px
+
+data_wind = px.data.wind()
+
+st.write('a_page')
+
+fig = px.bar_polar(
+    data_wind,
+    r=&quot;strength&quot;,
+    theta=&quot;direction&quot;,
+    color=&quot;frequency&quot;,
+    width=720, height=480
+)
+
+fig.show()
+</code></pre>
+<figure data-type="image" tabindex="11"><a href="https://imgse.com/i/ppsyo0e"><img src="https://s1.ax1x.com/2023/03/27/ppsyo0e.png" alt="ppsyo0e.png" loading="lazy"></a></figure>
+<pre><code class="language-python"># 必须使用这种方式装载图像, 否则, 图会自动加载浏览器新的页面上
+st.plotly_chart(fig)
+</code></pre>
+<figure data-type="image" tabindex="12"><a href="https://imgse.com/i/ppsyTTH"><img src="https://s1.ax1x.com/2023/03/27/ppsyTTH.png" alt="ppsyTTH.png" loading="lazy"></a></figure>
+<pre><code class="language-python">import streamlit as st
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+st.write('b_page')
+
+df = pd.DataFrame({&quot;Price 1&quot;: [7, 1, 5, 6, 3, 10, 5, 8],
+                   &quot;Price 2&quot;: [1, 2, 8, 4, 3, 9, 5, 2],
+                   &quot;Day&quot;: [1, 2, 3, 4, 5, 6, 7, 8]})
+
+plt.figure()
+
+fig = plt.figure(figsize=(20, 6))
+
+# sns, 这里返回的是ax
+sns.barplot(x='Day', y='Price 1', data=df, color='red')
+
+st.pyplot(fig)
+</code></pre>
+<pre><code class="language-python">import plotly.graph_objects as go
+import numpy as np
+from sklearn.datasets import make_moons
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+
+mesh_size = .02
+margin = 0.25
+
+X, y = make_moons(noise=0.3, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y.astype(str), test_size=0.25, random_state=0)
+
+# Create a mesh grid on which we will run our model
+x_min, x_max = X[:, 0].min() - margin, X[:, 0].max() + margin
+y_min, y_max = X[:, 1].min() - margin, X[:, 1].max() + margin
+xrange = np.arange(x_min, x_max, mesh_size)
+yrange = np.arange(y_min, y_max, mesh_size)
+xx, yy = np.meshgrid(xrange, yrange)
+
+# 癌症数据的knn
+clf = KNeighborsClassifier(15, weights='uniform')
+clf.fit(X, y)
+Z = clf.predict_proba(np.c_[xx.ravel(), yy.ravel()])[:, 1]
+Z = Z.reshape(xx.shape)
+
+# Plot the figure
+fig = go.Figure(data=[
+    go.Contour(
+        x=xrange,
+        y=yrange,
+        z=Z,
+        colorscale='RdBu'
+    )
+])
+
+st.plotly_chart(fig)
+</code></pre>
+<figure data-type="image" tabindex="13"><a href="https://imgse.com/i/p92cksf"><img src="https://s1.ax1x.com/2023/05/16/p92cksf.png" alt="p92cksf.png" loading="lazy"></a></figure>
+<p>在展示复杂的图像时, 可交互的模式显然更为之友好, 能让阅读者更好, 更容易理解图像的信息和细节.</p>
+<pre><code class="language-python">import plotly.graph_objects as go
+
+# Load data
+df = pd.read_csv(r&quot;D:\workspace_python\plotly专题\apple.csv&quot;)
+
+df.columns = [col.replace(&quot;AAPL.&quot;, &quot;&quot;) for col in df.columns]
+
+# Create figure
+fig = go.Figure()
+
+fig.add_trace(
+    go.Scatter(x=list(df.Date), y=list(df.High)))
+
+# Set title
+fig.update_layout(
+    title_text=&quot;Time series with range slider and selectors&quot;
+)
+
+# Add range slider
+fig.update_layout(
+    xaxis=dict(
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1,
+                     label=&quot;1m&quot;,
+                     step=&quot;month&quot;,
+                     stepmode=&quot;backward&quot;),
+                dict(count=6,
+                     label=&quot;6m&quot;,
+                     step=&quot;month&quot;,
+                     stepmode=&quot;backward&quot;),
+                dict(count=1,
+                     label=&quot;YTD&quot;,
+                     step=&quot;year&quot;,
+                     stepmode=&quot;todate&quot;),
+                dict(count=1,
+                     label=&quot;1y&quot;,
+                     step=&quot;year&quot;,
+                     stepmode=&quot;backward&quot;),
+                dict(step=&quot;all&quot;)
+            ])
+        ),
+        rangeslider=dict(
+            visible=True
+        ),
+        type=&quot;date&quot;
+    )
+)
+
+st.plotly_chart(fig)
+</code></pre>
+<figure data-type="image" tabindex="14"><a href="https://imgse.com/i/p92c3LT"><img src="https://s1.ax1x.com/2023/05/16/p92c3LT.png" alt="p92c3LT.png" loading="lazy"></a></figure>
+<p>由于<code>plotly</code>自身就自带交互控件, 实现相对复杂的交互并不难.</p>
+<h2 id="七-文件">七. 文件</h2>
+<h3 id="71-上传">7.1 上传</h3>
+<pre><code class="language-bash">st.file_uploader(label, type=None, accept_multiple_files=False, key=None, help=None, on_change=None, args=None, kwargs=None, *, disabled=False, label_visibility=&quot;visible&quot;)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>label</strong> <em>(str)</em></td>
+<td>A short label explaining to the user what this file uploader is for. The label can optionally contain Markdown and supports the following elements: Bold, Italics, Strikethroughs, Inline Code, Emojis, and Links.This also supports:Emoji shortcodes, such as <code>:+1:</code> and <code>:sunglasses:</code>. For a list of all supported codes, see https://share.streamlit.io/streamlit/emoji-shortcodes.LaTeX expressions, by wrapping them in &quot;<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">&quot;</mi><mi>o</mi><mi>r</mi><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">&quot; or &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord">&quot;</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord">&quot;</span></span></span></span><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">&quot;</mi><mo>(</mo><mi>t</mi><mi>h</mi><mi>e</mi><mi mathvariant="normal">&quot;</mi></mrow><annotation encoding="application/x-tex">&quot; (the &quot;</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">&quot;</span><span class="mopen">(</span><span class="mord mathdefault">t</span><span class="mord mathdefault">h</span><span class="mord mathdefault">e</span><span class="mord">&quot;</span></span></span></span>$&quot; must be on their own lines). Supported LaTeX functions are listed at https://katex.org/docs/supported.html.Colored text, using the syntax <code>:color[text to be colored]</code>, where <code>color</code> needs to be replaced with any of the following supported colors: blue, green, orange, red, violet.Unsupported elements are not displayed. Display unsupported elements as literal characters by backslash-escaping them. E.g. <code>1\. Not an ordered list</code>.For accessibility reasons, you should never set an empty label (label=&quot;&quot;) but hide it with label_visibility if needed. In the future, we may disallow empty labels by raising an exception.</td>
+</tr>
+<tr>
+<td><strong>type</strong> <em>(str or list of str or None)</em></td>
+<td>Array of allowed extensions. ['png', 'jpg'] The default is None, which means all extensions are allowed.</td>
+</tr>
+<tr>
+<td><strong>accept_multiple_files</strong> <em>(bool)</em></td>
+<td>If True, allows the user to upload multiple files at the same time, in which case the return value will be a list of files. Default: False</td>
+</tr>
+<tr>
+<td><strong>key</strong> <em>(str or int)</em></td>
+<td>An optional string or integer to use as the unique key for the widget. If this is omitted, a key will be generated for the widget based on its content. Multiple widgets of the same type may not share the same key.</td>
+</tr>
+<tr>
+<td><strong>help</strong> <em>(str)</em></td>
+<td>A tooltip that gets displayed next to the file uploader.</td>
+</tr>
+<tr>
+<td><strong>on_change</strong> <em>(callable)</em></td>
+<td>An optional callback invoked when this file_uploader's value changes.</td>
+</tr>
+<tr>
+<td><strong>args</strong> <em>(tuple)</em></td>
+<td>An optional tuple of args to pass to the callback.</td>
+</tr>
+<tr>
+<td><strong>kwargs</strong> <em>(dict)</em></td>
+<td>An optional dict of kwargs to pass to the callback.</td>
+</tr>
+<tr>
+<td><strong>disabled</strong> <em>(bool)</em></td>
+<td>An optional boolean, which disables the file uploader if set to True. The default is False. This argument can only be supplied by keyword.</td>
+</tr>
+<tr>
+<td><strong>label_visibility</strong> <em>(&quot;visible&quot; or &quot;hidden&quot; or &quot;collapsed&quot;)</em></td>
+<td>The visibility of the label. If &quot;hidden&quot;, the label doesn't show but there is still empty space for it above the widget (equivalent to label=&quot;&quot;). If &quot;collapsed&quot;, both the label and the space are removed. Default is &quot;visible&quot;. This argument can only be supplied by keyword.</td>
+</tr>
+<tr>
+<td>Returns</td>
+<td></td>
+</tr>
+<tr>
+<td><em>(None or UploadedFile or list of UploadedFile)</em></td>
+<td>If accept_multiple_files is False, returns either None or an UploadedFile object.If accept_multiple_files is True, returns a list with the uploaded files as UploadedFile objects. If no files were uploaded, returns an empty list.The UploadedFile class is a subclass of BytesIO, and therefore it is &quot;file-like&quot;. This means you can pass them anywhere where a file is expected.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">import streamlit as st
+import pandas as pd
+from io import StringIO
+
+# 单个文件上传
+uploaded_file = st.file_uploader(&quot;Choose a file&quot;)
+if uploaded_file is not None:
+    # To read file as bytes:
+    bytes_data = uploaded_file.getvalue()
+    st.write(bytes_data)
+
+    # To convert to a string based IO:
+    stringio = StringIO(uploaded_file.getvalue().decode(&quot;utf-8&quot;))
+    st.write(stringio)
+
+    # To read file as string:
+    string_data = stringio.read()
+    st.write(string_data)
+
+    # Can be used wherever a &quot;file-like&quot; object is accepted:
+    dataframe = pd.read_csv(uploaded_file)
+    st.write(dataframe)
+
+# 多个文件上传
+uploaded_files = st.file_uploader(&quot;Choose a CSV file&quot;, accept_multiple_files=True)
+for uploaded_file in uploaded_files:
+    bytes_data = uploaded_file.read()
+    st.write(&quot;filename:&quot;, uploaded_file.name)
+    st.write(bytes_data)
+</code></pre>
+<blockquote>
+<p>By default, uploaded files are limited to 200MB. You can configure this using the server.maxUploadSize config option. For more info on how to set config options, see https://docs.streamlit.io/library/advanced-features/configuration#set-configuration-options</p>
+</blockquote>
+<p>需要注意的是默认的上传文件大小限制<code> limited to 200MB</code>.</p>
+<h3 id="72-下载">7.2 下载</h3>
+<pre><code class="language-bash">st.download_button(label, data, file_name=None, mime=None, key=None, help=None, on_click=None, args=None, kwargs=None, *, disabled=False, use_container_width=False)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>label</strong> <em>(str)</em></td>
+<td>A short label explaining to the user what this button is for. The label can optionally contain Markdown and supports the following elements: Bold, Italics, Strikethroughs, and Emojis.Unsupported elements are not displayed. Display unsupported elements as literal characters by backslash-escaping them. E.g. <code>1\. Not an ordered list</code>.</td>
+</tr>
+<tr>
+<td><strong>data</strong> <em>(str or bytes or file)</em></td>
+<td>The contents of the file to be downloaded. See example below for caching techniques to avoid recomputing this data unnecessarily.</td>
+</tr>
+<tr>
+<td><strong>file_name</strong> <em>(str)</em></td>
+<td>An optional string to use as the name of the file to be downloaded, such as 'my_file.csv'. If not specified, the name will be automatically generated.</td>
+</tr>
+<tr>
+<td><strong>mime</strong> <em>(str or None)</em></td>
+<td>The MIME type of the data. If None, defaults to &quot;text/plain&quot; (if data is of type <em>str</em> or is a textual <em>file</em>) or &quot;application/octet-stream&quot; (if data is of type <em>bytes</em> or is a binary <em>file</em>).</td>
+</tr>
+<tr>
+<td><strong>key</strong> <em>(str or int)</em></td>
+<td>An optional string or integer to use as the unique key for the widget. If this is omitted, a key will be generated for the widget based on its content. Multiple widgets of the same type may not share the same key.</td>
+</tr>
+<tr>
+<td><strong>help</strong> <em>(str)</em></td>
+<td>An optional tooltip that gets displayed when the button is hovered over.</td>
+</tr>
+<tr>
+<td><strong>on_click</strong> <em>(callable)</em></td>
+<td>An optional callback invoked when this button is clicked.</td>
+</tr>
+<tr>
+<td><strong>args</strong> <em>(tuple)</em></td>
+<td>An optional tuple of args to pass to the callback.</td>
+</tr>
+<tr>
+<td><strong>kwargs</strong> <em>(dict)</em></td>
+<td>An optional dict of kwargs to pass to the callback.</td>
+</tr>
+<tr>
+<td><strong>disabled</strong> <em>(bool)</em></td>
+<td>An optional boolean, which disables the download button if set to True. The default is False. This argument can only be supplied by keyword.</td>
+</tr>
+<tr>
+<td><strong>use_container_width</strong> <em>(bool)</em></td>
+<td>An optional boolean, which makes the button stretch its width to match the parent container.</td>
+</tr>
+<tr>
+<td>Returns</td>
+<td></td>
+</tr>
+<tr>
+<td><em>(bool)</em></td>
+<td>True if the button was clicked on the last run of the app, False otherwise.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">import streamlit as st
+
+@st.cache
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+    return df.to_csv().encode('utf-8')
+
+csv = convert_df(my_large_df)
+# 下载文本
+st.download_button(
+    label=&quot;Download data as CSV&quot;,
+    data=csv,
+    file_name='large_df.csv',
+    mime='text/csv',
+)
+text_contents = '''This is some text'''
+st.download_button('Download some text', text_contents)
+
+# 下载二进制文件
+binary_contents = b'example content'
+# Defaults to 'application/octet-stream'
+st.download_button('Download binary file', binary_contents)
+
+# 下载图片
+with open(&quot;flower.png&quot;, &quot;rb&quot;) as file:
+    btn = st.download_button(
+            label=&quot;Download image&quot;,
+            data=file,
+            file_name=&quot;flower.png&quot;,
+            mime=&quot;image/png&quot;
+          )
+</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Extension</th>
+<th style="text-align:left">Kind of document</th>
+<th style="text-align:left">MIME Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>.aac</code></td>
+<td style="text-align:left">AAC audio</td>
+<td style="text-align:left"><code>audio/aac</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.abw</code></td>
+<td style="text-align:left"><a href="https://en.wikipedia.org/wiki/AbiWord">AbiWord</a> document</td>
+<td style="text-align:left"><code>application/x-abiword</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.arc</code></td>
+<td style="text-align:left">Archive document (multiple files embedded)</td>
+<td style="text-align:left"><code>application/x-freearc</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.avif</code></td>
+<td style="text-align:left">AVIF image</td>
+<td style="text-align:left"><code>image/avif</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.avi</code></td>
+<td style="text-align:left">AVI: Audio Video Interleave</td>
+<td style="text-align:left"><code>video/x-msvideo</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.azw</code></td>
+<td style="text-align:left">Amazon Kindle eBook format</td>
+<td style="text-align:left"><code>application/vnd.amazon.ebook</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.bin</code></td>
+<td style="text-align:left">Any kind of binary data</td>
+<td style="text-align:left"><code>application/octet-stream</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.bmp</code></td>
+<td style="text-align:left">Windows OS/2 Bitmap Graphics</td>
+<td style="text-align:left"><code>image/bmp</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.bz</code></td>
+<td style="text-align:left">BZip archive</td>
+<td style="text-align:left"><code>application/x-bzip</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.bz2</code></td>
+<td style="text-align:left">BZip2 archive</td>
+<td style="text-align:left"><code>application/x-bzip2</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.cda</code></td>
+<td style="text-align:left">CD audio</td>
+<td style="text-align:left"><code>application/x-cdf</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.csh</code></td>
+<td style="text-align:left">C-Shell script</td>
+<td style="text-align:left"><code>application/x-csh</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.css</code></td>
+<td style="text-align:left">Cascading Style Sheets (CSS)</td>
+<td style="text-align:left"><code>text/css</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.csv</code></td>
+<td style="text-align:left">Comma-separated values (CSV)</td>
+<td style="text-align:left"><code>text/csv</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.doc</code></td>
+<td style="text-align:left">Microsoft Word</td>
+<td style="text-align:left"><code>application/msword</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.docx</code></td>
+<td style="text-align:left">Microsoft Word (OpenXML)</td>
+<td style="text-align:left"><code>application/vnd.openxmlformats-officedocument.wordprocessingml.document</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.eot</code></td>
+<td style="text-align:left">MS Embedded OpenType fonts</td>
+<td style="text-align:left"><code>application/vnd.ms-fontobject</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.epub</code></td>
+<td style="text-align:left">Electronic publication (EPUB)</td>
+<td style="text-align:left"><code>application/epub+zip</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.gz</code></td>
+<td style="text-align:left">GZip Compressed Archive</td>
+<td style="text-align:left"><code>application/gzip</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.gif</code></td>
+<td style="text-align:left">Graphics Interchange Format (GIF)</td>
+<td style="text-align:left"><code>image/gif</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.htm</code>, <code>.html</code></td>
+<td style="text-align:left">HyperText Markup Language (HTML)</td>
+<td style="text-align:left"><code>text/html</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.ico</code></td>
+<td style="text-align:left">Icon format</td>
+<td style="text-align:left"><code>image/vnd.microsoft.icon</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.ics</code></td>
+<td style="text-align:left">iCalendar format</td>
+<td style="text-align:left"><code>text/calendar</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.jar</code></td>
+<td style="text-align:left">Java Archive (JAR)</td>
+<td style="text-align:left"><code>application/java-archive</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.jpeg</code>, <code>.jpg</code></td>
+<td style="text-align:left">JPEG images</td>
+<td style="text-align:left"><code>image/jpeg</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.js</code></td>
+<td style="text-align:left">JavaScript</td>
+<td style="text-align:left"><code>text/javascript</code> (Specifications: <a href="https://html.spec.whatwg.org/multipage/#scriptingLanguages">HTML</a> and <a href="https://www.rfc-editor.org/rfc/rfc9239">RFC 9239</a>)</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.json</code></td>
+<td style="text-align:left">JSON format</td>
+<td style="text-align:left"><code>application/json</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.jsonld</code></td>
+<td style="text-align:left">JSON-LD format</td>
+<td style="text-align:left"><code>application/ld+json</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.mid</code>, <code>.midi</code></td>
+<td style="text-align:left">Musical Instrument Digital Interface (MIDI)</td>
+<td style="text-align:left"><code>audio/midi</code>, <code>audio/x-midi</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.mjs</code></td>
+<td style="text-align:left">JavaScript module</td>
+<td style="text-align:left"><code>text/javascript</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.mp3</code></td>
+<td style="text-align:left">MP3 audio</td>
+<td style="text-align:left"><code>audio/mpeg</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.mp4</code></td>
+<td style="text-align:left">MP4 video</td>
+<td style="text-align:left"><code>video/mp4</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.mpeg</code></td>
+<td style="text-align:left">MPEG Video</td>
+<td style="text-align:left"><code>video/mpeg</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.mpkg</code></td>
+<td style="text-align:left">Apple Installer Package</td>
+<td style="text-align:left"><code>application/vnd.apple.installer+xml</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.odp</code></td>
+<td style="text-align:left">OpenDocument presentation document</td>
+<td style="text-align:left"><code>application/vnd.oasis.opendocument.presentation</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.ods</code></td>
+<td style="text-align:left">OpenDocument spreadsheet document</td>
+<td style="text-align:left"><code>application/vnd.oasis.opendocument.spreadsheet</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.odt</code></td>
+<td style="text-align:left">OpenDocument text document</td>
+<td style="text-align:left"><code>application/vnd.oasis.opendocument.text</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.oga</code></td>
+<td style="text-align:left">OGG audio</td>
+<td style="text-align:left"><code>audio/ogg</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.ogv</code></td>
+<td style="text-align:left">OGG video</td>
+<td style="text-align:left"><code>video/ogg</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.ogx</code></td>
+<td style="text-align:left">OGG</td>
+<td style="text-align:left"><code>application/ogg</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.opus</code></td>
+<td style="text-align:left">Opus audio</td>
+<td style="text-align:left"><code>audio/opus</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.otf</code></td>
+<td style="text-align:left">OpenType font</td>
+<td style="text-align:left"><code>font/otf</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.png</code></td>
+<td style="text-align:left">Portable Network Graphics</td>
+<td style="text-align:left"><code>image/png</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.pdf</code></td>
+<td style="text-align:left">Adobe <a href="https://www.adobe.com/acrobat/about-adobe-pdf.html">Portable Document Format</a> (PDF)</td>
+<td style="text-align:left"><code>application/pdf</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.php</code></td>
+<td style="text-align:left">Hypertext Preprocessor (<strong>Personal Home Page</strong>)</td>
+<td style="text-align:left"><code>application/x-httpd-php</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.ppt</code></td>
+<td style="text-align:left">Microsoft PowerPoint</td>
+<td style="text-align:left"><code>application/vnd.ms-powerpoint</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.pptx</code></td>
+<td style="text-align:left">Microsoft PowerPoint (OpenXML)</td>
+<td style="text-align:left"><code>application/vnd.openxmlformats-officedocument.presentationml.presentation</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.rar</code></td>
+<td style="text-align:left">RAR archive</td>
+<td style="text-align:left"><code>application/vnd.rar</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.rtf</code></td>
+<td style="text-align:left">Rich Text Format (RTF)</td>
+<td style="text-align:left"><code>application/rtf</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.sh</code></td>
+<td style="text-align:left">Bourne shell script</td>
+<td style="text-align:left"><code>application/x-sh</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.svg</code></td>
+<td style="text-align:left">Scalable Vector Graphics (SVG)</td>
+<td style="text-align:left"><code>image/svg+xml</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.tar</code></td>
+<td style="text-align:left">Tape Archive (TAR)</td>
+<td style="text-align:left"><code>application/x-tar</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.tif</code>, <code>.tiff</code></td>
+<td style="text-align:left">Tagged Image File Format (TIFF)</td>
+<td style="text-align:left"><code>image/tiff</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.ts</code></td>
+<td style="text-align:left">MPEG transport stream</td>
+<td style="text-align:left"><code>video/mp2t</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.ttf</code></td>
+<td style="text-align:left">TrueType Font</td>
+<td style="text-align:left"><code>font/ttf</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.txt</code></td>
+<td style="text-align:left">Text, (generally ASCII or ISO 8859-<em>n</em>)</td>
+<td style="text-align:left"><code>text/plain</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.vsd</code></td>
+<td style="text-align:left">Microsoft Visio</td>
+<td style="text-align:left"><code>application/vnd.visio</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.wav</code></td>
+<td style="text-align:left">Waveform Audio Format</td>
+<td style="text-align:left"><code>audio/wav</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.weba</code></td>
+<td style="text-align:left">WEBM audio</td>
+<td style="text-align:left"><code>audio/webm</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.webm</code></td>
+<td style="text-align:left">WEBM video</td>
+<td style="text-align:left"><code>video/webm</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.webp</code></td>
+<td style="text-align:left">WEBP image</td>
+<td style="text-align:left"><code>image/webp</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.woff</code></td>
+<td style="text-align:left">Web Open Font Format (WOFF)</td>
+<td style="text-align:left"><code>font/woff</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.woff2</code></td>
+<td style="text-align:left">Web Open Font Format (WOFF)</td>
+<td style="text-align:left"><code>font/woff2</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.xhtml</code></td>
+<td style="text-align:left">XHTML</td>
+<td style="text-align:left"><code>application/xhtml+xml</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.xls</code></td>
+<td style="text-align:left">Microsoft Excel</td>
+<td style="text-align:left"><code>application/vnd.ms-excel</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.xlsx</code></td>
+<td style="text-align:left">Microsoft Excel (OpenXML)</td>
+<td style="text-align:left"><code>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.xml</code></td>
+<td style="text-align:left">XML</td>
+<td style="text-align:left"><code>application/xml</code> is recommended as of <a href="https://datatracker.ietf.org/doc/html/rfc7303#section-4.1">RFC 7303</a> (section 4.1), but <code>text/xml</code> is still used sometimes. You can assign a specific MIME type to a file with <code>.xml</code> extension depending on how its contents are meant to be interpreted. For instance, an Atom feed is <code>application/atom+xml</code>, but <code>application/xml</code> serves as a valid default.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.xul</code></td>
+<td style="text-align:left">XUL</td>
+<td style="text-align:left"><code>application/vnd.mozilla.xul+xml</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.zip</code></td>
+<td style="text-align:left">ZIP archive</td>
+<td style="text-align:left"><code>application/zip</code></td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.3gp</code></td>
+<td style="text-align:left"><a href="https://en.wikipedia.org/wiki/3GP_and_3G2">3GPP</a> audio/video container</td>
+<td style="text-align:left"><code>video/3gpp</code>; <code>audio/3gpp</code> if it doesn't contain video</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.3g2</code></td>
+<td style="text-align:left"><a href="https://en.wikipedia.org/wiki/3GP_and_3G2">3GPP2</a> audio/video container</td>
+<td style="text-align:left"><code>video/3gpp2</code>; <code>audio/3gpp2</code> if it doesn't contain video</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>.7z</code></td>
+<td style="text-align:left"><a href="https://en.wikipedia.org/wiki/7-Zip">7-zip</a> archive</td>
+<td style="text-align:left"><code>application/x-7z-compressed</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types">Common MIME types - HTTP | MDN</a></li>
+</ul>
+<h2 id="八-多媒体">八. 多媒体</h2>
+<p>就是html对应的<code>img</code>, <code>audio</code>, <code>video</code>标签.</p>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.image</td>
+<td>图像</td>
+</tr>
+<tr>
+<td>st.audio</td>
+<td>音频</td>
+</tr>
+<tr>
+<td>st.video</td>
+<td>视频</td>
+</tr>
+</tbody>
+</table>
+<h2 id="九-状态提示">九. 状态提示</h2>
+<p>这部分没有什么复杂的东西, 注意一下<code>进度条</code>好了.</p>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.progress</td>
+<td>进度条</td>
+</tr>
+<tr>
+<td>st.spinner</td>
+<td>临时消息提示</td>
+</tr>
+<tr>
+<td>st.balloons</td>
+<td>庆祝气球</td>
+</tr>
+<tr>
+<td>st.snow</td>
+<td>雪花效果</td>
+</tr>
+<tr>
+<td>st.error</td>
+<td>错误内容</td>
+</tr>
+<tr>
+<td>st.warning</td>
+<td>警告内容</td>
+</tr>
+<tr>
+<td>st.info</td>
+<td>告知内容</td>
+</tr>
+<tr>
+<td>st.success</td>
+<td>成功内容</td>
+</tr>
+<tr>
+<td>st.exception</td>
+<td>意外内容</td>
+</tr>
+</tbody>
+</table>
+<h2 id="十-流控制">十. 流控制</h2>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.stop</td>
+<td>立即停止执行</td>
+</tr>
+<tr>
+<td>st.form</td>
+<td>创建表单</td>
+</tr>
+<tr>
+<td>st.form_submit_button</td>
+<td>展示一个表单提交按钮</td>
+</tr>
+<tr>
+<td>st.experimental_rerun</td>
+<td>即可重新运行脚本</td>
+</tr>
+</tbody>
+</table>
+<h2 id="十一-工具">十一. 工具</h2>
+<p><code>st.set_page_config</code>这个需要注意, 这是页面的配置方式, 如站点的favico, 名称等的设置.</p>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.set_page_config</td>
+<td>页面配置</td>
+</tr>
+<tr>
+<td>st.echo</td>
+<td></td>
+</tr>
+<tr>
+<td>st.help</td>
+<td>查看帮助文档</td>
+</tr>
+<tr>
+<td>st.experimental_show</td>
+<td></td>
+</tr>
+<tr>
+<td>st.experimental_get_query_params</td>
+<td></td>
+</tr>
+<tr>
+<td>st.experimental_set_query_params</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="十二-缓存">十二. 缓存</h2>
+<p>对于希望实现复杂的网页内容, 这部分是核心.</p>
+<figure data-type="image" tabindex="15"><img src="https://docs.streamlit.io/images/caching-high-level-diagram.png" alt="caching-high-level-diagram.png (1431×548) (streamlit.io)" loading="lazy"></figure>
+<p>目前<code>streamlit</code>已经将缓存机制合并到这两个装饰器之下:</p>
+<ul>
+<li>st.cache_data</li>
+<li>st.cache_resource</li>
+</ul>
+<h3 id="121-stcache_data">12.1 st.cache_data</h3>
+<pre><code class="language-bash">st.cache_data(func=None, *, ttl, max_entries, show_spinner, persist, experimental_allow_widgets)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>func</strong> <em>(callable)</em></td>
+<td>The function to cache. Streamlit hashes the function's source code.</td>
+</tr>
+<tr>
+<td><strong>ttl</strong> <em>(float or timedelta or None)</em></td>
+<td>The maximum number of seconds to keep an entry in the cache, or None if cache entries should not expire. The default is None. <strong>Note that ttl is incompatible with <code>persist=&quot;disk&quot;</code> - <code>ttl</code> will be ignored if <code>persist</code> is specified</strong>.</td>
+</tr>
+<tr>
+<td><strong>max_entries</strong> <em>(int or None)</em></td>
+<td>The maximum number of entries to keep in the cache, or None for an unbounded cache. (When a new entry is added to a full cache, the oldest cached entry will be removed.) The default is None.</td>
+</tr>
+<tr>
+<td><strong>show_spinner</strong> <em>(boolean)</em></td>
+<td>Enable the spinner. Default is True to show a spinner when there is a cache miss.</td>
+</tr>
+<tr>
+<td><strong>persist</strong> <em>(str or boolean or None)</em></td>
+<td>Optional location to persist cached data to**. Passing &quot;disk&quot; (or True) will persist the cached data to the local disk**. None (or False) will disable persistence. The default is None.</td>
+</tr>
+<tr>
+<td><strong>experimental_allow_widgets</strong> <em>(boolean)</em></td>
+<td>Allow widgets to be used in the cached function. Defaults to False. Support for widgets in cached functions is currently experimental. Setting this parameter to True may lead to excessive memory use since the widget value is treated as an additional input parameter to the cache. We may remove support for this option at any time without notice.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">import streamlit as st
+
+@st.cache_data
+def fetch_and_clean_data(url):
+    # Fetch data from URL here, and then clean it up.
+    return data
+
+d1 = fetch_and_clean_data(DATA_URL_1)
+# Actually executes the function, since this is the first time it was
+# encountered.
+
+d2 = fetch_and_clean_data(DATA_URL_1)
+# Does not execute the function. Instead, returns its previously computed
+# value. This means that now the data in d1 is the same as in d2.
+
+d3 = fetch_and_clean_data(DATA_URL_2)
+# This is a different URL, so the function executes.
+
+# 支持的参数
+@st.cache_data(persist=&quot;disk&quot;)
+def fetch_and_clean_data(url):
+    # Fetch data from URL here, and then clean it up.
+    return data
+</code></pre>
+<blockquote>
+<p>By default, all parameters to a cached function must be hashable. Any parameter whose name begins with <code>_</code> will not be hashed. You can use this as an &quot;escape hatch&quot; for parameters that are not hashable:</p>
+</blockquote>
+<p>默认情况下, 所有的被装饰的函数的参数必须是可哈希的的对象(<code>hashable</code>), 对于使用下划线标记的参数, 将不会被哈希, 对于不可哈希的参数, 可以使用这个标记.</p>
+<h3 id="122-stcache_resurce">12.2 st.cache_resurce</h3>
+<blockquote>
+<p>Decorator to cache functions that return global resources (e.g. database connections, ML models).</p>
+<p>缓存全局对象资源(单例), 如数据库连接对象, 机器学习模型</p>
+</blockquote>
+<pre><code class="language-bash">st.cache_resource(func, *, ttl, max_entries, show_spinner, validate, experimental_allow_widgets)
+</code></pre>
+<blockquote>
+<p>Cached objects are shared across all users, sessions, and reruns.</p>
+<p>缓存的对象将是全局用户, 全局会话.</p>
+<p>They must be thread-safe because they can be accessed from multiple threads concurrently. If thread safety is an issue, consider using <code>st.session_state</code> to store resources per session instead.</p>
+<p>缓存对象, 必须是线程安全的, 否则, 应当使用<code>st.session_state</code></p>
+</blockquote>
+<p>这里以<code>mysql.connector</code>为例</p>
+<blockquote>
+<h3 id="1014-mysqlconnectorthreadsafety-property">10.1.4 mysql.connector.threadsafety Property</h3>
+<p>This property is an integer that indicates the supported level of thread safety provided by Connector/Python.</p>
+<pre><code class="language-python">&gt;&gt;&gt; mysql.connector.threadsafety
+1
+</code></pre>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Parameters</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>func</strong> <em>(callable)</em></td>
+<td>The function that creates the cached resource. Streamlit hashes the function's source code.</td>
+</tr>
+<tr>
+<td><strong>ttl</strong> <em>(float or timedelta or None)</em></td>
+<td>The maximum number of seconds to keep an entry in the cache, or None if cache entries should not expire. The default is None.</td>
+</tr>
+<tr>
+<td><strong>max_entries</strong> <em>(int or None)</em></td>
+<td>The maximum number of entries to keep in the cache, or None for an unbounded cache. (When a new entry is added to a full cache, the oldest cached entry will be removed.) The default is None.</td>
+</tr>
+<tr>
+<td><strong>show_spinner</strong> <em>(boolean or string)</em></td>
+<td>Enable the spinner. Default is True to show a spinner when there is a &quot;cache miss&quot; and the cached resource is being created. If string, value of show_spinner param will be used for spinner text.</td>
+</tr>
+<tr>
+<td><strong>validate</strong> <em>(callable or None)</em></td>
+<td>An optional validation function for cached data. <code>validate</code> is called each time the cached value is accessed. It receives the cached value as its only parameter and it must return a boolean. If <code>validate</code> returns False, the current cached value is discarded, and the decorated function is called to compute a new value. This is useful e.g. to check the health of database connections.</td>
+</tr>
+<tr>
+<td><strong>experimental_allow_widgets</strong> <em>(boolean)</em></td>
+<td>Allow widgets to be used in the cached function. Defaults to False. Support for widgets in cached functions is currently experimental. Setting this parameter to True may lead to excessive memory use since the widget value is treated as an additional input parameter to the cache. We may remove support for this option at any time without notice.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><a href="https://juejin.cn/post/6907145922757525512">一文教会你什么线程安全以及如何实现线程安全 - 掘金 (juejin.cn)</a></li>
+</ul>
+<h3 id="123-二者应用场景">12.3 二者应用场景</h3>
+<table>
+<thead>
+<tr>
+<th>Use case</th>
+<th>Typical return types</th>
+<th>Caching decorator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Reading a CSV file with pd.read_csv(读取的csv内容)</td>
+<td>pandas.DataFrame</td>
+<td>st.cache_data</td>
+</tr>
+<tr>
+<td>Reading a text file(读取的文本内容)</td>
+<td>str, list of str</td>
+<td>st.cache_data</td>
+</tr>
+<tr>
+<td>Transforming pandas dataframes(pandas的对象)</td>
+<td>pandas.DataFrame, pandas.Series</td>
+<td>st.cache_data</td>
+</tr>
+<tr>
+<td>Computing with numpy arrays(np的数组)</td>
+<td>numpy.ndarray</td>
+<td>st.cache_data</td>
+</tr>
+<tr>
+<td>Simple computations with basic types(基本类型数据)</td>
+<td>str, int, float, …</td>
+<td>st.cache_data</td>
+</tr>
+<tr>
+<td>Querying a database(查询数据库)</td>
+<td>pandas.DataFrame</td>
+<td>st.cache_data</td>
+</tr>
+<tr>
+<td>Querying an API(查询 api)</td>
+<td>pandas.DataFrame, str, dict</td>
+<td>st.cache_data</td>
+</tr>
+<tr>
+<td>Running an ML model (inference)(运行机器学习模型实例)</td>
+<td>pandas.DataFrame, str, int, dict, list</td>
+<td>st.cache_data</td>
+</tr>
+<tr>
+<td>Creating or processing images(处理图片)</td>
+<td>PIL.Image.Image, numpy.ndarray</td>
+<td>st.cache_data</td>
+</tr>
+<tr>
+<td>Creating charts(创建图表)</td>
+<td>matplotlib.figure.Figure, plotly.graph_objects.Figure, altair.Chart</td>
+<td>st.cache_data (but some libraries require st.cache_resource, since the chart object is not serializable <strong>– make sure not to mutate the chart after creation</strong>!)</td>
+</tr>
+<tr>
+<td>Loading ML models(载入机器学习模型)</td>
+<td>transformers.Pipeline, torch.nn.Module, tensorflow.keras.Model</td>
+<td>st.cache_resource</td>
+</tr>
+<tr>
+<td>Initializing database connections(数据库连接对象)</td>
+<td>pyodbc.Connection, sqlalchemy.engine.base.Engine, psycopg2.connection, mysql.connector.MySQLConnection, sqlite3.Connection</td>
+<td>st.cache_resource</td>
+</tr>
+<tr>
+<td>Opening persistent file handles(文件句柄)</td>
+<td>_io.TextIOWrapper</td>
+<td>st.cache_resource</td>
+</tr>
+<tr>
+<td>Opening persistent threads(线程)</td>
+<td>threading.thread</td>
+<td>st.cache_resource</td>
+</tr>
+</tbody>
+</table>
+<p>简单总结</p>
+<ul>
+<li>返回直接数据的, 使用<code>st.cache_data</code></li>
+<li>返回的是实例对象, 句柄, 数据库连接对象等, 需要全局保持唯一性的, 使用<code>st.cache_resource</code></li>
+</ul>
+<p><em>注: 官方的改名, 有点奇葩, 之前的单例(<code>experimental_singleton</code>), 挺好分辨的.</em></p>
+<h3 id="124-会话缓存">12.4 会话缓存</h3>
+<figure data-type="image" tabindex="16"><a href="https://imgse.com/i/ppiABG9"><img src="https://s1.ax1x.com/2023/03/01/ppiABG9.png" alt="ppiABG9.png" loading="lazy"></a></figure>
+<p>在浏览器中, <code>storage</code>分为:</p>
+<ul>
+<li>
+<p><code>localStorage</code>, 持久性存储, 如果不主动清除, 将一直存在在浏览器上</p>
+</li>
+<li>
+<p><code>sessionStorage</code>, 会话存储, 当会话结束, 就自动销毁.</p>
+</li>
+</ul>
+<blockquote>
+<p>We define access to a Streamlit app in a browser tab as a <strong>session</strong>. For each browser tab that connects to the Streamlit server, a new session is created. Streamlit reruns your script from top to bottom every time you interact with your app. Each reruns takes place in a blank slate: no variables are shared between runs.</p>
+<p>streamlit中的会话定义: <code>For each browser tab that connects to the Streamlit server, a new session is created</code>, 和浏览器一致, 当每新建一个标签, 就代表一个新的<code>session</code>.</p>
+<p>Session State is a way to share variables between reruns, for each user session. In addition to the ability to store and persist state, Streamlit also exposes the ability to manipulate state using Callbacks. Session state also persists across apps inside a <a href="https://docs.streamlit.io/library/get-started/multipage-apps">multipage app</a>.</p>
+<p>会话用于解决多次运行脚本在一个会话中的变量的分享以及对多页面app的变量分享.</p>
+</blockquote>
+<figure data-type="image" tabindex="17"><a href="https://imgse.com/i/ppiAWIe"><img src="https://s1.ax1x.com/2023/03/01/ppiAWIe.png" alt="ppiAWIe.png" loading="lazy"></a></figure>
+<p>使用<code>st.cache_resource</code>装饰的 <code>a = App()</code> 是作用于全局的, <code>session</code>是作用于每个会话的.</p>
+<pre><code class="language-python">import streamlit as st
+
+# 必须初始化才能能访问
+st.write(st.session_state['value'])
+</code></pre>
+<figure data-type="image" tabindex="18"><img src="https://docs.streamlit.io/images/state_uninitialized_exception.png" alt="state-uninitialized-exception" loading="lazy"></figure>
+<h3 id="125-清除缓存">12.5 清除缓存</h3>
+<blockquote>
+<p>Clear all in-memory and on-disk data caches.</p>
+<p>清除内存/硬盘上的缓存</p>
+</blockquote>
+<pre><code class="language-python">import streamlit as st
+
+@st.cache_data
+def square(x):
+    return x**2
+
+@st.cache_data
+def cube(x):
+    return x**3
+
+# 手动清理缓存
+if st.button(&quot;Clear All&quot;):
+    # Clear values from *all* all in-memory and on-disk data caches:
+    # i.e. clear values from both square and cube
+    st.cache_data.clear()
+</code></pre>
+<h2 id="十三-其他组件">十三. 其他组件</h2>
+<p>这部分主要是一些按钮, 下拉框等.</p>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.button</td>
+<td>普通按钮</td>
+</tr>
+<tr>
+<td>st.experimental_data_editor</td>
+<td>实验性数据编辑器</td>
+</tr>
+<tr>
+<td>st.checkbox</td>
+<td>选中框</td>
+</tr>
+<tr>
+<td>st.selectbox</td>
+<td>选择</td>
+</tr>
+<tr>
+<td>st.multiselect</td>
+<td>多选框</td>
+</tr>
+<tr>
+<td>st.slider</td>
+<td>滑动条</td>
+</tr>
+<tr>
+<td>st.select_slider</td>
+<td>选择滑动条</td>
+</tr>
+<tr>
+<td>st.color_picker</td>
+<td>颜色选择器</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">from datetime import datetime
+
+cols = st.columns(2)
+with cols[0]:
+    start_time = st.slider(
+        &quot;When do you start?&quot;,
+        value=datetime(2020, 1, 1, 9, 30),
+        format=&quot;MM/DD/YY - hh:mm&quot;)
+    st.write(&quot;Start time:&quot;, start_time)
+
+with cols[1]:
+    start_color, end_color = st.select_slider(
+        'Select a range of color wavelength',
+        options=['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'],
+        value=('red', 'blue'))
+    st.write('You selected wavelengths between', start_color, 'and', end_color)
+</code></pre>
+<h2 id="十四-回调函数">十四. 回调函数</h2>
+<p><code>streamlit</code>为一些组件提供事件回调函数的支持, 但是使用上并没有实现<code>JavaScript</code>事件回调那种级别的便利, 只是很简单的事件回调.</p>
+<pre><code class="language-javascript">// js
+document.onkeydown = (event) =&gt; do somthing....;
+</code></pre>
+<blockquote>
+<p>Callbacks can be used with widgets using the parameters <code>on_change</code> (or <code>on_click</code>), <code>args</code>, and <code>kwargs</code>:</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><strong>on_change</strong> or <strong>on_click</strong> - The function name to be used as a callback</li>
+<li><strong>args</strong> (<em>tuple</em>) - List of arguments to be passed to the callback function</li>
+<li><strong>kwargs</strong> (<em>dict</em>) - Named arguments to be passed to the callback function</li>
+</ul>
+</blockquote>
+<p>支持数据发生变化, 点击, 这两种事件</p>
+<blockquote>
+<p>Widgets which support the <code>on_change</code> event:</p>
+<ul>
+<li><code>st.checkbox</code>, 复选框</li>
+<li><code>st.color_picker</code>, 颜色选择器</li>
+<li><code>st.date_input</code>, 日期输入</li>
+<li><code>st.multiselect</code>, 多选</li>
+<li><code>st.number_input</code>, 数字输入</li>
+<li><code>st.radio</code>, 单选</li>
+<li><code>st.select_slider</code>, 复合滑动条</li>
+<li><code>st.selectbox</code>, 下拉框</li>
+<li><code>st.slider</code>, 滑动条</li>
+<li><code>st.text_area</code>, 多行文本输入</li>
+<li><code>st.text_input</code>, 单行文本输入</li>
+<li><code>st.time_input</code>, 事件输入</li>
+<li><code>st.file_uploader</code>, 文件上传</li>
+</ul>
+<p>Widgets which support the <code>on_click</code> event:</p>
+<ul>
+<li><code>st.button</code>, 普通按钮</li>
+<li><code>st.download_button</code>, 下载按钮</li>
+<li><code>st.form_submit_button</code>, 表单按钮</li>
+</ul>
+<p>To add a callback, define a callback function <strong>above</strong> the widget declaration and pass it to the widget via the <code>on_change</code> (or <code>on_click</code> ) parameter.</p>
+</blockquote>
+<pre><code class="language-python">st.selectbox(
+        'How would you like to be contacted?',
+        ('Email', 'Home phone', 'Mobile phone'), on_change=a.test, args=(1,1))
+</code></pre>
+<p>其实现的方式和<code>Tampermonky</code>中的自定义函数事件回调类似, 但是<code>streamlit</code>无法通过回调函数直接传递参数.</p>
+<h2 id="十五-多页面">十五. 多页面</h2>
+<figure data-type="image" tabindex="19"><a href="https://imgse.com/i/ppPMfA0"><img src="https://s1.ax1x.com/2023/02/28/ppPMfA0.png" alt="ppPMfA0.png" loading="lazy"></a></figure>
+<p>和普通的方式, 主要的差异在于<code>url</code>, 可以直接使用</p>
+<blockquote>
+<p>Once you've created your entrypoint file, you can add pages by creating <code>.py</code> files in a <code>pages/</code> directory relative to your entrypoint file. For example, if your entrypoint file is <code>Home.py</code>, then you can create a <code>pages/About.py</code> file to define the &quot;About&quot; page. Here's a valid directory structure for a multipage app:</p>
+<pre><code>Home.py # This is the file you run with &quot;streamlit run&quot;
+└─── pages/
+└─── About.py # This is a page
+└─── 2_Page_two.py # This is another page
+└─── 3_😎_three.py # So is this
+</code></pre>
+</blockquote>
+<p>只需要<code>home.py</code>作为入口(不一定需要这个名称), <code>pages</code>(必须这个名称)下包含需要的页面文件即可</p>
+<blockquote>
+<p>Only <code>.py</code> files in the <code>pages/</code> directory will be loaded as pages. Streamlit ignores all other files in the <code>pages/</code> directory and subdirectories.</p>
+<p>注意放置的目录, 不要放置在子目录之下, 文件夹必须为<code>pages</code></p>
+</blockquote>
+<p><img src="https://docs.streamlit.io/images/mpa-add-pages.png" alt="Directory structure" loading="lazy">侧边栏自动生成, 其他的组件可以正常放置在侧边栏之上.</p>
+<h2 id="十六-套件">十六. 套件</h2>
+<p><code>Component</code>, 暂时翻译为套件吧(习惯了将诸如按钮, 图表这类的对象成为组件).</p>
+<blockquote>
+<p>If your goal in creating a Streamlit Component is solely to display HTML code or render a chart from a Python visualization library, Streamlit provides two methods that greatly simplify the process: <code>components.html()</code> and <code>components.iframe()</code>.</p>
+</blockquote>
+<blockquote>
+<h3 id="render-an-html-string">Render an HTML string</h3>
+<p>While <a href="https://docs.streamlit.io/library/api-reference/text/st.text"><code>st.text</code></a>, <a href="https://docs.streamlit.io/library/api-reference/text/st.markdown"><code>st.markdown</code></a> and <a href="https://docs.streamlit.io/library/api-reference/write-magic/st.write"><code>st.write</code></a> make it easy to write text to a Streamlit app, sometimes you'd rather implement a custom piece of HTML. Similarly, while Streamlit natively supports <a href="https://docs.streamlit.io/library/api-reference/charts#chart-elements">many charting libraries</a>, you may want to implement a specific HTML/JavaScript template for a new charting library. <code>components.html</code> works by giving you the ability to embed an iframe inside of a Streamlit app that contains your desired output.</p>
+</blockquote>
+<blockquote>
+<h3 id="render-an-iframe-url">Render an iframe URL</h3>
+<p><code>components.iframe</code> is similar in features to <code>components.html</code>, with the difference being that <code>components.iframe</code> takes a URL as its input. This is used for situations where you want to include an entire page within a Streamlit app.</p>
+</blockquote>
+<p>可以将套件认为是, 集成的独立模块, 相当于现成的<code>streamlit</code>特定功能的模块(可能这个功能是为未来的<a href="https://streamlit.io/components">套件商店_Components • Streamlit</a>做准备).</p>
+<h3 id="161-stcomponentsv1html">16.1 st.components.v1.html</h3>
+<pre><code class="language-python"># 在页面中注入js脚本
+from streamlit.components.v1 import html
+
+js = '''
+    &lt;script&gt;
+    console.log(&quot;Hello World!&quot;);
+    &lt;/script&gt;
+    '''
+
+html(js)
+</code></pre>
+<p><strong>Display an HTML string in an iframe.</strong></p>
+<p>注意这里注入的<code>js</code>脚本还是针对<code>iframe</code>的</p>
+<table>
+<thead>
+<tr>
+<th>Function signature</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.components.v1.html(html, width=None, height=None, scrolling=False)</td>
+<td></td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>html</strong> <em>(str)</em></td>
+<td>The HTML string to embed in the iframe.</td>
+</tr>
+<tr>
+<td><strong>width</strong> <em>(int)</em></td>
+<td>The width of the frame in CSS pixels. Defaults to the app's default element width.</td>
+</tr>
+<tr>
+<td><strong>height</strong> <em>(int)</em></td>
+<td>The height of the frame in CSS pixels. Defaults to 150.</td>
+</tr>
+<tr>
+<td><strong>scrolling</strong> <em>(bool)</em></td>
+<td>If True, show a scrollbar when the content is larger than the iframe. Otherwise, do not show a scrollbar. Defaults to False.</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><a href="https://github.com/thunderbug1/streamlit-javascript">GitHub - thunderbug1/streamlit-javascript: Streamlit component to execute javascript code on the client side and get back the result</a></li>
+</ul>
+<h3 id="162-stcomponentsv1iframe">16.2 st.components.v1.iframe</h3>
+<p>Load a remote URL in an iframe.</p>
+<p>载入子框架页面</p>
+<table>
+<thead>
+<tr>
+<th>Function signature</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.components.v1.iframe(src, width=None, height=None, scrolling=False)</td>
+<td></td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>src</strong> <em>(str)</em></td>
+<td>The URL of the page to embed.</td>
+</tr>
+<tr>
+<td><strong>width</strong> <em>(int)</em></td>
+<td>The width of the frame in CSS pixels. Defaults to the app's default element width.</td>
+</tr>
+<tr>
+<td><strong>height</strong> <em>(int)</em></td>
+<td>The height of the frame in CSS pixels. Defaults to 150.</td>
+</tr>
+<tr>
+<td><strong>scrolling</strong> <em>(bool)</em></td>
+<td>If True, show a scrollbar when the content is larger than the iframe. Otherwise, do not show a scrollbar. Defaults to False.</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-python">import streamlit.components.v1 as components
+
+# 嵌入一个子页面
+components.iframe(&quot;https://docs.streamlit.io/en/latest&quot;, width=1000, height=900, scrolling=True)
+</code></pre>
+<figure data-type="image" tabindex="20"><a href="https://imgse.com/i/ppiumSe"><img src="https://s1.ax1x.com/2023/03/01/ppiumSe.png" alt="ppiumSe.png" loading="lazy"></a></figure>
+<h2 id="十七-使用">十七. 使用</h2>
+<ul>
+<li>普通文档内容, <code>markdown</code></li>
+<li>数据处理, <code>pandas, numpy</code></li>
+<li>图表, <code>matplotlib/plotly</code></li>
+<li>数据库, <code>SQLite3/MySQL</code></li>
+<li>模型/数学: <code>sklearn/scipy</code></li>
+<li>.....</li>
+</ul>
+<p>通过简单组合, 即可完成从从数据存储, 查询, 展示, 绘图等等一些列内容....实现从前端到后端的全栈开发的需要.</p>
+<p><a href="https://geo.streamlit.app/U.S._Housing">Streamlit (geo.streamlit.app)</a></p>
+<figure data-type="image" tabindex="21"><a href="https://imgse.com/i/p922RMt"><img src="https://s1.ax1x.com/2023/05/16/p922RMt.png" alt="p922RMt.png" loading="lazy"></a></figure>
+<h2 id="十八-配置文件">十八. 配置文件</h2>
+<blockquote>
+<p>In a <strong>global config file</strong> at <code>~/.streamlit/config.toml</code> for macOS/Linux or <code>%userprofile%/.streamlit/config.toml</code> for Windows:</p>
+</blockquote>
+<p><code>streamlit</code>使用的配置文件为<code>toml</code>格式</p>
+<pre><code class="language-bash"># 端口
+[server]
+port = 80 # 端口
+showWarningOnDirectExecution = false
+runOnSave = true # 代码发生变化-自动运行脚本
+
+# 等价于
+streamlit run your_script.py --server.port 80
+
+# 主题
+[theme]
+base=&quot;light&quot;
+</code></pre>
+<p>侧边菜单栏设置, 由于侧边栏带有一个清除缓存的功能,</p>
+<ul>
+<li><a href="https://discuss.streamlit.io/t/how-do-i-hide-remove-the-menu-in-production/362/25">How do i hide/ remove the menu in production? - 🎈 Using Streamlit - Streamlit</a></li>
+<li><a href="https://github.com/streamlit/streamlit/issues/396">Ability to add custom items to hamburger menu -  Issue #396 -  streamlit/streamlit (github.com)</a></li>
+<li><a href="https://github.com/streamlit/streamlit/issues/395">Ability to hide the hamburger menu -  Issue #395 -  streamlit/streamlit (github.com)</a></li>
+</ul>
+<h2 id="十九-部署">十九. 部署</h2>
+<ul>
+<li>
+<p>私下分享</p>
+<p>直接在局域网可以访问.</p>
+<blockquote>
+<h2 id="sharing-private-apps">Sharing private apps</h2>
+<p><strong>By default all apps deployed from private source code are private to the developers in the workspace</strong>. Your apps will not be visible to anyone else unless you grant them explicit permission. You can grant permission either in your workspace or from the app itself.</p>
+</blockquote>
+</li>
+<li>
+<p>公开分享</p>
+<p><code>streamlit</code>提供<code>Streamlit Community Cloud</code>作为托管和实现的方式</p>
+<blockquote>
+<h2 id="add-your-app-to-github">Add your app to GitHub</h2>
+<p>Streamlit Community Cloud launches apps directly from your GitHub repo, so your app code and dependencies need to be on GitHub before you try to deploy the app. See <a href="https://docs.streamlit.io/streamlit-community-cloud/get-started/deploy-an-app/app-dependencies">App dependencies</a> for more information.</p>
+<p>支持直接启动<code>Github</code>仓库中的<code>streamlit</code>项目</p>
+<h3 id="optionally-add-a-configuration-file">Optionally, add a configuration file</h3>
+<p>Streamlit allows you to optionally set configuration options via four different methods. Among other things, you can use custom configs to customize your app's theme, enable logging, or set the port on which your app runs. For more information, see <a href="https://docs.streamlit.io/library/advanced-features/configuration">Configuration</a> and <a href="https://docs.streamlit.io/library/advanced-features/theming">Theming</a>. On Streamlit Community Cloud, however, you can only set configuration options via a configuration file in your GitHub repo.</p>
+<p>Specifically, you can add a configuration file to the root (top-level) directory of your repo: create a <code>.streamlit</code> folder, and then add a <code>config.toml</code> file to that folder. E.g., if your app is in a repo called <code>my-app</code>, you would add a file called <code>my-app/.streamlit/config.toml</code>. Say you want to set the theme of your app to &quot;dark&quot;. You would add the following to your <code>.streamlit/config.toml</code> file:</p>
+</blockquote>
+</li>
+<li>
+<p><a href="https://docs.streamlit.io/streamlit-community-cloud/get-started/deploy-an-app">Deploy an app - Streamlit Docs</a></p>
+</li>
+</ul>
+<h2 id="二十-资源">二十. 资源</h2>
+<ul>
+<li>
+<p>streamlit-apex-charts</p>
+<p>注意这个库在华为的镜像源没有发现, 在<code>pip</code>官方源上也没有查到这个库.</p>
+<pre><code class="language-bash">pip install -i https://pypi.tuna.tsinghua.edu.cn/simple streamlit-apex-charts
+# 暂时只在清华的镜像源上有
+# 绘图的库很多, 不一定需要这个
+</code></pre>
+<p><a href="https://discuss.streamlit.io/t/new-component-streamlit-apex-charts/18769">New Component: streamlit_apex_charts - 🧩 Streamlit Components - Streamlit</a></p>
+</li>
+</ul>
+<p><em>.... 未完, 待续</em></p>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/streamlit-shi-yong-zhi-nan/" title="Streamlit使用指南">https://Kyouichirou.github.io/post/streamlit-shi-yong-zhi-nan/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/0yrIeY7PQ/"># web</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/vWZdeXfxh/"># streamlit</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/OfTosZNoo/"># plotly</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/bfZBf6yTI/"># data visualization</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="常用矩阵特性摘要" href="https://Kyouichirou.github.io/post/chang-yong-ju-zhen-te-xing-zhai-yao/">常用矩阵特性摘要</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="常用矩阵特性摘要" href="https://Kyouichirou.github.io/post/chang-yong-ju-zhen-te-xing-zhai-yao/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="PCA&amp;SVD-摘要" href="https://Kyouichirou.github.io/post/pcaandsvd-zhai-yao/">PCA&amp;SVD-摘要</a>
+        <a class="nav-mobile-next" title="PCA&amp;SVD-摘要" href="https://Kyouichirou.github.io/post/pcaandsvd-zhai-yao/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

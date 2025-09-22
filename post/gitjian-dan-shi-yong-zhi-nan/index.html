@@ -1,0 +1,4067 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>Git(简单)使用指南 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="Git(简单)使用指南" />
+  <meta name="keywords" content="git,vim,priority" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一. 前言</a></li>
+<li><a href="#%E4%BA%8C-git%E5%AE%89%E8%A3%85">二. Git安装</a></li>
+<li><a href="#%E4%B8%89-%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B">三. 基本流程</a></li>
+<li><a href="#%E5%9B%9B-%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4">四. 基本命令</a>
+<ul>
+<li><a href="#41-vim-in-powershell">4.1 vim in powershell</a></li>
+</ul>
+</li>
+<li><a href="#%E4%BA%94-%E5%B7%A5%E4%BD%9C%E5%8C%BA">五. 工作区</a></li>
+<li><a href="#%E5%85%AD-%E6%9A%82%E5%AD%98%E5%8C%BA">六. 暂存区</a>
+<ul>
+<li><a href="#61-%E5%BF%BD%E7%95%A5%E6%96%87%E4%BB%B6">6.1 忽略文件</a></li>
+<li><a href="#62-%E4%B8%B4%E6%97%B6%E5%AD%98%E5%82%A8">6.2 临时存储</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%83-%E6%9C%AC%E5%9C%B0%E4%BB%93%E5%BA%93">七. 本地仓库</a>
+<ul>
+<li><a href="#71-%E6%A0%87%E7%AD%BE">7.1 标签</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%AB-%E6%9F%A5%E7%9C%8B%E5%8F%98%E5%8C%96">八. 查看变化</a>
+<ul>
+<li><a href="#81-%E6%AF%94%E8%BE%83%E6%96%87%E4%BB%B6%E5%B7%AE%E5%BC%82">8.1 比较文件差异</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B9%9D-%E5%88%86%E6%94%AF">九. 分支</a>
+<ul>
+<li><a href="#91-%E5%86%B2%E7%AA%81">9.1 冲突</a></li>
+<li><a href="#92-%E5%85%B3%E4%BA%8Ealready-up-to-date">9.2 关于<code>Already up-to-date</code></a></li>
+<li><a href="#93-%E5%85%B3%E4%BA%8E%E5%88%87%E6%8D%A2%E5%88%86%E6%94%AF%E5%8F%97%E9%99%90">9.3 关于切换分支受限</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81-%E6%92%A4%E9%94%80%E6%81%A2%E5%A4%8D">十. 撤销/恢复</a>
+<ul>
+<li><a href="#101-revert">10.1 revert</a></li>
+<li><a href="#102-checkout">10.2 checkout</a></li>
+<li><a href="#103-restore">10.3 restore</a></li>
+<li><a href="#104-reset">10.4 reset</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E4%B8%80-%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93">十一. 远程仓库</a>
+<ul>
+<li><a href="#111-%E5%88%9D%E5%A7%8B%E5%8C%96">11.1 初始化</a></li>
+<li><a href="#112-pull%E5%92%8Cfetch%E7%9A%84%E5%B7%AE%E5%BC%82">11.2 pull和fetch的差异</a></li>
+<li><a href="#113-%E6%9C%AC%E5%9C%B0%E4%BF%AE%E6%94%B9">11.3 本地修改</a></li>
+<li><a href="#114-%E6%8E%A8%E9%80%81">11.4 推送</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E4%BA%8C-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E5%8F%82%E6%95%B0">十二. 常用命令参数</a>
+<ul>
+<li><a href="#121-add">12.1 add</a></li>
+<li><a href="#122-reset">12.2 reset</a></li>
+<li><a href="#123-commit">12.3 commit</a></li>
+<li><a href="#124-checkout">12.4 checkout</a></li>
+<li><a href="#125-pull">12.5 pull</a></li>
+<li><a href="#126-diff">12.6 diff</a></li>
+<li><a href="#127-merge">12.7 merge</a></li>
+<li><a href="#128-branch">12.8 branch</a></li>
+<li><a href="#129-rebase">12.9 rebase</a></li>
+<li><a href="#1210-restore">12.10 restore</a></li>
+<li><a href="#1211-push">12.11 push</a></li>
+<li><a href="#1212-switch">12.12 switch</a></li>
+<li><a href="#1213-tag">12.13 tag</a></li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E4%B8%89-git-flow">十三. git flow</a></li>
+<li><a href="#%E5%8D%81%E5%9B%9B-%E5%90%8D%E8%AF%8D%E8%A7%A3%E6%9E%90">十四. 名词解析</a>
+<ul>
+<li><a href="#141-head">14.1 head</a>
+<ul>
+<li><a href="#1411-head">14.1.1 <code>HEAD</code></a></li>
+<li><a href="#1412-head~n">14.1.2 <code>HEAD~{n}</code></a></li>
+<li><a href="#1413-headn">14.1.3 <code>HEAD^n</code></a></li>
+<li><a href="#1414-%E7%A4%BA%E4%BE%8B">14.1.4 示例</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%8D%81%E4%BA%94-commit%E4%BF%A1%E6%81%AF%E8%A7%84%E8%8C%83">十五. commit信息规范</a></li>
+<li><a href="#%E5%8D%81%E5%85%AD-%E5%9B%BE%E5%BD%A2%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7">十六. 图形管理工具</a></li>
+<li><a href="#%E5%8D%81%E4%B8%83-%E9%80%9F%E6%9F%A5%E8%A1%A8">十七. 速查表</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/gitjian-dan-shi-yong-zhi-nan/"> Git(简单)使用指南 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-02-22 10:48:11">2023-02-22</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/zxKmYU_Ov/"> <span>git</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/0vCl85iR_/"> <span>vim</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/">
+        <span>priority</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >88<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >16973<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <h2 id="一-前言">一. 前言</h2>
+<figure data-type="image" tabindex="1"><img src="https://www.bootcss.com/p/git-guide/img/trees.png" alt="picv" loading="lazy"></figure>
+<p><code>Git</code>, 分布式版本管理系统(<code>Distributed Version Control System</code>)的一种.</p>
+<p>突然有新的想法, 准备使用新的思路来写代码, 但是担心写不去, 需要在写之前预留一个<strong>副本</strong>. 避免写不下去时可以返回初始的状态.</p>
+<p>多个需求或者多个方案, 代码存在多个分支, 方便维护.</p>
+<p>多人同时对一项目作业, 不同部分的协作.</p>
+<p>简而言之, 可以归结为以下三大功能:</p>
+<ul>
+<li>版本控制</li>
+<li>协同工作</li>
+<li>代码管理.</li>
+</ul>
+<!--more-->
+<h2 id="二-git安装">二. Git安装</h2>
+<p><a href="https://git-scm.com/downloads">Git download</a></p>
+<p>由于选项较多, 下面的链接提供较完整的解释, 新的版本<code>git</code>还在增加新的功能中...</p>
+<p><a href="https://www.cnblogs.com/z-x-y/p/10074116.html">Windows下相关安装教程</a></p>
+<h2 id="三-基本流程">三. 基本流程</h2>
+<figure data-type="image" tabindex="2"><a href="https://imgse.com/i/pS7w1lq"><img src="https://s1.ax1x.com/2023/02/15/pS7w1lq.png" alt="pS7w1lq.png" loading="lazy"></a></figure>
+<figure data-type="image" tabindex="3"><a href="https://imgse.com/i/pSIfPOA"><img src="https://s1.ax1x.com/2023/02/13/pSIfPOA.png" alt="pSIfPOA.png" loading="lazy"></a></figure>
+<p>文件的状态:</p>
+<p>In the following table, these three classes are shown in separate sections, and these characters are used for <code>X</code> and <code>Y</code> fields for the first two sections that show tracked paths:</p>
+<ul>
+<li>' ' = unmodified (未修改)</li>
+<li><em>M</em> = modified (已修改)</li>
+<li><em>T</em> = file type changed (regular file, symbolic link or submodule)</li>
+<li><em>A</em> = added (已添加到缓存区)</li>
+<li><em>D</em> = deleted (已删除)</li>
+<li><em>R</em> = renamed (已重命名)</li>
+<li><em>C</em> = copied (if config option status.renames is set to &quot;copies&quot;)</li>
+<li><em>U</em> = updated but unmerged (更新但未合并)</li>
+</ul>
+<p>(<em>当文件状态发生改变, 会使用上述标记用于标识</em>)</p>
+<pre><code class="language-bash">X          Y     Meaning
+-------------------------------------------------
+	 [AMD]   not updated
+M        [ MTD]  updated in index
+T        [ MTD]  type changed in index
+A        [ MTD]  added to index
+D                deleted from index
+R        [ MTD]  renamed in index
+C        [ MTD]  copied in index
+[MTARC]          index and work tree matches
+[ MTARC]    M    work tree changed since index
+[ MTARC]    T    type changed in work tree since index
+[ MTARC]    D    deleted in work tree
+	    R    renamed in work tree
+	    C    copied in work tree
+-------------------------------------------------
+D           D    unmerged, both deleted
+A           U    unmerged, added by us
+U           D    unmerged, deleted by them
+U           A    unmerged, added by them
+D           U    unmerged, deleted by us
+A           A    unmerged, both added
+U           U    unmerged, both modified
+-------------------------------------------------
+?           ?    untracked
+!           !    ignored
+-------------------------------------------------
+</code></pre>
+<p>本地的三个阶段分区:</p>
+<ul>
+<li><code>workspace</code> 工作区, 即当前正在作业的阶段</li>
+<li><code>index(stage)</code>, 缓存区, 等待<code>commit</code>的暂存阶段</li>
+<li><code>local repository</code>, 最终的提交<code>commit</code>的版本库</li>
+</ul>
+<figure data-type="image" tabindex="4"><img src="https://img-blog.csdnimg.cn/20200811162106295.png" alt="flow" loading="lazy"></figure>
+<pre><code class="language-bash"># 高频命令
+
+`add`, + filename, =&gt; 表示需要追踪的文件
+
+`commit` + (注释) =&gt; 提交
+
+`fetch` 将远端仓库的数据同步到本地仓库, 可以使用diff比较代码和工作区的差异, 然后在同步到工作区
+
+`pull` 将远端仓库的数据直接覆盖本地仓库
+
+`diff` 比较文件的差异
+
+`clone` 将项目复制到本地
+
+`rebase` 优化commit
+
+`checkout` 切换分支/恢复状态
+</code></pre>
+<h2 id="四-基本命令">四. 基本命令</h2>
+<pre><code class="language-bash"># 帮助信息
+git help
+
+# 具体获得某项帮助
+# 将打开浏览器加载本地的帮助文件
+git help add
+
+# 查看配置
+git config --list --show-origin
+
+# 设置用户名
+git config --global user.name &quot;John Doe&quot;
+git config --global user.email johndoe@example.com
+
+# 查看某个项的配置信息
+git config user.name
+</code></pre>
+<pre><code class="language-bash"># 变更默认的编辑器
+# 安装时有选择
+# 还是vim来得更为方便
+git config --global core.editor &quot;'C:/Program Files/Notepad++/notepad++.exe' -multiInst -notabbar -nosession -noPlugin&quot;
+
+git config --global core.editor vim
+
+core.editor=&quot;C:\Users\Lian\AppData\Local\Programs\Microsoft VS Code\bin\code&quot; --wait
+</code></pre>
+<pre><code class="language-bash"># 变更默认分支名称
+
+# github
+
+git config --global init.defaultBranch main
+</code></pre>
+<p><code>git</code>的默认终端-<code>MingW64</code>支持部分<code>Linux</code>命令, 假如对<code>Linux</code>命令熟悉, 相应的操作会比较得心应手.</p>
+<pre><code class="language-bash"># 创建文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ touch python_test.py
+
+# 查看文件目录
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ ls
+python_test.py
+
+# 查看文件内容
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ cat python_test.py
+import time
+
+def main():
+    print(time.time())
+
+# 创建文件夹
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ mkdir test_pack
+
+# 查看更详细的文件目录信息
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ ls -a
+./  ../  .git/  python_test.py  test_pack/
+
+# 切换目录
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ cd test_pack
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test/test_pack (master)
+$
+
+# 查看所有的文件信息
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/desktop/git_test (master)
+$ ls -R
+.:
+a.txt  d/  readme.txt  test_a/  test_b/  test_c/
+
+./d:
+'New Text Document.txt'
+
+./test_a:
+b.txt
+
+./test_b:
+c.txt  d.txt  e.py
+
+./test_c:
+1.txt  2.txt  3.py
+</code></pre>
+<pre><code class="language-powershell"># 假如不不使用git的终端
+# 相应的powershell的命令
+
+# 创建文本的命令
+echo 'hello world' &gt; readme.txt
+
+# 查看文档的内容
+@Lian ➜ ~\Desktop ( base 3.9.12)  get-content readme.txt
+hello world
+# 也支持cat命令
+@Lian ➜ ~\Desktop ( base 3.9.12)  cat &quot;bb-b.txt&quot;
+bb-b, abcn`
+
+# 查看文件列表
+ls
+
+# 创建文件夹
+mkdir test_folder
+
+# 删除文件
+rm test_folder/a.txt
+
+# 删除文件夹
+rm test_folder
+</code></pre>
+<h3 id="41-vim-in-powershell">4.1 vim in powershell</h3>
+<p>简单的文本修改还是<code>vim</code>更为便捷.</p>
+<figure data-type="image" tabindex="5"><a href="https://imgse.com/i/pSbFqMV"><img src="https://s1.ax1x.com/2023/02/16/pSbFqMV.png" alt="pSbFqMV.png" loading="lazy"></a></figure>
+<p>由于多数的终端操作是在<code>powershell</code>下执行, 为<code>git</code>单独开一个窗体执行, 相对麻烦, 这里将<code>vim</code>也转移到<code>powershell</code>.</p>
+<p>在<code>powershell</code>中同样可以使用<code>vim</code></p>
+<p>这里使用的<code>powershell</code>是<code>powershell7.x</code>, 相关的介绍见<code>Windows Terminal配置和美化手册</code>此文</p>
+<p>找到<code>git</code>的安装路径</p>
+<p>在<code>powershell</code>的配置文件<code>profile.ps1</code>, 添加以下内容, 保存即可在<code>powershell</code>中调用<code>vim</code></p>
+<pre><code class="language-powershell"># vim in ps
+# 这里的路径根据自己的安装位置修改
+$SCRIPTPATH = &quot;C:\Program Files\Git\usr\share\vim&quot;
+# vim的执行路径
+$VIMPATH    = &quot;C:\Program Files\Git\usr\bin\vim.exe&quot;
+
+Set-Alias vi   $VIMPATH
+Set-Alias vim  $VIMPATH
+
+# for editing your PowerShell profile
+Function Edit-Profile
+{
+    vim $profile
+}
+
+# for editing your Vim settings
+Function Edit-Vimrc
+{
+    vim $home\_vimrc
+}
+</code></pre>
+<figure data-type="image" tabindex="6"><a href="https://imgse.com/i/pSHY7ZQ"><img src="https://s1.ax1x.com/2023/02/16/pSHY7ZQ.png" alt="pSHY7ZQ.png" loading="lazy"></a></figure>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.management/?view=powershell-7.3">Microsoft.PowerShell.Management</a></li>
+</ul>
+<h2 id="五-工作区">五. 工作区</h2>
+<p>这是在使用编辑器直接操作文件的区域, 即可见的区域.</p>
+<pre><code class="language-bash"># 直接初始化
+@Lian ➜ ~\Desktop ( base 3.9.12)  git init git_test
+Initialized empty Git repository in C:/Users/Lian/Desktop/git_test/.git/
+
+# 初始化仓库, 先手动创建文件夹, 在当前文件路径下
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test
+$ git init
+Initialized empty Git repository in C:/Users/Lian/Desktop/git_test/.git/
+</code></pre>
+<pre><code class="language-bash"># clone remote仓库项目
+git clone https://github.com/baa-god/sql_node.git
+
+@Lian ➜ ~ ( base 3.9.12) 1.963s cd sql_node
+
+@Lian ➜ ~\sql_node ( base 3.9.12) git(master)  ls
+
+    Directory: C:\Users\Lian\sql_node
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----         2/13/2023     10:43                mysql
+-a----         2/13/2023     10:43             32 README.md
+
+@Lian ➜ ~\sql_node ( base 3.9.12) git(master)
+</code></pre>
+<h2 id="六-暂存区">六. 暂存区</h2>
+<p>暂存区, 一个处理文件的暂存区, 同时也是一个缓冲区, 当经过思考后, 认为代码完善没问题了, 然后才执行提交<code>commit</code>.</p>
+<pre><code class="language-bash"># git-rm - Remove files from the working tree and from the index
+
+# 查看缓存区文件 , 默认参数 -c
+git ls-files
+
+# 删除缓存区文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git rm --cached a.txt
+rm 'a.txt'
+
+# 查看暂存区文件内容
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(6361c5a)  git ls-files -s
+100644 5b236f9e8a494f33ea069dd6c9a4bf67daffec00 0       a.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(6361c5a)  git cat-file -p 5b23
+a-0
+</code></pre>
+<pre><code class="language-bash"># 添加单个文件到追踪
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git add python_test.py
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+# 尚未commit
+No commits yet
+
+Changes to be committed:
+  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+        new file:   python_test.py
+
+# 添加多个文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/desktop/git_test (master)
+$ git add test_b/d.txt test_b/e.py # 空格间隔即可
+warning: in the working copy of 'test_b/d.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'test_b/e.py', LF will be replaced by CRLF the next time Git touches it
+</code></pre>
+<p><em>需要注意的是, 新建的文件并不会主动添加到追踪.</em></p>
+<pre><code class="language-bash"># 添加特定的文件类型
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/desktop/git_test (master)
+$ git add test_c/*.txt
+warning: in the working copy of 'test_c/1.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'test_c/2.txt', LF will be replaced by CRLF the next time Git touches it
+</code></pre>
+<pre><code class="language-bash"># 添加整个文件夹
+# 文件夹
+# 将整个文件夹添加到缓存区
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git add test_folder/
+</code></pre>
+<pre><code class="language-bash"># 将整个目录都添加
+# 包括子目录
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/desktop/git_test (master)
+$ git add .
+warning: in the working copy of 'a.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'test_a/b.txt', LF will be replaced by CRLF the next time Git touches it
+
+# 等价
+git add --all
+</code></pre>
+<pre><code class="language-bash"># 查看哪些文件会被添加(不会实际执行)
+# 用于忽视文件是否全部纳入或者是意外纳入
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git add -n .
+add '.gitignore'
+add 'test_b/c.txt'
+add 'test_b/d.txt'
+add 'test_b/e.py'
+add 'test_c/1.txt'
+add 'test_c/2.txt'
+add 'test_c/3.py'
+</code></pre>
+<h3 id="61-忽略文件">6.1 忽略文件</h3>
+<p>在提交的文件, 部分内容需要排除掉.</p>
+<p>在<code>sourcetree</code>中支持全局范围的忽略文件.</p>
+<pre><code class="language-bash"># 创建忽略文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/desktop/git_test (master)
+$ vi .gitignore
+
+# 指定忽略的内容
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/desktop/git_test (master)
+$ cat .gitignore
+readme.txt # 忽略readme.txt
+/d # d 文件夹
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/desktop/git_test (master)
+$ git add --all
+warning: in the working copy of '.gitignore', LF will be replaced by CRLF the next time Git touches it
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/desktop/git_test (master)
+$ git status
+On branch master
+
+No commits yet
+
+Changes to be committed:
+  (use &quot;git rm --cached &lt;file&gt;...&quot; to unstage)
+        new file:   .gitignore
+        new file:   a.txt
+        new file:   test_a/b.txt
+        new file:   test_b/c.txt
+        new file:   test_b/d.txt
+        new file:   test_b/e.py
+        new file:   test_c/1.txt
+        new file:   test_c/2.txt
+        new file:   test_c/3.py
+
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><code>.gitignore</code>忽略规则简单说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+</tr>
+<tr>
+<td># 表示此为注释,将被Git忽略</td>
+</tr>
+<tr>
+<td>*.a 表示忽略所有 .a 结尾的文件</td>
+</tr>
+<tr>
+<td>!lib.a 表示但lib.a除外</td>
+</tr>
+<tr>
+<td>build/ 表示忽略 build/目录下的所有文件过滤整个build文件夹;</td>
+</tr>
+<tr>
+<td>doc/*.txt 表示会忽略doc/notes.txt但不包括 doc/server/arch.txt</td>
+</tr>
+<tr>
+<td>bin/: 表示忽略当前路径下的bin文件夹该文件夹下的所有内容都会被忽略不忽略 bin 文件</td>
+</tr>
+<tr>
+<td>/bin: 表示忽略根目录下的bin文件</td>
+</tr>
+<tr>
+<td>/*.c: 表示忽略cat.c不忽略 build/cat.c</td>
+</tr>
+<tr>
+<td>debug/*.obj: 表示忽略debug/io.obj不忽略 debug/common/io.obj和tools/debug/io.obj</td>
+</tr>
+<tr>
+<td>**/foo: 表示忽略/foo,a/foo,a/b/foo等</td>
+</tr>
+<tr>
+<td>a/**/b: 表示忽略a/b, a/x/b,a/x/y/b等</td>
+</tr>
+<tr>
+<td>!/bin/run.sh 表示不忽略bin目录下的run.sh文件</td>
+</tr>
+<tr>
+<td>*.log: 表示忽略所有 .log 文件</td>
+</tr>
+<tr>
+<td>config.php: 表示忽略当前路径的 config.php 文件</td>
+</tr>
+<tr>
+<td>/mtk/ 表示过滤整个文件夹</td>
+</tr>
+<tr>
+<td>*.zip 表示过滤所有.zip文件</td>
+</tr>
+<tr>
+<td>/mtk/do.c 表示过滤某个具体文件</td>
+</tr>
+<tr>
+<td>被过滤掉的文件就不会出现在git仓库中(gitlab或github)了当然本地库中还有只是push的时候不会上传.</td>
+</tr>
+<tr>
+<td>需要注意的是gitignore还可以指定要将哪些文件添加到版本管理中如下:</td>
+</tr>
+<tr>
+<td>!*.zip</td>
+</tr>
+<tr>
+<td>!/mtk/one.txt</td>
+</tr>
+<tr>
+<td>唯一的区别就是规则开头多了一个感叹号Git会将满足这类规则的文件添加到版本管理中.为什么要有两种规则呢?</td>
+</tr>
+<tr>
+<td>想象一个场景:假如我们只需要管理/mtk/目录中的one.txt文件这个目录中的其他文件都不需要管理那么.gitignore规则应写为::</td>
+</tr>
+<tr>
+<td>/mtk/*</td>
+</tr>
+<tr>
+<td>!/mtk/one.txt</td>
+</tr>
+<tr>
+<td>假设我们只有过滤规则而没有添加规则那么我们就需要把/mtk/目录下除了one.txt以外的所有文件都写出来!</td>
+</tr>
+<tr>
+<td>注意上面的/mtk/*不能写为/mtk/否则父目录被前面的规则排除掉了one.txt文件虽然加了!过滤规则也不会生效!</td>
+</tr>
+<tr>
+<td>----------------------------------------------------------------------------------</td>
+</tr>
+<tr>
+<td>还有一些规则如下:</td>
+</tr>
+<tr>
+<td>fd1/*</td>
+</tr>
+<tr>
+<td>说明:忽略目录 fd1 下的全部内容;注意不管是根目录下的 /fd1/ 目录还是某个子目录 /child/fd1/ 目录都会被忽略;</td>
+</tr>
+<tr>
+<td>/fd1/*</td>
+</tr>
+<tr>
+<td>说明:忽略根目录下的 /fd1/ 目录的全部内容;</td>
+</tr>
+<tr>
+<td>/*</td>
+</tr>
+<tr>
+<td>!.gitignore</td>
+</tr>
+<tr>
+<td>!/fw/</td>
+</tr>
+<tr>
+<td>/fw/*</td>
+</tr>
+<tr>
+<td>!/fw/bin/</td>
+</tr>
+<tr>
+<td>!/fw/sf/</td>
+</tr>
+<tr>
+<td>说明:忽略全部内容但是不忽略 .gitignore 文件根目录下的 /fw/bin/ 和 /fw/sf/ 目录;注意要先对bin/的父目录使用!规则使其不被排除.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="62-临时存储">6.2 临时存储</h3>
+<p>使用下面的<code>分支</code>产生的问题来演示.</p>
+<pre><code class="language-bash">@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc) 12.95s git switch master
+error: Your local changes to the following files would be overwritten by checkout:
+        bb-b.txt
+Please commit your changes or stash them before you switch branches.
+Aborting
+
+# 建议使用git stash save执行
+# 而不是直接使用 git stash
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git stash save 'file bb-b not finish'
+warning: in the working copy of 'bb-b.txt', LF will be replaced by CRLF the next time Git touches it
+Saved working directory and index state On cc: file bb-b not finish
+
+# 查看临时存储的信息
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc) 143ms git stash list
+stash@{0}: On cc: file bb-b not finish # 这样就可以看到这些分支到底保存的是什么工作状态
+
+# 就可以切换到其他的分支去
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc) 146ms git switch master
+Switched to branch 'master'
+
+# 假如不是再原分支上恢复操作引发的问题
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master) 146ms git stash pop
+CONFLICT (modify/delete): bb-b.txt deleted in Updated upstream and modified in Stashed changes.  Version Stashed changes of bb-b.txt left in tree.
+On branch master
+Unmerged paths:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+  (use &quot;git add/rm &lt;file&gt;...&quot; as appropriate to mark resolution)
+        deleted by us:   bb-b.txt
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+The stash entry is kept in case you need it again.
+
+# 再master进行操作后
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  git switch cc
+error: you need to resolve your current index first
+bb-b.txt: needs merge
+
+# 出现了问题
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  git status
+On branch master
+Unmerged paths:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+  (use &quot;git add/rm &lt;file&gt;...&quot; as appropriate to mark resolution)
+        deleted by us:   bb-b.txt
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+
+# 继续出现问题
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  git restore --staged bb-b.txt
+error: path 'bb-b.txt' is unmerged
+
+# 直接将master进行重置
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  git reset --hard # 谨慎操作这个命令
+HEAD is now at 242d6a3 init
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  git status
+On branch master
+nothing to commit, working tree clean
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  ls
+
+    Directory: C:\Users\Lian\Desktop\test-a
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---           2/16/2023    17:11              9 file2.txt
+
+# 查看文件内容
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  get-content file2.txt
+change3
+
+# 可以正常切换
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  git switch cc
+Switched to branch 'cc'
+# 恢复
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git stash pop
+On branch cc
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        modified:   bb-b.txt
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+Dropped refs/stash@{0} (a4ed010356b8d8b1bd54a51079aa03d9866fc9d4)
+# 删除stash
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git stash drop
+No stash entries found.
+# 已经清空
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git stash list
+</code></pre>
+<p><em>注意: <code>stash</code>产生的文件不会被推送到远端服务器.</em></p>
+<ul>
+<li><a href="https://www.cnblogs.com/tocy/p/git-stash-reference.html">git-stash用法小结 - Tocy - 博客园 (cnblogs.com)</a></li>
+</ul>
+<h2 id="七-本地仓库">七. 本地仓库</h2>
+<pre><code class="language-bash"># commit -a # 不需要添加暂存区 =&gt; 将所有追踪的文件提交
+
+# 执行commit
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git commit
+[master (root-commit) c2f673c] inital change
+ 1 file changed, 7 insertions(+)
+ create mode 100644 python_test.py
+# 将打开默认窗口填写调教信息
+
+# 带有信息提交
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git commit -m 'the second'
+[master 32317e3] the second
+ 1 file changed, 1 insertion(+)
+ create mode 100644 test_a/b.txt
+
+# 修改最后一次提交的commit信息
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git commit --amend -m 'this second change'
+[master d15128b] this second change
+ Date: Tue Feb 14 14:42:35 2023 +0800
+ 1 file changed, 1 insertion(+)
+ create mode 100644 test_a/b.txt
+# 修改各个阶段的信息还是相对麻烦的
+
+# 前面已经提交, 但是发现
+# 漏掉文件, 重新添加
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git commit --amend --no-edit
+[master ffa5a99] this second change
+ Date: Tue Feb 14 14:42:35 2023 +0800
+ 2 files changed, 2 insertions(+)
+ create mode 100644 abc.txt
+ create mode 100644 test_a/b.txt
+
+# 提交了三次的信息, 只显示两次的commit
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git log
+commit ffa5a9900f72ae15203026562e67b4ca613f8045 (HEAD -&gt; master)
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Tue Feb 14 14:42:35 2023 +0800
+
+    this second change
+
+commit 77c755fbb61bfd285a57e9ce5956d58159f7dd04
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Tue Feb 14 14:41:04 2023 +0800
+
+    the first
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git log --oneline
+ffa5a99 (HEAD -&gt; master) this second change
+77c755f the first
+
+# 修改历史的commit
+git rebase -i ffa5a99
+
+git rebase -i head~1
+# 相对麻烦, 试用图形软件修改更为方便
+</code></pre>
+<h3 id="71-标签">7.1 标签</h3>
+<p>提供一种更为直观的版本管理方式, 可以将之视作代码进入稳定状态的标记.</p>
+<pre><code class="language-bash"># 为最新的commit添加tag
+# 注意tag名称的规范
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git tag beta1.0
+
+# 为特定的节点标记tag
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git tag aplha1.0 c941c94
+
+# 查看tag
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git tag
+aplha1.0
+beta1.0
+
+# 看到变化
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$  git log --oneline
+0088566 (HEAD -&gt; master, tag: beta1.0) merge with test_branch
+a624df5 test_branch change two
+e9e8e78 master change test file
+1834b3c test branch change content
+466ea24 master create a test_file
+9ac57ed merge new_branch
+d8a4cf6 master change readme
+914b547 2
+c941c94 (tag: aplha1.0) 1
+</code></pre>
+<p><em>版本, 这里需要注意, 不应该简单将之视作仅仅是标签这么简单, 而是应该将之视作相对稳定版本代码的标记, 这样, 在回滚时, 得到的是一份相对完备, 整洁的代码,  而不是频繁的对代码更新就进行标记.</em></p>
+<h2 id="八-查看变化">八. 查看变化</h2>
+<pre><code class="language-mysql"># 查看当前所处的status
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+        python_test.py
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+
+# 日志
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test/test_pack (master)
+$ git log
+fatal: your current branch 'master' does not have any commits yet
+
+# 查看日志
+$ git log
+commit c2f673c6ff60981a33f119cf31a402b353a63ea1 (HEAD -&gt; master)
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Mon Feb 13 10:57:16 2023 +0800
+
+    inital change # 注释内容
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git log --oneline
+7a010fb (HEAD -&gt; master) bbc2
+3e9e014 test diff
+ffa5a99 this second change
+77c755f the first
+
+# -p参数查看每次提交的变化 -2, 表示最近两次的提交
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git log -p -2
+commit 0088566cf4a958bac6df70a1e35aefac106543b0 (HEAD -&gt; master, tag: beta1.0)
+Merge: e9e8e78 a624df5
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Wed Feb 15 11:04:37 2023 +0800
+
+    merge with test_branch
+
+commit a624df527f95bc413d77c6643f20cad7c4d094b7
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Wed Feb 15 10:56:58 2023 +0800
+
+    test_branch change two
+
+diff --git a/test.txt b/test.txt
+index 1d3dbbd..b96fc64 100644
+--- a/test.txt
++++ b/test.txt
+@@ -1,2 +1,3 @@
+ master create
+ test_branch change content
++test_branch change content too
+
+# --stat, 简略信息
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git log -2 --stat
+commit 0088566cf4a958bac6df70a1e35aefac106543b0 (HEAD -&gt; master, tag: beta1.0)
+Merge: e9e8e78 a624df5
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Wed Feb 15 11:04:37 2023 +0800
+
+    merge with test_branch
+
+commit a624df527f95bc413d77c6643f20cad7c4d094b7
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Wed Feb 15 10:56:58 2023 +0800
+
+    test_branch change two
+
+ test.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>-p</td>
+<td>按补丁格式显示每个更新之间的差异.</td>
+</tr>
+<tr>
+<td>--stat</td>
+<td>显示每次更新的文件修改统计信息.</td>
+</tr>
+<tr>
+<td>--shortstat</td>
+<td>只显示 --stat, 中最后的行数修改添加移除统计.</td>
+</tr>
+<tr>
+<td>--name-only</td>
+<td>仅在提交信息后显示已修改的文件清单.</td>
+</tr>
+<tr>
+<td>--name-status</td>
+<td>显示新增修改删除的文件清单.</td>
+</tr>
+<tr>
+<td>--abbrev-commit</td>
+<td>仅显示 SHA-1 的前几个字符而非所有的 40 个字符.</td>
+</tr>
+<tr>
+<td>--relative-date</td>
+<td>使用较短的相对时间显示(比如&quot;2 weeks ago&quot;).</td>
+</tr>
+<tr>
+<td>--graph</td>
+<td>显示 ASCII 图形表示的分支合并历史.</td>
+</tr>
+<tr>
+<td>--pretty</td>
+<td>使用其他格式显示历史提交信息.可用的选项包括 <code>oneline</code>shortfull<code>fuller</code> 和format(后跟指定格式).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="81-比较文件差异">8.1 比较文件差异</h3>
+<pre><code class="language-bash"># 假如commit这个添加到stage的文件后
+# 这个命令将返回空值
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git diff --staged
+diff --git a/bbc.txt b/bbc.txt
+new file mode 100644
+index 0000000..2dc53ed
+--- /dev/null
++++ b/bbc.txt
+@@ -0,0 +1 @@
++hello, bbc
+
+# 缓存区和工作区的文件比较
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git diff bbc.txt
+warning: in the working copy of 'bbc.txt', LF will be replaced by CRLF the next time Git touches it
+diff --git a/bbc.txt b/bbc.txt
+index f71589a..2381e80 100644
+--- a/bbc.txt
++++ b/bbc.txt
+@@ -1,2 +1,3 @@
+ hello, bbc!
+ new line
++3 lines # 新增内容
+
+# 提交的内容和工作区的文件比较
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git diff head readme.txt
+warning: in the working copy of 'readme.txt', LF will be replaced by CRLF the next time Git touches it
+diff --git a/readme.txt b/readme.txt
+index c021280..a06d008 100644
+--- a/readme.txt
++++ b/readme.txt
+@@ -1 +1,3 @@
+-hellx
+\ No newline at end of file
++hellx
++new line 2
++new line 3
+
+# 缓存区和仓库(commit)的文件的差异
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git diff --cached bbc.txt
+diff --git a/bbc.txt b/bbc.txt
+index c41b049..f71589a 100644
+--- a/bbc.txt
++++ b/bbc.txt
+@@ -1 +1,2 @@
+ hello, bbc!
++new line # 新增内容
+# 等价
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git diff --staged bbc.txt
+diff --git a/bbc.txt b/bbc.txt
+index c41b049..f71589a 100644
+--- a/bbc.txt
++++ b/bbc.txt
+@@ -1 +1,2 @@
+ hello, bbc!
++new line
+
+# 查看日志-格式化
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git log --oneline
+7a010fb (HEAD -&gt; master) bbc2
+3e9e014 test diff
+ffa5a99 this second change
+77c755f the first
+
+## 对比两次提交的内容的差异
+$ git diff 7a010fb 3e9e014
+diff --git a/bbc.txt b/bbc.txt
+index 2381e80..c41b049 100644
+--- a/bbc.txt
++++ b/bbc.txt
+@@ -1,3 +1 @@
+ hello, bbc!
+-new line
+-3 lines
+</code></pre>
+<h2 id="九-分支">九. 分支</h2>
+<p>关于分支的处理, 有两个关键字可以实现</p>
+<ul>
+<li><code>switch</code></li>
+<li><code>checkout</code></li>
+</ul>
+<p>二者在切换分支上的功能上, 非常接近.</p>
+<table>
+<thead>
+<tr>
+<th>previous command</th>
+<th>new command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git checkout &lt;branch&gt;</code></td>
+<td><code>git switch &lt;branch&gt;</code></td>
+</tr>
+<tr>
+<td><code>git checkout</code></td>
+<td>N/A (use <code>git status</code>)</td>
+</tr>
+<tr>
+<td><code>git checkout -b &lt;new_branch&gt; [&lt;start_point&gt;]</code></td>
+<td><code>git switch -c &lt;new-branch&gt; [&lt;start-point&gt;]</code></td>
+</tr>
+<tr>
+<td><code>git checkout -B &lt;new_branch&gt; [&lt;start_point&gt;]</code></td>
+<td><code>git switch -C &lt;new-branch&gt; [&lt;start-point&gt;]</code></td>
+</tr>
+<tr>
+<td><code>git checkout --orphan &lt;new_branch&gt;</code></td>
+<td><code>git switch --orphan &lt;new-branch&gt;</code></td>
+</tr>
+<tr>
+<td><code>git checkout --orphan &lt;new_branch&gt; &lt;start_point&gt;</code></td>
+<td>N/A (use <code>git switch &lt;start-point&gt;</code> then <code>git switch --orphan &lt;new-branch&gt;</code>)</td>
+</tr>
+<tr>
+<td><code>git checkout [--detach] &lt;commit&gt;</code></td>
+<td><code>git switch --detach &lt;commit&gt;</code></td>
+</tr>
+<tr>
+<td><code>git checkout --detach [&lt;branch&gt;]</code></td>
+<td><code>git switch --detach [&lt;branch&gt;]</code></td>
+</tr>
+<tr>
+<td><code>git checkout [--] &lt;pathspec&gt;…</code></td>
+<td><code>git restore [--] &lt;pathspec&gt;…</code></td>
+</tr>
+<tr>
+<td><code>git checkout --pathspec-from-file=&lt;file&gt;</code></td>
+<td><code>git restore --pathspec-from-file=&lt;file&gt;</code></td>
+</tr>
+<tr>
+<td><code>git checkout &lt;tree-ish&gt; [--] &lt;pathspec&gt;…</code></td>
+<td><code>git restore -s &lt;tree&gt; [--] &lt;pathspec&gt;…</code></td>
+</tr>
+<tr>
+<td><code>git checkout &lt;tree-ish&gt; --pathspec-from-file=&lt;file&gt;</code></td>
+<td><code>git restore -s &lt;tree&gt; --pathspec-from-file=&lt;file&gt;</code></td>
+</tr>
+<tr>
+<td><code>git checkout -p [&lt;tree-ish&gt;] [--] [&lt;pathspec&gt;…]</code></td>
+<td><code>git restore -p [-s &lt;tree&gt;] [--] [&lt;pathspec&gt;…]</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash"># 创建分支
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git branch test_branch
+
+# 查看分支
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git branch
+* master
+  test_branch
+
+# 变更当前的分支名称为main, github 默认使用main, 从之前的master
+git branch -M main
+
+# 直接生成转移分支
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git checkout -b new_branch
+Switched to a new branch 'new_branch'
+
+# 分支, 相当于在当前的commit的主分支上, 复制一份到新的分支上
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (new_branch)
+$ ls
+abc.txt  readme.txt
+
+# 有两个节点
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git log --oneline
+914b547 (HEAD -&gt; master) 2
+c941c94 1
+
+# 根据其中的节点创建新的分支
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git checkout -b new_branch c941c94
+Switched to a new branch 'new_branch'
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (new_branch)
+$ ls
+readme.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (new_branch)
+$ cat readme.txt
+hello
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (new_branch)
+
+# 根据另一个节点创建新的分支
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (new_branch)
+$ git switch -c n_branch 914b547
+Switched to a new branch 'n_branch'
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (n_branch)
+$ ls
+readme.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (n_branch)
+$ cat readme.txt
+hello
+new line 1
+</code></pre>
+<pre><code class="language-bash"># 在n_branch 下修改了readme.txt (三个分支都有这个文件)
+# 在没有提交, 没有添加文件到缓存区的情况下, 转移到其他的分支
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (n_branch)
+$ git switch new_branch
+error: Your local changes to the following files would be overwritten by checkout:
+        readme.txt
+Please commit your changes or stash them before you switch branches.
+Aborting
+# commit之后, 可以正常切换
+# 每次切换分区, 这个readme.txt文件在本地磁盘展示的内容都会随着分区转换而转换
+
+# 在new_branch中新建一个文件a.txt, 这个文件没有添加到追踪
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (new_branch)
+$ vi a.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (new_branch)
+$ ls
+a.txt  readme.txt
+
+# 不影响切换, 其他的分区也出现了这个文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (new_branch)
+$ git switch n_branch
+Switched to branch 'n_branch'
+
+# 在这n_branch将new_branch创建的a.txt文件commit
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (n_branch)
+$ git commit a.txt -m 'n_branch add a'
+warning: in the working copy of 'a.txt', LF will be replaced by CRLF the next time Git touches it
+[n_branch 9e260bc] n_branch add a
+ 1 file changed, 1 insertion(+)
+ create mode 100644 a.txt
+
+# 该文件的所属权归属于n_branch
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (n_branch)
+$ ls
+a.txt  readme.txt
+
+# 其他分区将不可见a.txt
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (new_branch)
+$ ls
+readme.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (new_branch)
+$ git switch master
+Switched to branch 'master'
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ ls
+readme.txt
+
+# 可以看到文件的所属权和commit密切相关
+</code></pre>
+<pre><code class="language-bash"># 合并分支
+# 对主分支的readme.txt修改
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ cat readme.txt
+hi, master
+new line 1
+# 尝试将new_branch的readme合并过来
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git merge new_branch
+Already up to date.
+# 提示早已经更新
+
+# 这里创建new_branch 没有再更新过, 但是master进行过新的commit, 虽然master的数据和new_branch的数据已经不一样
+
+# 修改new_branch的readme.txt之后
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git diff new_branch
+diff --git a/readme.txt b/readme.txt
+index 30f6dea..f61c0bb 100644
+--- a/readme.txt
++++ b/readme.txt
+@@ -1 +1,2 @@
+-hello, this is new branch
++hi, master
++new line 1
+
+# 可以合并, 并如预期看到冲突的出现
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git merge new_branch
+Auto-merging readme.txt
+CONFLICT (content): Merge conflict in readme.txt
+Automatic merge failed; fix conflicts and then commit the result.
+</code></pre>
+<h3 id="91-冲突">9.1 冲突</h3>
+<figure data-type="image" tabindex="7"><a href="https://imgse.com/i/pSTz201"><img src="https://s1.ax1x.com/2023/02/15/pSTz201.png" alt="pSTz201.png" loading="lazy"></a></figure>
+<p>由于是修改同一行的数据, 所以这种错误, 需要手动修正</p>
+<pre><code class="language-bash">Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git merge new_branch
+Auto-merging readme.txt
+CONFLICT (content): Merge conflict in readme.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+# 切换到new_branch, 可以看到提示代码合并中
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master|MERGING)
+$ vi readme.txt
+
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+hi, master
+new line 1
+=======
+hello, this is new branch
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; new_branch
+
+# 修改完数据后, 重新返回master
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master|MERGING)
+$ git switch master
+fatal: cannot switch branch while merging
+Consider &quot;git merge --quit&quot; or &quot;git worktree add&quot;.
+
+# 虽然没有合并数据但是, 修改的内容已经出现再master上的readme上
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master|MERGING)
+$ git merge --quit # 下面的合并异常和这一步有关?
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ cat readme.txt
+&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+hi, master
+new line 1
+no problems # 这个
+hello, this is new branch # 这个
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; new_branch
+
+# 再次切换分支还是出现错误
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git switch new_branch
+error: you need to resolve your current index first
+readme.txt: needs merge
+
+# 相当于合并数据
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git add readme.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git commit readme.txt -m 'merge new_branch'
+[master 9ac57ed] merge new_branch
+ 1 file changed, 4 insertions(+)
+
+# 但是需要注意-这里执行删除操作时出现的问题
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git branch -d new_branch
+error: The branch 'new_branch' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D new_branch'.
+
+# 相关的操作没有显示已经合并
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git branch --merged
+* master
+</code></pre>
+<figure data-type="image" tabindex="8"><a href="https://imgse.com/i/pSTz7Xd"><img src="https://s1.ax1x.com/2023/02/15/pSTz7Xd.png" alt="pSTz7Xd.png" loading="lazy"></a></figure>
+<p>合并<code>new_branch</code>分支到<code>master</code>之后的的仓库的情况</p>
+<ul>
+<li>
+<p><code>master</code>是主分支</p>
+</li>
+<li>
+<p><code>new_branch</code>和<code>n_branch</code>是基于<code>master</code>的两次<code>commit</code>的节点上分支出来的</p>
+</li>
+</ul>
+<pre><code class="language-bash"># 新建分区测试
+
+# master新建文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ vi test.txt
+
+# 文件内容
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ cat test.txt
+master create
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git add test.txt
+warning: in the working copy of 'test.txt', LF will be replaced by CRLF the next time Git touches it
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git commit test.txt -m 'master create a test_file'
+warning: in the working copy of 'test.txt', LF will be replaced by CRLF the next time Git touches it
+[master 466ea24] master create a test_file
+ 1 file changed, 1 insertion(+)
+ create mode 100644 test.txt
+
+# 直接创建一个test_branch分支
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git switch -c test_branch
+Switched to a new branch 'test_branch'
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (test_branch)
+$ vi test.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (test_branch)
+$ git add test.txt
+warning: in the working copy of 'test.txt', LF will be replaced by CRLF the next time Git touches it
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (test_branch)
+$ git commit test.txt
+warning: in the working copy of 'test.txt', LF will be replaced by CRLF the next time Git touches it
+[test_branch 1834b3c] test branch change content
+ 1 file changed, 1 insertion(+)
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (test_branch)
+$ git switch master
+Switched to branch 'master'
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ cat test.txt
+master create
+
+# 再test_branch的test.txt的下一行修改内容
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git diff test_branch
+diff --git a/test.txt b/test.txt
+index 1d3dbbd..c743a65 100644
+--- a/test.txt
++++ b/test.txt
+@@ -1,2 +1 @@
+ master create
+-test_branch change content
+
+# 合并, 成功
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git merge test_branch
+Updating 466ea24..1834b3c
+Fast-forward
+ test.txt | 1 +
+ 1 file changed, 1 insertion(+)
+
+# 合并的状态
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git branch --merged
+* master
+  test_branch # 可以看到合并成功的分支
+
+# 重新修改master的test.txt
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ vi test.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git add test.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git commit test.txt -m 'master change test file'
+[master e9e8e78] master change test file
+ 1 file changed, 1 insertion(+)
+
+# 同样修改分支的text.txt
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (test_branch)
+$ vi test.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (test_branch)
+$ git add test.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (test_branch)
+$ git commit test.txt -m 'test_branch change two'
+[test_branch a624df5] test_branch change two
+ 1 file changed, 1 insertion(+)
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (test_branch)
+$ git switch master
+Switched to branch 'master'
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+# 重新查看合并分支的变化情况
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git branch --merged
+* master
+# 修改内容后test_branch分支重新变为未合并
+
+# 如预期发生冲突
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git merge test_branch
+Auto-merging test.txt
+CONFLICT (content): Merge conflict in test.txt
+Automatic merge failed; fix conflicts and then commit the result.
+
+# 直接进入文件修改
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master|MERGING)
+$ vi test.txt
+
+# 重新合并
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master|MERGING)
+$ git merge test_branch
+error: Merging is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm &lt;file&gt;'
+hint: as appropriate to mark resolution and make a commit.
+fatal: Exiting because of an unresolved conflict.
+
+# 添加文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master|MERGING)
+$ git add test.txt
+
+# 注意这里的操作
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master|MERGING)
+$ git commit test.txt -m 'merge with test_branch'
+fatal: cannot do a partial commit during a merge.
+
+# 合并
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master|MERGING)
+$ git commit -m 'merge with test_branch'
+[master 0088566] merge with test_branch
+
+# 可以正常看到合并的分支
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git branch --merged
+* master
+  test_branch
+</code></pre>
+<figure data-type="image" tabindex="9"><a href="https://imgse.com/i/pS79vh6"><img src="https://s1.ax1x.com/2023/02/15/pS79vh6.png" alt="pS79vh6.png" loading="lazy"></a></figure>
+<pre><code class="language-bash"># 可以正常合并分支
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git branch -d test_branch
+Deleted branch test_branch (was a624df5).
+</code></pre>
+<pre><code class="language-bash">Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git log --oneline --graph
+*   0088566 (HEAD -&gt; master) merge with test_branch
+|\
+| * a624df5 test_branch change two
+* | e9e8e78 master change test file
+|/
+* 1834b3c test branch change content
+* 466ea24 master create a test_file
+* 9ac57ed merge new_branch
+* d8a4cf6 master change readme
+* 914b547 2
+* c941c94 1
+</code></pre>
+<h3 id="92-关于already-up-to-date">9.2 关于<code>Already up-to-date</code></h3>
+<blockquote>
+<p>The message &quot;Already up-to-date&quot; means that all the changes from the branch you’re trying to merge have already been merged to the branch you’re currently on. More specifically it means that the branch you’re trying to merge <em>is a parent of your current branch</em>.</p>
+</blockquote>
+<ul>
+<li><a href="https://www.cnblogs.com/butterflybay/p/11295407.html">git merge合并分支; already up to date 现象 merger算法 - JadeCicada - 博客园 (cnblogs.com)</a></li>
+</ul>
+<p><em>注意: 可以看到图形界面的好处, 可以看到各个分支的变化, 更好判断合并的异常.</em></p>
+<h3 id="93-关于切换分支受限">9.3 关于切换分支受限</h3>
+<p>分支管理是个相对复杂的行为, 除了考虑到代码的更新习惯等, 同时需要考虑, 撤销, 恢复等操作.</p>
+<figure data-type="image" tabindex="10"><a href="https://imgse.com/i/pSHIgGn"><img src="https://s1.ax1x.com/2023/02/16/pSHIgGn.png" alt="pSHIgGn.png" loading="lazy"></a></figure>
+<p>需要注意这个问题的存在, 其逻辑是?</p>
+<pre><code class="language-bash"># 基于master当前commit创建两个分支ab, bb
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git switch -c ab
+Switched to a new branch 'ab'
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (ab)
+$ git switch -c bb
+Switched to a new branch 'bb'
+
+# 初始状态, 这三个分支处于merged状态
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git branch --merged
+  ab
+  bb
+* master
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git branch
+  ab
+  bb
+* master
+  n_branch
+  new_branch
+</code></pre>
+<pre><code class="language-bash"># 分支创建文件ab.txt
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (ab)
+$ vim ab.txt
+
+# 添加到缓存区
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (ab)
+$ git add ab.txt
+warning: in the working copy of 'ab.txt', LF will be replaced by CRLF the next time Git touches it
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (ab)
+$ git status
+On branch ab
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   ab.txt
+
+# 切换到bb
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (ab)
+$ git switch bb
+Switched to branch 'bb'
+A       ab.txt
+
+# 修改ab.txt
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (bb)
+$ vim ab.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (bb)
+$ git status
+On branch bb
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   ab.txt
+
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        modified:   ab.txt
+
+# 切换到master
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (bb)
+$ git switch master
+Switched to branch 'master'
+A       ab.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   ab.txt
+
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        modified:   ab.txt
+
+# 看到文件的两次修改
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ cat ab.txt
+ab create ab
+bb change ab
+
+# -a, 强制提交所有的track file(不需要add)
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git commit -a -m 'ab-c-bb-master-commit'
+warning: in the working copy of 'ab.txt', LF will be replaced by CRLF the next time Git touches it
+[master fa07344] ab-c-bb-master-commit
+ 1 file changed, 2 insertions(+)
+ create mode 100644 ab.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ ls
+ab.txt  readme.txt  test.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git switch ab
+Switched to branch 'ab'
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (ab)
+$ git status
+On branch ab
+nothing to commit, working tree clean
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (ab)
+$ ls
+readme.txt  test.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (ab)
+$ git switch bb
+Switched to branch 'bb'
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (bb)
+$ git status
+On branch bb
+nothing to commit, working tree clean
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (bb)
+$ ls
+readme.txt  test.txt
+</code></pre>
+<p>上面的操作并没有触发<code>Please commit your changes or stash them before you switch branches.</code>这个提示, 在一连串的操作中.</p>
+<p><code>commit</code>之后, 相关的修改在哪个分支<code>commi</code>t的, 最终相关的内容归属于当前分支, 如同新建的文件的归属.</p>
+<p>这种操作有点奇怪, 为什么<code>git</code>没有全部阻止某个分支在对文件修改没有<code>commit</code>, 却可以自由切换到其他的分支, 而是在部分情形才会阻止切换.</p>
+<pre><code class="language-bash"># 例如这里创建的
+# ab
+@Lian ➜ ~\..\git test-a ( base 3.9.12) git(ab)  git add ab.txt
+warning: in the working copy of 'ab.txt', LF will be replaced by CRLF the next time Git touches it
+@Lian ➜ ~\..\git test-a ( base 3.9.12) git(ab)  git switch bb
+Switched to branch 'bb'
+A       ab.txt
+
+# 在bb上可以修改, 可以commit, 可以删除
+@Lian ➜ ~\..\git test-a ( base 3.9.12) git(bb)  git status
+On branch bb
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   ab.txt
+</code></pre>
+<pre><code class="language-bash"># 复刻出现阻止的情况
+@Lian ➜ ~\Desktop ( base 3.9.12)  cd test-a
+@Lian ➜ ~\..\test-a ( base 3.9.12)  git init
+Initialized empty Git repository in C:/Users/Lian/Desktop/test-a/.git/
+
+# 在master创建file2.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  echo change3 &gt; file2.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  git add .
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  git commit -am &quot;init&quot;
+[master (root-commit) 242d6a3] init
+ 1 file changed, 1 insertion(+)
+ create mode 100644 file2.txt
+
+# 创建分支
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  git switch -c cc
+Switched to a new branch 'cc'
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  cat file2.txt
+change3
+# 修改这个file2.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  echo new_ssh &gt; file2.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git add .
+# 添加commit
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git commit -am &quot;update&quot;
+[cc 30a2f00] update
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc) 103ms git status
+On branch cc
+nothing to commit, working tree clean
+# 在次修改(关键)
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  echo bbc &gt; file2.txt
+# 切换出现异常
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git switch master
+error: Your local changes to the following files would be overwritten by checkout:
+        file2.txt
+Please commit your changes or stash them before you switch branches.
+Aborting
+
+# 撤销掉这个更新
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git restore file2.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git status
+On branch cc
+nothing to commit, working tree clean
+# 新建一个文件bb-b.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  vim bb-b.txt
+# 切换master正常
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc) 6.808s git switch master
+Switched to branch 'master'
+# 回到cc分支
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master)  git switch cc
+Switched to branch 'cc'
+# 添加对bb-b.txt的commit
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git add .
+warning: in the working copy of 'bb-b.txt', LF will be replaced by CRLF the next time Git touches it
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git commit -am &quot;update2&quot;
+[cc 4fa1860] update2
+ 1 file changed, 1 insertion(+)
+ create mode 100644 bb-b.txt
+# 再次修改这个bb-b.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  vim bb-b.txt
+# 再次切换, 就促发这个问题
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc) 12.95s git switch master
+error: Your local changes to the following files would be overwritten by checkout:
+        bb-b.txt
+Please commit your changes or stash them before you switch branches.
+Aborting
+</code></pre>
+<p>可以得出这个错误的逻辑, 当分支的文件<strong>已经提交过<code>commit</code></strong>, 修改这些已经被标记的文件, 而且不进行<code>commit</code>就执行切换分支的操作将导致这个错误的出现. 实际上<code>git</code>的逻辑是文件一定需要和版本库产生联系了, <code>git</code>才执行真正意义上对文件进行各种监控的行为. 否则<code>git</code>只能通过文件的状态来提醒用户, 切换分支需要注意, <code>git</code>认为尚未和版本库产生联系, 这些文件还是相对自由的, 分支尚不具备约束这些文件的能力.</p>
+<hr>
+<h2 id="十-撤销恢复">十. 撤销/恢复</h2>
+<p><em>相关操作针对的情景非常多, 审慎操作.</em></p>
+<p>这里的注意, 相当多的文档介绍, 由于理解表达以及翻译上的差异, 没有区分开二者的区别.</p>
+<p><strong>撤销</strong>, 其操作上强调的是, 撤销某种行为. 例如<code>add</code>之后, 撤销, 将是就这个<code>add</code>执行的操作撤销掉, 就是删掉<code>add</code>添加到缓存区的操作, 对于工作区的文件无影响.</p>
+<p><strong>恢复</strong>, 这是两个步骤的组合, 撤销之前的操作(如修改文档, 删除文件); 恢复, 即将文件恢复到一定的状态阶段(也可以说成是撤销某某操作). 简而言之, 在执行恢复的操作, 也带有撤销的行为, 但是和撤销不一样的是, 恢复通常带有文件的变迁(文件丢失, 可以找回).</p>
+<ul>
+<li>reset, reset current HEAD to the specified state</li>
+<li>restore, restore working tree files</li>
+<li>checkout, restore working tree files</li>
+<li>revert, revert some existing commits</li>
+</ul>
+<blockquote>
+<ul>
+<li><code>git-revert</code> is about making a new commit that reverts the changes made by other commits.</li>
+<li><code>git-restore</code> is about restoring files in the working tree from either the index or another commit.<br>
+This command does <strong>not update your branch</strong>.<br>
+The command can also be used to restore files in the index from another commit.</li>
+<li><code>git-reset</code> is about updating your branch, moving the tip in order to add or remove commits from the branch. This operation changes the commit history.<br>
+<code>git reset</code> can also be used to restore the index, overlapping with <code>git restore</code>.</li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Scope</th>
+<th>Common use cases</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>git reset</code></td>
+<td>Commit-level</td>
+<td>Discard commits in a private branch or throw away uncommitted changes</td>
+</tr>
+<tr>
+<td><code>git reset</code></td>
+<td>File-level</td>
+<td>Unstage a file</td>
+</tr>
+<tr>
+<td><code>git checkout</code></td>
+<td>Commit-level</td>
+<td>Switch between branches or inspect old snapshots</td>
+</tr>
+<tr>
+<td><code>git checkout</code></td>
+<td>File-level</td>
+<td>Discard changes in the working directory</td>
+</tr>
+<tr>
+<td><code>git revert</code></td>
+<td>Commit-level</td>
+<td>Undo commits in a public branch</td>
+</tr>
+<tr>
+<td><code>git revert</code></td>
+<td>File-level</td>
+<td>(N/A)</td>
+</tr>
+</tbody>
+</table>
+<p>按照需要恢复的内容:</p>
+<ul>
+<li>恢复文件</li>
+<li>恢复文件夹(下的文件)</li>
+<li>恢复分支</li>
+</ul>
+<p>按照恢复的影响范围:</p>
+<ul>
+<li>覆盖式恢复(如整体全部恢复)</li>
+<li>阶段覆盖(如覆盖工作区, 但是不影响缓存区)</li>
+<li>指定范围的恢复(如指定恢复某个问及那)</li>
+</ul>
+<p>按照从那里恢复:</p>
+<ul>
+<li>
+<p>缓存区</p>
+<p>需要注意缓存区的操作, 如果文件还没有提交过, 撤销(<code>reset/restore</code>)操作会导致缓存区的文件丢失. 假如你本地磁盘进行修改或者删除操作, 缓存区的文件已经不存在, 之后的操作如恢复将不复存在.</p>
+</li>
+<li>
+<p>版本仓库</p>
+</li>
+</ul>
+<p>由于很多文档关于恢复这一点上的介绍相当模糊, 如恢复, 到底是恢复哪个阶段? 恢复哪些内容? 对哪些文件产生影响?(这涉及到是否会丢失文件)等等这些问题大多含糊不清.</p>
+<h3 id="101-revert">10.1 revert</h3>
+<p><code>revert</code>相对而言, 是个非常清晰的<code>function</code>, 没有一堆乱七八糟的解析</p>
+<blockquote>
+<p>Revert some existing commits</p>
+<p>撤销现有的commit</p>
+</blockquote>
+<pre><code class="language-bash"># 以此为例
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git log
+commit 429695f1950c21be7b9696f29b337e1227a2dc61 (HEAD -&gt; master)
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Wed Feb 15 14:38:08 2023 +0800
+
+    4
+
+commit 796c2252c24d9550074f44905b67b8102c560aa5
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Wed Feb 15 14:37:36 2023 +0800
+
+    3
+
+commit 8a2b4011f0aa4851adaa6d1dbc7516cd84582d09
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Wed Feb 15 14:37:19 2023 +0800
+
+    2
+
+commit 4c4b583f95d95db524215cd41720a6cc2597f0c7
+Author: Lian &lt;Lian_Hwang@126.com&gt;
+Date:   Wed Feb 15 14:36:59 2023 +0800
+
+    1
+
+# revert
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git revert head
+[master 2747218] Revert &quot;test_r_head&quot;
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git log --oneline
+2747218 (HEAD -&gt; master) Revert &quot;test_r_head&quot;
+429695f 4
+796c225 3
+8a2b401 2
+4c4b583 1
+
+# git revert head 退回当前节点的上一个节点
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git diff 796c225 2747218
+
+# 添加一个a.txt untract的文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git revert 796c225
+[master 5dcf325] Revert &quot;test-3&quot;
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+# 指定节点 revert 返回, a文件不受影响
+
+# 这里, 将a.txt添加缓存区
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git add a.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   a.txt
+
+# 将会出现错误, 提示返回的内容将执行覆盖操作
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git revert 429695f
+error: your local changes would be overwritten by revert.
+hint: commit your changes or stash them to proceed.
+fatal: revert failed
+</code></pre>
+<p>不对当前的<code>commit</code>产生影响, 开一个基于指定的<code>commit</code>新的<code>commit</code>.</p>
+<p>从文档和测试来看, <code>revert</code>应该是只作用于<code>commit</code>, 而不具有针对单个文件的操作. 假如当前的工作区存在尚未<code>commit</code>的文件, 会停止, 这一点很好, 不担心操作导致的意外.</p>
+<h3 id="102-checkout">10.2 checkout</h3>
+<p><em>注意工作区文件的丢失.</em></p>
+<blockquote>
+<p>restore working tree files</p>
+<p><strong>Updates files in the working tree to match the version in the index or the specified tree.</strong> If no <strong>pathspec</strong> was given, <em>git checkout</em> will also <strong>update <code>HEAD</code> to set the specified branch as the current branch</strong>.</p>
+<p>注意这里的作用范围, 将可能影响到当前分支, 也可能影响到其他的分支.</p>
+</blockquote>
+<p><code>pathspec</code>:</p>
+<blockquote>
+<p>From the <a href="https://git-scm.com/docs/gitglossary.html#gitglossary-aiddefpathspecapathspec">Git Glossary</a>:</p>
+<blockquote>
+<p>[A pathspec is a pattern] used to limit paths in Git commands.</p>
+<p>Pathspecs are used on the command line of &quot;git ls-files&quot;, &quot;git ls-tree&quot;, &quot;git add&quot;, &quot;git grep&quot;, &quot;git diff&quot;, &quot;git checkout&quot;, and many other commands to limit the scope of operations to some subset of the tree or worktree.</p>
+</blockquote>
+<p>As an example, the command <code>git add :/**.ts</code> will recursively add to the index all of the files that end with <code>.ts</code> starting at the root of the repository (respecting the various ways of ignoring files).</p>
+<p>简而言之, 指定(路径)的范围</p>
+</blockquote>
+<p>[github - What's a  in the git command? - Stack Overflow](https://stackoverflow.com/questions/27711924/whats-a-pathspec-in-the-git-command#:~:text=[A pathspec is a pattern] used to limit,to some subset of the tree or worktree.)</p>
+<pre><code class="language-bash"># 先将上面的revert产生的两个commit删除掉
+
+# 由于有文件还没commit
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git rebase 429695f
+error: cannot rebase: Your index contains uncommitted changes.
+error: Please commit or stash them.
+
+`429695f`, commit_id, 可以操作之前的commit
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   a.txt
+
+# 撤销掉这个缓存区的文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git restore --staged a.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git status
+On branch master
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+        a.txt
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git log --oneline
+5dcf325 (HEAD -&gt; master) Revert &quot;test-3&quot;
+2747218 Revert &quot;test_r_head&quot;
+429695f 4
+796c225 3
+8a2b401 2
+4c4b583 1
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git rebase -i 429695f
+Successfully rebased and updated refs/heads/master.
+# 弹出的窗口, 删除掉429695f之前的两个revert的节点, 改pick =&gt; drop即可
+# 当前head指向429695f =&gt; 恢复到之前的提交状态
+</code></pre>
+<p><em>上面的内容和下面无关, 之前的思路中断了.</em></p>
+<pre><code class="language-bash"># 当存在有文件尚未commit, checkout被阻止
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master) 128ms git checkout 6361c5a4061f3410c7eab79f21dd5a3493902de1
+error: Your local changes to the following files would be overwritten by checkout:
+        a.txt
+Please commit your changes or stash them before you switch branches.
+Aborting
+
+# 提交commit后执行
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(master) 118ms git checkout 6361c5a4061f3410c7eab79f21dd5a3493902de1
+Note: switching to '6361c5a4061f3410c7eab79f21dd5a3493902de1'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c &lt;new-branch-name&gt;
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at 6361c5a add a0
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(6361c5a)  cat a.txt
+a-0
+
+# 缓存区的文件
+# 注意  git(6361c5a) 这里的变化吗不再显示分区的位置, 而是显示节点的id
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(6361c5a)  git ls-files -s
+100644 5b236f9e8a494f33ea069dd6c9a4bf67daffec00 0       a.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(6361c5a)  git cat-file -p 5b23
+a-0
+</code></pre>
+<figure data-type="image" tabindex="11"><a href="https://imgse.com/i/pSbE9u6"><img src="https://s1.ax1x.com/2023/02/16/pSbE9u6.png" alt="pSbE9u6.png" loading="lazy"></a></figure>
+<p>注意图上的<code>HEAD</code>的位置</p>
+<blockquote>
+<p>You are in '<strong>detached HEAD</strong>' state. You can look around, make experimental<br>
+changes and commit them, and you can discard any commits you make in this<br>
+state without impacting any branches by switching back to a branch.</p>
+<p>简而言之, 进入游离的指针状态</p>
+</blockquote>
+<pre><code class="language-bash">@Lian ➜ ~\..\test-a ( base 3.9.12) git(b67d952)  git switch master
+error: Your local changes to the following files would be overwritten by checkout:
+        a.txt
+Please commit your changes or stash them before you switch branches.
+Aborting
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(b67d952)  git status
+HEAD detached from 6361c5a
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        modified:   a.txt
+
+# 查看指针的位置
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(b67d952)  cat .git/HEAD
+b67d9525e5dce122439fd2a8dc0795dbbe9140d3
+
+# 切换到新建的分支
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(b67d952) 131ms git switch -c detached-branch
+Switched to a new branch 'detached-branch'
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(detached-branch)  ls
+
+    Directory: C:\Users\Lian\Desktop\test-a
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---           2/16/2023    18:14              3 a.txt
+
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(detached-branch)  cat a.txt
+a-0
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(detached-branch)  git status
+On branch detached-branch
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        modified:   a.txt
+
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(detached-branch)  git ls-files -s
+100644 5b236f9e8a494f33ea069dd6c9a4bf67daffec00 0       a.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(detached-branch)  git cat-file -p 5b236
+a-0
+
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(detached-branch)  git commit -am &quot;detech&quot;
+[detached-branch 2355d51] detech
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(detached-branch)  git branch -v
+  cc              1b385f1 add a3
+* detached-branch 2355d51 detech
+  master          fe904af add a4
+</code></pre>
+<figure data-type="image" tabindex="12"><a href="https://imgse.com/i/pSbZB9J"><img src="https://s1.ax1x.com/2023/02/16/pSbZB9J.png" alt="pSbZB9J.png" loading="lazy"></a></figure>
+<ul>
+<li><a href="https://www.howtogeek.com/devops/how-do-you-fix-a-detached-head-in-a-git-repository/">How Do You Fix a &quot;Detached HEAD&quot; in a Git Repository? (howtogeek.com)</a></li>
+<li><a href="https://blog.csdn.net/u011240877/article/details/76273335">Git HEAD detached from XXX (git HEAD 游离) 解决办法_拭心的博客-CSDN博客</a></li>
+</ul>
+<pre><code class="language-bash">@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git log --oneline
+1b385f1 (HEAD -&gt; cc) add a3
+03986f8 add a1
+6361c5a add a0
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc) 129ms git checkout a.txt 03986f8
+error: pathspec '03986f8' did not match any file(s) known to git
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git checkout 03986f8 -- a.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  cat a.txt
+a-1
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git status
+On branch cc
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        modified:   a.txt
+</code></pre>
+<h3 id="103-restore">10.3 restore</h3>
+<blockquote>
+<p>Restore working tree files</p>
+</blockquote>
+<pre><code class="language-bash"># 文件首次添加到缓存区
+(use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+
+# 文件已经添加到缓存区
+# 再次执行工作区的修改, 这个命令可以重置工作区执行的修改
+(use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        modified:   bb-b.txt
+</code></pre>
+<pre><code class="language-bash"># 沿用临时存储的哪个示例
+
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git ls-files
+bb-b.txt
+file2.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  get-content bb-b.txt
+bb-b, abcn`
+
+# 从缓存区删除
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git rm --cached bb-b.txt
+rm 'bb-b.txt'
+
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git status
+On branch cc
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        deleted:    bb-b.txt
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+        bb-b.txt
+
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git restore --staged bb-b.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git status
+On branch cc
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        modified:   bb-b.txt
+
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git add bb-b.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git commit -am &quot;add bb-b&quot;
+[cc 7ee0ab8] add bb-b
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  echo bbc-ccd &gt; bb-b.txt
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  get-content bb-b.txt
+bb-b, abcn`
+
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  cat bb-b.txt
+bbc-ccd
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  git restore bb-b.txt
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(cc)  cat bb-b.txt
+bb-b, abcn`
+</code></pre>
+<pre><code class="language-bash"># 将添加到缓存区的a.txt 撤销掉
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git restore --staged a.txt
+
+# 添加文件夹到缓存区
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git add ./test
+
+# 然后删掉文件夹
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   test/ab.txt
+
+Changes not staged for commit:
+  (use &quot;git add/rm &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        deleted:    test/ab.txt
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+        a.txt
+
+# 这里就看到和restore的差异
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git checkout ./test # checkout恢复文件, 但是不影响缓存区的文件
+Updated 1 path from the index
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   test/ab.txt
+
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+        a.txt
+
+# `restore`, 撤销缓存区的文件, 但是假如文件添加缓存区后,
+# 工作区的文件被删除, 这个操作是不会将删除的文件恢复的.
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git restore --staged ./test
+</code></pre>
+<pre><code class="language-bash"># 将a.txt commit
+# 修改a.txt # 未提交缓存区
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git status
+On branch master
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        modified:   a.txt
+
+# 文件将被恢复到commit时的状态
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git restore a.txt
+
+# 删除掉缓存文件a
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git rm --cached a.txt
+rm 'a.txt'
+
+# 删除掉这个文件之后, 将无法恢复
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git restore a.txt
+error: pathspec 'a.txt' did not match any file(s) known to git
+
+# 这里没办法恢复
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git checkout a.txt
+error: pathspec 'a.txt' did not match any file(s) known to git
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git log --oneline
+433a2f1 (HEAD -&gt; master) change a 1
+429695f 4
+796c225 3
+8a2b401 2
+4c4b583 1
+
+# 手动指定从哪个
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git checkout 433a2f1 a.txt
+Updated 1 path from 03710bd
+
+# 缓存区的文件也被恢复
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git ls-files
+New Text Document.txt
+a.txt
+</code></pre>
+<h3 id="104-reset">10.4 reset</h3>
+<blockquote>
+<p>Reset current HEAD to the specified state</p>
+</blockquote>
+<ul>
+<li>soft: 不改变工作区和缓存区只移动 HEAD 到指定 commit.</li>
+<li>mixed: 只改变缓存区不改变工作区.这是默认参数通常用于撤销<code>git add</code>.</li>
+<li>hard:改变工作区和暂存区到指定 commit.该参数等同于重置可能会引起数据损失.<code>git reset --hard</code>等同于 <code>git reset --hard HEAD</code></li>
+</ul>
+<blockquote>
+<p>-soft</p>
+<p><strong>Does not touch the index file or the working tree at all</strong> (but resets the head to <code>&lt;commit&gt;</code>, just like all modes do). This leaves all your changed files &quot;Changes to be committed&quot;, as <code>git status</code> would put it.</p>
+<p>--mixed</p>
+<p><strong>Resets the index but not the working tree</strong> (i.e., the changed files are preserved but not marked for commit) and reports what has not been updated. This is the default action.</p>
+<p>If <code>-N</code> is specified, removed paths are marked as intent-to-add (see <a href="git-add.html">git-add(1)</a>).</p>
+<p>--hard</p>
+<p><strong>Resets the index and working tree</strong>. Any changes to tracked files in the working tree since <code>&lt;commit&gt;</code> are discarded. Any untracked files or directories in the way of writing any tracked files are simply deleted.</p>
+</blockquote>
+<pre><code class="language-bash">Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git add b.txt
+warning: in the working copy of 'b.txt', LF will be replaced by CRLF the next time Git touches it
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   b.txt
+
+# 这一步的操作也相当于撤销掉add操作
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git reset head b.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+        b.txt
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ cat b.txt
+b
+
+# 添加 =&gt; 删掉本地文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   b.txt
+
+Changes not staged for commit:
+  (use &quot;git add/rm &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        deleted:    b.txt
+
+# 没有恢复文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git reset head b.txt
+
+# 缓存区的文件就会丢失
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git ls-files
+readme.txt
+test.txt
+
+# 缓存区已经不存在文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+nothing to commit, working tree clean
+</code></pre>
+<pre><code class="language-bash">Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   b.txt
+
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        modified:   b.txt
+
+# b修改(工作区)不受影响
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git reset head b.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+        b.txt
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+
+# 这里的操作就即可以说撤销b的修改, 也可以说恢复b的文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git checkout b.txt
+Updated 1 path from the index
+# 使用缓存区的文件覆盖掉工作区的b文件
+
+# 这里和restore的操作不同, checkout没有撤销add操作
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use &quot;git restore --staged &lt;file&gt;...&quot; to unstage)
+        new file:   b.txt
+# 没有删除缓存区的文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git_test (master)
+$ git ls-files
+b.txt
+readme.txt
+test.txt
+</code></pre>
+<pre><code class="language-bash"># 延续上面的checkout恢复删除的文件
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git reset -- a.txt --mixed
+Unstaged changes after reset:
+D       a.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git status
+On branch master
+Changes not staged for commit:
+  (use &quot;git add/rm &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        deleted:    a.txt
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ ls
+'New Text Document.txt'
+
+# 文件被恢复至缓存区, 本地磁盘不受影响
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git ls-files
+New Text Document.txt
+a.txt
+
+# soft =&gt; 数据还是恢复到缓存区
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git reset -- a.txt --soft
+Unstaged changes after reset:
+D       a.txt
+
+# 这里D的delete的标记
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ ls
+'New Text Document.txt'
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git ls-files
+New Text Document.txt
+a.txt
+
+# 再文件被删除之后, 文件的恢复只能到缓存区
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git reset -- a.txt --hard
+Unstaged changes after reset:
+D       a.txt
+
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/git beta (master)
+$ git status
+On branch master
+Changes not staged for commit:
+  (use &quot;git add/rm &lt;file&gt;...&quot; to update what will be committed)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        deleted:    a.txt
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+</code></pre>
+<pre><code class="language-bash"># 延续checkout部分的内容
+
+# soft的作用, 移动指针
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(6361c5a)  git reset --soft b67d9525e5dce122439fd2a8dc0795dbbe9140d3
+# 只是指针的移动, 对于工作区和缓存区无影响
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(b67d952)  cat a.txt
+a-0
+@Lian ➜ ~\..\test-a ( base 3.9.12) git(b67d952)  git cat-file -p 5b23
+a-0
+</code></pre>
+<figure data-type="image" tabindex="13"><a href="https://imgse.com/i/pSbEJ8s"><img src="https://s1.ax1x.com/2023/02/16/pSbEJ8s.png" alt="pSbEJ8s.png" loading="lazy"></a></figure>
+<h2 id="十一-远程仓库">十一. 远程仓库</h2>
+<figure data-type="image" tabindex="14"><a href="https://imgse.com/i/pSXOKF1"><img src="https://s1.ax1x.com/2023/02/21/pSXOKF1.png" alt="pSXOKF1.png" loading="lazy"></a></figure>
+<p>以<code>gitee</code>/<code>github</code>在多数的操作上应该时相同的, 差异的话应该不会很大.</p>
+<p>关于验证方式, 有非常多种类型.</p>
+<p>这里, <code>gitee</code>我使用的是账号密码的方式(上面安装``git<code>时安装有账号/密码管理器(</code>credential.helper<code>)); </code>github`使用的是机器授权码.</p>
+<h3 id="111-初始化">11.1 初始化</h3>
+<pre><code class="language-bash"># 将项目克隆到本地
+git clone https....git
+
+... 修改内容后
+
+# 推送
+git push origin master
+# 安装了凭证管理会弹窗提示输入账号密码
+# 加 参数: -f, 将覆盖掉可能存在冲突的readme.md文件
+</code></pre>
+<h3 id="112-pull和fetch的差异">11.2 pull和fetch的差异</h3>
+<figure data-type="image" tabindex="15"><a href="https://imgse.com/i/pSOvk36"><img src="https://s1.ax1x.com/2023/02/20/pSOvk36.png" alt="pSOvk36.png" loading="lazy"></a></figure>
+<p>上图中的<code>merge</code>的产生就是<code>pull</code>执行, <code>update</code>的<code>master</code>, 就是<code>fetch</code></p>
+<ul>
+<li>
+<p><code>pull</code>, 执行后, 马上进入合并阶段.</p>
+<pre><code class="language-bash">@Lian ➜ ~\..\test_push ( base 3.9.12) git(master) 2.422s git status
+On branch master
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+        b.txt
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+</code></pre>
+<p>合并后, 本地的未追踪的文件, 并无丢失.</p>
+</li>
+<li>
+<p><code>fetch</code>, 则是在本地仓库, 不会影响当前的工作</p>
+<pre><code class="language-bash"># fetch远程仓库
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/test-project (master)
+$ git fetch origin
+remote: Enumerating objects: 5, done.
+remote: Counting objects: 100% (5/5), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 3 (delta 1), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), 1012 bytes | 101.00 KiB/s, done.
+From https://gitee.com/lian_hwang/test-project
+   6687f7f..019a9f8  master     -&gt; origin/master
+</code></pre>
+<pre><code class="language-bash">@Lian ➜ ~\..\test_push ( base 3.9.12) git(master)  git reset --hard origin/master
+HEAD is now at 0ec7294 update main.py.
+@Lian ➜ ~\..\test_push ( base 3.9.12) git(master)  cat main.py
+# 1
+# 2
+def test_main():
+    print('change content')
+
+def add(a, b):
+    print(a + b)
+@Lian ➜ ~\..\test_push ( base 3.9.12) git(master)  git status
+On branch master
+Untracked files:
+  (use &quot;git add &lt;file&gt;...&quot; to include in what will be committed)
+        b.txt
+
+nothing added to commit but untracked files present (use &quot;git add&quot; to track)
+</code></pre>
+<figure data-type="image" tabindex="16"><a href="https://imgse.com/i/pSOvTKO"><img src="https://s1.ax1x.com/2023/02/20/pSOvTKO.png" alt="pSOvTKO.png" loading="lazy"></a></figure>
+<p>并未如此所言, 出现丢失的情形.</p>
+<figure data-type="image" tabindex="17"><a href="https://imgse.com/i/pSOvLad"><img src="https://s1.ax1x.com/2023/02/20/pSOvLad.png" alt="pSOvLad.png" loading="lazy"></a></figure>
+</li>
+</ul>
+<h3 id="113-本地修改">11.3 本地修改</h3>
+<pre><code class="language-bash"># 查看远程仓库和本地文件的差异
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/test-project (master)
+$ git diff origin/master
+diff --git a/main.py b/main.py
+index dc37942..522cd30 100644
+--- a/main.py
++++ b/main.py
+@@ -1,4 +1,2 @@
+ # 1
+ # 2
+-def test_main():
+-    print('change content')    # 这里是在远端修改的内容
+\ No newline at end of file
+
+# 将合并远程和本地仓库
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/test-project (master)
+$ git pull
+Updating 6687f7f..019a9f8
+Fast-forward
+ main.py | 2 ++
+ 1 file changed, 2 insertions(+)
+</code></pre>
+<h3 id="114-推送">11.4 推送</h3>
+<p>创建仓库时, 假如创建以下文件, 而本地不存在.</p>
+<figure data-type="image" tabindex="18"><a href="https://imgse.com/i/pSOXexO"><img src="https://s1.ax1x.com/2023/02/20/pSOXexO.png" alt="pSOXexO.png" loading="lazy"></a></figure>
+<pre><code class="language-bash"># 出现不一致的提示
+Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/markdown_project (main)
+$ git push -u origin main
+To https://github.com/Kyouichirou/markdown_project.git
+ ! [rejected]        main -&gt; main (fetch first)
+error: failed to push some refs to 'https://github.com/Kyouichirou/markdown_project.git'
+hint: Updates were rejected because the remote contains work that you do
+hint: not have locally. This is usually caused by another repository pushing
+hint: to the same ref. You may want to first integrate the remote changes
+hint: (e.g., 'git pull ...') before pushing again.
+hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+</code></pre>
+<pre><code class="language-bash">Lian@DESKTOP-F6VO5U4 MINGW64 ~/Desktop/markdown_project (main)
+$ git pull origin main
+remote: Enumerating objects: 3, done.
+remote: Counting objects: 100% (3/3), done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+Unpacking objects: 100% (3/3), 1.19 KiB | 121.00 KiB/s, done.
+From https://github.com/Kyouichirou/markdown_project
+ * branch            main       -&gt; FETCH_HEAD
+ * [new branch]      main       -&gt; origin/main
+
+# 出现合并错误的提示
+fatal: refusing to merge unrelated histories
+</code></pre>
+<figure data-type="image" tabindex="19"><a href="https://imgse.com/i/pSOXYz8"><img src="https://s1.ax1x.com/2023/02/20/pSOXYz8.png" alt="pSOXYz8.png" loading="lazy"></a></figure>
+<p>这个内容, 在``git`上并看不到.</p>
+<pre><code class="language-bash"># git新增的特性
+git pull origin main --allow-unrelated-histories
+</code></pre>
+<pre><code class="language-bash"># 即可
+git push -u origin main
+</code></pre>
+<h2 id="十二-常用命令参数">十二. 常用命令参数</h2>
+<h3 id="121-add">12.1 add</h3>
+<blockquote>
+<p>git-add - Add file contents to the index</p>
+<p>添加文件到索引(缓存区)</p>
+</blockquote>
+<pre><code class="language-bash">git add [--verbose | -v] [--dry-run | -n] [--force | -f] [--interactive | -i] [--patch | -p]
+          [--edit | -e] [--[no-]all | --[no-]ignore-removal | [--update | -u]] [--sparse]
+          [--intent-to-add | -N] [--refresh] [--ignore-errors] [--ignore-missing] [--renormalize]
+          [--chmod=(+|-)x] [--pathspec-from-file=&lt;file&gt; [--pathspec-file-nul]]
+          [--] [&lt;pathspec&gt;…]
+
+ # n, 只是测试, 不是实际操作, 只是为了测试, 到底哪些文件会被添加(忽略)
+</code></pre>
+<h3 id="122-reset">12.2 reset</h3>
+<blockquote>
+<p>git-reset - Reset current HEAD to the specified state</p>
+<p>修改当前指针到特定的阶段</p>
+</blockquote>
+<pre><code class="language-bash">git reset [-q] [&lt;tree-ish&gt;] [--] &lt;pathspec&gt;…
+git reset [-q] [--pathspec-from-file=&lt;file&gt; [--pathspec-file-nul]] [&lt;tree-ish&gt;]
+git reset (--patch | -p) [&lt;tree-ish&gt;] [--] [&lt;pathspec&gt;…]
+git reset [--soft | --mixed [-N] | --hard | --merge | --keep] [-q] [&lt;commit&gt;]
+DEPRECATED: git reset [-q] [--stdin [-z]] [&lt;tree-ish&gt;]
+</code></pre>
+<p><em>注意<code>--hard</code>参数的使用, 这将可能导致工作区的内容丢失.</em></p>
+<h3 id="123-commit">12.3 commit</h3>
+<blockquote>
+<p>git-commit - Record changes to the repository</p>
+<p>提交修改到仓库</p>
+</blockquote>
+<pre><code class="language-bash">git commit [-a | --interactive | --patch] [-s] [-v] [-u&lt;mode&gt;] [--amend]
+           [--dry-run] [(-c | -C | --squash) &lt;commit&gt; | --fixup [(amend|reword):]&lt;commit&gt;)]
+           [-F &lt;file&gt; | -m &lt;msg&gt;] [--reset-author] [--allow-empty]
+           [--allow-empty-message] [--no-verify] [-e] [--author=&lt;author&gt;]
+           [--date=&lt;date&gt;] [--cleanup=&lt;mode&gt;] [--[no-]status]
+           [-i | -o] [--pathspec-from-file=&lt;file&gt; [--pathspec-file-nul]]
+           [(--trailer &lt;token&gt;[(=|:)&lt;value&gt;])…] [-S[&lt;keyid&gt;]]
+           [--] [&lt;pathspec&gt;…]
+
+# amend, 修改提交信息(最后一次)
+# m, 执行commit的同时, 同时提交commit的内容(否则打开默认编辑器进行操作)
+
+--no-abbrev-commit
+Show the full 40-byte hexadecimal commit object name. This negates --abbrev-commit, either explicit or implied by other options such as &quot;--oneline&quot;. It also overrides the log.abbrevCommit variable.
+# 可以更方便获取commit的id
+--oneline
+This is a shorthand for &quot;--pretty=oneline --abbrev-commit&quot; used together.
+</code></pre>
+<h3 id="124-checkout">12.4 checkout</h3>
+<blockquote>
+<p>git-checkout - Switch branches or restore working tree files</p>
+<p>切换分支/重置工作区文件</p>
+</blockquote>
+<pre><code class="language-bash">git checkout [-q] [-f] [-m] [&lt;branch&gt;]
+git checkout [-q] [-f] [-m] --detach [&lt;branch&gt;]
+git checkout [-q] [-f] [-m] [--detach] &lt;commit&gt;
+git checkout [-q] [-f] [-m] [[-b|-B|--orphan] &lt;new-branch&gt;] [&lt;start-point&gt;]
+git checkout [-f|--ours|--theirs|-m|--conflict=&lt;style&gt;] [&lt;tree-ish&gt;] [--] &lt;pathspec&gt;…
+git checkout [-f|--ours|--theirs|-m|--conflict=&lt;style&gt;] [&lt;tree-ish&gt;] --pathspec-from-file=&lt;file&gt; [--pathspec-file-nul]
+git checkout (-p|--patch) [&lt;tree-ish&gt;] [--] [&lt;pathspec&gt;…]
+</code></pre>
+<h3 id="125-pull">12.5 pull</h3>
+<blockquote>
+<p>git-pull - Fetch from and integrate with another repository or a local branch</p>
+<p>合并其他的仓库或者本地的分支</p>
+</blockquote>
+<pre><code class="language-bash">git pull [&lt;options&gt;] [&lt;repository&gt; [&lt;refspec&gt;…]]
+</code></pre>
+<h3 id="126-diff">12.6 diff</h3>
+<blockquote>
+<p>git-diff - Show changes between commits, commit and working tree, etc</p>
+<p>查看仓库区和工作区的内容的变化</p>
+</blockquote>
+<pre><code class="language-bash">git diff [&lt;options&gt;] [&lt;commit&gt;] [--] [&lt;path&gt;…]
+git diff [&lt;options&gt;] --cached [--merge-base] [&lt;commit&gt;] [--] [&lt;path&gt;…]
+git diff [&lt;options&gt;] [--merge-base] &lt;commit&gt; [&lt;commit&gt;…] &lt;commit&gt; [--] [&lt;path&gt;…]
+git diff [&lt;options&gt;] &lt;commit&gt;…&lt;commit&gt; [--] [&lt;path&gt;…]
+git diff [&lt;options&gt;] &lt;blob&gt; &lt;blob&gt;
+git diff [&lt;options&gt;] --no-index [--] &lt;path&gt; &lt;path&gt;
+</code></pre>
+<h3 id="127-merge">12.7 merge</h3>
+<blockquote>
+<p>git-merge - Join two or more development histories together</p>
+<p>合并分支</p>
+</blockquote>
+<pre><code class="language-bash">git merge [-n] [--stat] [--no-commit] [--squash] [--[no-]edit]
+        [--no-verify] [-s &lt;strategy&gt;] [-X &lt;strategy-option&gt;] [-S[&lt;keyid&gt;]]
+        [--[no-]allow-unrelated-histories]
+        [--[no-]rerere-autoupdate] [-m &lt;msg&gt;] [-F &lt;file&gt;]
+        [--into-name &lt;branch&gt;] [&lt;commit&gt;…]
+git merge (--continue | --abort | --quit)
+</code></pre>
+<h3 id="128-branch">12.8 branch</h3>
+<blockquote>
+<p>git-branch - List, create, or delete branches</p>
+<p>展示, 创建, 删除 分支</p>
+</blockquote>
+<pre><code class="language-bash">git branch [--color[=&lt;when&gt;] | --no-color] [--show-current]
+        [-v [--abbrev=&lt;n&gt; | --no-abbrev]]
+        [--column[=&lt;options&gt;] | --no-column] [--sort=&lt;key&gt;]
+        [--merged [&lt;commit&gt;]] [--no-merged [&lt;commit&gt;]]
+        [--contains [&lt;commit&gt;]] [--no-contains [&lt;commit&gt;]]
+        [--points-at &lt;object&gt;] [--format=&lt;format&gt;]
+        [(-r | --remotes) | (-a | --all)]
+        [--list] [&lt;pattern&gt;…]
+git branch [--track[=(direct|inherit)] | --no-track] [-f]
+        [--recurse-submodules] &lt;branchname&gt; [&lt;start-point&gt;]
+git branch (--set-upstream-to=&lt;upstream&gt; | -u &lt;upstream&gt;) [&lt;branchname&gt;]
+git branch --unset-upstream [&lt;branchname&gt;]
+git branch (-m | -M) [&lt;oldbranch&gt;] &lt;newbranch&gt;
+git branch (-c | -C) [&lt;oldbranch&gt;] &lt;newbranch&gt;
+git branch (-d | -D) [-r] &lt;branchname&gt;…
+git branch --edit-description [&lt;branchname&gt;]
+</code></pre>
+<h3 id="129-rebase">12.9 rebase</h3>
+<blockquote>
+<p>git-rebase - Reapply commits on top of another base tip</p>
+<p>重置<code>commit</code></p>
+</blockquote>
+<pre><code class="language-bash">git rebase [-i | --interactive] [&lt;options&gt;] [--exec &lt;cmd&gt;]
+        [--onto &lt;newbase&gt; | --keep-base] [&lt;upstream&gt; [&lt;branch&gt;]]
+git rebase [-i | --interactive] [&lt;options&gt;] [--exec &lt;cmd&gt;] [--onto &lt;newbase&gt;]
+        --root [&lt;branch&gt;]
+git rebase (--continue | --skip | --abort | --quit | --edit-todo | --show-current-patch)
+</code></pre>
+<p><em>注意<code>rebase`可能导致的</code>commit`丢失</em>.</p>
+<h3 id="1210-restore">12.10 restore</h3>
+<blockquote>
+<p>git-restore - Restore working tree files</p>
+<p>重置工作区</p>
+</blockquote>
+<pre><code class="language-bash">git restore [&lt;options&gt;] [--source=&lt;tree&gt;] [--staged] [--worktree] [--] &lt;pathspec&gt;…​
+git restore [&lt;options&gt;] [--source=&lt;tree&gt;] [--staged] [--worktree] --pathspec-from-file=&lt;file&gt; [--pathspec-file-nul]
+git restore (-p|--patch) [&lt;options&gt;] [--source=&lt;tree&gt;] [--staged] [--worktree] [--] [&lt;pathspec&gt;…​]
+</code></pre>
+<h3 id="1211-push">12.11 push</h3>
+<blockquote>
+<p>git-push - Update remote refs along with associated objects</p>
+<p>推送到远程仓库</p>
+</blockquote>
+<pre><code class="language-bash">git push [--all | --mirror | --tags] [--follow-tags] [--atomic] [-n | --dry-run] [--receive-pack=&lt;git-receive-pack&gt;]
+           [--repo=&lt;repository&gt;] [-f | --force] [-d | --delete] [--prune] [-v | --verbose]
+           [-u | --set-upstream] [-o &lt;string&gt; | --push-option=&lt;string&gt;]
+           [--[no-]signed|--signed=(true|false|if-asked)]
+           [--force-with-lease[=&lt;refname&gt;[:&lt;expect&gt;]] [--force-if-includes]]
+           [--no-verify] [&lt;repository&gt; [&lt;refspec&gt;…]]
+</code></pre>
+<h3 id="1212-switch">12.12 switch</h3>
+<blockquote>
+<p>git-switch - Switch branches</p>
+<p>切换分支</p>
+</blockquote>
+<pre><code class="language-bash">git switch [&lt;options&gt;] [--no-guess] &lt;branch&gt;
+git switch [&lt;options&gt;] --detach [&lt;start-point&gt;]
+git switch [&lt;options&gt;] (-c|-C) &lt;new-branch&gt; [&lt;start-point&gt;]
+git switch [&lt;options&gt;] --orphan &lt;new-branch&gt;
+
+-c 创建分支, 同时转移到新的分支
+</code></pre>
+<h3 id="1213-tag">12.13 tag</h3>
+<blockquote>
+<p>git-tag - Create, list, delete or verify a tag object signed with GPG</p>
+<p>标签</p>
+</blockquote>
+<pre><code class="language-bash">git tag [-a | -s | -u &lt;key-id&gt;] [-f] [-m &lt;msg&gt; | -F &lt;file&gt;] [-e]
+        &lt;tagname&gt; [&lt;commit&gt; | &lt;object&gt;]
+git tag -d &lt;tagname&gt;…
+git tag [-n[&lt;num&gt;]] -l [--contains &lt;commit&gt;] [--no-contains &lt;commit&gt;]
+        [--points-at &lt;object&gt;] [--column[=&lt;options&gt;] | --no-column]
+        [--create-reflog] [--sort=&lt;key&gt;] [--format=&lt;format&gt;]
+        [--merged &lt;commit&gt;] [--no-merged &lt;commit&gt;] [&lt;pattern&gt;…]
+git tag -v [--format=&lt;format&gt;] &lt;tagname&gt;…
+</code></pre>
+<h2 id="十三-git-flow">十三. git flow</h2>
+<figure data-type="image" tabindex="20"><img src="https://images.cnblogs.com/cnblogs_com/roverliang/915085/o_flow.png" alt="flow" loading="lazy"></figure>
+<pre><code class="language-bash">@Lian ➜ ~\Desktop ( base 3.9.12)  git flow help
+usage: git flow &lt;subcommand&gt;
+
+Available subcommands are:
+   init      Initialize a new git repo with support for the branching model.
+   feature   Manage your feature branches.
+   bugfix    Manage your bugfix branches.
+   release   Manage your release branches.
+   hotfix    Manage your hotfix branches.
+   support   Manage your support branches.
+   version   Shows version information.
+   config    Manage your git-flow configuration.
+   log       Show log deviating from base branch.
+</code></pre>
+<p>在<code>sourcetree</code>上</p>
+<figure data-type="image" tabindex="21"><a href="https://imgse.com/i/pSXWQu6"><img src="https://s1.ax1x.com/2023/02/21/pSXWQu6.png" alt="pSXWQu6.png" loading="lazy"></a></figure>
+<p>在<code>GitKraken</code>上</p>
+<figure data-type="image" tabindex="22"><a href="https://imgse.com/i/pSXWavt"><img src="https://s1.ax1x.com/2023/02/21/pSXWavt.png" alt="pSXWavt.png" loading="lazy"></a></figure>
+<h2 id="十四-名词解析">十四. 名词解析</h2>
+<h3 id="141-head">14.1 head</h3>
+<h4 id="1411-head">14.1.1 <code>HEAD</code></h4>
+<pre><code class="language-bash">HEAD` 指向当前所在分支提交至仓库的最新一次的 `commit
+# 使用最新一次提交重制暂存区
+git reset HEAD -- filename
+
+# 使用最新一次提交重制暂存区和工作区
+git reset --hard HEAD
+
+# 将 commit log 回滚一次 暂存区和工作区代码不变
+git reset --soft HEAD~1
+</code></pre>
+<h4 id="1412-head~n">14.1.2 <code>HEAD~{n}</code></h4>
+<pre><code class="language-bash">~` 是用来在`当前提交路径`上回溯的修饰符
+`HEAD~{n}` 表示当前所在的提交路径上的前 `n` 个提交(n &gt;= 0):
+`HEAD` = `HEAD~0`~
+`HEAD~` = `HEAD~1`
+`HEAD~~` = `HEAD~2`
+`HEAD{n个~}` = `HEAD~n
+</code></pre>
+<h4 id="1413-headn">14.1.3 <code>HEAD^n</code></h4>
+<p><code>^</code> 是用来<code>切换父级提交路径</code>的修饰符.当我们始终在一个分支比如 <code>dev</code> 开发/提交代码时每个 <code>commit</code> 都只会有一个父级提交就是上一次提交但当并行多个分支开发<code>feat1</code>, <code>feat2</code>, <code>feat3</code>完成后 <code>merge feat1 feat2 feat3</code> 回 <code>dev</code> 分支后此次的 <code>merge commit</code> 就会有多个父级提交.</p>
+<p><img src="https://segmentfault.com/img/bVbGA97" alt="image.png" loading="lazy"><br>
+如上提交图所示当前的 <code>HEAD</code> 节点有 <code>3</code> 个父级:<code>feat1</code>(归并到主线)<code>feat2``feat3</code></p>
+<p>tips: <code>父级</code> 一词本身就代表回溯了 <code>1</code> 次</p>
+<p><code>HEAD</code> 的 第一个父级</p>
+<pre><code class="language-gauss"># 第一个父级提交 即 feat1 的最近第1次的提交
+λ git show HEAD^
+feat1 3 foo_feat1
+
+# 第一个父级提交的上1次提交 即 feat1 的最近第2次的提交
+λ git show HEAD^~1 / git show HEAD^^
+feat1 2 foo_feat1
+
+# 第一个父级提交的上2次提交 即 feat1 的最近第3次的提交
+λ git show HEAD^~2 / git show HEAD^^^
+feat1 1 foo_feat1
+</code></pre>
+<p><code>HEAD</code> 的 第二个父级</p>
+<pre><code class="language-gauss"># 第二个父级提交 即 feat2 的最近第1次的提交
+λ git show HEAD^2
+feat2 2 foo_feat2
+
+# 第二个父级提交的上1次提交 即 feat2 的最近第2次的提交
+λ git show HEAD^2~1 / git show HEAD^2^
+feat2 1 foo_feat2
+
+# 第二个父级提交的上2次提交 即 feat2 的最近第3次的提交
+λ git show HEAD^2~2 / git show HEAD^2^^
+feat2 add foo_feat2
+</code></pre>
+<p><code>HEAD</code> 的 第三个父级</p>
+<pre><code class="language-bash"># 第三个父级提交 即 feat3 的最近第1次的提交
+λ git show HEAD^3
+feat3 2 foo_feat3
+
+# 第三个父级提交的上1次提交 即 feat3 的最近第2次的提交
+λ git show HEAD^3~1 / git show HEAD^3^
+feat3 1 foo_feat3
+
+# 第三个父级提交的上2次提交 feat3 的最近第3次的提交回归到了主线上
+λ git show HEAD^3~2 / git show HEAD^3^^
+master foo 2
+</code></pre>
+<h4 id="1414-示例">14.1.4 示例</h4>
+<pre><code class="language-apache"># 当前提交
+HEAD = HEAD~0 = HEAD^0
+
+# 主线回溯
+HEAD~1 = HEAD^ 主线的上一次提交
+HEAD~2 = HEAD^^ 主线的上二次提交
+HEAD~3 = HEAD^^^ 主线的上三次提交
+
+# 如果某个节点有其他分支并入
+HEAD^1 主线提交(第一个父提交)
+HEAD^2 切换到了第2个并入的分支并得到最近一次的提交
+HEAD^2~3 切换到了第2个并入的分支并得到最近第 4 次的提交
+HEAD^3~2 切换到了第3个并入的分支并得到最近第 3 次的提交
+
+# ^{n} 和 ^ 重复 n 次的区别
+HEAD~1 = HEAD^
+HEAD~2 = HEAD^^
+HEAD~3 = HEAD^^^
+# 切换父级
+HEAD^1~3 = HEAD~4
+HEAD^2~3 = HEAD^2^^^
+HEAD^3~3 = HEAD^3^^^
+</code></pre>
+<ul>
+<li><a href="https://segmentfault.com/a/1190000022506884">git HEAD / HEAD^ / HEAD~ 的含义 - 个人文章 - SegmentFault 思否</a></li>
+</ul>
+<h2 id="十五-commit信息规范">十五. commit信息规范</h2>
+<p>非标准的要求, 只是为了方便阅读和自动化处理这些<code>commit</code>而提出的约束规范.</p>
+<ul>
+<li>https://github.com/conventional-changelog/standard-version</li>
+<li><a href="https://www.conventionalcommits.org/zh-hans/v1.0.0/#%e7%ba%a6%e5%ae%9a%e5%bc%8f%e6%8f%90%e4%ba%a4%e8%a7%84%e8%8c%83">约定式提交</a></li>
+<li><a href="https://github.com/pvdlg/conventional-changelog-metahub#conventional-changelog-metahub">conventional-changelog-metahub</a></li>
+<li>[Git Commit message 编写指南 | Gitee 产品文档](https://help.gitee.com/enterprise/code-manage/Git 知识大全/Git Commit message 编写指南)</li>
+</ul>
+<h2 id="十六-图形管理工具">十六. 图形管理工具</h2>
+<p>这里使用的是<a href="https://www.gitkraken.com/"><code>GitKraken</code></a></p>
+<figure data-type="image" tabindex="23"><a href="https://imgse.com/i/pSTZOeS"><img src="https://s1.ax1x.com/2023/02/14/pSTZOeS.png" alt="pSTZOeS.png" loading="lazy"></a></figure>
+<p>这个软件之前是免费的针对个人, 但是现在已经收费, 包括之前不少人用的<code>6.5.1</code>这个版本(官方已经不支持这个版本的下载), 同样也只是提供<code>7</code>天的试用期.</p>
+<p>付费版本和免费版本的最大差异是, 免费版本不支持<code>Private</code>的<code>GitHub</code>仓库.</p>
+<p>这里安装的是<code>6.5.1</code>, 破解的方式很简单(<em>6.5.1这个版本已经不支持安装即用</em>)</p>
+<ul>
+<li>先在<code>hosts</code>文件添加<code>0.0.0.0 release.gitkraken.com</code>(保证程序无法更新)</li>
+<li>安装好程序, 这个程序在菜单栏上的快捷方式是先执行<code>update.exe</code>之后再执行主程序, 所以顺便再防火墙将这个<code>update.exe</code>禁止出站.</li>
+<li>打开界面, 会出现强制要求登录的弹窗, 这里使用的<code>GitHub</code>授权登录的方式(假如出现<code>error</code>, 尝试多次), 退出程序.</li>
+<li>在<code>hosts</code>文件添加<code>0.0.0.0 api.gitkraken.com</code>.(注意不能提前禁用, 这个前面的授权需要用到).</li>
+<li>重新打开程序, 即可以看到<code>7</code>天的试用授权提示消失, 底部显示的也将是<code>pro</code>版本.</li>
+</ul>
+<p><em>这里仅作为测试试用, 开发不易, 请支持开发者, 请勿用于商业用途.</em></p>
+<p><em>注意挂代理(需要在代理中排除掉上述两个host, 代理绕过本地的<code>hosts</code>, 将导致<code>pro</code>变回<code>free</code>, 但是不影响私有仓库的使用.</em></p>
+<figure data-type="image" tabindex="24"><a href="https://imgse.com/i/pSTd9pt"><img src="https://s1.ax1x.com/2023/02/14/pSTd9pt.png" alt="pSTd9pt.png" loading="lazy"></a></figure>
+<p>相比于<code>bash</code>终端, 图形界面更为直观的看到各个分支的数据变化情况.</p>
+<figure data-type="image" tabindex="25"><a href="https://imgse.com/i/pS7sz0P"><img src="https://s1.ax1x.com/2023/02/15/pS7sz0P.png" alt="pS7sz0P.png" loading="lazy"></a></figure>
+<p><code>Git</code> &amp; <code>pycharm</code></p>
+<h2 id="十七-速查表">十七. 速查表</h2>
+<figure data-type="image" tabindex="26"><a href="https://imgse.com/i/pSII8u4"><img src="https://s1.ax1x.com/2023/02/13/pSII8u4.png" alt="pSII8u4.png" loading="lazy"></a></figure>
+<p>详细的思维导图:</p>
+<p><a href="https://upload-images.jianshu.io/upload_images/290760-e8491f69473bf200.jpg">git-思维导图</a></p>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/gitjian-dan-shi-yong-zhi-nan/" title="Git(简单)使用指南">https://Kyouichirou.github.io/post/gitjian-dan-shi-yong-zhi-nan/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/zxKmYU_Ov/"># git</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/0vCl85iR_/"># vim</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"># priority</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="MySQL Shell for VS Code简单使用" href="https://Kyouichirou.github.io/post/mysql-shell-for-vs-code-jian-dan-shi-yong/">MySQL Shell for VS Code简单使用</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="MySQL Shell for VS Code简单使用" href="https://Kyouichirou.github.io/post/mysql-shell-for-vs-code-jian-dan-shi-yong/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Python正则表达式 -&#34; \w &#34;-坑" href="https://Kyouichirou.github.io/post/python-zheng-ze-biao-da-shi-w-keng/">Python正则表达式 -&#34; \w &#34;-坑</a>
+        <a class="nav-mobile-next" title="Python正则表达式 -&#34; \w &#34;-坑" href="https://Kyouichirou.github.io/post/python-zheng-ze-biao-da-shi-w-keng/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

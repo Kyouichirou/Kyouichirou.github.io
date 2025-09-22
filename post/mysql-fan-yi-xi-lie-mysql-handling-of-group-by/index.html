@@ -1,0 +1,1288 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>MySQL翻译系列-MySQL Handling of GROUP BY | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="MySQL翻译系列-MySQL Handling of GROUP BY" />
+  <meta name="keywords" content="translation,database,mysql" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/mysql-fan-yi-xi-lie-mysql-handling-of-group-by/"> MySQL翻译系列-MySQL Handling of GROUP BY </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-01-29 12:27:04">2023-01-29</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/T5dhhKFc0/"> <span>translation</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/sOZV2rCDf/"> <span>database</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/">
+        <span>mysql</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >14<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >2647<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <blockquote>
+<p>摘要信息:</p>
+<p>对比<code>MySQL</code>和标准<code>SQL</code>语句之间在针对字段别名等情况, <code>group by</code>的允许范围差异.</p>
+<p><code>select</code>语句后返回的字段内容, 在<code>only_full_group_by</code>模式下, 假如这个字段没有纳入<code>group by</code>聚合的字段中, 将会出现错误.类似的, 假如使用聚合函数, 如<code>max()</code>(隐含聚合), 同时返回没有其他的字段也会引发类似的问题.</p>
+<ul>
+<li>关闭这种模式(不建议).</li>
+<li>在非聚合的要返回的字段, 使用<code>any_value()</code>, 返回随意值(<strong>唯一值</strong>).</li>
+<li>假如非聚合的字段是主键或者是非<code>null</code>的唯一索引, 则没有问题(实际上就是聚合的返回的内容是多行数据的叠加, 但是不在聚合下的字段, 就没办法确定要返回的内容是哪些, 所以引发错误, 但是<code>MySQL</code>则扩展了这个标准, 认为假如假如字段是唯一的, 也可以返回内容).</li>
+</ul>
+</blockquote>
+<!--more-->
+<p>SQL-92 and earlier does not permit queries for which the select list, <code>HAVING</code> condition, or <code>ORDER BY</code> list refer to nonaggregated columns that are not named in the <code>GROUP BY</code> clause. For example, this query is illegal in standard SQL-92 because the nonaggregated <code>name</code> column in the select list does not appear in the <code>GROUP BY</code>:</p>
+<p><code>SQL-92</code>以及更早之前的标准不允许<code>select</code>、<code>having</code>条件语句或<code>order by</code>列表引用不在<code>group by</code>子句中命名的非聚合列的查询.</p>
+<p>这种查询语句是非法的在<code>SQL-92</code>标准中, 因为未聚合的列<code>name</code>没有出现在<code>group by</code>语句中.</p>
+<pre><code class="language-sql">SELECT o.custid, c.name, MAX(o.payment)
+  FROM orders AS o, customers AS c
+  WHERE o.custid = c.custid
+  GROUP BY o.custid;
+</code></pre>
+<pre><code class="language-bash"># 见这个例子
+mysql&gt; select * from test;
++------+------+------------+
+| id   | col  | c_year     |
++------+------+------------+
+|    3 | c    | 1991-01-02 |
+|    4 | d    | 2004-01-01 |
+|    1 | a    | 2011-01-02 |
+|    2 | b    | 2022-11-04 |
++------+------+------------+
+4 rows in set (0.00 sec)
+
+mysql&gt; select c_year, sum(id) from test group by col;
+ERROR 1055 (42000): Expression #1 of SELECT list is not in GROUP BY clause and contains nonaggregated column 'test_db.test.c_year' which is not functionally dependent on columns in GROUP BY clause; this is incompatible with sql_mode=only_full_group_by
+</code></pre>
+<p>For the query to be legal in SQL-92, the <code>name</code> column must be omitted from the select list or named in the <code>GROUP BY</code> clause.</p>
+<p>对于上述的查询语句, 要满足<code>SQL-92</code>标准的要求, <code>name</code>列必须从select语句中移除掉或者加入到<code>group by</code>语句中去.</p>
+<p>SQL:1999 and later permits such nonaggregates per optional feature T301 if they are functionally dependent on <code>GROUP BY</code> columns: If such a relationship exists between <code>name</code> and <code>custid</code>, the query is legal. This would be the case, for example, were <code>custid</code> a primary key of <code>customers</code>.</p>
+<p>MySQL implements detection of functional dependence. If the <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a> SQL mode is enabled (which it is by default), MySQL rejects queries for which the select list, <code>HAVING</code> condition, or <code>ORDER BY</code> list refer to nonaggregated columns that are neither named in the <code>GROUP BY</code> clause nor are functionally dependent on them.</p>
+<p><code>MySQL</code>会检测函数的依赖. 当 <code>only_full_group</code>模式启用(这是默认开启的), <code>MySQL</code>也会拒接执行上述例子的<code>SQL</code>语句.</p>
+<p>MySQL also permits a nonaggregate column not named in a <code>GROUP BY</code> clause when SQL <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a> mode is enabled, provided that this column is limited to a single value, as shown in the following example:</p>
+<p>当<code>only_full_group</code>处于启用时, <code>MySQL</code>允许非聚合的字段不出现在<code>group by</code>语句中, 这只对单个值字段, 如下面的例子.</p>
+<pre><code class="language-sql">mysql&gt; CREATE TABLE mytable (
+    -&gt;    id INT UNSIGNED NOT NULL PRIMARY KEY,
+    -&gt;    a VARCHAR(10),
+    -&gt;    b INT
+    -&gt; );
+
+mysql&gt; INSERT INTO mytable
+    -&gt; VALUES (1, 'abc', 1000),
+    -&gt;        (2, 'abc', 2000),
+    -&gt;        (3, 'def', 4000);
+
+mysql&gt; SET SESSION sql_mode = sys.list_add(@@session.sql_mode, 'ONLY_FULL_GROUP_BY');
+
+mysql&gt; SELECT a, SUM(b) FROM mytable WHERE a = 'abc';
++------+--------+
+| a    | SUM(b) |
++------+--------+
+| abc  |   3000 |
++------+--------+
+</code></pre>
+<p>It is also possible to have more than one nonaggregate column in the <a href="https://dev.mysql.com/doc/refman/8.0/en/select.html"><code>SELECT</code></a> list when employing <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a>. In this case, every such column must be limited to a single value in the <code>WHERE</code> clause, and all such limiting conditions must be joined by logical <code>AND</code>, as shown here:</p>
+<p>MySQL同样支持在超过非聚合的多个字段在<code>select</code>语句中,在<code>only_full_group</code>模式下. 在这个例子中, 同样限制单个值, 在where语句中使用 and操作符进行连接. 如下面的例子.</p>
+<pre><code class="language-sql">mysql&gt; DROP TABLE IF EXISTS mytable;
+
+mysql&gt; CREATE TABLE mytable (
+    -&gt;    id INT UNSIGNED NOT NULL PRIMARY KEY,
+    -&gt;    a VARCHAR(10),
+    -&gt;    b VARCHAR(10),
+    -&gt;    c INT
+    -&gt; );
+
+mysql&gt; INSERT INTO mytable
+    -&gt; VALUES (1, 'abc', 'qrs', 1000),
+    -&gt;        (2, 'abc', 'tuv', 2000),
+    -&gt;        (3, 'def', 'qrs', 4000),
+    -&gt;        (4, 'def', 'tuv', 8000),
+    -&gt;        (5, 'abc', 'qrs', 16000),
+    -&gt;        (6, 'def', 'tuv', 32000);
+
+mysql&gt; SELECT @@session.sql_mode;
++---------------------------------------------------------------+
+| @@session.sql_mode                                            |
++---------------------------------------------------------------+
+| ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION |
++---------------------------------------------------------------+
+
+mysql&gt; SELECT a, b, SUM(c) FROM mytable
+    -&gt;     WHERE a = 'abc' AND b = 'qrs';
++------+------+--------+
+| a    | b    | SUM(c) |
++------+------+--------+
+| abc  | qrs  |  17000 |
++------+------+--------+
+</code></pre>
+<p>If <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a> is disabled, a MySQL extension to the standard SQL use of <code>GROUP BY</code> permits the select list, <code>HAVING</code> condition, or <code>ORDER BY</code> list to refer to nonaggregated columns even if the columns are not functionally dependent on <code>GROUP BY</code> columns. This causes MySQL to accept the preceding query. In this case, the server is free to choose any value from each group, so unless they are the same, the values chosen are nondeterministic, which is probably not what you want. Furthermore, the selection of values from each group cannot be influenced by adding an <code>ORDER BY</code> clause. Result set sorting occurs after values have been chosen, and <code>ORDER BY</code> does not affect which value within each group the server chooses. Disabling <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a> is useful primarily when you know that, due to some property of the data, all values in each nonaggregated column not named in the <code>GROUP BY</code> are the same for each group.</p>
+<p>假如<code>only_full_group</code>被禁用, <code>MySQL</code>将延展标准的<code>SQL</code>语句, 允许上述的非法操作. 但是需要注意, 返回的结果未必是你所期待的.</p>
+<p>You can achieve the same effect without disabling <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a> by using <a href="https://dev.mysql.com/doc/refman/8.0/en/miscellaneous-functions.html#function_any-value"><code>ANY_VALUE()</code></a> to refer to the nonaggregated column.</p>
+<p>可以使用<code>any_value</code>来实现不需要关闭<code>only_full_group_by</code>模式.</p>
+<p>The following discussion demonstrates functional dependence, the error message MySQL produces when functional dependence is absent, and ways of causing MySQL to accept a query in the absence of functional dependence.</p>
+<p>下面的讨论, 将演示函数依赖<code>MySQL</code>在不存在函数依赖时产生的错误消息，以及导致MySQL在不存在函数依赖时接受查询的方法.</p>
+<p>This query might be invalid with <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a> enabled because the nonaggregated <code>address</code> column in the select list is not named in the <code>GROUP BY</code> clause:</p>
+<p>在<code>only_full_group</code>模式下, 这条语句是无效的, 因为非聚合的字段, <code>address</code>出现在<code>select</code>语句中, 而这个字段并未出现在<code>group by</code>中.</p>
+<pre><code class="language-sql">SELECT name, address, MAX(age) FROM t GROUP BY name;
+</code></pre>
+<p>The query is valid if <code>name</code> is a primary key of <code>t</code> or is a unique <code>NOT NULL</code> column. In such cases, MySQL recognizes that the selected column is functionally dependent on a grouping column. For example, if <code>name</code> is a primary key, its value determines the value of <code>address</code> because each group has only one value of the primary key and thus only one row. As a result, there is no randomness in the choice of <code>address</code> value in a group and no need to reject the query.</p>
+<p>假如<code>name</code>字段是<code>主键</code>或者是<code>非空</code>的唯一索引, 那么这条语句是有效的.</p>
+<p>The query is invalid if <code>name</code> is not a primary key of <code>t</code> or a unique <code>NOT NULL</code> column. In this case, no functional dependency can be inferred and an error occurs:</p>
+<p>反之, 则会引发以下的错误.</p>
+<pre><code class="language-sql">mysql&gt; SELECT name, address, MAX(age) FROM t GROUP BY name;
+ERROR 1055 (42000): Expression #2 of SELECT list is not in GROUP
+BY clause and contains nonaggregated column 'mydb.t.address' which
+is not functionally dependent on columns in GROUP BY clause; this
+is incompatible with sql_mode=only_full_group_by
+</code></pre>
+<p>If you know that, <em>for a given data set,</em> each <code>name</code> value in fact uniquely determines the <code>address</code> value, <code>address</code> is effectively functionally dependent on <code>name</code>. To tell MySQL to accept the query, you can use the <a href="https://dev.mysql.com/doc/refman/8.0/en/miscellaneous-functions.html#function_any-value"><code>ANY_VALUE()</code></a> function:</p>
+<p>如你所知道的, 在给定的数据集中, <code>name</code>字段应当决定<code>address</code>字段的唯一值, <code>address</code>字段应当依赖于<code>name</code>字段. 所以可以告诉MySQL可以返回任意值, 使用any_value函数.</p>
+<pre><code class="language-sql">SELECT name, ANY_VALUE(address), MAX(age) FROM t GROUP BY name;
+</code></pre>
+<p>Alternatively, disable <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a>.</p>
+<p>否则, 就只能关闭<code>only_full_group_by</code>模式.</p>
+<p>The preceding example is quite simple, however. In particular, it is unlikely you would group on a single primary key column because every group would contain only one row. For additional examples demonstrating functional dependence in more complex queries, see <a href="https://dev.mysql.com/doc/refman/8.0/en/group-by-functional-dependence.html">Section 12.20.4, “Detection of Functional Dependence”</a>.</p>
+<p>然而, 上述的例子都是相对简单的.</p>
+<p>If a query has aggregate functions and no <code>GROUP BY</code> clause, it cannot have nonaggregated columns in the select list, <code>HAVING</code> condition, or <code>ORDER BY</code> list with <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a> enabled:</p>
+<p>以下是没有使用<code>group by</code>聚合的情况, 如使用<code>min</code>, <code>max</code>.</p>
+<pre><code class="language-sql">mysql&gt; SELECT name, MAX(age) FROM t;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression
+#1 of SELECT list contains nonaggregated column 'mydb.t.name'; this
+is incompatible with sql_mode=only_full_group_by
+</code></pre>
+<p>Without <code>GROUP BY</code>, there is a single group and it is nondeterministic which <code>name</code> value to choose for the group. Here, too, <a href="https://dev.mysql.com/doc/refman/8.0/en/miscellaneous-functions.html#function_any-value"><code>ANY_VALUE()</code></a> can be used, if it is immaterial which <code>name</code> value MySQL chooses:</p>
+<p>使用<code>any_value()</code></p>
+<pre><code class="language-sql">SELECT ANY_VALUE(name), MAX(age) FROM t;
+</code></pre>
+<p><code>ONLY_FULL_GROUP_BY</code> also affects handling of queries that use <code>DISTINCT</code> and <code>ORDER BY</code>. Consider the case of a table <code>t</code> with three columns <code>c1</code>, <code>c2</code>, and <code>c3</code> that contains these rows:</p>
+<p>注意这种模式对于<code>distinct</code>的影响</p>
+<pre><code class="language-none">c1 c2 c3
+1  2  A
+3  4  B
+1  2  C
+</code></pre>
+<p>Suppose that we execute the following query, expecting the results to be ordered by <code>c3</code>:</p>
+<p>假设, 执行下面这条语句</p>
+<pre><code class="language-sql">SELECT DISTINCT c1, c2 FROM t ORDER BY c3;
+</code></pre>
+<p>To order the result, duplicates must be eliminated first. But to do so, should we keep the first row or the third? This arbitrary choice influences the retained value of <code>c3</code>, which in turn influences ordering and makes it arbitrary as well. To prevent this problem, a query that has <code>DISTINCT</code> and <code>ORDER BY</code> is rejected as invalid if any <code>ORDER BY</code> expression does not satisfy at least one of these conditions:</p>
+<p>假如不满足以下任意一项要求, MySQL执行上述语句将会出现错误.</p>
+<ul>
+<li>The expression is equal to one in the select list</li>
+<li>等价于在select 返回一行内容</li>
+<li>All columns referenced by the expression and belonging to the query's selected tables are elements of the select list</li>
+</ul>
+<p>Another MySQL extension to standard SQL permits references in the <code>HAVING</code> clause to aliased expressions in the select list. For example, the following query returns <code>name</code> values that occur only once in table <code>orders</code>:</p>
+<pre><code class="language-sql">SELECT name, COUNT(name) FROM orders
+  GROUP BY name
+  HAVING COUNT(name) = 1;
+</code></pre>
+<p>The MySQL extension permits the use of an alias in the <code>HAVING</code> clause for the aggregated column:</p>
+<p><code>MySQL</code>支持在<code>having</code>后使用字段别名</p>
+<pre><code class="language-sql">SELECT name, COUNT(name) AS c FROM orders
+  GROUP BY name
+  HAVING c = 1;
+</code></pre>
+<p>在有<code>having</code>, 筛选条件下使用, 在<code>MySQL</code>是允许的.</p>
+<p>Standard SQL permits only column expressions in <code>GROUP BY</code> clauses, so a statement such as this is invalid because <code>FLOOR(value/100)</code> is a noncolumn expression:</p>
+<p>在标准的<code>SQL</code>中只允许<code>group by</code>聚合字段, 类似于下面的语句也是无效的.(虽然看起来临时字段也出现在<code>group by</code>后面)</p>
+<pre><code class="language-sql">SELECT id, FLOOR(value/100)
+  FROM tbl_name
+  GROUP BY id, FLOOR(value/100);
+</code></pre>
+<p>MySQL extends standard SQL to permit noncolumn expressions in <code>GROUP BY</code> clauses and considers the preceding statement valid.</p>
+<p>Standard SQL also does not permit aliases in <code>GROUP BY</code> clauses. MySQL extends standard SQL to permit aliases, so another way to write the query is as follows:</p>
+<p>同样标准SQL不允许别名的形式, 尽管别名也出现在group by后.</p>
+<pre><code class="language-sql">SELECT id, FLOOR(value/100) AS val
+  FROM tbl_name
+  GROUP BY id, val;
+</code></pre>
+<p>The alias <code>val</code> is considered a column expression in the <code>GROUP BY</code> clause.</p>
+<p>别名<code>val</code>被视作字段, 在<code>group by</code>中.</p>
+<p>In the presence of a noncolumn expression in the <code>GROUP BY</code> clause, MySQL recognizes equality between that expression and expressions in the select list. This means that with <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a> SQL mode enabled, the query containing <code>GROUP BY id, FLOOR(value/100)</code> is valid because that same <a href="https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html#function_floor"><code>FLOOR()</code></a> expression occurs in the select list. However, MySQL does not try to recognize functional dependence on <code>GROUP BY</code> noncolumn expressions, so the following query is invalid with <a href="https://dev.mysql.com/doc/refman/8.0/en/sql-mode.html#sqlmode_only_full_group_by"><code>ONLY_FULL_GROUP_BY</code></a> enabled, even though the third selected expression is a simple formula of the <code>id</code> column and the <a href="https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html#function_floor"><code>FLOOR()</code></a> expression in the <code>GROUP BY</code> clause:</p>
+<p>这个语句在<code>only_full_group_by</code>模式下的MySQL是合法的.(有别于上面的标准SQL)</p>
+<pre><code class="language-sql">SELECT id, FLOOR(value/100), id+FLOOR(value/100)
+  FROM tbl_name
+  GROUP BY id, FLOOR(value/100);
+</code></pre>
+<p>A workaround is to use a derived table:</p>
+<p>衍生表中使用:</p>
+<pre><code class="language-sql"> SELECT id, F, id+F
+  FROM
+    (SELECT id, FLOOR(value/100) AS F
+     FROM tbl_name
+     GROUP BY id, FLOOR(value/100)) AS dt;
+</code></pre>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/mysql-fan-yi-xi-lie-mysql-handling-of-group-by/" title="MySQL翻译系列-MySQL Handling of GROUP BY">https://Kyouichirou.github.io/post/mysql-fan-yi-xi-lie-mysql-handling-of-group-by/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/T5dhhKFc0/"># translation</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/sOZV2rCDf/"># database</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/"># mysql</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="Ubuntu_WSL配置与使用手册" href="https://Kyouichirou.github.io/post/ubuntu_wsl-pei-zhi-yu-shi-yong-shou-ce/">Ubuntu_WSL配置与使用手册</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="Ubuntu_WSL配置与使用手册" href="https://Kyouichirou.github.io/post/ubuntu_wsl-pei-zhi-yu-shi-yong-shou-ce/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="VBA和MySQL的交互" href="https://Kyouichirou.github.io/post/vba-he-mysql-de-jiao-hu/">VBA和MySQL的交互</a>
+        <a class="nav-mobile-next" title="VBA和MySQL的交互" href="https://Kyouichirou.github.io/post/vba-he-mysql-de-jiao-hu/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

@@ -1,0 +1,2271 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>Python数据可视化库概览 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="Python数据可视化库概览" />
+  <meta name="keywords" content="priority,data visualization,python" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一. 前言</a></li>
+<li><a href="#%E4%BA%8C-%E4%BC%98%E5%85%88">二. 优先</a>
+<ul>
+<li><a href="#21-matplotlib">2.1 Matplotlib</a></li>
+<li><a href="#22-seaborn">2.2 Seaborn</a></li>
+<li><a href="#23-pyechartshttpsgallerypyechartsorg-23">2.3 Pyecharts</a></li>
+<li><a href="#24-bokeh">2.4 Bokeh</a></li>
+<li><a href="#25-altair">2.5 Altair</a></li>
+<li><a href="#26-plotly">2.6 Plotly</a></li>
+<li><a href="#27-holoviews">2.7 HoloViews</a></li>
+<li><a href="#28-pyqtgraph">2.8 PyQtGraph</a></li>
+</ul>
+</li>
+<li><a href="#%E4%B8%89-%E5%85%B6%E4%BB%96">三. 其他</a></li>
+<li><a href="#%E5%9B%9B-%E5%B0%8F%E7%BB%93">四. 小结</a>
+<ul>
+<li><a href="#41-b%E7%AB%99%E4%B8%8A%E7%9A%84%E6%83%85%E5%BD%A2">4.1 B站上的情形</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/python-shu-ju-ke-shi-hua-ku-gai-lan/"> Python数据可视化库概览 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-03-21 19:20:31">2023-03-21</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"> <span>priority</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/bfZBf6yTI/"> <span>data visualization</span> </a>、   
+      <a href="https://Kyouichirou.github.io/tag/x52r92_VNV/">
+        <span>python</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >22<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >4408<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <h2 id="一-前言">一. 前言</h2>
+<blockquote>
+<p>业精于勤, 荒于嬉,  行成于思, 毁于随.</p>
+<p>-- 韩愈 &lt; 进学解 &gt;</p>
+</blockquote>
+<figure data-type="image" tabindex="1"><a href="https://imgse.com/i/ppGK2SP"><img src="https://s1.ax1x.com/2023/03/17/ppGK2SP.png" alt="ppGK2SP.png" loading="lazy"></a></figure>
+<!--more-->
+<p>Python的数据可视库的数量相当多, 以下做简单的梳理.</p>
+<p><code>python</code>数据可视化库主要可分为以下几个类型:</p>
+<ul>
+<li>
+<p>传统的图表(这个需求, 绝大部分的库都可以实现)</p>
+</li>
+<li>
+<p>需要交互的图表</p>
+</li>
+<li>
+<p>满足算法/机器学习需要的复杂数据可视化需求</p>
+<figure data-type="image" tabindex="2"><a href="https://imgse.com/i/ppUEiSP"><img src="https://s1.ax1x.com/2023/03/21/ppUEiSP.png" alt="ppUEiSP.png" loading="lazy"></a></figure>
+<p><em>(图: 退火算法的模拟)</em></p>
+<p>通常情况下, 机器学习需要融合一些物理/数学的多维空间的绘图的特性.</p>
+</li>
+<li>
+<p>绘制的载体的差异, 如适合在前端的, 适合在桌面端的.</p>
+</li>
+<li>
+<p>专业对口的图表, 如地理的GIS, 气象, 物理中常用的3D</p>
+</li>
+</ul>
+<h2 id="二-优先">二. 优先</h2>
+<p>优先考虑的库应当满足以下要求:</p>
+<ul>
+<li>
+<p>上手的容易</p>
+</li>
+<li>
+<p>当前库的维护状态较好(依然还处于相对活跃的维护状态)</p>
+</li>
+<li>
+<p>使用的用户数量(<code>github</code>上的<code>fork</code>, <code>start</code>等数据亮眼)较多(项目不至于突然中断)</p>
+</li>
+<li>
+<p>生态(例如和<code>pandas, numpy</code>等数据基础适配, 和<code>dash, streamlit</code>等前端数据可视化框架适配)</p>
+<p>如: <code>streamlit( web application )</code>原生支持的库:</p>
+<table>
+<thead>
+<tr>
+<th>function</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>st.pyplot</td>
+<td>和matplotlib联动</td>
+</tr>
+<tr>
+<td>st.altair_chart</td>
+<td>和Altair联动</td>
+</tr>
+<tr>
+<td>st.vega_lite_chart</td>
+<td>和Vega-Lite联动</td>
+</tr>
+<tr>
+<td>st.plotly_chart</td>
+<td>和plotly联动</td>
+</tr>
+<tr>
+<td>st.bokeh_chart</td>
+<td>和Bokeh联动</td>
+</tr>
+<tr>
+<td>st.pydeck_chart</td>
+<td>和PyDeck联动</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>实际生产环境的使用情况(是否需要考虑交互, 是否需要前端部署等)</p>
+</li>
+</ul>
+<p><em>需要注意的是, 对于商业化应用还需要考虑开源授权的问题.</em></p>
+<ul>
+<li>matplotlib, 看看, 但不主要用</li>
+<li>saeborn, 个人主力</li>
+<li>pyecharts, 地图交互, 备用</li>
+<li>bokeh</li>
+<li>holoviews</li>
+<li>altair</li>
+<li>plotly</li>
+<li>pyqtgraph</li>
+</ul>
+<p>抓取了以上库的<code>GitHub</code>上的一些基本情况(数据时间: 2023-03-21 15:30).</p>
+<p>部分信息<code>api</code>示例:</p>
+<blockquote>
+<p>https://api.github.com/repos/pyqtgraph/pyqtgraph/</p>
+<p>https://api.github.com/repos/ + 所有者 + 仓库名称</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>repos</th>
+<th>starts</th>
+<th>forks</th>
+<th>open_issues</th>
+<th>open_prs</th>
+<th>contributors</th>
+<th>watch</th>
+<th>create_at</th>
+<th>update_at</th>
+<th>github</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>matplotlib</td>
+<td>17048</td>
+<td>6775</td>
+<td>1515</td>
+<td>330</td>
+<td>1267</td>
+<td>591</td>
+<td>2011-02-19T03:17:12Z</td>
+<td>2023-03-21T04:34:02Z</td>
+<td>https://github.com/matplotlib/matplotlib</td>
+</tr>
+<tr>
+<td>seaborn</td>
+<td>10485</td>
+<td>1712</td>
+<td>103</td>
+<td>10</td>
+<td>176</td>
+<td>254</td>
+<td>2012-06-18T18:41:19Z</td>
+<td>2023-03-21T06:57:12Z</td>
+<td>https://github.com/mwaskom/seaborn</td>
+</tr>
+<tr>
+<td>pyecharts</td>
+<td>13321</td>
+<td>2770</td>
+<td>5</td>
+<td>1</td>
+<td>36</td>
+<td>383</td>
+<td>2017-06-22T02:50:25Z</td>
+<td>2023-03-21T05:32:30Z</td>
+<td>https://github.com/pyecharts/pyecharts</td>
+</tr>
+<tr>
+<td>bokeh</td>
+<td>17383</td>
+<td>4078</td>
+<td>666</td>
+<td>38</td>
+<td>562</td>
+<td>447</td>
+<td>2012-03-26T15:40:01Z</td>
+<td>2023-03-21T05:30:28Z</td>
+<td>https://github.com/bokeh/bokeh</td>
+</tr>
+<tr>
+<td>holoviews</td>
+<td>2397</td>
+<td>374</td>
+<td>961</td>
+<td>41</td>
+<td>126</td>
+<td>61</td>
+<td>2014-05-07T16:59:22Z</td>
+<td>2023-03-19T12:45:30Z</td>
+<td>https://github.com/holoviz/holoviews</td>
+</tr>
+<tr>
+<td>altair</td>
+<td>8113</td>
+<td>718</td>
+<td>202</td>
+<td>21</td>
+<td>137</td>
+<td>149</td>
+<td>2015-09-19T03:14:04Z</td>
+<td>2023-03-21T03:18:34Z</td>
+<td>https://github.com/altair-viz/altair</td>
+</tr>
+<tr>
+<td>plotly</td>
+<td>13115</td>
+<td>2316</td>
+<td>1250</td>
+<td>82</td>
+<td>205</td>
+<td>276</td>
+<td>2013-11-21T05:53:08Z</td>
+<td>2023-03-21T00:13:59Z</td>
+<td>https://github.com/plotly/plotly.py</td>
+</tr>
+<tr>
+<td>pyqtgraph</td>
+<td>3168</td>
+<td>994</td>
+<td>318</td>
+<td>33</td>
+<td>223</td>
+<td>152</td>
+<td>2013-09-12T07:18:21Z</td>
+<td>2023-03-21T04:18:20Z</td>
+<td>https://github.com/pyqtgraph/pyqtgraph</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>item</th>
+<th>what</th>
+<th>weight</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>starts</td>
+<td>受到基本认可</td>
+<td>1</td>
+</tr>
+<tr>
+<td>watch</td>
+<td>对这个项目较为感兴趣</td>
+<td>1.2</td>
+</tr>
+<tr>
+<td>forks</td>
+<td>对这个项目有开发的兴趣</td>
+<td>1.4</td>
+</tr>
+<tr>
+<td>open_issues</td>
+<td>使用遇到问题, 或者是建议</td>
+<td>1.8</td>
+</tr>
+<tr>
+<td>open_prs</td>
+<td>参与到这个项目中来(提交bug或者为这个项目提供新的功能)</td>
+<td>2.5</td>
+</tr>
+<tr>
+<td>contributors</td>
+<td>真正意义上参与到项目</td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p>假设按照一定的权重进行简单打分, 为平衡年份的差异, 以<code>matplotlib</code>的2011年为基准, 2012年的增加权重2, 2017, 则权重为7...如此, y_weight, 对受到时间影响较大的<code>open_issues, open_prs, contributors</code>三项进一步调整权重.</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi><mo>=</mo><mi>l</mi><mi>o</mi><msub><mi>g</mi><mn>10</mn></msub><mo>(</mo><mi>s</mi><mi>t</mi><mi>a</mi><mi>r</mi><mi>t</mi><mi>s</mi><mo>∗</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>+</mo><mi>w</mi><mi>a</mi><mi>t</mi><mi>c</mi><mi>h</mi><mo>∗</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>+</mo><mi>f</mi><mi>o</mi><mi>r</mi><mi>k</mi><mi>s</mi><mo>∗</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>+</mo><mo>(</mo><mi>o</mi><mi>p</mi><mi>e</mi><msub><mi>n</mi><mi>i</mi></msub><mi>s</mi><mi>s</mi><mi>u</mi><mi>e</mi><mi>s</mi><mo>∗</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>+</mo><mi>o</mi><mi>p</mi><mi>e</mi><msub><mi>n</mi><mi>p</mi></msub><mi>r</mi><mi>s</mi><mo>∗</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>+</mo><mi>c</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>r</mi><mi>i</mi><mi>b</mi><mi>u</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>s</mi><mo>∗</mo><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>)</mo><mo>∗</mo><mi>y</mi><mi>w</mi><mi>e</mi><mi>i</mi><mi>g</mi><mi>h</mi><mi>t</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">score = log_{10}(starts * weight + watch * weight + forks * weight + (open_issues * weight  + open_prs * weight + contributors * weight) * yweight)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mord mathdefault">s</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">e</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">a</span><span class="mord mathdefault">t</span><span class="mord mathdefault">c</span><span class="mord mathdefault">h</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">e</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.03148em;">k</span><span class="mord mathdefault">s</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">e</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathdefault">o</span><span class="mord mathdefault">p</span><span class="mord mathdefault">e</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mord mathdefault">u</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">e</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.751388em;vertical-align:-0.286108em;"></span><span class="mord mathdefault">o</span><span class="mord mathdefault">p</span><span class="mord mathdefault">e</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">p</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">s</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">e</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">n</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">i</span><span class="mord mathdefault">b</span><span class="mord mathdefault">u</span><span class="mord mathdefault">t</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">s</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">e</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">e</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">h</span><span class="mord mathdefault">t</span><span class="mclose">)</span></span></span></span></span></p>
+<table>
+<thead>
+<tr>
+<th>repos</th>
+<th>score</th>
+<th>bing_results(cn)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>matplotlib</strong></td>
+<td>4.539016</td>
+<td>31,100,000</td>
+</tr>
+<tr>
+<td>seaborn</td>
+<td>4.166235</td>
+<td>5,400,000</td>
+</tr>
+<tr>
+<td>pyecharts</td>
+<td>4.267057</td>
+<td>1,520,000</td>
+</tr>
+<tr>
+<td>bokeh</td>
+<td>4.471119</td>
+<td>67,400,000</td>
+</tr>
+<tr>
+<td>holoviews</td>
+<td>4.073168</td>
+<td>481,000</td>
+</tr>
+<tr>
+<td>altair</td>
+<td>4.128157</td>
+<td>55,600,000</td>
+</tr>
+<tr>
+<td>plotly</td>
+<td>4.413276</td>
+<td>7,720,000</td>
+</tr>
+<tr>
+<td>pyqtgraph</td>
+<td>3.940203</td>
+<td>569,000</td>
+</tr>
+</tbody>
+</table>
+<p>以上内容, 仅供参考, 也许一定程度缓解选择困难的问题.</p>
+<pre><code class="language-python">repos = [
+    &quot;malplotlib&quot;,
+    &quot;seaborn&quot;,
+    &quot;pyecharts&quot;,
+    &quot;bokeh&quot;,
+    &quot;holoviews&quot;,
+    &quot;altair&quot;,
+    &quot;plotly&quot;,
+    &quot;pyqtgraph&quot;
+]
+
+scores = [
+    4.53901584566781,
+    4.16623468176729,
+    4.26705668381745,
+    4.47111854563224,
+    4.0731682622651,
+    4.12815684924073,
+    4.41327628806936,
+    3.94020260373063
+]
+
+df = pd.DataFrame()
+df['repos'] = repos
+df['scores'] = scores
+
+mpl.figure(figsize=(10, 6))
+mpl.ylim(3.5, 5)
+ax = sns.lineplot(data = df, x='repos', y='scores', marker='^', markeredgecolor='g', markersize='2',markeredgewidth=5).set(title ='Repos of Data Visualization')
+
+for i,  e in enumerate(scores):
+    plt.text(i, e, str(round(e, 2)))
+</code></pre>
+<figure data-type="image" tabindex="3"><a href="https://imgse.com/i/ppUHmQ0"><img src="https://s1.ax1x.com/2023/03/21/ppUHmQ0.png" alt="ppUHmQ0.png" loading="lazy"></a></figure>
+<p>综上, 也能明显看到一个趋势, 对前端友好的, 具有交互能力的库, 整体得到更多的关注和使用. 根据自己的需要, 掌握其中的1 - 2个即可满足绝大部分的需求场景.</p>
+<h3 id="21-matplotlib">2.1 <a href="https://matplotlib.org/">Matplotlib</a></h3>
+<blockquote>
+<p>GitHub statistics:</p>
+<ul>
+<li><a href="https://github.com/matplotlib/matplotlib/stargazers"> <strong>Stars:</strong> 17048</a></li>
+<li><a href="https://github.com/matplotlib/matplotlib/network/members"> <strong>Forks:</strong> 6775</a></li>
+<li><a href="https://github.com/matplotlib/matplotlib/issues"> <strong>Open issues:</strong> 1515</a></li>
+<li><a href="https://github.com/matplotlib/matplotlib/pulls"> <strong>Open PRs:</strong> 330</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Matplotlib is a comprehensive library for creating static, animated, and interactive visualizations in Python. Matplotlib makes easy things easy and hard things possible.</p>
+</blockquote>
+<p>将<code>matplotlib</code>作为<code>python</code>数据可视化的根基不为过, 对于大部分的可视化库, 或多或少受到这个库的影响. 虽然这个库号称<code>makes easy things easy</code>, 但是在实际的使用中, 很多操作还是很麻烦, 原则上不建议在生产环境中使用<code>matplotlib</code>, 但是作为新手可以先用这个库来训练基础, 掌握绘图的一些基础概念和框架, 这些基础在其他库上的实现是类似的.</p>
+<figure data-type="image" tabindex="4"><img src="https://pic1.zhimg.com/80/v2-342ae4bbd5969409d946887fbda5c1bc_720w.webp" alt="detail" loading="lazy"></figure>
+<pre><code class="language-python">## 同样是实现下面的绘图
+# 看看seaborn的差异何在
+import matplotlib.pyplot as plt
+
+# figsize, 必须放置于此, 在subplots
+fig, ax = plt.subplots(figsize=(10, 6))
+
+fruits = ['apple', 'blueberry', 'cherry', 'orange']
+counts = [40, 100, 30, 55]
+bar_labels = ['red', 'blue', '_red', 'orange']
+bar_colors = ['tab:red', 'tab:blue', 'tab:red', 'tab:orange']
+
+ax.bar(fruits, counts, label=bar_labels, color=bar_colors)
+
+ax.set_ylabel('fruit supply')
+ax.set_title('Fruit supply by kind and color')
+ax.legend(title='Fruit color')
+
+plt.show()
+</code></pre>
+<figure data-type="image" tabindex="5"><img src="https://matplotlib.org/stable/_images/sphx_glr_bar_colors_001.png" alt="Fruit supply by kind and color" loading="lazy"></figure>
+<pre><code class="language-python">import matplotlib.pyplot as mpl
+import seaborn as sns
+
+mpl.figure(figsize=(10, 6))
+fruits = ['apple', 'blueberry', 'cherry', 'orange']
+bar_labels = ['red', 'blue', '_red', 'orange']
+counts = [40, 100, 30, 55]
+# 在实际的使用中, pandas是高频的应用, 数据的载体以pandas作为基础, 更为合理
+df = pd.DataFrame(data=[counts], columns=fruits)
+
+# 关键在于此, seaborn将matplotlib的零散的处理(dataframe), 将其整合在一起
+ax = sns.barplot(data=df, palette=bar_colors, label=bar_labels)
+
+# 这部分的设置是一样的
+ax.set_ylabel('fruit supply')
+ax.set_xlabel('fruit kind')
+ax.set_title('Fruit supply by kind and color')
+ax.legend(title='Fruit color', loc=0)
+</code></pre>
+<p>从上面的简单案例, 可以看到<code>seaborn</code>和<code>matplotlib</code>似乎没什么区别, 但是需要注意 <code>seaborn</code>的强处在于它有大量封装好的模板可以直接使用.</p>
+<pre><code class="language-python">import matplotlib.pyplot as mpl
+
+vegetables = [&quot;cucumber&quot;, &quot;tomato&quot;, &quot;lettuce&quot;, &quot;asparagus&quot;,
+              &quot;potato&quot;, &quot;wheat&quot;, &quot;barley&quot;]
+farmers = [&quot;Farmer Joe&quot;, &quot;Upland Bros.&quot;, &quot;Smith Gardening&quot;,
+           &quot;Agrifun&quot;, &quot;Organiculture&quot;, &quot;BioGoods Ltd.&quot;, &quot;Cornylee Corp.&quot;]
+
+harvest = np.array([[0.8, 2.4, 2.5, 3.9, 0.0, 4.0, 0.0],
+                    [2.4, 0.0, 4.0, 1.0, 2.7, 0.0, 0.0],
+                    [1.1, 2.4, 0.8, 4.3, 1.9, 4.4, 0.0],
+                    [0.6, 0.0, 0.3, 0.0, 3.1, 0.0, 0.0],
+                    [0.7, 1.7, 0.6, 2.6, 2.2, 6.2, 0.0],
+                    [1.3, 1.2, 0.0, 0.0, 0.0, 3.2, 5.1],
+                    [0.1, 2.0, 0.0, 1.4, 0.0, 1.9, 6.3]])
+
+# 执行的细节太多, 太浪费时间
+mpl.xticks(np.arange(len(farmers)), labels=farmers,
+                     rotation=45, rotation_mode=&quot;anchor&quot;, ha=&quot;right&quot;)
+mpl.yticks(np.arange(len(vegetables)), labels=vegetables)
+
+mpl.title(&quot;Harvest of local farmers (in tons/year)&quot;)
+
+mpl.imshow(harvest)
+
+mpl.colorbar()
+
+mpl.tight_layout()
+
+mpl.show()
+</code></pre>
+<figure data-type="image" tabindex="6"><a href="https://imgse.com/i/ppUgAPO"><img src="https://s1.ax1x.com/2023/03/21/ppUgAPO.png" alt="ppUgAPO.png" loading="lazy"></a></figure>
+<pre><code class="language-python"># 通常而言, 多数时候, 并不希望花太多时间在这些细节上
+
+# 设置主题
+sns.set_theme()
+
+# 载入数据
+flights_long = sns.load_dataset(&quot;flights&quot;)
+# 如无法加载
+# https://codeload.github.com/mwaskom/seaborn-data/zip/refs/heads/master
+# 下载文件, 释放到user之下的seaborn-data文件夹之下, 即可
+flights = flights_long.pivot(&quot;month&quot;, &quot;year&quot;, &quot;passengers&quot;)
+
+# 相比于上面的matplotlib, seaborn将需要手动逐个处理的内容, 直接封装起来归于sns.heatmap
+f, ax = mpl.subplots(figsize=(9, 6))
+mpl.title('flight heatmap')
+sns.heatmap(flights, annot=True, fmt=&quot;d&quot;, linewidths=.5, ax=ax)
+</code></pre>
+<figure data-type="image" tabindex="7"><a href="https://imgse.com/i/ppUg3i8"><img src="https://s1.ax1x.com/2023/03/21/ppUg3i8.png" alt="ppUg3i8.png" loading="lazy"></a></figure>
+<h3 id="22-seaborn">2.2 <a href="https://seaborn.pydata.org/">Seaborn</a></h3>
+<blockquote>
+<p>GitHub statistics:</p>
+<ul>
+<li><a href="https://github.com/mwaskom/seaborn/stargazers"> <strong>Stars:</strong> 10484</a></li>
+<li><a href="https://github.com/mwaskom/seaborn/network/members"> <strong>Forks:</strong> 1712</a></li>
+<li><a href="https://github.com/mwaskom/seaborn/issues"> <strong>Open issues:</strong> 103</a></li>
+<li><a href="https://github.com/mwaskom/seaborn/pulls"> <strong>Open PRs:</strong> 10</a></li>
+</ul>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特点</th>
+<th style="text-align:center">Matplotlib</th>
+<th style="text-align:center">Seaborn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">功能</td>
+<td style="text-align:center">它用于制作基本图形. 数据集在条形图 直方图 饼图 散点图 线条等的帮助下可视化.</td>
+<td style="text-align:center">Seaborn 包含许多用于数据可视化的模式和图表. 它使用迷人的主题. 它有助于将整个数据编译成一个图. 它还提供数据分布.</td>
+</tr>
+<tr>
+<td style="text-align:center">语法</td>
+<td style="text-align:center">它使用比较复杂和冗长的语法. 示例: <code>bargraph-matplotlib.pyplot.bar(x_axis, y_axis)</code> 的语法.</td>
+<td style="text-align:center">它使用相对简单的语法 更容易学习和理解. 示例: <code>bargraph-seaborn.barplot(x_axis, y_axis)</code> 的语法.</td>
+</tr>
+<tr>
+<td style="text-align:center">处理</td>
+<td style="text-align:center">多个图形可以同时打开和使用多个图形. 但是 它们明显关闭. 一次关闭一个图形的语法: <code>matplotlib.pyplot.close()</code>. 关闭所有图形的语法:  <code>matplotlib.pyplot.close(&quot;all&quot;)</code></td>
+<td style="text-align:center">Seaborn 为每个图形的创建设置时间. 但是 它可能会导致(OOM)内存不足问题</td>
+</tr>
+<tr>
+<td style="text-align:center">可视化</td>
+<td style="text-align:center">Matplotlib 与 Numpy 和 Pandas 很好地连接 并充当 python 中数据可视化的图形包. Pyplot 提供与 MATLAB 类似的功能和语法. 因此 MATLAB 用户可以轻松学习它.</td>
+<td style="text-align:center">Seaborn 更擅长处理 Pandas 数据帧. 它使用基本的方法集在 python 中提供漂亮的图形.</td>
+</tr>
+<tr>
+<td style="text-align:center">柔韧性</td>
+<td style="text-align:center">Matplotlib 是一个高度定制且强大的</td>
+<td style="text-align:center">Seaborn 借助其默认主题避免了绘图重叠</td>
+</tr>
+<tr>
+<td style="text-align:center">数据框和数组</td>
+<td style="text-align:center">Matplotlib 有效地处理数据框和数组. 它将图形和轴视为对象. 它包含用于绘图的各种有状态 API. 因此 类似 <code>plot()</code> 的方法可以在没有参数的情况下工作.</td>
+<td style="text-align:center">Seaborn 比 Matplotlib 更具功能性和组织性 并将整个数据集视为一个单元. Seaborn 不是那么有状态 因此在调用 <code>plot()</code> 等方法时需要参数</td>
+</tr>
+<tr>
+<td style="text-align:center">用例</td>
+<td style="text-align:center">Matplotlib 使用 Pandas 和 Numpy 绘制各种图形</td>
+<td style="text-align:center">Seaborn 是 Matplotlib 的扩展版本 它使用 Matplotlib 以及 Numpy 和 Pandas 绘制图形</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Seaborn is a Python data visualization library based on <a href="https://matplotlib.org/">matplotlib</a>. It provides a high-level interface for drawing attractive and informative statistical graphics.</p>
+</blockquote>
+<p><code>seaborn</code>是建立在<code>matplotlib</code>之上的, 对后者的使用进行了强化, 更为易用, 提供了更为丰富的图表的直接支持(只需要少量的代码), 生产环境, 建议使用<code>seaborn</code>来替代<code>matplotlib</code></p>
+<iframe src="https://seaborn.pydata.org/examples/index.html" height=600 width=600></iframe>
+<pre><code class="language-python">import pandas as pd
+import numpy as np
+import seaborn as sns
+
+# 设置风格
+sns.set_style(&quot;whitegrid&quot;)
+
+# 模拟数据
+OMEGA = 2
+Z1 = np.linspace(0, 10, 100)
+X1 = np.cos(OMEGA*Z1)
+Y1= np.sin(OMEGA*Z1)
+
+# 设置图大小
+mpl.figure(figsize=(10,6))
+
+# 设置为3D
+axes = mpl.axes(projection='3d')
+
+axes.plot3D(X1,Y1,Z1)
+# 调整布局
+mpl.tight_layout()
+mpl.show()
+</code></pre>
+<figure data-type="image" tabindex="8"><a href="https://imgse.com/i/ppUEFQf"><img src="https://s1.ax1x.com/2023/03/21/ppUEFQf.png" alt="ppUEFQf.png" loading="lazy"></a></figure>
+<p>选择<code>seaborn</code>作为主力的考量</p>
+<ul>
+<li>背靠大树(<code>matplotlib</code>), <code>matplotlib</code>作为高度成熟的产品, 变化不会像其他的一些新锐的库那样频繁(各种<code>api</code>都相对规范和稳定), 例如<code>pyecharts</code>, 大版本的迭代导致大量的代码需要重写.</li>
+<li>满足绝大部分的场景需求</li>
+<li><code>matplotlib</code>, 基本被各种外部的扩展库所支持, 生态完备.</li>
+</ul>
+<h3 id="23-pyechartshttpsgallerypyechartsorg-23">2.3 [Pyecharts](https://gallery.pyecharts.org/### 2.3 /)</h3>
+<blockquote>
+<p>GitHub statistics:</p>
+<ul>
+<li><a href="https://github.com/pyecharts/pyecharts/stargazers"> <strong>Stars:</strong> 13321</a></li>
+<li><a href="https://github.com/pyecharts/pyecharts/network/members"> <strong>Forks:</strong> 2770</a></li>
+<li><a href="https://github.com/pyecharts/pyecharts/issues"> <strong>Open issues:</strong> 5</a></li>
+<li><a href="https://github.com/pyecharts/pyecharts/pulls"> <strong>Open PRs:</strong> 1</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>A Python Echarts Plotting Library.</p>
+<ul>
+<li>Chart: 30+ kinds of charts</li>
+<li>Map: 300+ Chinese cities / 200+ countries and regions</li>
+<li>Platforms: Pure Python / Jupyter Notebook / Web Framework</li>
+</ul>
+</blockquote>
+<p>了解百度春节人口迁移图的用户应该对于这个库不陌生, 这个库就是大名鼎鼎<a href="https://echarts.apache.org/examples/en/index.html">Apache ECharts</a>的<code>python</code>的实现, 特别强调了其绘制地图相关的数据可视化的优势.</p>
+<p>(目前该项目已经从百度脱离(捐赠), 由阿帕奇基金会负责管理)</p>
+<figure data-type="image" tabindex="9"><img src="https://pic4.zhimg.com/v2-2ecec89583e1bac6f25c3a56b5fed99f_b.webp" alt="map" loading="lazy"></figure>
+<p>这是个很不错的可视化库, 但是其文档有点混乱, 加上版本迭代后, 代码出现了很多不兼容的情况.</p>
+<p>在其中的一个<a href="05x-docs.pyecharts.org">官方文档</a>上, 随手找一个示例, 这种文档在使用搜索引擎检索时, 经常会查到这种旧版本的内容</p>
+<blockquote>
+<p>v0.5.x 和 V1 间不兼容 V1 是一个全新的版本 详见 <a href="https://github.com/pyecharts/pyecharts/issues/892">ISSUE#892</a> <a href="https://github.com/pyecharts/pyecharts/issues/1033">ISSUE#1033</a>.</p>
+<p>V 0.5.x</p>
+<blockquote>
+<p>支持 Python2.7 3.4+</p>
+</blockquote>
+<p>经开发团队决定 0.5.x 版本将不再进行维护 0.5.x 版本代码位于 <em>05x</em> 分支 文档位于 <a href="http://05x-docs.pyecharts.org/">05x-docs.pyecharts.org</a>.</p>
+<p>V 1</p>
+<blockquote>
+<p>仅支持 Python3.6+</p>
+</blockquote>
+<p>新版本系列将从 v1.0.0 开始 文档位于 <a href="https://pyecharts.org/">pyecharts.org</a>; 示例位于 <a href="https://gallery.pyecharts.org/">gallery.pyecharts.org</a></p>
+<p>V 2</p>
+<blockquote>
+<p>仅支持 Python3.6+</p>
+</blockquote>
+<p>新版本基于 Echarts 5.4.1+ 进行渲染, 文档和示例位置与 V1 相同</p>
+</blockquote>
+<figure data-type="image" tabindex="10"><a href="https://imgse.com/i/ppUidr4"><img src="https://s1.ax1x.com/2023/03/21/ppUidr4.png" alt="ppUidr4.png" loading="lazy"></a></figure>
+<p>注意新版本的文档地址: <a href="https://gallery.pyecharts.org/#/README">中文简介 - Document (pyecharts.org)</a></p>
+<figure data-type="image" tabindex="11"><a href="https://imgse.com/i/ppUiaMF"><img src="https://s1.ax1x.com/2023/03/21/ppUiaMF.png" alt="ppUiaMF.png" loading="lazy"></a></figure>
+<p>华为的镜像站点还是<code>1.9</code></p>
+<figure data-type="image" tabindex="12"><a href="https://imgse.com/i/ppUiwqJ"><img src="https://s1.ax1x.com/2023/03/21/ppUiwqJ.png" alt="ppUiwqJ.png" loading="lazy"></a></figure>
+<pre><code class="language-bash"># 默认使用的是华为的镜像
+# 最新版本仅为1.9
+@Lian ➜ ~\Desktop ( base 3.9.12) 2.85s pip install --upgrade pyecharts
+Looking in indexes: https://repo.huaweicloud.com/repository/pypi/simple
+Requirement already satisfied: pyecharts in c:\users\lian\anaconda3\lib\site-packages (1.9.0)
+Requirement already satisfied: simplejson in c:\users\lian\anaconda3\lib\site-packages (from pyecharts) (3.18.0)
+Requirement already satisfied: jinja2 in c:\users\lian\anaconda3\lib\site-packages (from pyecharts) (2.11.3)
+Requirement already satisfied: prettytable in c:\users\lian\anaconda3\lib\site-packages (from pyecharts) (3.5.0)
+Requirement already satisfied: MarkupSafe&gt;=0.23 in c:\users\lian\anaconda3\lib\site-packages (from jinja2-&gt;pyecharts) (2.0.1)
+Requirement already satisfied: wcwidth in c:\users\lian\anaconda3\lib\site-packages (from prettytable-&gt;pyecharts) (0.2.5)
+</code></pre>
+<pre><code class="language-bash"># 手动指定回官方的源地址
+pip install --upgrade pyecharts -i https://pypi.Python.org/simple/
+</code></pre>
+<pre><code class="language-python">from pyecharts import options as opts
+from pyecharts.charts import Bar
+from pyecharts.faker import Faker
+
+c = (
+    Bar()
+    .add_xaxis(Faker.choose())
+    .add_yaxis(&quot;商家A&quot;, Faker.values())
+    .add_yaxis(&quot;商家B&quot;, Faker.values())
+    .set_global_opts(title_opts=opts.TitleOpts(title=&quot;Bar-基本示例&quot;, subtitle=&quot;我是副标题&quot;))
+    .render_notebook()
+)
+</code></pre>
+<p>即可得到一个可交互的图表.</p>
+<pre><code class="language-python">from pyecharts import Map
+
+value = [155, 10, 66, 78]
+attr = [&quot;福建&quot;, &quot;山东&quot;, &quot;北京&quot;, &quot;上海&quot;]
+map = Map(&quot;全国地图示例&quot;, width=1200, height=600)
+map.add(&quot;&quot;, attr, value, maptype='china')
+map.render()
+</code></pre>
+<figure data-type="image" tabindex="13"><img src="https://user-images.githubusercontent.com/19553554/35082377-718385f0-fc54-11e7-88c2-bd1df8bf112b.gif" alt="map-demo" loading="lazy"></figure>
+<p>同样绘制一个热力图</p>
+<pre><code class="language-python">import random
+from pyecharts import options as opts
+from pyecharts.charts import HeatMap
+from pyecharts.faker import Faker
+
+value = [[i, j, random.randint(0, 50)] for i in range(24) for j in range(7)]
+c = (
+    HeatMap()
+    .add_xaxis(Faker.clock)
+    .add_yaxis(
+        &quot;series0&quot;,
+        Faker.week,
+        value,
+        label_opts=opts.LabelOpts(is_show=True, position=&quot;inside&quot;),
+    )
+    .set_global_opts(
+        title_opts=opts.TitleOpts(title=&quot;HeatMap-Label 显示&quot;),
+        visualmap_opts=opts.VisualMapOpts(),
+    )
+    .render_notebook()
+)
+</code></pre>
+<figure data-type="image" tabindex="14"><a href="https://imgse.com/i/ppU2d6H"><img src="https://s1.ax1x.com/2023/03/21/ppU2d6H.png" alt="ppU2d6H.png" loading="lazy"></a></figure>
+<p>保存图片麻烦点, 这是可交互的web元素.</p>
+<h3 id="24-bokeh">2.4 <a href="https://bokeh.org/">Bokeh</a></h3>
+<blockquote>
+<p>GitHub statistics:</p>
+<ul>
+<li><a href="https://github.com/bokeh/bokeh/stargazers"> <strong>Stars:</strong> 17383</a></li>
+<li><a href="https://github.com/bokeh/bokeh/network/members"> <strong>Forks:</strong> 4078</a></li>
+<li><a href="https://github.com/bokeh/bokeh/issues"> <strong>Open issues:</strong> 666</a></li>
+<li><a href="https://github.com/bokeh/bokeh/pulls"> <strong>Open PRs:</strong> 38</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Bokeh is a Python library for <strong>creating interactive visualizations for modern web browsers</strong>. It helps you build beautiful graphics, ranging from simple plots to complex dashboards with streaming datasets. With Bokeh, you can create JavaScript-powered visualizations without writing any JavaScript yourself.</p>
+</blockquote>
+<pre><code class="language-python">from bokeh.models import ColumnDataSource
+from bokeh.plotting import figure, show
+from bokeh.sampledata.commits import data
+from bokeh.transform import jitter
+
+DAYS = ['Sun', 'Sat', 'Fri', 'Thu', 'Wed', 'Tue', 'Mon']
+
+source = ColumnDataSource(data)
+
+p = figure(width=800, height=300, y_range=DAYS, x_axis_type='datetime',
+           title=&quot;Commits by Time of Day (US/Central) 2012-2016&quot;)
+
+p.scatter(x='time', y=jitter('day', width=0.6, range=p.y_range),  source=source, alpha=0.3)
+
+p.xaxis.formatter.days = '%Hh'
+p.x_range.range_padding = 0
+p.ygrid.grid_line_color = None
+
+show(p)
+</code></pre>
+<figure data-type="image" tabindex="15"><a href="https://imgse.com/i/ppUhC40"><img src="https://s1.ax1x.com/2023/03/21/ppUhC40.png" alt="ppUhC40.png" loading="lazy"></a></figure>
+<p>图可以直接渲染到<code>html</code>文件上</p>
+<h3 id="25-altair">2.5 <a href="https://altair-viz.github.io/">Altair</a></h3>
+<blockquote>
+<p>GitHub statistics:</p>
+<ul>
+<li><a href="https://github.com/altair-viz/altair/stargazers"> <strong>Stars:</strong> 8113</a></li>
+<li><a href="https://github.com/altair-viz/altair/network/members"> <strong>Forks:</strong> 718</a></li>
+<li><a href="https://github.com/altair-viz/altair/issues"> <strong>Open issues:</strong> 202</a></li>
+<li><a href="https://github.com/altair-viz/altair/pulls"> <strong>Open PRs:</strong> 21</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Vega-Altair is a declarative statistical visualization library for Python, based on <a href="http://vega.github.io/vega">Vega</a> and <a href="http://vega.github.io/vega-lite">Vega-Lite</a>.</p>
+</blockquote>
+<iframe width=600 height=600 src="https://altair-viz.github.io/gallery/index.html"></iframe>
+<pre><code class="language-python">import altair as alt
+from vega_datasets import data
+
+source = data.movies.url
+
+alt.Chart(source).mark_rect().encode(
+    alt.X('IMDB_Rating:Q', bin=alt.Bin(maxbins=60)),
+    alt.Y('Rotten_Tomatoes_Rating:Q', bin=alt.Bin(maxbins=40)),
+    alt.Color('count():Q', scale=alt.Scale(scheme='greenblue'))
+)
+</code></pre>
+<figure data-type="image" tabindex="16"><img src="data:image/png;base64,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" alt="img" loading="lazy"></figure>
+<pre><code class="language-python">import pandas as pd
+
+pd.read_json(source)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">Title</th>
+<th style="text-align:right">US_Gross</th>
+<th style="text-align:right">Worldwide_Gross</th>
+<th style="text-align:right">US_DVD_Sales</th>
+<th style="text-align:right">Production_Budget</th>
+<th style="text-align:right">Release_Date</th>
+<th style="text-align:right">MPAA_Rating</th>
+<th style="text-align:right">Running_Time_min</th>
+<th style="text-align:right">Distributor</th>
+<th style="text-align:right">Source</th>
+<th style="text-align:right">Major_Genre</th>
+<th style="text-align:right">Creative_Type</th>
+<th style="text-align:right">Director</th>
+<th style="text-align:right">Rotten_Tomatoes_Rating</th>
+<th style="text-align:right">IMDB_Rating</th>
+<th style="text-align:right">IMDB_Votes</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">0</td>
+<td style="text-align:right">The Land Girls</td>
+<td style="text-align:right">146083.0</td>
+<td style="text-align:right">146083.0</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">8000000.0</td>
+<td style="text-align:right">Jun 12 1998</td>
+<td style="text-align:right">R</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">Gramercy</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">6.1</td>
+<td>1071.0</td>
+</tr>
+<tr>
+<td style="text-align:right">1</td>
+<td style="text-align:right">First Love, Last Rites</td>
+<td style="text-align:right">10876.0</td>
+<td style="text-align:right">10876.0</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">300000.0</td>
+<td style="text-align:right">Aug 07 1998</td>
+<td style="text-align:right">R</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">Strand</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">Drama</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">6.9</td>
+<td>207.0</td>
+</tr>
+<tr>
+<td style="text-align:right">2</td>
+<td style="text-align:right">I Married a Strange Person</td>
+<td style="text-align:right">203134.0</td>
+<td style="text-align:right">203134.0</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">250000.0</td>
+<td style="text-align:right">Aug 28 1998</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">Lionsgate</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">Comedy</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">6.8</td>
+<td>865.0</td>
+</tr>
+<tr>
+<td style="text-align:right">3</td>
+<td style="text-align:right">Let's Talk About Sex</td>
+<td style="text-align:right">373615.0</td>
+<td style="text-align:right">373615.0</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">300000.0</td>
+<td style="text-align:right">Sep 11 1998</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">NaN</td>
+<td style="text-align:right">Fine Line</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">Comedy</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">None</td>
+<td style="text-align:right">13.0</td>
+<td style="text-align:right">NaN</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
+<h3 id="26-plotly">2.6 <a href="https://plotly.com/python/">Plotly</a></h3>
+<blockquote>
+<p>GitHub statistics:</p>
+<ul>
+<li><a href="https://github.com/plotly/plotly.py/stargazers"> <strong>Stars:</strong> 13115</a></li>
+<li><a href="https://github.com/plotly/plotly.py/network/members"> <strong>Forks:</strong> 2316</a></li>
+<li><a href="https://github.com/plotly/plotly.py/issues"> <strong>Open issues:</strong> 1250</a></li>
+<li><a href="https://github.com/plotly/plotly.py/pulls"> <strong>Open PRs:</strong> 82</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>Plotly's Python graphing library makes interactive, publication-quality graphs. Examples of how to make line plots, scatter plots, area charts, bar charts, error bars, box plots, histograms, heatmaps, subplots, multiple-axes, polar charts, and bubble charts.</p>
+</blockquote>
+<iframe width=600 height=600 src="https://plotly.com/python/"></iframe>
+<p>这是一个非常值得关注的库, 其开发者为<code>Dash</code>(相当流行的数据可视化前端库)的同一开发者. 可以平滑延申到dash.</p>
+<pre><code class="language-python">import plotly.express as px
+
+# 一个dataframe, pandas
+data_canada = px.data.gapminder().query(&quot;country == 'Canada'&quot;)
+
+fig = px.bar(data_canada, x='year', y='pop')
+fig.show()
+</code></pre>
+<p>和<code>pyecharts</code>一样, 渲染后得到的是可交互的图表.</p>
+<p>同样绘制一张热力图</p>
+<pre><code class="language-python">import plotly.express as px
+
+z = [[.1, .3, .5, .7, .9],
+     [1, .8, .6, .4, .2],
+     [.2, 0, .5, .7, .9],
+     [.9, .8, .4, .2, 0],
+     [.3, .4, .5, .7, 1]]
+
+fig = px.imshow(z, text_auto=True)
+fig.show()
+</code></pre>
+<figure data-type="image" tabindex="17"><a href="https://imgse.com/i/ppU5E79"><img src="https://s1.ax1x.com/2023/03/21/ppU5E79.png" alt="ppU5E79.png" loading="lazy"></a></figure>
+<h3 id="27-holoviews">2.7 <a href="https://holoviews.org/">HoloViews</a></h3>
+<blockquote>
+<p>GitHub statistics:</p>
+<ul>
+<li><a href="https://github.com/holoviz/holoviews/stargazers"> <strong>Stars:</strong> 2397</a></li>
+<li><a href="https://github.com/holoviz/holoviews/network/members"> <strong>Forks:</strong> 374</a></li>
+<li><a href="https://github.com/holoviz/holoviews/issues"> <strong>Open issues:</strong> 961</a></li>
+<li><a href="https://github.com/holoviz/holoviews/pulls"> <strong>Open PRs:</strong> 41</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>HoloViews is an <a href="https://github.com/holoviz/holoviews/blob/main/LICENSE.txt">open-source</a> Python library designed to make data analysis and visualization seamless and simple. With HoloViews, you can usually express what you want to do in very few lines of code, letting you focus on what you are trying to explore and convey, not on the process of plotting.</p>
+</blockquote>
+<h3 id="28-pyqtgraph">2.8 <a href="https://www.pyqtgraph.org/">PyQtGraph</a></h3>
+<blockquote>
+<p>GitHub statistics:</p>
+<ul>
+<li><a href="https://github.com/pyqtgraph/pyqtgraph/stargazers"> <strong>Stars:</strong> 3168</a></li>
+<li><a href="https://github.com/pyqtgraph/pyqtgraph/network/members"> <strong>Forks:</strong> 994</a></li>
+<li><a href="https://github.com/pyqtgraph/pyqtgraph/issues"> <strong>Open issues:</strong> 318</a></li>
+<li><a href="https://github.com/pyqtgraph/pyqtgraph/pulls"> <strong>Open PRs:</strong> 33</a></li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>PyQtGraph</strong> is a pure-python graphics and GUI library built on <a href="http://www.riverbankcomputing.co.uk/software/pyqt/intro">PyQt</a> / <a href="http://www.pyside.org/">PySide</a> and <a href="http://www.numpy.org/">numpy</a>. It is intended for use in mathematics / scientific / engineering applications. Despite being written entirely in python, the library is very fast due to its heavy leverage of NumPy for number crunching and <a href="https://doc.qt.io/qt-5/qgraphicsview.html">Qt's GraphicsView framework</a> for fast display. PyQtGraph is distributed under the <a href="http://www.opensource.org/licenses/mit-license.php">MIT open-source license</a>.</p>
+</blockquote>
+<p><code>PyQtGraph</code>是相对少的一个库, 专门针对本地应用<code>pyqt</code>开发的.</p>
+<h2 id="三-其他">三. 其他</h2>
+<ul>
+<li>
+<p><a href="https://www.pygal.org/en/stable/">Pygal</a></p>
+</li>
+<li>
+<p><a href="https://gleam.io/docs">Gleam Documentation</a></p>
+</li>
+<li>
+<p><a href="https://vincent.readthedocs.io/en/latest/">Vincent: A Python to Vega Translator</a></p>
+</li>
+<li>
+<p><a href="https://docs.enthought.com/mayavi/mayavi/">Mayavi: 3D scientific data visualization and plotting in Python)</a></p>
+</li>
+<li>
+<p><a href="http://mpld3.github.io/">mpld3 -  Bringing Matplotlib to the Browser</a></p>
+</li>
+<li>
+<p><a href="https://andrea-cuttone.github.io/geoplotlib/">geoplotlib</a></p>
+</li>
+</ul>
+<h2 id="四-小结">四. 小结</h2>
+<p>在<code>Python数据处理的优势</code>一文中曾提及, <code>python</code>的其中的优势在于强大的生态支持, 从数据可视化库的庞大和用途的广泛可见一斑.</p>
+<h3 id="41-b站上的情形">4.1 B站上的情形</h3>
+<p>补充这部分的信息, 忘了面向B站学习, 来看看B站上关于上述优先内容的检索情况.</p>
+<table>
+<thead>
+<tr>
+<th>repos</th>
+<th>search_results(pages)</th>
+<th>&gt; 60</th>
+<th>normal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>matplotlib</td>
+<td>34</td>
+<td>34</td>
+<td>0</td>
+</tr>
+<tr>
+<td>seaborn</td>
+<td>19</td>
+<td>10</td>
+<td>9</td>
+</tr>
+<tr>
+<td>pyecharts</td>
+<td>15</td>
+<td>3</td>
+<td>12</td>
+</tr>
+<tr>
+<td>bokeh</td>
+<td>&lt; 3 (大部分是非相关内容)</td>
+<td>&lt; 1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>holoviews</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>altair</td>
+<td>&lt; 1</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>plotly</td>
+<td>10</td>
+<td>2</td>
+<td>8</td>
+</tr>
+<tr>
+<td>pyqtgraph</td>
+<td>2</td>
+<td>&lt; 1</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>从检索内容来看, 绝大部分超长(大于<code>60</code>分钟)内容是培训机构发布的低质低效视频, 这部分不纳入考虑范围.</p>
+<p>鉴于<code>matplotlib</code>已经被培训机构的信息所覆盖(从这里可以看到培训机构的无能和低效), 将其剔除掉.</p>
+<p><code>seaborn, plotly, pyecharts</code>在实际生产中更应该得到关注.</p>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/python-shu-ju-ke-shi-hua-ku-gai-lan/" title="Python数据可视化库概览">https://Kyouichirou.github.io/post/python-shu-ju-ke-shi-hua-ku-gai-lan/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/7svOER7Ka/"># priority</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/bfZBf6yTI/"># data visualization</a>
+    
+      <a href="https://Kyouichirou.github.io/tag/x52r92_VNV/"># python</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="markdown LaTex数学公式速查" href="https://Kyouichirou.github.io/post/markdown-latex-shu-xue-gong-shi-su-cha/">markdown LaTex数学公式速查</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="markdown LaTex数学公式速查" href="https://Kyouichirou.github.io/post/markdown-latex-shu-xue-gong-shi-su-cha/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="PostgreSQL简单使用体验" href="https://Kyouichirou.github.io/post/postgresql-jian-dan-shi-yong-ti-yan/">PostgreSQL简单使用体验</a>
+        <a class="nav-mobile-next" title="PostgreSQL简单使用体验" href="https://Kyouichirou.github.io/post/postgresql-jian-dan-shi-yong-ti-yan/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

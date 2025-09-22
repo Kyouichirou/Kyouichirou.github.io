@@ -1,0 +1,1927 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>MySQL_联合索引-分页检索 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="MySQL_联合索引-分页检索" />
+  <meta name="keywords" content="mysql" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E5%88%86%E9%A1%B5%E6%9F%A5%E8%AF%A2">一. 分页查询</a></li>
+<li><a href="#%E4%BA%8C-%E8%81%94%E5%90%88%E7%B4%A2%E5%BC%95">二. 联合索引</a></li>
+<li><a href="#%E4%B8%89-%E5%9B%9E%E8%A1%A8">三. 回表</a>
+<ul>
+<li><a href="#31-%E6%89%8B%E5%8A%A8%E5%9B%9E%E8%A1%A8">3.1 手动回表</a></li>
+<li><a href="#32-%E6%80%A7%E8%83%BD%E7%9A%84%E5%BD%B1%E5%93%8D">3.2 性能的影响</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E5%B0%8F%E7%BB%93">四. 小结</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/lian-he-suo-yin-fen-ye-jian-suo/"> MySQL_联合索引-分页检索 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-03-06 18:27:42">2023-03-06</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/">
+        <span>mysql</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >18<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >3288<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <p>本文是作为<code>MySQL使用指南</code>一文的进一步细节延申和补充.</p>
+<ul>
+<li>分页查询</li>
+<li>联合索引</li>
+<li>回表</li>
+</ul>
+<p><em>(由于Typora的字数超过2万速度会明显下降, 4万字已经出现卡顿, 这里将更多内容拆出来讨论).</em></p>
+<pre><code class="language-mysql"># 创建测试的表
+drop table if exists test_w;
+create table test_w (
+	id int UNSIGNED not null PRIMARY key auto_increment,
+	grade float UNSIGNED not null,
+	birth_date date not null,
+	s_name varCHAR(15) not null,
+	address varchar(16) not null
+);
+</code></pre>
+<!--more-->
+<pre><code class="language-mysql"># 写入随机的数据
+drop PROCEDURE if exists pro_test_w;
+delimiter $$
+CREATE PROCEDURE pro_test_w ( IN total INT ) BEGIN
+	DECLARE
+		i INT DEFAULT 1;
+	START TRANSACTION;
+	WHILE
+			i &lt;= total DO
+			INSERT INTO test_w ( grade, birth_date, s_name, address )
+		VALUES
+			(
+				ROUND( RAND() * 10, 1 ),
+				DATE_ADD( now(), INTERVAL floor( 10000 * rand()) DAY ),
+				CONCAT ( 'name_', i ),
+				CONCAT ( 'address_', i )
+			);
+
+		SET i = i + 1;
+
+	END WHILE;
+	COMMIT;
+
+END $$
+
+delimiter;
+</code></pre>
+<pre><code class="language-mysql"># 为保证显示出足够的时间差异, 将这里的数字调节大一点
+call pro_test_w(1500000);
+# 比较消耗时间, 注意
+</code></pre>
+<p>上述操作, 先得到<code>150</code>万行的随机测试数据.</p>
+<h2 id="一-分页查询">一. 分页查询</h2>
+<p>分别对不同的偏移程度进行取<code>25</code>条数据.</p>
+<ul>
+<li>10</li>
+<li>1250000</li>
+</ul>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; EXPLAIN select grade, s_name from test_w order by grade limit 10, 25;
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+| id | select_type | table  | partitions | type | possible_keys | key    | key_len | ref    | rows    | filtered | Extra          |
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+| 1  | SIMPLE      | test_w | &lt;null&gt;     | ALL  | &lt;null&gt;        | &lt;null&gt; | &lt;null&gt;  | &lt;null&gt; | 1491849 | 100.0    | Using filesort |
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+
+1 row in set
+Time: 0.006s
+MySQL root@localhost:test_db&gt; EXPLAIN select grade, s_name from test_w order by grade limit 950000, 25;
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+| id | select_type | table  | partitions | type | possible_keys | key    | key_len | ref    | rows    | filtered | Extra          |
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+| 1  | SIMPLE      | test_w | &lt;null&gt;     | ALL  | &lt;null&gt;        | &lt;null&gt; | &lt;null&gt;  | &lt;null&gt; | 1491849 | 100.0    | Using filesort |
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+</code></pre>
+<p>可以看到, 上述的返回数据的方式均需要<strong>全表扫描</strong>.</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; select grade, s_name from test_w order by grade limit 10, 25;
++-------+-----------+
+| grade | s_name    |
++-------+-----------+
+| 0.0   | name_4023 |
+| 0.0   | name_2404 |
+| 0.0   | name_6336 |
+| 0.0   | name_472  |
+| 0.0   | name_4705 |
+| 0.0   | name_2889 |
+| 0.0   | name_2504 |
+| 0.0   | name_3088 |
+| 0.0   | name_5769 |
+| 0.0   | name_5962 |
+| 0.0   | name_3045 |
+| 0.0   | name_520  |
+| 0.0   | name_83   |
+| 0.0   | name_554  |
+| 0.0   | name_2890 |
+| 0.0   | name_4883 |
+| 0.0   | name_3930 |
+| 0.0   | name_1848 |
+| 0.0   | name_1111 |
+| 0.0   | name_2242 |
+| 0.0   | name_811  |
+| 0.0   | name_1259 |
+| 0.0   | name_6429 |
+| 0.0   | name_2482 |
+| 0.0   | name_4537 |
++-------+-----------+
+25 rows in set
+Time: 0.433s
+
+MySQL root@localhost:test_db&gt; select grade, s_name from test_w order by grade limit 1250000, 25;
++-------+-------------+
+| grade | s_name      |
++-------+-------------+
+| 8.3   | name_104964 |
+| 8.3   | name_105016 |
+| 8.3   | name_105119 |
+| 8.3   | name_105191 |
+| 8.3   | name_105204 |
+| 8.3   | name_105299 |
+| 8.3   | name_105484 |
+| 8.3   | name_105490 |
+| 8.3   | name_105493 |
+| 8.3   | name_105663 |
+| 8.3   | name_105691 |
+| 8.3   | name_105925 |
+| 8.3   | name_105990 |
+| 8.3   | name_106309 |
+| 8.3   | name_106310 |
+| 8.3   | name_106615 |
+| 8.3   | name_106631 |
+| 8.3   | name_106641 |
+| 8.3   | name_106657 |
+| 8.3   | name_106855 |
+| 8.3   | name_106918 |
+| 8.3   | name_106926 |
+| 8.3   | name_106954 |
+| 8.3   | name_107094 |
+| 8.3   | name_107238 |
++-------+-------------+
+25 rows in set
+Time: 0.817s
+</code></pre>
+<p>但是其返回数据消耗的时间差异很大:</p>
+<ul>
+<li>Time: 0.433s</li>
+<li>Time: 0.817s</li>
+</ul>
+<p>这里可以看到这么简单的数据偏移操作返回数据也是颇为消耗时间的, 这就是全表扫描带来的压力, 同时偏移的范围的扩大, 消耗的时间也在不断地增加.</p>
+<p>这里对需要排序的<code>grade</code>一项进行添加索引的操作.</p>
+<pre><code class="language-mysql">alter table test_w add index idx_grade (grade);
+</code></pre>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; EXPLAIN select grade, s_name from test_w order by grade limit 10, 25;
++----+-------------+--------+------------+-------+---------------+-----------+---------+--------+------+----------+--------+
+| id | select_type | table  | partitions | type  | possible_keys | key       | key_len | ref    | rows | filtered | Extra  |
++----+-------------+--------+------------+-------+---------------+-----------+---------+--------+------+----------+--------+
+| 1  | SIMPLE      | test_w | &lt;null&gt;     | index | &lt;null&gt;        | idx_grade | 4       | &lt;null&gt; | 35   | 100.0    | &lt;null&gt; |
++----+-------------+--------+------------+-------+---------------+-----------+---------+--------+------+----------+--------+
+
+MySQL root@localhost:test_db&gt; EXPLAIN select grade, s_name from test_w order by grade limit 1250000, 25;
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+| id | select_type | table  | partitions | type | possible_keys | key    | key_len | ref    | rows    | filtered | Extra          |
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+| 1  | SIMPLE      | test_w | &lt;null&gt;     | ALL  | &lt;null&gt;        | &lt;null&gt; | &lt;null&gt;  | &lt;null&gt; | 1491849 | 100.0    | Using filesort |
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+</code></pre>
+<p>可以看到其中的变化, 添加索引后, <code>limit 10, 25;</code>偏移量小的语句使用了索引而<code>limit 1250000, 25;</code>依然还是使用<strong>全表扫描</strong>的方式.</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; select grade, s_name from test_w order by grade limit 1250000, 25;
++-------+-------------+
+| grade | s_name      |
++-------+-------------+
+| 8.3   | name_104964 |
+| 8.3   | name_105016 |
+| 8.3   | name_105119 |
+| 8.3   | name_105191 |
+| 8.3   | name_105204 |
+| 8.3   | name_105299 |
+| 8.3   | name_105484 |
+| 8.3   | name_105490 |
+| 8.3   | name_105493 |
+| 8.3   | name_105663 |
+| 8.3   | name_105691 |
+| 8.3   | name_105925 |
+| 8.3   | name_105990 |
+| 8.3   | name_106309 |
+| 8.3   | name_106310 |
+| 8.3   | name_106615 |
+| 8.3   | name_106631 |
+| 8.3   | name_106641 |
+| 8.3   | name_106657 |
+| 8.3   | name_106855 |
+| 8.3   | name_106918 |
+| 8.3   | name_106926 |
+| 8.3   | name_106954 |
+| 8.3   | name_107094 |
+| 8.3   | name_107238 |
++-------+-------------+
+25 rows in set
+Time: 0.824s
+
+MySQL root@localhost:test_db&gt; select grade, s_name from test_w order by grade limit 10, 25;
++-------+-----------+
+| grade | s_name    |
++-------+-----------+
+| 0.0   | name_2242 |
+| 0.0   | name_2404 |
+| 0.0   | name_2482 |
+| 0.0   | name_2504 |
+| 0.0   | name_2531 |
+| 0.0   | name_2672 |
+| 0.0   | name_2694 |
+| 0.0   | name_2889 |
+| 0.0   | name_2890 |
+| 0.0   | name_3045 |
+| 0.0   | name_3088 |
+| 0.0   | name_3930 |
+| 0.0   | name_4023 |
+| 0.0   | name_4153 |
+| 0.0   | name_4228 |
+| 0.0   | name_4537 |
+| 0.0   | name_4705 |
+| 0.0   | name_4883 |
+| 0.0   | name_5040 |
+| 0.0   | name_5214 |
+| 0.0   | name_5520 |
+| 0.0   | name_5769 |
+| 0.0   | name_5962 |
+| 0.0   | name_6336 |
+| 0.0   | name_6429 |
++-------+-----------+
+25 rows in set
+Time: 0.007s
+</code></pre>
+<ul>
+<li>Time, 0.007s</li>
+<li>Time: 0.824s</li>
+</ul>
+<p>二者的差异就更为明显了, 由偏移量大的依然还是使用全表扫描的方式, 没有使用索引.</p>
+<p>这里强制偏移量大的SQL语句使用索引,看看变化.</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; EXPLAIN select grade, s_name from test_w force index (idx_grade) order by grade limit
+                           -&gt; 1250000, 25;
++----+-------------+--------+------------+-------+---------------+-----------+---------+--------+---------+----------+--------+
+| id | select_type | table  | partitions | type  | possible_keys | key       | key_len | ref    | rows    | filtered
+| Extra  |
++----+-------------+--------+------------+-------+---------------+-----------+---------+--------+---------+----------+--------+
+| 1  | SIMPLE      | test_w | &lt;null&gt;     | index | &lt;null&gt;        | idx_grade | 4       | &lt;null&gt; | 1250025 | 100.0
+| &lt;null&gt; |
++----+-------------+--------+------------+-------+---------------+-----------+---------+--------+---------+----------+--------+
+</code></pre>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; select grade, s_name from test_w force index (idx_grade) order by grade limit 1250000,
+                           -&gt;  25;
++-------+--------------+
+| grade | s_name       |
++-------+--------------+
+| 8.3   | name_1247790 |
+| 8.3   | name_1247906 |
+| 8.3   | name_1247950 |
+| 8.3   | name_1247969 |
+| 8.3   | name_1248146 |
+| 8.3   | name_1248243 |
+| 8.3   | name_1248300 |
+| 8.3   | name_1248532 |
+| 8.3   | name_1248671 |
+| 8.3   | name_1248812 |
+| 8.3   | name_1248815 |
+| 8.3   | name_1248949 |
+| 8.3   | name_1249038 |
+| 8.3   | name_1249061 |
+| 8.3   | name_1249062 |
+| 8.3   | name_1249233 |
+| 8.3   | name_1249381 |
+| 8.3   | name_1249921 |
+| 8.3   | name_1249934 |
+| 8.3   | name_1249978 |
+| 8.3   | name_1250079 |
+| 8.3   | name_1250176 |
+| 8.3   | name_1250258 |
+| 8.3   | name_1250385 |
+| 8.3   | name_1250396 |
++-------+--------------+
+25 rows in set
+Time: 7.354s
+</code></pre>
+<p>强制索引之后, 时间的消耗对比</p>
+<ul>
+<li>Time: 0.824s</li>
+<li>Time: 7.354s</li>
+</ul>
+<p>索引没有为大的偏移量这个语句带来速度的提升, 相反, 消耗的时间<strong>增加</strong>了将近<strong>8倍</strong>.</p>
+<p>这里可以回答在<code>MySQL使用手册</code>那篇文章提到的, <code>MySQL</code>的优化器的作用.</p>
+<blockquote>
+<p>注意优化器的解析处理, 这将改变一些理论上的行为. 例如优化器认为走全表扫描比对索引来的更快, 也许并不会使用索引.</p>
+</blockquote>
+<h2 id="二-联合索引">二. 联合索引</h2>
+<blockquote>
+<p>如果一个索引包含( 或者说覆盖) 所有需要查询的字段的值 我们就称之为&quot; <strong>覆盖索引</strong>&quot; .</p>
+</blockquote>
+<pre><code class="language-mysql">alter table test_w add index idx_grade_s_name (grade, s_name);
+</code></pre>
+<p>将需要查询的字段添加到联合索引中去.</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; EXPLAIN select grade, s_name from test_w order by grade limit 1250000, 25;
++----+-------------+--------+------------+-------+---------------+------------------+---------+--------+---------+----------+-------------+
+| id | select_type | table  | partitions | type  | possible_keys | key              | key_len | ref    | rows    | filtered | Extra       |
++----+-------------+--------+------------+-------+---------------+------------------+---------+--------+---------+----------+-------------+
+| 1  | SIMPLE      | test_w | &lt;null&gt;     | index | &lt;null&gt;        | idx_grade_s_name | 86      | &lt;null&gt; | 1250025 | 100.0    | Using index |
++----+-------------+--------+------------+-------+---------------+------------------+---------+--------+---------+----------+-------------+
+</code></pre>
+<p>可以看到, 该语句的执行已经转为使用索引的方式.</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; select grade, s_name from test_w order by grade limit 1250000, 25;
++-------+-------------+
+| grade | s_name      |
++-------+-------------+
+| 8.3   | name_771974 |
+| 8.3   | name_771978 |
+| 8.3   | name_77200  |
+| 8.3   | name_772160 |
+| 8.3   | name_772332 |
+| 8.3   | name_772430 |
+| 8.3   | name_772537 |
+| 8.3   | name_772725 |
+| 8.3   | name_772759 |
+| 8.3   | name_772784 |
+| 8.3   | name_772811 |
+| 8.3   | name_772822 |
+| 8.3   | name_772918 |
+| 8.3   | name_773078 |
+| 8.3   | name_773079 |
+| 8.3   | name_773153 |
+| 8.3   | name_77325  |
+| 8.3   | name_773450 |
+| 8.3   | name_773591 |
+| 8.3   | name_773746 |
+| 8.3   | name_773994 |
+| 8.3   | name_774021 |
+| 8.3   | name_774102 |
+| 8.3   | name_774109 |
+| 8.3   | name_774159 |
++-------+-------------+
+25 rows in set
+Time: 0.259s
+</code></pre>
+<ul>
+<li>Time: 0.259s</li>
+</ul>
+<p>时间的消耗大幅度下降</p>
+<p>但是, 联合索引, 有一个很明显的弊端, 那就是需要将大量查询的字段纳入到索引当中去, 假如需要检索的字段更多, 显然不希望将所有的字段添加到索引当中去, 这会导致索引消耗过于巨大.</p>
+<h2 id="三-回表">三. 回表</h2>
+<p>将上述的语句变换一下, 将一个新的字段加入到<code>select</code>语句中, 上述的联合索引就失效了.</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; EXPLAIN select grade, s_name, address from test_w order by grade limit 1250000, 25;
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+| id | select_type | table  | partitions | type | possible_keys | key    | key_len | ref    | rows    | filtered | Extra          |
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+| 1  | SIMPLE      | test_w | &lt;null&gt;     | ALL  | &lt;null&gt;        | &lt;null&gt; | &lt;null&gt;  | &lt;null&gt; | 1491849 | 100.0    | Using filesort |
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+
+1 row in set
+</code></pre>
+<h3 id="31-手动回表">3.1 手动回表</h3>
+<p>需要注意这里的子语句查询, <code>This version of MySQL doesn't yet support 'LIMIT &amp; IN/ALL/ANY/SOME subquery</code>.</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; select grade, s_name from test_w where id in (select id from test_w order by grade lim
+                           -&gt; it 1250000, 25);
+(1235, &quot;This version of MySQL doesn't yet support 'LIMIT &amp; IN/ALL/ANY/SOME subquery'&quot;)
+</code></pre>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; explain select grade, s_name from test_w as b join (select id from test_w order by gra
+                           -&gt; de limit 1250000, 25) as a on a.id = b.id;
++----+-------------+------------+------------+--------+---------------+-----------+---------+--------+---------+----------+-------------+
+| id | select_type | table      | partitions | type   | possible_keys | key       | key_len | ref    | rows    | filtered | Extra       |
++----+-------------+------------+------------+--------+---------------+-----------+---------+--------+---------+----------+-------------+
+| 1  | PRIMARY     | &lt;derived2&gt; | &lt;null&gt;     | ALL    | &lt;null&gt;        | &lt;null&gt;    | &lt;null&gt;  | &lt;null&gt; | 1250025 | 100.0    | &lt;null&gt;      |
+| 1  | PRIMARY     | b          | &lt;null&gt;     | eq_ref | PRIMARY       | PRIMARY   | 4       | a.id   | 1       | 100.0    | &lt;null&gt;      |
+| 2  | DERIVED     | test_w     | &lt;null&gt;     | index  | &lt;null&gt;        | idx_grade | 4       | &lt;null&gt; | 1250025 | 100.0    | Using index |
++----+-------------+------------+------------+--------+---------------+-----------+---------+--------+---------+----------+-------------+
+
+3 rows in set
+Time: 0.008s
+</code></pre>
+<p>这里可以看到索引的使用情况.</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; select grade, s_name from test_w as b join (select id from test_w order by grade limit
+                           -&gt;  1250000, 25) as a on a.id = b.id;
++-------+--------------+
+| grade | s_name       |
++-------+--------------+
+| 8.3   | name_1247790 |
+| 8.3   | name_1247906 |
+| 8.3   | name_1247950 |
+| 8.3   | name_1247969 |
+| 8.3   | name_1248146 |
+| 8.3   | name_1248243 |
+| 8.3   | name_1248300 |
+| 8.3   | name_1248532 |
+| 8.3   | name_1248671 |
+| 8.3   | name_1248812 |
+| 8.3   | name_1248815 |
+| 8.3   | name_1248949 |
+| 8.3   | name_1249038 |
+| 8.3   | name_1249061 |
+| 8.3   | name_1249062 |
+| 8.3   | name_1249233 |
+| 8.3   | name_1249381 |
+| 8.3   | name_1249921 |
+| 8.3   | name_1249934 |
+| 8.3   | name_1249978 |
+| 8.3   | name_1250079 |
+| 8.3   | name_1250176 |
+| 8.3   | name_1250258 |
+| 8.3   | name_1250385 |
+| 8.3   | name_1250396 |
++-------+--------------+
+25 rows in set
+Time: 0.207s
+</code></pre>
+<p>消耗的时间甚至比联合索引消耗的时间更少.</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; EXPLAIN select grade, s_name, address from test_w order by grade limit 1250000, 25;
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+| id | select_type | table  | partitions | type | possible_keys | key    | key_len | ref    | rows    | filtered | Extra          |
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+| 1  | SIMPLE      | test_w | &lt;null&gt;     | ALL  | &lt;null&gt;        | &lt;null&gt; | &lt;null&gt;  | &lt;null&gt; | 1491849 | 100.0    | Using filesort |
++----+-------------+--------+------------+------+---------------+--------+---------+--------+---------+----------+----------------+
+
+1 row in set
+Time: 0.006s
+</code></pre>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; select grade, s_name, address from test_w as b join (select id from test_w order by gr
+                           -&gt; ade limit 1250000, 25) as a on a.id = b.id;
++-------+--------------+-----------------+
+| grade | s_name       | address         |
++-------+--------------+-----------------+
+| 8.3   | name_1247790 | address_1247790 |
+| 8.3   | name_1247906 | address_1247906 |
+| 8.3   | name_1247950 | address_1247950 |
+| 8.3   | name_1247969 | address_1247969 |
+| 8.3   | name_1248146 | address_1248146 |
+| 8.3   | name_1248243 | address_1248243 |
+| 8.3   | name_1248300 | address_1248300 |
+| 8.3   | name_1248532 | address_1248532 |
+| 8.3   | name_1248671 | address_1248671 |
+| 8.3   | name_1248812 | address_1248812 |
+| 8.3   | name_1248815 | address_1248815 |
+| 8.3   | name_1248949 | address_1248949 |
+| 8.3   | name_1249038 | address_1249038 |
+| 8.3   | name_1249061 | address_1249061 |
+| 8.3   | name_1249062 | address_1249062 |
+| 8.3   | name_1249233 | address_1249233 |
+| 8.3   | name_1249381 | address_1249381 |
+| 8.3   | name_1249921 | address_1249921 |
+| 8.3   | name_1249934 | address_1249934 |
+| 8.3   | name_1249978 | address_1249978 |
+| 8.3   | name_1250079 | address_1250079 |
+| 8.3   | name_1250176 | address_1250176 |
+| 8.3   | name_1250258 | address_1250258 |
+| 8.3   | name_1250385 | address_1250385 |
+| 8.3   | name_1250396 | address_1250396 |
++-------+--------------+-----------------+
+25 rows in set
+Time: 0.206s
+</code></pre>
+<p>而且比联合索引使用更为方便, 可以任意添加字段, 而不需要将之纳入到联合索引当中去.</p>
+<h3 id="32-性能的影响">3.2 性能的影响</h3>
+<p>但是需要注意的是手动回表的方式, 也并非完全是高效的.</p>
+<p>这受到这个子语句中的数据量的影响</p>
+<pre><code class="language-mysql">(select id from test_w where grade &gt; 8.8)
+</code></pre>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; select grade, s_name, address from test_w where grade &gt; 8.8;
++-------+--------------+-----------------+
+| grade | s_name       | address         |
++-------+--------------+-----------------+
+|  9.8  | name_16      | address_16      |
+|  9.4  | name_23      | address_23      |
+|  9.2  | name_33      | address_33      |
+|  9.0  | name_39      | address_39      |
+|  8.9  | name_45      | address_45      |
+|  9.8  | name_50      | address_50      |
+|  9.3  | name_51      | address_51      |
+|  9.1  | name_71      | address_71      |
+| 10.0  | name_75      | address_75      |
+|  9.9  | name_98      | address_98      |
+|  9.0  | name_100     | address_100     |
+|  9.6  | name_111     | address_111     |
+|  8.9  | name_115     | address_115     |
+|  9.0  | name_116     | address_116     |
+|  9.0  | name_138     | address_138     |
+|  9.0  | name_142     | address_142     |
+|  9.2  | name_144     | address_144     |
+|  9.1  | name_148     | address_148     |
+|  9.3  | name_171     | address_171     |
+|  9.8  | name_173     | address_173     |
+|  9.9  | name_175     | address_175     |
+|  8.9  | name_185     | address_185     |
+|  8.9  | name_191     | address_191     |
+|  9.6  | name_200     | address_200     |
+|  9.6  | name_216     | address_216     |
+|  9.3  | name_217     | address_217     |
+|  9.9  | name_235     | address_235     |
+|  9.2  | name_245     | address_245     |
+|  9.1  | name_251     | address_251     |
+|  8.9  | name_264     | address_264     |
+|  9.1  | name_275     | address_275     |
+| 10.0  | name_276     | address_276     |
+|  9.3  | name_289     | address_289     |
+|  9.1  | name_290     | address_290     |
+|  9.9  | name_291     | address_291     |
+|  8.8  | name_298     | address_298     |
+187602 rows in set
+Time: 15.274s
+</code></pre>
+<p>直接检索的方式比手动回表的方式速度更快.</p>
+<pre><code class="language-bash">ySQL root@localhost:test_db&gt; select grade, s_name, address from test_w where id in (select id from test_w where gra
+                           -&gt; de &gt; 8.8);
++-------+--------------+-----------------+
+| grade | s_name       | address         |
++-------+--------------+-----------------+
+|  8.8  | name_298     | address_298     |
+|  8.8  | name_354     | address_354     |
+|  8.8  | name_487     | address_487     |
+|  8.8  | name_617     | address_617     |
+|  8.8  | name_727     | address_727     |
+|  8.8  | name_746     | address_746     |
+|  8.8  | name_791     | address_791     |
+|  8.8  | name_824     | address_824     |
+|  8.8  | name_921     | address_921     |
+|  8.8  | name_938     | address_938     |
+|  8.8  | name_1004    | address_1004    |
+|  8.8  | name_1079    | address_1079    |
+|  8.8  | name_1267    | address_1267    |
+|  8.8  | name_1298    | address_1298    |
+|  8.8  | name_1431    | address_1431    |
+|  8.8  | name_1738    | address_1738    |
+|  8.8  | name_1757    | address_1757    |
+|  8.8  | name_2063    | address_2063    |
+|  8.8  | name_2072    | address_2072    |
+|  8.8  | name_2089    | address_2089    |
+|  8.8  | name_2391    | address_2391    |
+|  8.8  | name_2469    | address_2469    |
+|  8.8  | name_2483    | address_2483    |
+|  8.8  | name_2507    | address_2507    |
+|  8.8  | name_2515    | address_2515    |
+|  8.8  | name_2522    | address_2522    |
+|  8.8  | name_2574    | address_2574    |
+|  8.8  | name_2675    | address_2675    |
+|  8.8  | name_2724    | address_2724    |
+|  8.8  | name_2736    | address_2736    |
+|  8.8  | name_2766    | address_2766    |
+|  8.8  | name_2849    | address_2849    |
+|  8.8  | name_3231    | address_3231    |
+|  8.8  | name_3392    | address_3392    |
+|  8.8  | name_3395    | address_3395    |
+|  8.8  | name_3438    | address_3438    |
+187602 rows in set
+Time: 31.309s
+</code></pre>
+<p>当数据量变小时, 这里二者的性能差异也随着变化</p>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; select grade, s_name, address from test_w where id in (select id from test_w where bir
+                           -&gt; th_date &gt; '2050-06-28');
++-------+--------------+-----------------+
+| grade | s_name       | address         |
++-------+--------------+-----------------+
+|  5.0  | name_155     | address_155     |
+|  2.7  | name_196     | address_196     |
+|  8.7  | name_268     | address_268     |
+|  1.9  | name_1264    | address_1264    |
+|  3.4  | name_1526    | address_1526    |
+|  4.7  | name_2339    | address_2339    |
+|  1.5  | name_2631    | address_2631    |
+|  8.8  | name_3909    | address_3909    |
+|  2.7  | name_4506    | address_4506    |
+|  6.8  | name_4530    | address_4530    |
+|  7.9  | name_5021    | address_5021    |
+|  2.5  | name_5148    | address_5148    |
+|  2.2  | name_5274    | address_5274    |
+|  3.7  | name_5995    | address_5995    |
+|  4.4  | name_6323    | address_6323    |
+|  8.6  | name_6552    | address_6552    |
+|  2.5  | name_6619    | address_6619    |
+|  8.7  | name_6694    | address_6694    |
+|  9.8  | name_6774    | address_6774    |
+|  7.0  | name_6782    | address_6782    |
+|  6.4  | name_7439    | address_7439    |
+|  8.2  | name_8065    | address_8065    |
+|  9.8  | name_8528    | address_8528    |
+|  6.1  | name_10099   | address_10099   |
+|  6.2  | name_10749   | address_10749   |
+|  9.3  | name_10884   | address_10884   |
+|  7.4  | name_11121   | address_11121   |
+|  4.5  | name_11284   | address_11284   |
+|  1.6  | name_11664   | address_11664   |
+|  7.5  | name_12016   | address_12016   |
+|  4.9  | name_12219   | address_12219   |
+|  2.5  | name_12723   | address_12723   |
+|  1.7  | name_14061   | address_14061   |
+|  6.2  | name_14686   | address_14686   |
+|  7.1  | name_15274   | address_15274   |
+|  0.7  | name_15600   | address_15600   |
+3409 rows in set
+Time: 1.823s
+</code></pre>
+<pre><code class="language-bash">MySQL root@localhost:test_db&gt; select grade, s_name, address from test_w where birth_date &gt; '2050-06-28';
++-------+--------------+-----------------+
+| grade | s_name       | address         |
++-------+--------------+-----------------+
+|  5.0  | name_155     | address_155     |
+|  2.7  | name_196     | address_196     |
+|  8.7  | name_268     | address_268     |
+|  1.9  | name_1264    | address_1264    |
+|  3.4  | name_1526    | address_1526    |
+|  4.7  | name_2339    | address_2339    |
+|  1.5  | name_2631    | address_2631    |
+|  8.8  | name_3909    | address_3909    |
+|  2.7  | name_4506    | address_4506    |
+|  6.8  | name_4530    | address_4530    |
+|  7.9  | name_5021    | address_5021    |
+|  2.5  | name_5148    | address_5148    |
+|  2.2  | name_5274    | address_5274    |
+|  3.7  | name_5995    | address_5995    |
+|  4.4  | name_6323    | address_6323    |
+|  8.6  | name_6552    | address_6552    |
+|  2.5  | name_6619    | address_6619    |
+|  8.7  | name_6694    | address_6694    |
+|  9.8  | name_6774    | address_6774    |
+|  7.0  | name_6782    | address_6782    |
+|  6.4  | name_7439    | address_7439    |
+|  8.2  | name_8065    | address_8065    |
+|  9.8  | name_8528    | address_8528    |
+|  6.1  | name_10099   | address_10099   |
+|  6.2  | name_10749   | address_10749   |
+|  9.3  | name_10884   | address_10884   |
+|  7.4  | name_11121   | address_11121   |
+|  4.5  | name_11284   | address_11284   |
+|  1.6  | name_11664   | address_11664   |
+|  7.5  | name_12016   | address_12016   |
+|  4.9  | name_12219   | address_12219   |
+|  2.5  | name_12723   | address_12723   |
+|  1.7  | name_14061   | address_14061   |
+|  6.2  | name_14686   | address_14686   |
+|  7.1  | name_15274   | address_15274   |
+|  0.7  | name_15600   | address_15600   |
+3409 rows in set
+Time: 1.825s
+</code></pre>
+<h2 id="四-小结">四. 小结</h2>
+<p>综上, 可以看到, 各种方式的执行优劣并不是完全固定的, 根据数量的大小的变化情况来决定使用那些<code>SQL</code>语句.</p>
+<p>适当的使用索引(联合索引)能够大幅度提升执行的速度.</p>
+<ul>
+<li><a href="https://juejin.cn/post/6938357172791148575">避免写出致命 SQL 搞懂 MySQL 回表 - 掘金 (juejin.cn)</a></li>
+</ul>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/lian-he-suo-yin-fen-ye-jian-suo/" title="MySQL_联合索引-分页检索">https://Kyouichirou.github.io/post/lian-he-suo-yin-fen-ye-jian-suo/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/53itHjBFa/"># mysql</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title=" MySQL命令行工具_mycli中文乱码解决" href="https://Kyouichirou.github.io/post/mysql-ming-ling-xing-gong-ju-_mycli-zhong-wen-luan-ma-jie-jue/"> MySQL命令行工具_mycli中文乱码解决</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title=" MySQL命令行工具_mycli中文乱码解决" href="https://Kyouichirou.github.io/post/mysql-ming-ling-xing-gong-ju-_mycli-zhong-wen-luan-ma-jie-jue/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Pandas翻译系列-2.0版本前瞻" href="https://Kyouichirou.github.io/post/pandas-fan-yi-xi-lie-20-ban-ben-qian-zhan/">Pandas翻译系列-2.0版本前瞻</a>
+        <a class="nav-mobile-next" title="Pandas翻译系列-2.0版本前瞻" href="https://Kyouichirou.github.io/post/pandas-fan-yi-xi-lie-20-ban-ben-qian-zhan/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>

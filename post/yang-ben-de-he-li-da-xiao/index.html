@@ -1,0 +1,1555 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="keywords" content="Lian个人博客-数据与思考">
+<meta name="description" content="Make Thing Better and Simpler">
+<meta name="theme-color" content="#000">
+<title>样本的合理大小 | Lian</title>
+<link rel="shortcut icon" href="/favicon.ico?v=1758516680740">
+<link rel="stylesheet" href="/media/css/mist.css">
+<link rel="stylesheet" href="/media/fonts/font-awesome.css">
+<link
+  href="//fonts.loli.net/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Rosario:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext"
+  rel="stylesheet" type="text/css">
+
+<link href="/media/hljs/styles/tomorrow-night.css"
+  rel="stylesheet">
+
+<link rel="stylesheet" href="/styles/main.css">
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<script src="/media/js/jquery.js"></script>
+<script src="/media/hljs/highlight.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbnet.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript-html.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/vbscript.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/highlight.js/9.18.0/languages/sql.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.min.js"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/velocity/1.5.1/velocity.ui.min.js"></script>
+<link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/KaTeX/0.11.1/katex.min.css"
+  integrity="sha384-zB1R0rpPzHqg7Kpt0Aljp8JPLqbXI3bhnPWROx27a9N0Ll6ZP/+DiW/UqRcLbRjq" crossorigin="anonymous">
+
+
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ["\\(", "\\)"]],
+      displayMath: [['$$', '$$'], ["\\[", "\\]"]]
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code', 'a', 'annotation', 'annotation-xml'],
+      ignoreHtmlClass: 'tex2jax_ignore|crayon-.*', // 'crayon-' 开头的类，属于Wordpress代码高亮库，这部分不需要处理，否则会导致显示不正确,这部分是正则式，多条之间用'|'分割
+      processHtmlClass: 'tex2jax_process'
+    },
+    //禁用右键菜单	
+    renderActions: {
+      addMenu: [0, '', '']
+    }
+  };
+</script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+
+
+
+<script>
+  var _hmt = _hmt || [];
+  (function () {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?19bd452dc174a21cc99fb66ddfcef0cc";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+  })();
+</script>
+
+
+
+  <meta name="description" content="样本的合理大小" />
+  <meta name="keywords" content="statistics" />
+</head>
+
+<body>
+  <div class="head-top-line"></div>
+  <div class="header-box">
+    
+<div class="mist">
+  <header class="header bg-color ">
+    <div class="blog-header box-shadow-wrapper  " id="header">
+      <div class="nav-toggle" id="nav_toggle">
+        <div class="toggle-box">
+          <div class="line line-top"></div>
+          <div class="line line-center"></div>
+          <div class="line line-bottom"></div>
+        </div>
+      </div>
+      <div class="site-meta">       
+        <div class="site-title">
+          
+            <a href="/" class="">
+              <span class="logo-line-before">
+                <i class=""></i>
+              </span>
+              <span class="main-title">Lian</span>
+              <span class="logo-line-after">
+                <i class=""></i>
+              </span>
+            </a>  
+          
+        </div>
+        
+      </div>
+      <nav class="site-nav" id="site_nav">
+        <ul id="nav_ul">
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/" target="_self">
+                  <i class="fa fa-globe"></i> Home
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/archives" target="_self">
+                  <i class="fa fa-globe"></i> Archives
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="/tags" target="_self">
+                  <i class="fa fa-globe"></i> Tags
+                </a>
+              
+            </li>
+          
+            
+            
+              
+            
+            <li class="nav-item ">
+              
+              
+                <a href="https://Kyouichirou.github.io/post/about-me" target="_self">
+                  <i class="fa fa-globe"></i> About
+                </a>
+              
+            </li>
+          
+          
+            
+              <li class="nav-item ">
+                <a href="/friends/" target="_self">
+                  
+                    <i class="fa fa-github"></i> GitHub
+                  
+                </a>
+              </li>
+            
+          
+          
+        </ul>
+      </nav>
+    </div>
+  </header>
+</div>
+
+<script type="text/javascript"> 
+ 
+  let showNav = true;
+
+  let navToggle = document.querySelector('#nav_toggle'),
+  siteNav = document.querySelector('#site_nav');
+  
+  function navClick() {
+    let sideBar = document.querySelector('.sidebar');
+    let navUl = document.querySelector('#nav_ul');
+    navToggle.classList.toggle('nav-toggle-active');
+    siteNav.classList.toggle('nav-menu-active');
+    if (siteNav.classList.contains('nav-menu-active')) {
+      siteNav.style = "height: " + (navUl.children.length * 42) +"px !important";
+    } else {
+      siteNav.style = "";
+    }
+  }
+
+  navToggle.addEventListener('click',navClick);  
+</script>
+  </div>
+  <div class="main-continer">
+    
+    <div
+      class="section-layout mist bg-color">
+      <div class="section-layout-wrapper">
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper  right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body mist" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
+<div class="sidebar-wrapper box-shadow-wrapper ">
+  <div class="sidebar-item">
+    <img class="site-author-image right-motion" src="/images/avatar.png"/>
+    <p class="site-author-name">Lian</p>
+    
+    <div class="site-description right-motion">
+      
+      
+      
+        <p>make thing better and simpler.</p>
+      
+      
+    </div>
+    
+  </div>
+  <div class="sidebar-item side-item-stat right-motion">
+    <div class="sidebar-item-box">
+      <a href="/archives/">
+        
+        <span class="site-item-stat-count">103</span>
+        <span class="site-item-stat-name language" data-lan="article">文章</span>
+      </a>
+    </div>
+    <div class="sidebar-item-box">
+      <a href="/tags/">
+        <span class="site-item-stat-count">64</span>
+        <span class="site-item-stat-name language" data-lan="tag">标签</span>
+      </a>
+    </div>
+  </div>
+  
+  
+
+
+
+</div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper  auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li>
+<ul>
+<li><a href="#%E4%B8%80-%E5%89%8D%E8%A8%80">一. 前言</a></li>
+<li><a href="#%E4%BA%8C-%E6%A0%B7%E6%9C%AC%E5%A4%A7%E5%B0%8F%E7%9A%84%E5%BD%B1%E5%93%8D">二. 样本大小的影响</a></li>
+<li><a href="#%E4%B8%89-%E5%90%88%E7%90%86%E5%A4%A7%E5%B0%8F%E8%AE%A1%E7%AE%97">三. 合理大小计算</a>
+<ul>
+<li><a href="#31-%E7%AE%80%E5%8D%95%E6%96%B9%E5%BC%8F">3.1 简单方式</a></li>
+<li><a href="#32-%E5%9F%BA%E4%BA%8Ez%E5%88%86%E5%B8%83">3.2 基于z分布</a></li>
+<li><a href="#33-%E5%85%B6%E4%BB%96%E8%AE%A1%E7%AE%97%E6%96%B9%E5%BC%8F">3.3 其他计算方式</a></li>
+</ul>
+</li>
+<li><a href="#%E5%9B%9B-%E5%B0%8F%E7%BB%93">四. 小结</a></li>
+<li><a href="#%E4%BA%94-%E5%8F%82%E8%80%83">五. 参考</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</div>
+
+<script>
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
+      }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
+    });
+  }
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    jQuery.Velocity(hideElement, 'stop');
+    jQuery.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        jQuery.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://Kyouichirou.github.io/post/yang-ben-de-he-li-da-xiao/"> 样本的合理大小 </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2023-04-19 11:40:49">2023-04-19</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">标签:</span>
+       
+      <a href="https://Kyouichirou.github.io/tag/w4OdC7GCbG/">
+        <span>statistics</span>
+      </a>
+       
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span
+        >12<span class="language" data-lan="minute"
+          >分钟</span
+        ></span
+      >
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span
+        >2919<span class="pc-show language" data-lan="words"
+          >字数</span
+        ></span
+      >
+    </span>
+    
+  </div>
+</section>
+
+            <div class="post-body next-md-body" id="post_body">
+              <h2 id="一-前言">一. 前言</h2>
+<figure data-type="image" tabindex="1"><a href="https://imgse.com/i/ppXySy9"><img src="https://s1.ax1x.com/2023/04/12/ppXySy9.png" alt="ppXySy9.png" loading="lazy"></a></figure>
+<p>(<em>图: 知乎-相关问题</em>)(题目写错了?, mmape?)</p>
+<!--more-->
+<figure data-type="image" tabindex="2"><a href="https://imgse.com/i/ppX675V"><img src="https://s1.ax1x.com/2023/04/12/ppX675V.png" alt="ppX675V.png" loading="lazy"></a></figure>
+<p>假如检索相关问题, 可以看到各种五花八门的答案, 众说纷纭.</p>
+<p>和机器学习中的各种超参数设置一样, 统计学也有不少类似的参数悬案.</p>
+<figure data-type="image" tabindex="3"><a href="https://imgse.com/i/ppXydwq"><img src="https://s1.ax1x.com/2023/04/12/ppXydwq.png" alt="ppXydwq.png" loading="lazy"></a></figure>
+<p>最为经典莫过于中心极限定理中要求的样本数量大于<code>30</code>(或者28, 29), 但是为什么是<code>30</code>, 却找不到相关靠谱的说明或者是数学证明, <code>30</code> 这个临界值起到些什么具体的作用.</p>
+<p>在<code>wikipedia</code>关于中心极限定理的介绍种也没有收录样本要求超过30类似信息.</p>
+<blockquote>
+<p>在<code>stackexchange</code>有这样一个答案, 提到了关于中心极限定理中关于30的由来</p>
+<p>[O]ne of my fellow doctoral candidates undertook a dissertation [with] a sample of only 20 cases per group. ... [L]ater I discovered ... that for a two-independent-group-mean comparison with n=30n=30 per group at the sanctified two-tailed .05.05 level, the probability that a medium-sized effect would be labeled as significant by ... a <em>t</em> test was only .47.47. Thus, it was approximately a coin flip whether one would get a significant result, even though, in reality, the effect size was meaningful. ... [My friend] ended up with nonsignificant results–with which he proceeded to demolish an important branch of psychoanalytic theory.</p>
+<p><a href="https://stats.stackexchange.com/questions/2541/what-references-should-be-cited-to-support-using-30-as-a-large-enough-sample-siz">What references should be cited to support using 30 as a large enough sample size?</a></p>
+</blockquote>
+<p>再看看大厂如何看待这个问题, 这是腾讯技术发的一篇相关的文章.</p>
+<figure data-type="image" tabindex="4"><a href="https://imgse.com/i/ppXW3Yq"><img src="https://s1.ax1x.com/2023/04/12/ppXW3Yq.png" alt="ppXW3Yq.png" loading="lazy"></a></figure>
+<p>(<em>图: 知乎-腾讯技术</em>)</p>
+<ul>
+<li><a href="https://www.zhihu.com/question/26420138">zhihu_为什么 30 个样本就称为「大样本」, 而不是 40 或 50? </a></li>
+</ul>
+<h2 id="二-样本大小的影响">二. 样本大小的影响</h2>
+<p>在讨论样本合理性之前, 先探讨样本大小对于结果的影响在那些地方.</p>
+<p>对于小样本, 毫无疑问, 不需要任何的数学证明也可知道, 样本偏小, 通常情况下显然是不利于数据的分析和相关结论得出的.</p>
+<p>当然这里并非是指小样本都会出现这个问题, 而是说这是最直观感觉(就如同在某些期刊种的实验不可在其他实验室复现, 只是期刊作者的若干次实验的成功).</p>
+<p>显然初步的结论是样本应该足够&quot;大&quot;(合适的范围起点), 才能保证结果的可靠性, 这一点应该可以肯定的.</p>
+<p>大样本的好处, 最为直观的实验就是抛硬币, 当抛的次数足够多的情况下, 出现正反面出现的次数占比都将趋近于50%(在这里, 显然样本越大越能反映事物真实的规律).</p>
+<p><strong>中心极限定理</strong></p>
+<blockquote>
+<p>中心极限定理 是指<a href="https://baike.baidu.com/item/%E6%A6%82%E7%8E%87%E8%AE%BA/829122?fromModule=lemma_inlink">概率论</a>中讨论随机变量序列部分和分布渐近于正态分布的一类定理. 这组定理是<a href="https://baike.baidu.com/item/%E6%95%B0%E7%90%86%E7%BB%9F%E8%AE%A1%E5%AD%A6/8763454?fromModule=lemma_inlink">数理统计学</a>和误差分析的理论基础 指出了大量随机变量近似服从正态分布的条件. 它是概率论中最重要的一类定理 有广泛的实际应用背景. 在自然界与生产中 一些现象受到许多相互独立的随机因素的影响 如果每个因素所产生的影响都很微小时 总的影响可以看作是服从正态分布的. 中心极限定理就是从数学上证明了这一现象. 最早的中心极限定理是讨论重点 <a href="https://baike.baidu.com/item/%E4%BC%AF%E5%8A%AA%E5%88%A9%E8%AF%95%E9%AA%8C/238488?fromModule=lemma_inlink">伯努利试验</a>中 事件A出现的次数渐近于正态分布的问题.</p>
+<p>百度百科</p>
+</blockquote>
+<p><strong>大数定理</strong></p>
+<p><em>大数定律好一点?</em></p>
+<blockquote>
+<p>大数定理简单来说 指得是某个随机事件在单次试验中可能发生也可能不发生 但在大量重复实验中往往呈现出明显的规律性 即该随机事件发生的频率会向某个常数值收敛 该常数值即为该事件发生的概率.</p>
+<p>知乎</p>
+</blockquote>
+<p>上述的两个定理, 是数据处理中极为重要的两个支点(<em>甚至于滥用</em>).</p>
+<figure data-type="image" tabindex="5"><a href="https://imgse.com/i/p9Fr77T"><img src="https://s1.ax1x.com/2023/04/19/p9Fr77T.png" alt="p9Fr77T.png" loading="lazy"></a></figure>
+<blockquote>
+<p>In <a href="https://en.wikipedia.org/wiki/Probability_theory">probability theory</a>, the <strong>central limit theorem</strong> (<strong>CLT</strong>) establishes that, in many situations, for identically distributed independent samples, the standardized sample mean tends towards the standard normal distribution even if the original variables themselves are not normally distributed.</p>
+</blockquote>
+<ul>
+<li><a href="https://www.zhihu.com/question/31593033">zhihu_大数定律和中心极限定理在各个领域的运用有什么 ?</a></li>
+<li><a href="https://www.zhihu.com/question/265122443">简明易懂的大样本理论( asymptotic/large sample theory) 的教材?  - 知乎 (zhihu.com)</a></li>
+</ul>
+<figure data-type="image" tabindex="6"><a href="https://imgse.com/i/p9PCawt"><img src="https://s1.ax1x.com/2023/04/17/p9PCawt.png" alt="p9PCawt.png" loading="lazy"></a></figure>
+<p>(<em>图: 统计世界, 第八版, 关于推断的滥用, 抛硬币的不同次数对于显著性P值得影响</em>)</p>
+<p>上面的示例, 可以用更简单的t检验中t值得计算为例子</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi><mo>=</mo><mfrac><mrow><mover accent="true"><mi>x</mi><mo>ˉ</mo></mover><mo>−</mo><mi>μ</mi></mrow><mrow><mi>s</mi><mi mathvariant="normal">/</mi><msqrt><mi>n</mi></msqrt></mrow></mfrac></mrow><annotation encoding="application/x-tex">t = \frac{\bar{x} - \mu}{s/\sqrt{n}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.20061em;vertical-align:-0.9402800000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.2603300000000002em;"><span style="top:-2.30972em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">s</span><span class="mord">/</span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8002800000000001em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord mathdefault">n</span></span></span><span style="top:-2.76028em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,
+-10,-9.5,-14c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54c44.2,-33.3,65.8,
+-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10s173,378,173,378c0.7,0,
+35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429c69,-144,104.5,-217.7,106.5,
+-221c5.3,-9.3,12,-14,20,-14H400000v40H845.2724s-225.272,467,-225.272,467
+s-235,486,-235,486c-2.7,4.7,-9,7,-19,7c-6,0,-10,-1,-12,-3s-194,-422,-194,-422
+s-65,47,-65,47z M834 80H400000v40H845z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.23972em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.56778em;"><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">x</span></span></span><span style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="accent-body" style="left:-0.22222em;">ˉ</span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">μ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9402800000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>在不考虑其他得变量(或者认为其他变量的变化对于t值的影响没那么大)样本数 n 越大, t 值显然趋向于变大, 而 t 值通常用于作证显著性 P 值得可靠性.</p>
+<blockquote>
+<p>所以换句话说 样本量越大 你越不需要靠「运气」做出「好」的结果.  而他的原话指的是第I类错误 我们上面说了 第I类错误的发生概率是我们已经通过显著性水平 ( 5%) 控制了的 所以他说的现象并不会发生.  所以呢 在我看来 至少现在我还没想到什么原因使得「大样本 」劣于「小样本」 至少从统计理论方面来看.</p>
+<p>zhihu</p>
+</blockquote>
+<h2 id="三-合理大小计算">三. 合理大小计算</h2>
+<p><a href="https://stats.libretexts.org/Bookshelves/Applied_Statistics/Book%3A_Biological_Statistics_(McDonald)/02%3A_Tests_for_Nominal_Variables/2.07%3A_Fisher's_Exact_Test">Fisher's Exact Test</a></p>
+<blockquote>
+<p><strong>Fisher's exact test is more accurate than the chi-square test or <em>G</em>–test of independence</strong> when the <strong>expected numbers are small</strong>. <strong>I recommend you use Fisher's exact test when the total sample size is less than 1000</strong>, and use the chi-square or <em>G</em>–test for larger sample sizes. See the web page on small sample sizes for further discussion of what it means to be &quot;<strong>small</strong>&quot;.</p>
+</blockquote>
+<h3 id="31-简单方式">3.1 简单方式</h3>
+<figure data-type="image" tabindex="7"><a href="https://imgse.com/i/ppXtOjf"><img src="https://s1.ax1x.com/2023/04/12/ppXtOjf.png" alt="ppXtOjf.png" loading="lazy"></a></figure>
+<p>(<em>图: 统计世界, 第八版</em>)</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>e</mi><mo>=</mo><mfrac><mn>1</mn><msqrt><mi>n</mi></msqrt></mfrac></mrow><annotation encoding="application/x-tex">e = \frac{1}{\sqrt{n}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.25144em;vertical-align:-0.9300000000000002em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.30972em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8002800000000001em;"><span class="svg-align" style="top:-3em;"><span class="pstrut" style="height:3em;"></span><span class="mord" style="padding-left:0.833em;"><span class="mord mathdefault">n</span></span></span><span style="top:-2.76028em;"><span class="pstrut" style="height:3em;"></span><span class="hide-tail" style="min-width:0.853em;height:1.08em;"><svg width='400em' height='1.08em' viewBox='0 0 400000 1080' preserveAspectRatio='xMinYMin slice'><path d='M95,702c-2.7,0,-7.17,-2.7,-13.5,-8c-5.8,-5.3,-9.5,
+-10,-9.5,-14c0,-2,0.3,-3.3,1,-4c1.3,-2.7,23.83,-20.7,67.5,-54c44.2,-33.3,65.8,
+-50.3,66.5,-51c1.3,-1.3,3,-2,5,-2c4.7,0,8.7,3.3,12,10s173,378,173,378c0.7,0,
+35.3,-71,104,-213c68.7,-142,137.5,-285,206.5,-429c69,-144,104.5,-217.7,106.5,
+-221c5.3,-9.3,12,-14,20,-14H400000v40H845.2724s-225.272,467,-225.272,467
+s-235,486,-235,486c-2.7,4.7,-9,7,-19,7c-6,0,-10,-1,-12,-3s-194,-422,-194,-422
+s-65,47,-65,47z M834 80H400000v40H845z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.23972em;"><span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.9300000000000002em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<figure data-type="image" tabindex="8"><a href="https://imgse.com/i/ppXNOi9"><img src="https://s1.ax1x.com/2023/04/12/ppXNOi9.png" alt="ppXNOi9.png" loading="lazy"></a></figure>
+<table>
+<thead>
+<tr>
+<th>数量</th>
+<th>e</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>10</td>
+<td>0.316227766</td>
+</tr>
+<tr>
+<td>20</td>
+<td>0.223606798</td>
+</tr>
+<tr>
+<td><strong>30</strong></td>
+<td>0.182574186</td>
+</tr>
+<tr>
+<td>50</td>
+<td>0.141421356</td>
+</tr>
+<tr>
+<td>100</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>300</td>
+<td>0.057735027</td>
+</tr>
+<tr>
+<td>500</td>
+<td>0.04472136</td>
+</tr>
+<tr>
+<td><strong>1000</strong></td>
+<td>0.031622777</td>
+</tr>
+<tr>
+<td>2000</td>
+<td>0.02236068</td>
+</tr>
+<tr>
+<td>5000</td>
+<td>0.014142136</td>
+</tr>
+<tr>
+<td>10000</td>
+<td>0.01</td>
+</tr>
+</tbody>
+</table>
+<p>基于此, 可以绘制出样本大小-误差图.</p>
+<p>腾讯技术文章中的<code>1000</code>数字来源可以通过图大致确定, 有点类似于<code>k-means</code>中的肘子确定 k 值法. 在1000左右, 样本数量的增加对于误差的降低的边际收益将趋于平缓.</p>
+<h3 id="32-基于z分布">3.2 基于z分布</h3>
+<p>有多种计算方式, 基于z分布.</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable side="right"><mlabeledtr><mtd><mtext>(f-1)</mtext></mtd><mtd><mrow><mi mathvariant="normal">相</mi><mi mathvariant="normal">对</mi><mi mathvariant="normal">简</mi><mi mathvariant="normal">单</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">方</mi><mi mathvariant="normal">式</mi><mo>:</mo><mspace linebreak="newline"></mspace><mi>n</mi><mo>=</mo><mo>(</mo><mfrac><mrow><msub><mi>Z</mi><mrow><mi>σ</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msub><mi>σ</mi></mrow><mi>E</mi></mfrac><msup><mo>)</mo><mn>2</mn></msup><mspace linebreak="newline"></mspace></mrow></mtd></mlabeledtr></mtable><annotation encoding="application/x-tex">相对简单的方式:\\
+n = (\frac{Z_{\sigma/2}\sigma}{E})^ 2\tag{f-1}\\
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord cjk_fallback">相</span><span class="mord cjk_fallback">对</span><span class="mord cjk_fallback">简</span><span class="mord cjk_fallback">单</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">方</span><span class="mord cjk_fallback">式</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.11453em;vertical-align:-0.686em;"></span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.4285299999999999em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">E</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.7451999999999996em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.34480000000000005em;"><span style="top:-2.5198em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.03588em;">σ</span><span class="mord mtight">/</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3551999999999999em;"><span></span></span></span></span></span></span><span class="mord mathdefault" style="margin-right:0.03588em;">σ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mspace newline"></span><span class="tag"><span class="strut" style="height:2.11453em;vertical-align:-0.686em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">f</span><span class="mord">-</span><span class="mord">1</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<figure data-type="image" tabindex="9"><a href="https://imgse.com/i/p9PiP8U"><img src="https://s1.ax1x.com/2023/04/17/p9PiP8U.png" alt="p9PiP8U.png" loading="lazy"></a></figure>
+<p>(<em>图: bing直接提供相关计算工具</em>, <em>使用的是下面的公式</em>)</p>
+<figure data-type="image" tabindex="10"><a href="https://imgse.com/i/p9PijzD"><img src="https://s1.ax1x.com/2023/04/17/p9PijzD.png" alt="p9PijzD.png" loading="lazy"></a></figure>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable side="right"><mlabeledtr><mtd><mtext>(f-2)</mtext></mtd><mtd><mrow><mi>C</mi><mi>o</mi><mi>c</mi><mi>h</mi><mi>r</mi><mi>a</mi><mi>n</mi><mi mathvariant="normal">’</mi><mi>s</mi><mi>F</mi><mi>o</mi><mi>r</mi><mi>m</mi><mi>u</mi><mi>l</mi><mi>a</mi><mo>:</mo><mspace linebreak="newline"></mspace><mspace linebreak="newline"></mspace><mi>s</mi><mi>a</mi><mi>m</mi><mi>p</mi><mi>l</mi><mi>e</mi><mo>=</mo><mfrac><mrow><msubsup><mi>z</mi><mrow><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi></mrow><mn>2</mn></msubsup><mo>∗</mo><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mo>∗</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mo>)</mo></mrow><mrow><mi>m</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>n</mi><mtext>  </mtext><mi>o</mi><mi>f</mi><mtext>  </mtext><mi>e</mi><mi>r</mi><mi>r</mi><mi>o</mi><mi>r</mi></mrow></mfrac><mspace linebreak="newline"></mspace><msub><mi>z</mi><mrow><mi>s</mi><mi>c</mi><mi>o</mi><mi>r</mi><mi>e</mi></mrow></msub><mo separator="true">,</mo><mi mathvariant="normal">上</mi><mi mathvariant="normal">图</mi><mi mathvariant="normal">查</mi><mi mathvariant="normal">表</mi><mo separator="true">,</mo><mspace linebreak="newline"></mspace><mi>α</mi><mo>=</mo><mn>0.05</mn><mo>(</mo><mn>95</mn><mi mathvariant="normal">%</mi><mo>)</mo><mi mathvariant="normal">时</mi><mo separator="true">,</mo><mi mathvariant="normal">两</mi><mi mathvariant="normal">侧</mi><mi mathvariant="normal">为</mi><mn>0.025</mn><mo separator="true">,</mo><mi mathvariant="normal">查</mi><mi mathvariant="normal">表</mi><mo separator="true">,</mo><mi mathvariant="normal">即</mi><mn>1.96</mn><mspace linebreak="newline"></mspace><mi>S</mi><mi>t</mi><mi>d</mi><mi>D</mi><mi>e</mi><mi>v</mi><mo>=</mo><mn>0.5</mn><mo separator="true">,</mo><mi mathvariant="normal">经</mi><mi mathvariant="normal">验</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">值</mi><mspace linebreak="newline"></mspace><mi>m</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>n</mi><mtext>  </mtext><mi>o</mi><mi>f</mi><mtext>  </mtext><mi>e</mi><mi>r</mi><mi>r</mi><mi>o</mi><mi>r</mi><mo>=</mo><mn>0.03</mn><mo>(</mo><mi mathvariant="normal">根</mi><mi mathvariant="normal">据</mi><mi mathvariant="normal">需</mi><mi mathvariant="normal">要</mi><mi mathvariant="normal">自</mi><mi mathvariant="normal">由</mi><mi mathvariant="normal">调</mi><mi mathvariant="normal">整</mi><mo>)</mo><mspace linebreak="newline"></mspace><mi mathvariant="normal">代</mi><mi mathvariant="normal">入</mi><mi mathvariant="normal">计</mi><mi mathvariant="normal">算</mi><mo>:</mo><mn>1067.111111</mn></mrow></mtd></mlabeledtr></mtable><annotation encoding="application/x-tex">Cochran’s Formula:\\
+\\
+sample = \frac{z_{score}^ 2 * StdDev * (1 - StdDev)}{margin\;of\;error} \tag{f-2}\\
+z_{score}, 上图查表, \\
+\alpha = 0.05(95\%)时, 两侧为0.025, 查表, 即1.96\\
+StdDev = 0.5, 经验数值\\
+margin\;of\;error = 0.03(根据需要自由调整)\\
+代入计算: 1067.111111
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="mord mathdefault">o</span><span class="mord mathdefault">c</span><span class="mord mathdefault">h</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">a</span><span class="mord mathdefault">n</span><span class="mord">’</span><span class="mord mathdefault">s</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">m</span><span class="mord mathdefault">u</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">a</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="mspace newline"></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">s</span><span class="mord mathdefault">a</span><span class="mord mathdefault">m</span><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.371548em;vertical-align:-0.8804400000000001em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.491108em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-2.4530000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">o</span><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mord mathdefault mtight">e</span></span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault">t</span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault">t</span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804400000000001em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.04398em;">z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.04398em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">s</span><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">o</span><span class="mord mathdefault mtight" style="margin-right:0.02778em;">r</span><span class="mord mathdefault mtight">e</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">上</span><span class="mord cjk_fallback">图</span><span class="mord cjk_fallback">查</span><span class="mord cjk_fallback">表</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">5</span><span class="mopen">(</span><span class="mord">9</span><span class="mord">5</span><span class="mord">%</span><span class="mclose">)</span><span class="mord cjk_fallback">时</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">两</span><span class="mord cjk_fallback">侧</span><span class="mord cjk_fallback">为</span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">2</span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">查</span><span class="mord cjk_fallback">表</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">即</span><span class="mord">1</span><span class="mord">.</span><span class="mord">9</span><span class="mord">6</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">S</span><span class="mord mathdefault">t</span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.02778em;">D</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8388800000000001em;vertical-align:-0.19444em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">经</span><span class="mord cjk_fallback">验</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">值</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">3</span><span class="mopen">(</span><span class="mord cjk_fallback">根</span><span class="mord cjk_fallback">据</span><span class="mord cjk_fallback">需</span><span class="mord cjk_fallback">要</span><span class="mord cjk_fallback">自</span><span class="mord cjk_fallback">由</span><span class="mord cjk_fallback">调</span><span class="mord cjk_fallback">整</span><span class="mclose">)</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord cjk_fallback">代</span><span class="mord cjk_fallback">入</span><span class="mord cjk_fallback">计</span><span class="mord cjk_fallback">算</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">6</span><span class="mord">7</span><span class="mord">.</span><span class="mord">1</span><span class="mord">1</span><span class="mord">1</span><span class="mord">1</span><span class="mord">1</span><span class="mord">1</span></span><span class="tag"><span class="strut" style="height:2.371548em;vertical-align:-0.8804400000000001em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">f</span><span class="mord">-</span><span class="mord">2</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<table>
+<thead>
+<tr>
+<th>e</th>
+<th>f-2</th>
+<th>f-1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.1</td>
+<td>96.04</td>
+<td>384.16</td>
+</tr>
+<tr>
+<td>0.09</td>
+<td>118.5679</td>
+<td>474.2716</td>
+</tr>
+<tr>
+<td>0.08</td>
+<td>150.0625</td>
+<td>600.25</td>
+</tr>
+<tr>
+<td>0.07</td>
+<td>196</td>
+<td>784</td>
+</tr>
+<tr>
+<td>0.06</td>
+<td>266.7778</td>
+<td>1067.111</td>
+</tr>
+<tr>
+<td>0.05</td>
+<td>384.16</td>
+<td>1536.64</td>
+</tr>
+<tr>
+<td>0.04</td>
+<td>600.25</td>
+<td>2401</td>
+</tr>
+<tr>
+<td>0.03</td>
+<td>1067.111</td>
+<td>4268.444</td>
+</tr>
+<tr>
+<td>0.02</td>
+<td>2401</td>
+<td>9604</td>
+</tr>
+<tr>
+<td>0.01</td>
+<td>9604</td>
+<td>38416</td>
+</tr>
+</tbody>
+</table>
+<p>显然上述是假设总体足够大, 假如总体的数值相对较小时:</p>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mtable side="right"><mlabeledtr><mtd><mtext>(f-3)</mtext></mtd><mtd><mrow><mi mathvariant="normal">对</mi><mi mathvariant="normal">上</mi><mi mathvariant="normal">述</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">计</mi><mi mathvariant="normal">算</mi><mi mathvariant="normal">进</mi><mi mathvariant="normal">行</mi><mi mathvariant="normal">调</mi><mi mathvariant="normal">整</mi><mo>:</mo><mspace linebreak="newline"></mspace><mi>n</mi><mo>=</mo><mfrac><msub><mi>n</mi><mn>0</mn></msub><mrow><mn>1</mn><mo>+</mo><mfrac><mrow><mo>(</mo><msub><mi>n</mi><mn>0</mn></msub><mo>−</mo><mn>1</mn><mo>)</mo></mrow><mi>N</mi></mfrac></mrow></mfrac><mspace linebreak="newline"></mspace><msub><mi>n</mi><mn>0</mn></msub><mo separator="true">,</mo><mi mathvariant="normal">为</mi><mi mathvariant="normal">上</mi><mi mathvariant="normal">述</mi><mi>f</mi><mn>2</mn><mi mathvariant="normal">计</mi><mi mathvariant="normal">算</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">理</mi><mi mathvariant="normal">想</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">值</mi><mspace linebreak="newline"></mspace><mi>N</mi><mi mathvariant="normal">为</mi><mi mathvariant="normal">整</mi><mi mathvariant="normal">体</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">样</mi><mi mathvariant="normal">本</mi><mi mathvariant="normal">数</mi><mi mathvariant="normal">量</mi></mrow></mtd></mlabeledtr></mtable><annotation encoding="application/x-tex">对上述的计算进行调整:\\
+n = \frac{n_0}{ 1+ \frac{(n_0 - 1)}{N}}\tag{f-3}\\
+n_0, 为上述f2计算的理想数值\\
+N为整体的样本数量
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord cjk_fallback">对</span><span class="mord cjk_fallback">上</span><span class="mord cjk_fallback">述</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">计</span><span class="mord cjk_fallback">算</span><span class="mord cjk_fallback">进</span><span class="mord cjk_fallback">行</span><span class="mord cjk_fallback">调</span><span class="mord cjk_fallback">整</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.35256em;vertical-align:-1.245em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1075599999999999em;"><span style="top:-2.1099999999999994em;"><span class="pstrut" style="height:3.01em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.10903em;">N</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span><span style="top:-3.2399999999999998em;"><span class="pstrut" style="height:3.01em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.687em;"><span class="pstrut" style="height:3.01em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:1.245em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord cjk_fallback">为</span><span class="mord cjk_fallback">上</span><span class="mord cjk_fallback">述</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord">2</span><span class="mord cjk_fallback">计</span><span class="mord cjk_fallback">算</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">理</span><span class="mord cjk_fallback">想</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">值</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mord cjk_fallback">为</span><span class="mord cjk_fallback">整</span><span class="mord cjk_fallback">体</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">样</span><span class="mord cjk_fallback">本</span><span class="mord cjk_fallback">数</span><span class="mord cjk_fallback">量</span></span><span class="tag"><span class="strut" style="height:2.35256em;vertical-align:-1.245em;"></span><span class="mord text"><span class="mord">(</span><span class="mord"><span class="mord">f</span><span class="mord">-</span><span class="mord">3</span></span><span class="mord">)</span></span></span></span></span></span></p>
+<p>示例:</p>
+<blockquote>
+<p>A marketing research firm wants to estimate the average amount a student spends during the Spring break. They want to determine it to within $120 with 90% confidence. One can roughly say that it ranges from $100 to $1700. How many students should they sample?</p>
+</blockquote>
+<p class='katex-block'><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">基</mi><mi mathvariant="normal">于</mi><mi>f</mi><mn>1</mn><mi mathvariant="normal">的</mi><mi mathvariant="normal">计</mi><mi mathvariant="normal">算</mi><mi mathvariant="normal">方</mi><mi mathvariant="normal">式</mi><mo>:</mo><mi>n</mi><mo>=</mo><mo>(</mo><mfrac><mrow><mn>1.645</mn><mo>(</mo><mn>400</mn><mo>)</mo></mrow><mn>120</mn></mfrac><msup><mo>)</mo><mn>2</mn></msup><mo>=</mo><mn>30.07</mn><mspace linebreak="newline"></mspace><mn>400</mn><mo>=</mo><mfrac><mrow><mn>1700</mn><mo>−</mo><mn>100</mn></mrow><mn>4</mn></mfrac><mspace linebreak="newline"></mspace><mi mathvariant="normal">这</mi><mi mathvariant="normal">个</mi><mi mathvariant="normal">是</mi><mi mathvariant="normal">对</mi><mi mathvariant="normal">标</mi><mi mathvariant="normal">准</mi><mi mathvariant="normal">差</mi><mi mathvariant="normal">的</mi><mi mathvariant="normal">粗</mi><mi mathvariant="normal">略</mi><mi mathvariant="normal">估</mi><mi mathvariant="normal">计</mi><mo>:</mo><mi>E</mi><mo>=</mo><mfrac><mrow><mi>m</mi><mi>a</mi><mi>x</mi><mo>−</mo><mi>m</mi><mi>i</mi><mi>n</mi></mrow><mn>4</mn></mfrac><mspace linebreak="newline"></mspace><mi mathvariant="normal">或</mi><mi mathvariant="normal">基</mi><mi mathvariant="normal">于</mi><mi>t</mi><mi mathvariant="normal">检</mi><mi mathvariant="normal">验</mi><mo>:</mo><mspace linebreak="newline"></mspace><mi>n</mi><mo>=</mo><mo>(</mo><mfrac><mrow><msub><mi>t</mi><mrow><mi>α</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow></msub><mi>s</mi></mrow><mi>E</mi></mfrac><msup><mo>)</mo><mn>2</mn></msup><mspace linebreak="newline"></mspace><mi mathvariant="normal">见</mi><mi mathvariant="normal">下</mi><mi mathvariant="normal">面</mi><mi mathvariant="normal">参</mi><mi mathvariant="normal">考</mi><mi mathvariant="normal">链</mi><mi mathvariant="normal">接</mi></mrow><annotation encoding="application/x-tex">基于f1的计算方式:
+n = (\frac{1.645(400)}{120}) ^ 2 = 30.07\\
+400 = \frac{1700 - 100}{4}\\
+这个是对标准差的粗略估计:
+E = \frac{max - min}{4}\\
+或基于t检验:\\
+n = (\frac{t_{\alpha/2}s}{E}) ^ 2\\
+见下面参考链接
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord cjk_fallback">基</span><span class="mord cjk_fallback">于</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord">1</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">计</span><span class="mord cjk_fallback">算</span><span class="mord cjk_fallback">方</span><span class="mord cjk_fallback">式</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.113em;vertical-align:-0.686em;"></span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mord">2</span><span class="mord">0</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mord">.</span><span class="mord">6</span><span class="mord">4</span><span class="mord">5</span><span class="mopen">(</span><span class="mord">4</span><span class="mord">0</span><span class="mord">0</span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">7</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.00744em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.32144em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mord">7</span><span class="mord">0</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord cjk_fallback">这</span><span class="mord cjk_fallback">个</span><span class="mord cjk_fallback">是</span><span class="mord cjk_fallback">对</span><span class="mord cjk_fallback">标</span><span class="mord cjk_fallback">准</span><span class="mord cjk_fallback">差</span><span class="mord cjk_fallback">的</span><span class="mord cjk_fallback">粗</span><span class="mord cjk_fallback">略</span><span class="mord cjk_fallback">估</span><span class="mord cjk_fallback">计</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.02252em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3365200000000002em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">4</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault">m</span><span class="mord mathdefault">a</span><span class="mord mathdefault">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord cjk_fallback">或</span><span class="mord cjk_fallback">基</span><span class="mord cjk_fallback">于</span><span class="mord mathdefault">t</span><span class="mord cjk_fallback">检</span><span class="mord cjk_fallback">验</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.04628em;vertical-align:-0.686em;"></span><span class="mopen">(</span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3602799999999997em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.05764em;">E</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.7451999999999996em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"><span class="mord mathdefault">t</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.34480000000000005em;"><span style="top:-2.5198em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right:0.0037em;">α</span><span class="mord mtight">/</span><span class="mord mtight">2</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3551999999999999em;"><span></span></span></span></span></span></span><span class="mord mathdefault">s</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0em;vertical-align:0em;"></span><span class="mord cjk_fallback">见</span><span class="mord cjk_fallback">下</span><span class="mord cjk_fallback">面</span><span class="mord cjk_fallback">参</span><span class="mord cjk_fallback">考</span><span class="mord cjk_fallback">链</span><span class="mord cjk_fallback">接</span></span></span></span></span></p>
+<ul>
+<li><a href="https://www.chedong.com/blog/archives/001462.html">如何确定抽样统计的最小样本量( 附: 随机抽样统计的抽样误差Excel计算表格)</a></li>
+<li><a href="https://www.cnblogs.com/triple-y/p/11212205.html">z-score</a></li>
+<li><a href="https://www.statisticshowto.com/probability-and-statistics/find-sample-size/">Sample Size in Statistics (How to Find it): Excel, Cochran’s Formula, General Tips</a></li>
+</ul>
+<h3 id="33-其他计算方式">3.3 其他计算方式</h3>
+<p><a href="https://online.stat.psu.edu/stat415/lesson/25/25.3">Calculating Sample Size</a></p>
+<figure data-type="image" tabindex="11"><a href="https://imgse.com/i/ppXN4x0"><img src="https://s1.ax1x.com/2023/04/12/ppXN4x0.png" alt="ppXN4x0.png" loading="lazy"></a></figure>
+<p><a href="https://www.datasciencecentral.com/determining-sample-size-in-one-picture/">Determining Sample Size in One Picture</a></p>
+<h2 id="四-小结">四. 小结</h2>
+<p>在&quot;<em>大数据</em>&quot;横行的当下, 貌似讨论样本大小没什么意义, 大规模的数据采集, 存储, 处理等等早期数理统计会遇到的问题在当下已经不再是问题, 数据当然是以大为王, 机器学习种大模型的巨大成功也在印证这种思路. 对于传统的统计方式的学习也会发现这种现象, 统计学种的一些繁琐的工作步骤, 在机器学习上是见不到的, 机器学习有时显得很粗暴, 简单, 上数据, 调优模型....当然这种简单也不是单纯靠算力来实现的, 很多还是建立在统计学/数学之上的, 只是在处理方式上, 相比于传统的数理统计发生了很大的变化.</p>
+<p>但是, 对于诸如医学, 高精度实验等的结果验证, 这些实验多花费巨大, 或者受限的现实条件的限制, 如医学的临床测试, 显然其数据规模不可能太大, 对于样本大小的要求是必然的.</p>
+<p>但是也应该看到传统数理统计的局限性, 和其受到计算机科学的强烈冲击的现状.</p>
+<blockquote>
+<p>其实许多高分期刊已经开始慢慢进行不彻底的改革, 在文章中不再提&quot;认为<strong>P＜0.05</strong>具有统计显著性&quot;, 不再报告P值水平, 而使用<strong>点估计</strong>和<strong>区间估计</strong>来替代, 或是用<strong>贝叶斯因子</strong>来替代.</p>
+</blockquote>
+<blockquote>
+<p>&quot;接受不确定性. 保持思考, 开放和谦逊&quot;.</p>
+</blockquote>
+<p>事皆有多面性, 不可一叶落而天下秋.</p>
+<blockquote>
+<p>&quot;实际中只有凭借经验才能确定显著性检验在频率意义上的结果是否显著. 总之, 我们得到的结论, 既依赖于对类似事物的直接经验, 也依赖于我们对观测效应如何产生的一般性理解. 潜在假定的引入, 只会掩盖这一事实: 真实知识的产生过程其实是试探性的. &quot;</p>
+<p>Fisher</p>
+</blockquote>
+<h2 id="五-参考">五. 参考</h2>
+<ul>
+<li>&lt; 统计世界 &gt; 第八版</li>
+<li><a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0262804">Sample size determination with a pilot study</a></li>
+<li><a href="https://www.zhihu.com/question/505366002/answer/2274714158">什么是统计学意义下的显著性? 如何看待统计显著性应该被淘汰了的观点? </a></li>
+<li><a href="https://www.zhihu.com/question/268384579/answer/540793202">神经网络为什么可以(理论上)拟合任何函数? </a></li>
+<li><a href="https://www.qualtrics.com/experience-management/research/determine-sample-size/">Determining sample size: how to make sure you get the correct sample size</a></li>
+<li>https://www.stat.purdue.edu/~minzhang/514-Fall2021/lec%20notes_files/Lec5-samplesize.pdf</li>
+</ul>
+
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Lian
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://Kyouichirou.github.io/post/yang-ben-de-he-li-da-xiao/" title="样本的合理大小">https://Kyouichirou.github.io/post/yang-ben-de-he-li-da-xiao/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://Kyouichirou.github.io/tag/w4OdC7GCbG/"># statistics</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="Excel有趣函数系列1 - sumproduct()" href="https://Kyouichirou.github.io/post/excel-you-qu-han-shu-xi-lie-1-sumproduct/">Excel有趣函数系列1 - sumproduct()</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="Excel有趣函数系列1 - sumproduct()" href="https://Kyouichirou.github.io/post/excel-you-qu-han-shu-xi-lie-1-sumproduct/">上一篇</a>
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="LINGO简单使用" href="https://Kyouichirou.github.io/post/lingo-jian-dan-shi-yong/">LINGO简单使用</a>
+        <a class="nav-mobile-next" title="LINGO简单使用" href="https://Kyouichirou.github.io/post/lingo-jian-dan-shi-yong/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-box">
+  <footer class="footer">
+    <center id="runTimeBox">
+      已运行:<span id="run_time"></span>
+    </center>
+    <span id="busuanzi_container_site_pv">浏览数:<span id="busuanzi_value_site_pv"></span> 次</span>
+    <span class="post-meta-divider">|</span>
+    <span id="busuanzi_container_site_uv">访客数:<span id="busuanzi_value_site_uv"></span> 人</span>
+
+    <script>
+      BirthDay = new Date('');
+      if (BirthDay.getTime()) {
+        function runTime() {
+          str = "";
+          today = new Date();
+          timeold = today.getTime() - BirthDay.getTime();
+          msPerDay = 24 * 60 * 60 * 1000;
+          e_daysold = timeold / msPerDay;
+          daysold = Math.floor(e_daysold);
+          str += daysold + "天";
+          return str;
+        }
+        setInterval(function () {
+          $("#run_time").html(runTime());
+        }, 1000);
+      } else {
+        document.querySelector('.footer').removeChild(document.querySelector('#runTimeBox'));
+      }
+    </script>
+    <div class="poweredby">
+      Powered by <a href="https://github.com/Kyouichirou" target="_blank">Kyouichirou</a>
+    </div>
+  </footer>
+  
+    
+      <div class="drawer-box left" id="drawer_box">
+        <span class="muse-line muse-line-first"></span>
+        <span class="muse-line muse-line-middle"></span>
+        <span class="muse-line muse-line-last"></span>
+      </div>
+      
+        <div class="mist back-to-top" id="back_to_top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+        
+          
+            
+              <div class="bg-img">
+                <img src="https://s1.ax1x.com/2023/03/24/ppBNvm6.jpg" />
+              </div>
+              
+                
+                  
+                        
+</div>
+<script>
+  let sideBarOpen = "sidebar-open";
+  let body = document.body;
+  let back2Top = document.querySelector("#back_to_top"),
+    back2TopText = document.querySelector("#back_to_top_text"),
+    drawerBox = document.querySelector("#drawer_box"),
+    rightSideBar = document.querySelector(".sidebar"),
+    viewport = document.querySelector("body");
+
+  function scrollAnimation(currentY, targetY) {
+    let needScrollTop = targetY - currentY;
+    let _currentY = currentY;
+    setTimeout(() => {
+      const dist = Math.ceil(needScrollTop / 10);
+      _currentY += dist;
+      window.scrollTo(_currentY, currentY);
+      if (needScrollTop > 10 || needScrollTop < -10) {
+        scrollAnimation(_currentY, targetY);
+      } else {
+        window.scrollTo(_currentY, targetY);
+      }
+    }, 1);
+  }
+
+  back2Top.addEventListener("click", function (e) {
+    scrollAnimation(document.scrollingElement.scrollTop, 0);
+    e.stopPropagation();
+    return false;
+  });
+
+  window.addEventListener("scroll", function (e) {
+    let percent =
+      (document.scrollingElement.scrollTop /
+        (document.scrollingElement.scrollHeight -
+          document.scrollingElement.clientHeight)) *
+      100;
+    if (percent > 1 && !back2Top.classList.contains("back-top-active")) {
+      back2Top.classList.add("back-top-active");
+    }
+    if (percent == 0) {
+      back2Top.classList.remove("back-top-active");
+    }
+    if (back2TopText) {
+      back2TopText.textContent = Math.floor(percent);
+    }
+  });
+
+  let hasCacu = false;
+  window.addEventListener("resize", function (e) {
+    calcuHeight();
+  });
+
+  function calcuHeight() {
+    // 动态调整站点概览高度
+    if (
+      (!hasCacu && back2Top.classList.contains("pisces")) ||
+      back2Top.classList.contains("gemini")
+    ) {
+      let sideBar = document.querySelector(".sidebar");
+      let navUl = document.querySelector("#site_nav");
+      sideBar.style =
+        "margin-top:" + (navUl.offsetHeight + navUl.offsetTop + 15) + "px;";
+      hasCacu = true;
+    }
+  }
+  calcuHeight();
+
+  let open = false,
+    MOTION_TIME = 300,
+    RIGHT_MOVE_DIS = "320px";
+
+  if (drawerBox) {
+    let rightMotions = document.querySelectorAll(".right-motion");
+    let right = drawerBox.classList.contains("right");
+
+    let transitionDir = right
+      ? "transition.slideRightIn"
+      : "transition.slideLeftIn";
+
+    let openProp, closeProp;
+    if (right) {
+      openProp = {
+        paddingRight: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingRight: "0px",
+      };
+    } else {
+      openProp = {
+        paddingLeft: RIGHT_MOVE_DIS,
+      };
+      closeProp = {
+        paddingLeft: "0px",
+      };
+    }
+
+    drawerBox.onclick = function () {
+      open = !open;
+      jQuery.Velocity(rightSideBar, "stop");
+      jQuery.Velocity(viewport, "stop");
+      jQuery.Velocity(rightMotions, "stop");
+      if (open) {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: RIGHT_MOVE_DIS,
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, transitionDir, {});
+            },
+          }
+        );
+        jQuery.Velocity(viewport, openProp, {
+          duration: MOTION_TIME,
+        });
+      } else {
+        jQuery.Velocity(
+          rightSideBar,
+          {
+            width: "0px",
+          },
+          {
+            duration: MOTION_TIME,
+            begin: function () {
+              jQuery.Velocity(rightMotions, {
+                opacity: 0,
+              });
+            },
+          }
+        );
+        jQuery.Velocity(viewport, closeProp, {
+          duration: MOTION_TIME,
+        });
+      }
+      for (let i = 0; i < drawerBox.children.length; i++) {
+        drawerBox.children[i].classList.toggle("muse-line");
+      }
+      drawerBox.classList.toggle(sideBarOpen);
+    };
+  }
+
+  // 链接跳转
+  let newWindow = "false";
+  if (newWindow === "true") {
+    let links = document.querySelectorAll(".post-body a");
+    links.forEach((item) => {
+      if (!item.classList.contains("btn")) {
+        item.setAttribute("target", "_blank");
+      }
+    });
+  }
+
+  let faSearch = document.querySelector("#fa_search");
+  faSearch &&
+    faSearch.addEventListener("click", function () {
+      document.querySelector("#search_mask").style = "";
+    });
+
+  // 代码高亮
+  hljs.initHighlightingOnLoad();
+
+  // 离开当前页title变化
+  var leaveTitle = "";
+  var normal_title = document.title;
+  if (leaveTitle) {
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState == "hidden") {
+        normal_title = document.title;
+        document.title = leaveTitle;
+      } else {
+        document.title = normal_title;
+      }
+    });
+  }
+</script>
+
+<link rel="stylesheet" href="/media/css/jquery.fancybox.css" />
+<script src="/media/js/jquery.fancybox.js"></script>
+
+<script>
+  let images = document.querySelectorAll(".section img");
+  images.forEach((image) => {
+    var parent = image.parentElement;
+    var next = image.nextElementSibling;
+    parent.removeChild(image);
+    var aelem = document.createElement("a");
+    aelem.href = image.src;
+    aelem.dataset["fancybox"] = "images";
+    aelem.dataset["rel"] = "fancybox-button";
+    aelem.classList.add("fancybox");
+    aelem.appendChild(image);
+    parent.insertBefore(aelem, next);
+  });
+</script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip"> </p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        jQuery.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        jQuery.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        jQuery.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        jQuery.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn && rewardBtn.addEventListener('click', (e) => {
+      jQuery.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      jQuery.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
+  </div>
+</body>
+
+<input hidden id="copy" />
+<script>
+  !function () {
+    let times = document.querySelectorAll('.publish-time');
+    for (let i = 0; i < times.length; i++) {
+      let date = times[i].dataset.t;
+      let time = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+      if (time < 60) {
+        str = time + '秒之前';
+      } else if (time < 3600) {
+        str = Math.floor(time / 60) + '分钟之前';
+      } else if (time >= 3600 && time < 86400) {
+        str = Math.floor(time / 3600) + '小时之前';
+      } else if (time >= 86400 && time < 259200) {
+        str = Math.floor(time / 86400) + '天之前';
+      } else {
+        str = times[i].textContent;
+      }
+      times[i].textContent = str;
+    }
+  }();
+</script>
+
+<script>
+  let language = 'en';
+  if (language !== '') {
+    let map = new Map();
+    if (language === 'en') {
+      map.set('search', 'Search');
+      map.set('category', 'Categories');
+      map.set('article', 'Articles');
+      map.set('tag', 'Tags');
+      map.set('top', 'Top');
+      map.set('publish', 'published');
+      map.set('minute', ' minutes');
+      map.set('read-more', 'Read More');
+      map.set('view', 'View');
+      map.set('words', ' words');
+      map.set('category-in', 'category in');
+      map.set('preview', 'Meta');
+      map.set('index', 'Toc');
+      map.set('no-archives', "You haven't created yet");
+      map.set('archives', " articles in total");
+      map.set('cloud-tags', " tags in total");
+      map.set('copyright', "Copyright: ");
+      map.set('author', "Author: ");
+      map.set('link', "Link: ");
+      map.set('leave-message', "Leave a message");
+      map.set('format', "Links Format");
+      map.set('site-name', "Name: ");
+      map.set('site-link', "Link: ");
+      map.set('site-desc', "Desc: ");
+      map.set('stat', " related results, taking ");
+      map.set('stat-time', " ms");
+      map.set('site-img', "Image: ");
+    }
+
+    if (map.size > 0) {
+      let lanElems = document.querySelectorAll('.language');
+      lanElems.forEach(elem => {
+        let lan = elem.dataset.lan, text = map.get(lan);
+        if (elem.__proto__ === HTMLInputElement.prototype) {
+          elem.placeholder = text
+        } else {
+          if (elem.dataset.count) {
+            text = elem.dataset.count + text;
+          }
+          elem.textContent = text;
+        }
+      })
+    }
+  }
+
+  window.Clipboard = (function (window, document, navigator) {
+    var textArea,
+      copy;
+
+    // 判断是不是ios端
+    function isOS() {
+      return navigator.userAgent.match(/ipad|iphone/i);
+    }
+    //创建文本元素
+    function createTextArea(text) {
+      textArea = document.createElement('textArea');
+      textArea.value = text;
+      textArea.style.width = 0;
+      textArea.style.height = 0;
+      textArea.clientHeight = 0;
+      textArea.clientWidth = 0;
+      document.body.appendChild(textArea);
+    }
+    //选择内容
+    function selectText() {
+      var range,
+        selection;
+
+      if (isOS()) {
+        range = document.createRange();
+        range.selectNodeContents(textArea);
+        selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        textArea.setSelectionRange(0, 999999);
+      } else {
+        textArea.select();
+      }
+    }
+
+    //复制到剪贴板
+    function copyToClipboard() {
+      try {
+        document.execCommand("Copy")
+      } catch (err) {
+        alert("复制错误！请手动复制！")
+      }
+      document.body.removeChild(textArea);
+    }
+
+    copy = function (text) {
+      createTextArea(text);
+      selectText();
+      copyToClipboard();
+    };
+
+    return {
+      copy: copy
+    };
+  })(window, document, navigator);
+
+  function copyCode(e) {
+    if (e.srcElement.tagName === 'SPAN' && e.srcElement.classList.contains('copy-code')) {
+      let code = e.currentTarget.querySelector('code');
+      var text = code.innerText;
+      if (e.srcElement.textContent === '复制成功') {
+        return;
+      }
+      e.srcElement.textContent = '复制成功';
+      (function (elem) {
+        setTimeout(() => {
+          if (elem.textContent === '复制成功') {
+            elem.textContent = '复制代码'
+          }
+        }, 1000);
+      })(e.srcElement)
+      Clipboard.copy(text);
+    }
+  }
+
+  let pres = document.querySelectorAll('pre');
+  pres.forEach(pre => {
+    let code = pre.querySelector('code');
+    let copyElem = document.createElement('span');
+    copyElem.classList.add('copy-code');
+    copyElem.textContent = '复制代码';
+    pre.appendChild(copyElem);
+    pre.onclick = copyCode
+  })
+
+</script>
+<script src="/media/js/motion.js"></script>
+
+
+  <script
+    src="https://cdn.staticfile.org/smooth-scroll/16.1.3/smooth-scroll.polyfills.min.js"></script>
+  <script>
+    var scroll = new SmoothScroll('a[href*="#"]', {
+      speed: 200
+    });
+  </script>
+
+
+
+
+
+
+  <div class="snow-container"></div>
+  <script src="/media/js/bg/snow.js"></script>
+
+</html>
